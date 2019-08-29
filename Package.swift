@@ -5,6 +5,12 @@ import PackageDescription
 
 let package = Package(
     name: "XcodeServer",
+    platforms: [
+        .macOS(.v10_12),
+        .iOS(.v10),
+        .tvOS(.v10),
+        .watchOS(.v3),
+    ],
     products: [
         // Products define the executables and libraries produced by a package, and make them visible to other packages.
         .library(
@@ -20,9 +26,19 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
             name: "XcodeServer",
+            dependencies: ["XcodeServerCommon", "XcodeServerAPI", "XcodeServerCoreData"]),
+        .target(
+            name: "XcodeServerCommon",
             dependencies: []),
+        .target(
+            name: "XcodeServerAPI",
+            dependencies: ["XcodeServerCommon"]),
+        .target(
+            name: "XcodeServerCoreData",
+            dependencies: ["XcodeServerCommon", "XcodeServerAPI"]),
         .testTarget(
             name: "XcodeServerTests",
             dependencies: ["XcodeServer"]),
-    ]
+    ],
+    swiftLanguageVersions: [.v5]
 )
