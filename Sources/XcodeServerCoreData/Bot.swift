@@ -8,11 +8,7 @@ import XcodeServerAPI
 public class Bot: NSManagedObject {
     
     public convenience init?(managedObjectContext: NSManagedObjectContext, identifier: String, server: XcodeServer) {
-        guard let entityDescription = NSEntityDescription.entity(forEntityName: "Bot", in: managedObjectContext) else {
-            return nil
-        }
-        
-        self.init(entity: entityDescription, insertInto: managedObjectContext)
+        self.init(managedObjectContext: managedObjectContext)
         self.identifier = identifier
         self.xcodeServer = server
         self.integrations = Set<Integration>()

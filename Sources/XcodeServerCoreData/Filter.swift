@@ -5,11 +5,7 @@ import XcodeServerAPI
 public class Filter: NSManagedObject {
     
     public convenience init?(managedObjectContext: NSManagedObjectContext, deviceSpecification: DeviceSpecification) {
-        guard let entityDescription = NSEntityDescription.entity(forEntityName: "Filter", in: managedObjectContext) else {
-            return nil
-        }
-        
-        self.init(entity: entityDescription, insertInto: managedObjectContext)
+        self.init(managedObjectContext: managedObjectContext)
         self.deviceSpecification = deviceSpecification
     }
     

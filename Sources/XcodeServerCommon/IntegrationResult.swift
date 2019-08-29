@@ -1,6 +1,5 @@
 import Foundation
 
-/// ### IntegrationResult
 /// The outcome of the `Integration`.
 public enum IntegrationResult: String {
     case unknown

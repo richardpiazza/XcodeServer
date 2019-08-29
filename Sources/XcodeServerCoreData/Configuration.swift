@@ -6,11 +6,7 @@ import XcodeServerAPI
 public class Configuration: NSManagedObject {
     
     public convenience init?(managedObjectContext: NSManagedObjectContext, bot: Bot) {
-        guard let entityDescription = NSEntityDescription.entity(forEntityName: "Configuration", in: managedObjectContext) else {
-            return nil
-        }
-        
-        self.init(entity: entityDescription, insertInto: managedObjectContext)
+        self.init(managedObjectContext: managedObjectContext)
         self.bot = bot
         self.deviceSpecification = DeviceSpecification(managedObjectContext: managedObjectContext, configuration: self)
     }
