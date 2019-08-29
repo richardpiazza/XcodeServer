@@ -3,25 +3,25 @@ import CoreData
 
 public extension EmailConfiguration {
     
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<EmailConfiguration> {
+    @nonobjc class func fetchRequest() -> NSFetchRequest<EmailConfiguration> {
         return NSFetchRequest<EmailConfiguration>(entityName: "EmailConfiguration")
     }
     
-    @NSManaged public var additionalRecipients: String?
-    @NSManaged public var emailComitters: NSNumber?
-    @NSManaged public var includeCommitMessages: NSNumber?
-    @NSManaged public var includeIssueDetails: NSNumber?
-    @NSManaged public var ccAddressesData: Data?
-    @NSManaged public var allowedDomainNamesData: Data?
-    @NSManaged public var includeLogs: NSNumber?
-    @NSManaged public var replyToAddress: String?
-    @NSManaged public var includeBotConfiguration: NSNumber?
-    @NSManaged public var fromAddress: String?
-    @NSManaged public var emailTypeRawValue: NSNumber?
-    @NSManaged public var includeResolvedIssues: NSNumber?
-    @NSManaged public var weeklyScheduleDay: NSNumber?
-    @NSManaged public var minutesAfterHour: NSNumber?
-    @NSManaged public var hour: NSNumber?
-    @NSManaged public var trigger: Trigger?
+    @NSManaged var additionalRecipients: String?
+    @NSManaged var emailComitters: NSNumber?
+    @NSManaged var includeCommitMessages: NSNumber?
+    @NSManaged var includeIssueDetails: NSNumber?
+    @NSManaged var ccAddressesData: Data?
+    @NSManaged var allowedDomainNamesData: Data?
+    @NSManaged var includeLogs: NSNumber?
+    @NSManaged var replyToAddress: String?
+    @NSManaged var includeBotConfiguration: NSNumber?
+    @NSManaged var fromAddress: String?
+    @NSManaged var emailTypeRawValue: NSNumber?
+    @NSManaged var includeResolvedIssues: NSNumber?
+    @NSManaged var weeklyScheduleDay: NSNumber?
+    @NSManaged var minutesAfterHour: NSNumber?
+    @NSManaged var hour: NSNumber?
+    @NSManaged var trigger: Trigger?
     
 }

@@ -34,7 +34,7 @@ public class XcodeServer: NSManagedObject {
         var ids: [String] = bots.map({ $0.identifier })
         
         for element in data {
-            if let index = ids.index(of: element._id) {
+            if let index = ids.firstIndex(of: element._id) {
                 ids.remove(at: index)
             }
             

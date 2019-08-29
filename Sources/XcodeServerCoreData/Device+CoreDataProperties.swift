@@ -3,32 +3,32 @@ import CoreData
 
 public extension Device {
     
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Device> {
+    @nonobjc class func fetchRequest() -> NSFetchRequest<Device> {
         return NSFetchRequest<Device>(entityName: "Device")
     }
     
-    @NSManaged public var architecture: String?
-    @NSManaged public var connected: NSNumber?
-    @NSManaged public var deviceID: String?
-    @NSManaged public var deviceType: String?
-    @NSManaged public var enabledForDevelopment: NSNumber?
-    @NSManaged public var identifier: String?
-    @NSManaged public var isServer: NSNumber?
-    @NSManaged public var modelCode: String?
-    @NSManaged public var modelName: String?
-    @NSManaged public var modelUTI: String?
-    @NSManaged public var name: String?
-    @NSManaged public var osVersion: String?
-    @NSManaged public var platformIdentifier: String?
-    @NSManaged public var retina: NSNumber?
-    @NSManaged public var simulator: NSNumber?
-    @NSManaged public var supported: NSNumber?
-    @NSManaged public var trusted: NSNumber?
-    @NSManaged public var revision: String?
-    @NSManaged public var activeProxiedDevice: Device?
-    @NSManaged public var deviceSpecifications: Set<DeviceSpecification>?
-    @NSManaged public var integrations: Set<Integration>?
-    @NSManaged public var inverseActiveProxiedDevice: Device?
+    @NSManaged var architecture: String?
+    @NSManaged var connected: NSNumber?
+    @NSManaged var deviceID: String?
+    @NSManaged var deviceType: String?
+    @NSManaged var enabledForDevelopment: NSNumber?
+    @NSManaged var identifier: String?
+    @NSManaged var isServer: NSNumber?
+    @NSManaged var modelCode: String?
+    @NSManaged var modelName: String?
+    @NSManaged var modelUTI: String?
+    @NSManaged var name: String?
+    @NSManaged var osVersion: String?
+    @NSManaged var platformIdentifier: String?
+    @NSManaged var retina: NSNumber?
+    @NSManaged var simulator: NSNumber?
+    @NSManaged var supported: NSNumber?
+    @NSManaged var trusted: NSNumber?
+    @NSManaged var revision: String?
+    @NSManaged var activeProxiedDevice: Device?
+    @NSManaged var deviceSpecifications: Set<DeviceSpecification>?
+    @NSManaged var integrations: Set<Integration>?
+    @NSManaged var inverseActiveProxiedDevice: Device?
     
 }
 

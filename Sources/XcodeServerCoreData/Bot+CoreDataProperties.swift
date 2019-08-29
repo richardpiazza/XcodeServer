@@ -3,19 +3,19 @@ import CoreData
 
 public extension Bot {
     
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Bot> {
+    @nonobjc class func fetchRequest() -> NSFetchRequest<Bot> {
         return NSFetchRequest<Bot>(entityName: "Bot")
     }
     
-    @NSManaged public var identifier: String
-    @NSManaged public var lastUpdate: Date?
-    @NSManaged public var name: String?
-    @NSManaged public var type: NSNumber?
-    @NSManaged public var revision: String?
-    @NSManaged public var configuration: Configuration?
-    @NSManaged public var integrations: Set<Integration>?
-    @NSManaged public var stats: Stats?
-    @NSManaged public var xcodeServer: XcodeServer?
+    @NSManaged var identifier: String
+    @NSManaged var lastUpdate: Date?
+    @NSManaged var name: String?
+    @NSManaged var type: NSNumber?
+    @NSManaged var revision: String?
+    @NSManaged var configuration: Configuration?
+    @NSManaged var integrations: Set<Integration>?
+    @NSManaged var stats: Stats?
+    @NSManaged var xcodeServer: XcodeServer?
     
 }
 

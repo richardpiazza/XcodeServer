@@ -3,35 +3,35 @@ import CoreData
 
 public extension Integration {
     
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Integration> {
+    @nonobjc class func fetchRequest() -> NSFetchRequest<Integration> {
         return NSFetchRequest<Integration>(entityName: "Integration")
     }
     
-    @NSManaged public var currentStep: String?
-    @NSManaged public var duration: NSNumber?
-    @NSManaged public var endedTime: Date?
-    @NSManaged public var hasRetrievedAssets: NSNumber?
-    @NSManaged public var hasRetrievedCommits: NSNumber?
-    @NSManaged public var hasRetrievedIssues: NSNumber?
-    @NSManaged public var identifier: String
-    @NSManaged public var lastUpdate: Date?
-    @NSManaged public var number: NSNumber?
-    @NSManaged public var queuedDate: Date?
-    @NSManaged public var result: String?
-    @NSManaged public var shouldClean: NSNumber?
-    @NSManaged public var startedTime: Date?
-    @NSManaged public var successStreak: NSNumber?
-    @NSManaged public var testHierachy: NSObject?
-    @NSManaged public var testHierachyData: Data?
-    @NSManaged public var revision: String?
-    @NSManaged public var assets: IntegrationAssets?
-    @NSManaged public var bot: Bot?
-    @NSManaged public var buildResultSummary: BuildResultSummary?
-    @NSManaged public var inverseBestSuccessStreak: Stats?
-    @NSManaged public var inverseLastCleanIntegration: Stats?
-    @NSManaged public var issues: IntegrationIssues?
-    @NSManaged public var revisionBlueprints: Set<RevisionBlueprint>?
-    @NSManaged public var testedDevices: Set<Device>?
+    @NSManaged var currentStep: String?
+    @NSManaged var duration: NSNumber?
+    @NSManaged var endedTime: Date?
+    @NSManaged var hasRetrievedAssets: NSNumber?
+    @NSManaged var hasRetrievedCommits: NSNumber?
+    @NSManaged var hasRetrievedIssues: NSNumber?
+    @NSManaged var identifier: String
+    @NSManaged var lastUpdate: Date?
+    @NSManaged var number: NSNumber?
+    @NSManaged var queuedDate: Date?
+    @NSManaged var result: String?
+    @NSManaged var shouldClean: NSNumber?
+    @NSManaged var startedTime: Date?
+    @NSManaged var successStreak: NSNumber?
+    @NSManaged var testHierachy: NSObject?
+    @NSManaged var testHierachyData: Data?
+    @NSManaged var revision: String?
+    @NSManaged var assets: IntegrationAssets?
+    @NSManaged var bot: Bot?
+    @NSManaged var buildResultSummary: BuildResultSummary?
+    @NSManaged var inverseBestSuccessStreak: Stats?
+    @NSManaged var inverseLastCleanIntegration: Stats?
+    @NSManaged var issues: IntegrationIssues?
+    @NSManaged var revisionBlueprints: Set<RevisionBlueprint>?
+    @NSManaged var testedDevices: Set<Device>?
     
 }
 

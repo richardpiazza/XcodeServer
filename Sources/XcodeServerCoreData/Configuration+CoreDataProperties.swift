@@ -3,36 +3,36 @@ import CoreData
 
 public extension Configuration {
     
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Configuration> {
+    @nonobjc class func fetchRequest() -> NSFetchRequest<Configuration> {
         return NSFetchRequest<Configuration>(entityName: "Configuration")
     }
     
-    @NSManaged public var builtFromClean: NSNumber?
-    @NSManaged public var codeCoveragePreference: NSNumber?
-    @NSManaged public var hourOfIntegration: NSNumber?
-    @NSManaged public var minutesAfterHourToIntegrate: NSNumber?
-    @NSManaged public var performsAnalyzeAction: NSNumber?
-    @NSManaged public var performsArchiveAction: NSNumber?
-    @NSManaged public var performsTestAction: NSNumber?
-    @NSManaged public var periodicScheduleInterval: NSNumber?
-    @NSManaged public var scheduleType: NSNumber?
-    @NSManaged public var schemeName: String?
-    @NSManaged public var testingDestinationType: NSNumber?
-    @NSManaged public var weeklyScheduleDay: NSNumber?
-    @NSManaged public var disableAppThinning: NSNumber?
-    @NSManaged public var useParallelDeviceTesting: NSNumber?
-    @NSManaged public var exportsProductFromArchive: NSNumber?
-    @NSManaged public var runOnlyDisabledTests: NSNumber?
-    @NSManaged public var testingDestinationTypeRawValue: NSNumber?
-    @NSManaged public var performsUpgradeIntegration: NSNumber?
-    @NSManaged public var addMissingDeviceToTeams: NSNumber?
-    @NSManaged public var manageCertsAndProfiles: NSNumber?
-    @NSManaged public var additionalBuildArgumentsData: Data?
-    @NSManaged public var buildEnvironmentVariablesData: Data?
-    @NSManaged public var bot: Bot?
-    @NSManaged public var deviceSpecification: DeviceSpecification?
-    @NSManaged public var repositories: Set<Repository>?
-    @NSManaged public var triggers: Set<Trigger>?
+    @NSManaged var builtFromClean: NSNumber?
+    @NSManaged var codeCoveragePreference: NSNumber?
+    @NSManaged var hourOfIntegration: NSNumber?
+    @NSManaged var minutesAfterHourToIntegrate: NSNumber?
+    @NSManaged var performsAnalyzeAction: NSNumber?
+    @NSManaged var performsArchiveAction: NSNumber?
+    @NSManaged var performsTestAction: NSNumber?
+    @NSManaged var periodicScheduleInterval: NSNumber?
+    @NSManaged var scheduleType: NSNumber?
+    @NSManaged var schemeName: String?
+    @NSManaged var testingDestinationType: NSNumber?
+    @NSManaged var weeklyScheduleDay: NSNumber?
+    @NSManaged var disableAppThinning: NSNumber?
+    @NSManaged var useParallelDeviceTesting: NSNumber?
+    @NSManaged var exportsProductFromArchive: NSNumber?
+    @NSManaged var runOnlyDisabledTests: NSNumber?
+    @NSManaged var testingDestinationTypeRawValue: NSNumber?
+    @NSManaged var performsUpgradeIntegration: NSNumber?
+    @NSManaged var addMissingDeviceToTeams: NSNumber?
+    @NSManaged var manageCertsAndProfiles: NSNumber?
+    @NSManaged var additionalBuildArgumentsData: Data?
+    @NSManaged var buildEnvironmentVariablesData: Data?
+    @NSManaged var bot: Bot?
+    @NSManaged var deviceSpecification: DeviceSpecification?
+    @NSManaged var repositories: Set<Repository>?
+    @NSManaged var triggers: Set<Trigger>?
     
 }
 

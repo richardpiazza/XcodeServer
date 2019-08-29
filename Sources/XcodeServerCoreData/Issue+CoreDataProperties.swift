@@ -3,36 +3,36 @@ import CoreData
 
 public extension Issue {
     
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Issue> {
+    @nonobjc class func fetchRequest() -> NSFetchRequest<Issue> {
         return NSFetchRequest<Issue>(entityName: "Issue")
     }
     
-    @NSManaged public var age: NSNumber?
-    @NSManaged public var identifier: String?
-    @NSManaged public var issueType: String?
-    @NSManaged public var testCase: String?
-    @NSManaged public var documentFilePath: String?
-    @NSManaged public var documentLocationData: String?
-    @NSManaged public var lineNumber: NSNumber?
-    @NSManaged public var message: String?
-    @NSManaged public var revision: String?
-    @NSManaged public var status: NSNumber?
-    @NSManaged public var target: String?
-    @NSManaged public var type: String?
-    @NSManaged public var fixItType: String?
-    @NSManaged public var inverseBuildServiceErrors: IntegrationIssues?
-    @NSManaged public var inverseBuildServiceWarnings: IntegrationIssues?
-    @NSManaged public var inverseFreshAnalyserWarnings: IntegrationIssues?
-    @NSManaged public var inverseFreshErrors: IntegrationIssues?
-    @NSManaged public var inverseFreshTestFailures: IntegrationIssues?
-    @NSManaged public var inverseFreshWarnings: IntegrationIssues?
-    @NSManaged public var inverseResolvedAnalyzerWarnings: IntegrationIssues?
-    @NSManaged public var inverseResolvedErrors: IntegrationIssues?
-    @NSManaged public var inverseResolvedTestFailures: IntegrationIssues?
-    @NSManaged public var inverseResolvedWarnings: IntegrationIssues?
-    @NSManaged public var inverseUnresolvedAnalyzerWarnings: IntegrationIssues?
-    @NSManaged public var inverseUnresolvedErrors: IntegrationIssues?
-    @NSManaged public var inverseUnresolvedTestFailures: IntegrationIssues?
-    @NSManaged public var inverseUnresolvedWarnings: IntegrationIssues?
+    @NSManaged var age: NSNumber?
+    @NSManaged var identifier: String?
+    @NSManaged var issueType: String?
+    @NSManaged var testCase: String?
+    @NSManaged var documentFilePath: String?
+    @NSManaged var documentLocationData: String?
+    @NSManaged var lineNumber: NSNumber?
+    @NSManaged var message: String?
+    @NSManaged var revision: String?
+    @NSManaged var status: NSNumber?
+    @NSManaged var target: String?
+    @NSManaged var type: String?
+    @NSManaged var fixItType: String?
+    @NSManaged var inverseBuildServiceErrors: IntegrationIssues?
+    @NSManaged var inverseBuildServiceWarnings: IntegrationIssues?
+    @NSManaged var inverseFreshAnalyserWarnings: IntegrationIssues?
+    @NSManaged var inverseFreshErrors: IntegrationIssues?
+    @NSManaged var inverseFreshTestFailures: IntegrationIssues?
+    @NSManaged var inverseFreshWarnings: IntegrationIssues?
+    @NSManaged var inverseResolvedAnalyzerWarnings: IntegrationIssues?
+    @NSManaged var inverseResolvedErrors: IntegrationIssues?
+    @NSManaged var inverseResolvedTestFailures: IntegrationIssues?
+    @NSManaged var inverseResolvedWarnings: IntegrationIssues?
+    @NSManaged var inverseUnresolvedAnalyzerWarnings: IntegrationIssues?
+    @NSManaged var inverseUnresolvedErrors: IntegrationIssues?
+    @NSManaged var inverseUnresolvedTestFailures: IntegrationIssues?
+    @NSManaged var inverseUnresolvedWarnings: IntegrationIssues?
     
 }

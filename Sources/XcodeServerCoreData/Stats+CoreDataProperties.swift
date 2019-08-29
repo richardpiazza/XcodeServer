@@ -3,26 +3,26 @@ import CoreData
 
 public extension Stats {
     
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Stats> {
+    @nonobjc class func fetchRequest() -> NSFetchRequest<Stats> {
         return NSFetchRequest<Stats>(entityName: "Stats")
     }
     
-    @NSManaged public var codeCoveragePercentageDelta: NSNumber?
-    @NSManaged public var numberOfCommits: NSNumber?
-    @NSManaged public var numberOfIntegrations: NSNumber?
-    @NSManaged public var sinceDate: String?
-    @NSManaged public var testAdditionRate: NSNumber?
-    @NSManaged public var numberOfSuccessfulIntegrations: NSNumber?
-    @NSManaged public var analysisWarnings: StatsBreakdown?
-    @NSManaged public var averageIntegrationTime: StatsBreakdown?
-    @NSManaged public var bestSuccessStreak: Integration?
-    @NSManaged public var bot: Bot?
-    @NSManaged public var errors: StatsBreakdown?
-    @NSManaged public var improvedPerfTests: StatsBreakdown?
-    @NSManaged public var lastCleanIntegration: Integration?
-    @NSManaged public var regressedPerfTests: StatsBreakdown?
-    @NSManaged public var testFailures: StatsBreakdown?
-    @NSManaged public var tests: StatsBreakdown?
-    @NSManaged public var warnings: StatsBreakdown?
+    @NSManaged var codeCoveragePercentageDelta: NSNumber?
+    @NSManaged var numberOfCommits: NSNumber?
+    @NSManaged var numberOfIntegrations: NSNumber?
+    @NSManaged var sinceDate: String?
+    @NSManaged var testAdditionRate: NSNumber?
+    @NSManaged var numberOfSuccessfulIntegrations: NSNumber?
+    @NSManaged var analysisWarnings: StatsBreakdown?
+    @NSManaged var averageIntegrationTime: StatsBreakdown?
+    @NSManaged var bestSuccessStreak: Integration?
+    @NSManaged var bot: Bot?
+    @NSManaged var errors: StatsBreakdown?
+    @NSManaged var improvedPerfTests: StatsBreakdown?
+    @NSManaged var lastCleanIntegration: Integration?
+    @NSManaged var regressedPerfTests: StatsBreakdown?
+    @NSManaged var testFailures: StatsBreakdown?
+    @NSManaged var tests: StatsBreakdown?
+    @NSManaged var warnings: StatsBreakdown?
     
 }

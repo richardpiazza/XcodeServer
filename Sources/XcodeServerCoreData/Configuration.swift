@@ -1,5 +1,6 @@
 import Foundation
 import CoreData
+import XcodeServerCommon
 import XcodeServerAPI
 
 public class Configuration: NSManagedObject {
@@ -49,7 +50,7 @@ public class Configuration: NSManagedObject {
         if #available(macOS 10.12, iOS 10.0, tvOS 10.0, watchOS 3.0, *) {
             if let buildArgs = configuration.additionalBuildArguments {
                 do {
-//                    self.additionalBuildArgumentsData = try XCServerCoreData.jsonEncoder.encode(buildArgs)
+                    self.additionalBuildArgumentsData = try jsonEncoder.encode(buildArgs)
                 } catch {
                     
                 }
@@ -57,7 +58,7 @@ public class Configuration: NSManagedObject {
             
             if let envVars = configuration.buildEnvironmentVariables {
                 do {
-//                    self.buildEnvironmentVariablesData = try XCServerCoreData.jsonEncoder.encode(envVars)
+                    self.buildEnvironmentVariablesData = try jsonEncoder.encode(envVars)
                 } catch {
                     
                 }
