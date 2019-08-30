@@ -1,25 +1,12 @@
 import Foundation
 import CoreData
 import XcodeServerCommon
-import XcodeServerAPI
 
 public class CommitContributor: NSManagedObject {
     
     public convenience init?(managedObjectContext: NSManagedObjectContext, commit: Commit) {
         self.init(managedObjectContext: managedObjectContext)
         self.commit = commit
-    }
-    
-    public func update(withCommitContributor contributor: XCSCommitContributor) {
-        self.name = contributor.name
-        self.displayName = contributor.displayName
-        if let emails = contributor.emails {
-            do {
-                self.emailsData = try jsonEncoder.encode(emails)
-            } catch {
-                print(error)
-            }
-        }
     }
     
     public var initials: String? {

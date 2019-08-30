@@ -30,3 +30,9 @@ public struct XCSRepositoryBlueprint: Codable {
     public var workingCopyPaths: [String : String]?
     public var additionalValidationRemoteRepositories: [XCSRemoteRepository]?
 }
+
+public extension XCSRepositoryBlueprint {
+    var repositoryIds: [String] {
+        return locations?.compactMap({ $0.key }).sorted() ?? []
+    }
+}

@@ -35,7 +35,7 @@ let package = Package(
             dependencies: ["XcodeServerCommon"]),
         .target(
             name: "XcodeServerCoreData",
-            dependencies: ["XcodeServerCommon", "XcodeServerAPI"]),
+            dependencies: ["XcodeServerCommon"]),
         .testTarget(
             name: "XcodeServerTests",
             dependencies: ["XcodeServer"]),
