@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "BitByteData",
+        "repositoryURL": "https://github.com/tsolomko/BitByteData.git",
+        "state": {
+          "branch": null,
+          "revision": "e7516072dfc33cad98db8db28e97d573d9e540aa",
+          "version": "1.4.1"
+        }
+      },
+      {
+        "package": "CodeQuickKit",
+        "repositoryURL": "https://github.com/richardpiazza/CodeQuickKit.git",
+        "state": {
+          "branch": null,
+          "revision": "5bb67f17dd575d458626293865f5b96f49d55bfe",
+          "version": "6.6.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
