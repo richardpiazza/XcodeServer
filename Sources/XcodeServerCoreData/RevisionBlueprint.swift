@@ -1,6 +1,5 @@
 import Foundation
 import CoreData
-import XcodeServerAPI
 
 public class RevisionBlueprint: NSManagedObject {
     
@@ -9,4 +8,12 @@ public class RevisionBlueprint: NSManagedObject {
         self.commit = commit
         self.integration = integration
     }
+}
+
+// MARK: - CoreData Properties
+public extension RevisionBlueprint {
+    
+    @NSManaged var commit: Commit?
+    @NSManaged var integration: Integration?
+    
 }

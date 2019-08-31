@@ -8,3 +8,12 @@ public class DeviceSpecification: NSManagedObject {
         self.configuration = configuration
     }
 }
+
+// MARK: - CoreData Properties
+public extension DeviceSpecification {
+    
+    @NSManaged var configuration: Configuration?
+    @NSManaged var filters: Set<Filter>?
+    @NSManaged var devices: Set<Device>?
+    
+}

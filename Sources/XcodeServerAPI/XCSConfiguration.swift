@@ -1,12 +1,13 @@
 import Foundation
+import XcodeServerCommon
 
 public struct XCSConfiguration: Codable {
     public var schemeName: String?
     
     // Options
-    public var builtFromClean: XCSCleanSchedule?
+    public var builtFromClean: CleanSchedule?
     public var disableAppThinning: Bool?
-    public var codeCoveragePreference: XCSCodeCoveragePreference?
+    public var codeCoveragePreference: CodeCoveragePreference?
     public var useParallelDeviceTesting: Bool?
     public var performsArchiveAction: Bool?
     public var performsAnalyzeAction: Bool?
@@ -19,8 +20,8 @@ public struct XCSConfiguration: Codable {
     public var testLocalizations: [XCSTestLocalzation]?
     
     // Schedule
-    public var scheduleType: XCSBotSchedule?
-    public var periodicScheduleInterval: XCSPeriodicScheduleInterval
+    public var scheduleType: BotSchedule?
+    public var periodicScheduleInterval: PeriodicScheduleInterval
     public var weeklyScheduleDay: Int?
     public var hourOfIntegration: Int?
     public var minutesAfterHourToIntegrate: Int?

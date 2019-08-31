@@ -1,7 +1,7 @@
 import Foundation
 
 // TODO: Verify Order
-public enum XCSCleanSchedule: Int, Codable {
+public enum CleanSchedule: Int, Codable {
     case never = 0
     case always = 1
     case daily = 2

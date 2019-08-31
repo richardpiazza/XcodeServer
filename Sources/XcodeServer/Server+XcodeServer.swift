@@ -2,7 +2,7 @@ import Foundation
 import XcodeServerAPI
 import XcodeServerCoreData
 
-extension XcodeServer {
+extension Server {
     public func update(withVersion version: XCSVersion, api: Int? = nil) {
         self.os = version.os
         self.server = version.server
@@ -41,7 +41,7 @@ extension XcodeServer {
         
         for id in ids {
             if let bot = moc.bot(withIdentifier: id) {
-                bot.xcodeServer = nil
+                bot.server = nil
                 moc.delete(bot)
             }
         }

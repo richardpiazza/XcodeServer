@@ -1,4 +1,5 @@
 import Foundation
+import XcodeServerCommon
 
 public struct XCSEmailConfiguration: Codable {
     public var ccAddresses: [String]?
@@ -12,7 +13,7 @@ public struct XCSEmailConfiguration: Codable {
     public var scmOptions: [String : Int]?
     public var emailCommitters: Bool?
     public var fromAddress: String?
-    public var type: XCSEmailType?
+    public var type: EmailType?
     public var includeResolvedIssues: Bool?
     public var weeklyScheduleDay: Int?
     public var minutesAfterHour: Int?

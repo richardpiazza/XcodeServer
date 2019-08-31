@@ -8,7 +8,7 @@ public typealias ManagerErrorCompletion = (_ error: Swift.Error?) -> Void
 
 public class Manager {
     
-    public static var container: NSPersistentContainer = NSPersistentContainer.legacyXcodeServerCoreData
+    public static var container: NSPersistentContainer = NSPersistentContainer.xcodeServerCoreData
     
     public enum Error: Swift.Error, LocalizedError {
         case unhandled
@@ -35,7 +35,7 @@ public class Manager {
     
     /// Ping the Xcode Server.
     /// A Status code of '204' indicates success.
-    public static func ping(xcodeServer: XcodeServer, completion: @escaping ManagerErrorCompletion) {
+    public static func ping(xcodeServer: Server, completion: @escaping ManagerErrorCompletion) {
         let client: APIClient
         do {
             client = try APIClient.client(forFQDN: xcodeServer.fqdn)
@@ -57,7 +57,7 @@ public class Manager {
     
     /// Retreive the version information about the `XcodeServer`
     /// Updates the supplied `XcodeServer` entity with the response.
-    public static func syncVersionData(forXcodeServer xcodeServer: XcodeServer, completion: @escaping ManagerErrorCompletion) {
+    public static func syncVersionData(forXcodeServer xcodeServer: Server, completion: @escaping ManagerErrorCompletion) {
         let client: APIClient
         do {
             client = try APIClient.client(forFQDN: xcodeServer.fqdn)
@@ -75,7 +75,7 @@ public class Manager {
                 container.performBackgroundTask({ (privateContext) in
                     privateContext.automaticallyMergesChangesFromParent = true
                     
-                    if let server = privateContext.object(with: xcodeServer.objectID) as? XcodeServer {
+                    if let server = privateContext.object(with: xcodeServer.objectID) as? Server {
                         server.update(withVersion: value.0)
                         server.lastUpdate = Date()
                     }
@@ -95,7 +95,7 @@ public class Manager {
     
     /// Retrieves all `Bot`s from the `XcodeServer`
     /// Updates the supplied `XcodeServer` entity with the response.
-    public static func syncBots(forXcodeServer xcodeServer: XcodeServer, completion: @escaping ManagerErrorCompletion) {
+    public static func syncBots(forXcodeServer xcodeServer: Server, completion: @escaping ManagerErrorCompletion) {
         let client: APIClient
         do {
             client = try APIClient.client(forFQDN: xcodeServer.fqdn)
@@ -113,7 +113,7 @@ public class Manager {
                 container.performBackgroundTask({ (privateContext) in
                     privateContext.automaticallyMergesChangesFromParent = true
                     
-                    if let server = privateContext.object(with: xcodeServer.objectID) as? XcodeServer {
+                    if let server = privateContext.object(with: xcodeServer.objectID) as? Server {
                         server.update(withBots: value)
                         server.lastUpdate = Date()
                     }
@@ -134,7 +134,7 @@ public class Manager {
     /// Retrieves the information for a given `Bot` from the `XcodeServer`.
     /// Updates the supplied `Bot` entity with the response.
     public static func syncBot(bot: Bot, completion: @escaping ManagerErrorCompletion) {
-        guard let xcodeServer = bot.xcodeServer else {
+        guard let xcodeServer = bot.server else {
             completion(Error.xcodeServer)
             return
         }
@@ -177,7 +177,7 @@ public class Manager {
     /// Gets the cumulative integration stats for the specified `Bot`.
     /// Updates the supplied `Bot` entity with the response.
     public static func syncStats(forBot bot: Bot, completion: @escaping ManagerErrorCompletion) {
-        guard let xcodeServer = bot.xcodeServer else {
+        guard let xcodeServer = bot.server else {
             completion(Error.xcodeServer)
             return
         }
@@ -219,7 +219,7 @@ public class Manager {
     /// Begin a new integration for the specified `Bot`.
     /// Updates the supplied `Bot` entity with the response.
     public static func triggerIntegration(forBot bot: Bot, completion: @escaping ManagerErrorCompletion) {
-        guard let xcodeServer = bot.xcodeServer else {
+        guard let xcodeServer = bot.server else {
             completion(Error.xcodeServer)
             return
         }
@@ -262,7 +262,7 @@ public class Manager {
     /// Gets a list of `Integration` for a specified `Bot`.
     /// Updates the supplied `Bot` entity with the response.
     public static func syncIntegrations(forBot bot: Bot, completion: @escaping ManagerErrorCompletion) {
-        guard let xcodeServer = bot.xcodeServer else {
+        guard let xcodeServer = bot.server else {
             completion(Error.xcodeServer)
             return
         }
@@ -310,7 +310,7 @@ public class Manager {
             return
         }
         
-        guard let xcodeServer = bot.xcodeServer else {
+        guard let xcodeServer = bot.server else {
             completion(Error.xcodeServer)
             return
         }
@@ -358,7 +358,7 @@ public class Manager {
             return
         }
         
-        guard let xcodeServer = bot.xcodeServer else {
+        guard let xcodeServer = bot.server else {
             completion(Error.xcodeServer)
             return
         }
@@ -410,7 +410,7 @@ public class Manager {
             return
         }
         
-        guard let xcodeServer = bot.xcodeServer else {
+        guard let xcodeServer = bot.server else {
             completion(Error.xcodeServer)
             return
         }

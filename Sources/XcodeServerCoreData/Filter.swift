@@ -8,3 +8,13 @@ public class Filter: NSManagedObject {
         self.deviceSpecification = deviceSpecification
     }
 }
+
+// MARK: - CoreData Properties
+public extension Filter {
+    
+    @NSManaged var architectureType: NSNumber?
+    @NSManaged var filterType: NSNumber?
+    @NSManaged var deviceSpecification: DeviceSpecification?
+    @NSManaged var platform: Platform?
+    
+}

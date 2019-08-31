@@ -1,11 +1,26 @@
 import Foundation
 import CoreData
 
-class Model_2_0_4: NSManagedObjectModel {
+/// Xcode Server Core Data Model: **1.0.0**
+///
+/// This is the base state of all known Xcode Server entities that are accessable
+/// via the REST API.
+///
+/// ## Additions
+///
+/// _N/A_
+///
+/// ## Transformations
+///
+/// _N/A_
+///
+/// ## Removals
+///
+/// _N/A_
+///
+class Model_1_0_0: NSManagedObjectModel {
     
-    public static var instance: Model_2_0_4 = Model_2_0_4()
-    
-    private override init() {
+    public override init() {
         super.init()
         
         let asset = NSEntityDescription(name: "Asset")
@@ -17,11 +32,13 @@ class Model_2_0_4: NSManagedObjectModel {
         asset.properties.append(NSAttributeDescription(name: "triggerName", type: .stringAttributeType))
         
         let bot = NSEntityDescription(name: "Bot")
-        bot.properties.append(NSAttributeDescription(name: "identifier", type: .stringAttributeType, isOptional: false, defaultValue: "_identifier"))
+        let bot_identifier = NSAttributeDescription(name: "identifier", type: .stringAttributeType, isOptional: false, defaultValue: "_identifier")
+        bot.properties.append(bot_identifier)
         bot.properties.append(NSAttributeDescription(name: "lastUpdate", type: .dateAttributeType))
         bot.properties.append(NSAttributeDescription(name: "name", type: .stringAttributeType))
         bot.properties.append(NSAttributeDescription(name: "revision", type: .stringAttributeType))
         bot.properties.append(NSAttributeDescription(name: "type", type: .integer32AttributeType, defaultValue: 0))
+        bot.indexes.append(NSFetchIndexDescription(name: "byIdentifierIndex", elements: [NSFetchIndexElementDescription(property: bot_identifier, collationType: .binary)]))
         
         let buildResultSummary = NSEntityDescription(name: "BuildResultSummary")
         buildResultSummary.properties.append(NSAttributeDescription(name: "analyzerWarningChange", type: .integer32AttributeType, defaultValue: 0))
@@ -40,9 +57,11 @@ class Model_2_0_4: NSManagedObjectModel {
         buildResultSummary.properties.append(NSAttributeDescription(name: "warningCount", type: .integer32AttributeType, defaultValue: 0))
         
         let commit = NSEntityDescription(name: "Commit")
-        commit.properties.append(NSAttributeDescription(name: "commitHash", type: .stringAttributeType, isOptional: false, defaultValue: "_commitHash"))
+        let commit_commitHash = NSAttributeDescription(name: "commitHash", type: .stringAttributeType, isOptional: false, defaultValue: "_commitHash")
+        commit.properties.append(commit_commitHash)
         commit.properties.append(NSAttributeDescription(name: "message", type: .stringAttributeType))
         commit.properties.append(NSAttributeDescription(name: "timestamp", type: .stringAttributeType))
+        commit.indexes.append(NSFetchIndexDescription(name: "byCommitHashIndex", elements: [NSFetchIndexElementDescription(property: commit_commitHash, collationType: .binary)]))
         
         let commitChange = NSEntityDescription(name: "CommitChange")
         commitChange.properties.append(NSAttributeDescription(name: "filePath", type: .stringAttributeType))
@@ -78,12 +97,13 @@ class Model_2_0_4: NSManagedObjectModel {
         configuration.properties.append(NSAttributeDescription(name: "weeklyScheduleDay", type: .integer32AttributeType, defaultValue: 0))
         
         let device = NSEntityDescription(name: "Device")
+        let device_identifier = NSAttributeDescription(name: "identifier", type: .stringAttributeType, isOptional: false, defaultValue: "_identifier")
         device.properties.append(NSAttributeDescription(name: "architecture", type: .stringAttributeType))
         device.properties.append(NSAttributeDescription(name: "connected", type: .booleanAttributeType))
         device.properties.append(NSAttributeDescription(name: "deviceID", type: .stringAttributeType))
         device.properties.append(NSAttributeDescription(name: "deviceType", type: .stringAttributeType))
         device.properties.append(NSAttributeDescription(name: "enabledForDevelopment", type: .booleanAttributeType))
-        device.properties.append(NSAttributeDescription(name: "identifier", type: .stringAttributeType, isOptional: false, defaultValue: "_identifier"))
+        device.properties.append(device_identifier)
         device.properties.append(NSAttributeDescription(name: "isServer", type: .booleanAttributeType))
         device.properties.append(NSAttributeDescription(name: "modelCode", type: .stringAttributeType))
         device.properties.append(NSAttributeDescription(name: "modelName", type: .stringAttributeType))
@@ -95,6 +115,7 @@ class Model_2_0_4: NSManagedObjectModel {
         device.properties.append(NSAttributeDescription(name: "simulator", type: .booleanAttributeType))
         device.properties.append(NSAttributeDescription(name: "supported", type: .booleanAttributeType))
         device.properties.append(NSAttributeDescription(name: "trusted", type: .booleanAttributeType))
+        device.indexes.append(NSFetchIndexDescription(name: "byIdentifierIndex", elements: [NSFetchIndexElementDescription(property: device_identifier, collationType: .binary)]))
         
         let deviceSpecification = NSEntityDescription(name: "DeviceSpecification")
         
@@ -109,13 +130,14 @@ class Model_2_0_4: NSManagedObjectModel {
         filter.properties.append(NSAttributeDescription(name: "filterType", type: .integer32AttributeType, defaultValue: 0))
         
         let integration = NSEntityDescription(name: "Integration")
+        let integration_identifier = NSAttributeDescription(name: "identifier", type: .stringAttributeType, isOptional: false, defaultValue: "_identifier")
         integration.properties.append(NSAttributeDescription(name: "currentStep", type: .stringAttributeType))
         integration.properties.append(NSAttributeDescription(name: "duration", type: .integer32AttributeType, defaultValue: 0))
         integration.properties.append(NSAttributeDescription(name: "endedTime", type: .dateAttributeType))
         integration.properties.append(NSAttributeDescription(name: "hasRetrievedAssets", type: .booleanAttributeType))
         integration.properties.append(NSAttributeDescription(name: "hasRetrievedCommits", type: .booleanAttributeType))
         integration.properties.append(NSAttributeDescription(name: "hasRetrievedIssues", type: .booleanAttributeType))
-        integration.properties.append(NSAttributeDescription(name: "identifier", type: .stringAttributeType, isOptional: false, defaultValue: "_identifier"))
+        integration.properties.append(integration_identifier)
         integration.properties.append(NSAttributeDescription(name: "lastUpdate", type: .dateAttributeType))
         integration.properties.append(NSAttributeDescription(name: "number", type: .integer32AttributeType, defaultValue: 0))
         integration.properties.append(NSAttributeDescription(name: "queuedDate", type: .dateAttributeType))
@@ -126,16 +148,18 @@ class Model_2_0_4: NSManagedObjectModel {
         integration.properties.append(NSAttributeDescription(name: "successStreak", type: .integer32AttributeType, defaultValue: 0))
         integration.properties.append(NSAttributeDescription(name: "testHierarchy", type: .transformableAttributeType))
         integration.properties.append(NSAttributeDescription(name: "testHierarchyData", type: .binaryDataAttributeType))
+        integration.indexes.append(NSFetchIndexDescription(name: "byIdentifierIndex", elements: [NSFetchIndexElementDescription(property: integration_identifier, collationType: .binary)]))
         
         let integrationAssets = NSEntityDescription(name: "IntegrationAssets")
         
         let integrationIssues = NSEntityDescription(name: "IntegrationIssues")
         
         let issue = NSEntityDescription(name: "Issue")
+        let issue_identifier = NSAttributeDescription(name: "identifier", type: .stringAttributeType, isOptional: false, defaultValue: "_identifier")
         issue.properties.append(NSAttributeDescription(name: "age", type: .integer32AttributeType, defaultValue: 0))
         issue.properties.append(NSAttributeDescription(name: "documentFilePath", type: .stringAttributeType))
         issue.properties.append(NSAttributeDescription(name: "documentLocationData", type: .stringAttributeType))
-        issue.properties.append(NSAttributeDescription(name: "identifier", type: .stringAttributeType, isOptional: false, defaultValue: "_identifier"))
+        issue.properties.append(issue_identifier)
         issue.properties.append(NSAttributeDescription(name: "issueType", type: .stringAttributeType))
         issue.properties.append(NSAttributeDescription(name: "lineNumber", type: .integer32AttributeType, defaultValue: 0))
         issue.properties.append(NSAttributeDescription(name: "message", type: .stringAttributeType))
@@ -144,6 +168,7 @@ class Model_2_0_4: NSManagedObjectModel {
         issue.properties.append(NSAttributeDescription(name: "target", type: .stringAttributeType))
         issue.properties.append(NSAttributeDescription(name: "testCase", type: .stringAttributeType))
         issue.properties.append(NSAttributeDescription(name: "type", type: .stringAttributeType))
+        issue.indexes.append(NSFetchIndexDescription(name: "byIdentifierIndex", elements: [NSFetchIndexElementDescription(property: issue_identifier, collationType: .binary)]))
         
         let platform = NSEntityDescription(name: "Platform")
         platform.properties.append(NSAttributeDescription(name: "buildNumber", type: .stringAttributeType))
@@ -155,16 +180,29 @@ class Model_2_0_4: NSManagedObjectModel {
         platform.properties.append(NSAttributeDescription(name: "version", type: .stringAttributeType))
         
         let repository = NSEntityDescription(name: "Repository")
+        let repository_identifier = NSAttributeDescription(name: "identifier", type: .stringAttributeType, isOptional: false, defaultValue: "_identifier")
         repository.properties.append(NSAttributeDescription(name: "branchIdentifier", type: .stringAttributeType))
         repository.properties.append(NSAttributeDescription(name: "branchOptions", type: .integer32AttributeType, defaultValue: 0))
-        repository.properties.append(NSAttributeDescription(name: "identifier", type: .stringAttributeType, isOptional: false, defaultValue: "_identifier"))
+        repository.properties.append(repository_identifier)
         repository.properties.append(NSAttributeDescription(name: "locationType", type: .stringAttributeType))
         repository.properties.append(NSAttributeDescription(name: "system", type: .stringAttributeType))
         repository.properties.append(NSAttributeDescription(name: "url", type: .stringAttributeType))
         repository.properties.append(NSAttributeDescription(name: "workingCopyPath", type: .stringAttributeType))
         repository.properties.append(NSAttributeDescription(name: "workingCopyState", type: .integer32AttributeType, defaultValue: 0))
+        repository.indexes.append(NSFetchIndexDescription(name: "byIdentifierIndex", elements: [NSFetchIndexElementDescription(property: repository_identifier, collationType: .binary)]))
         
         let revisionBlueprint = NSEntityDescription(name: "RevisionBlueprint")
+        
+        let server = NSEntityDescription(name: "Server")
+        let server_fqdn = NSAttributeDescription(name: "fqdn", type: .stringAttributeType, isOptional: false, defaultValue: "_fqdn")
+        server.properties.append(NSAttributeDescription(name: "apiVersion", type: .integer32AttributeType, defaultValue: 0))
+        server.properties.append(server_fqdn)
+        server.properties.append(NSAttributeDescription(name: "lastUpdate", type: .dateAttributeType))
+        server.properties.append(NSAttributeDescription(name: "os", type: .stringAttributeType))
+        server.properties.append(NSAttributeDescription(name: "server", type: .stringAttributeType))
+        server.properties.append(NSAttributeDescription(name: "xcode", type: .stringAttributeType))
+        server.properties.append(NSAttributeDescription(name: "xcodeServer", type: .stringAttributeType))
+        server.indexes.append(NSFetchIndexDescription(name: "byFqdnIndex", elements: [NSFetchIndexElementDescription(property: server_fqdn, collationType: .binary)]))
         
         let stats = NSEntityDescription(name: "Stats")
         stats.properties.append(NSAttributeDescription(name: "codeCoveragePercentageDelta", type: .integer32AttributeType, defaultValue: 0))
@@ -173,7 +211,7 @@ class Model_2_0_4: NSManagedObjectModel {
         stats.properties.append(NSAttributeDescription(name: "sinceDate", type: .stringAttributeType))
         stats.properties.append(NSAttributeDescription(name: "testAdditionRate", type: .integer32AttributeType, defaultValue: 0))
         
-        let statsBreakdown = NSEntityDescription(name: "StatsBreakdwon")
+        let statsBreakdown = NSEntityDescription(name: "StatsBreakdown")
         statsBreakdown.properties.append(NSAttributeDescription(name: "avg", type: .floatAttributeType, defaultValue: 0.0))
         statsBreakdown.properties.append(NSAttributeDescription(name: "count", type: .integer32AttributeType, defaultValue: 0))
         statsBreakdown.properties.append(NSAttributeDescription(name: "max", type: .floatAttributeType, defaultValue: 0.0))
@@ -187,15 +225,6 @@ class Model_2_0_4: NSManagedObjectModel {
         trigger.properties.append(NSAttributeDescription(name: "scriptBody", type: .stringAttributeType))
         trigger.properties.append(NSAttributeDescription(name: "type", type: .integer32AttributeType, defaultValue: 0))
         
-        let xcodeServer = NSEntityDescription(name: "XcodeServer")
-        xcodeServer.properties.append(NSAttributeDescription(name: "apiVersion", type: .integer32AttributeType, defaultValue: 0))
-        xcodeServer.properties.append(NSAttributeDescription(name: "fqdn", type: .stringAttributeType, isOptional: false, defaultValue: "_fqdn"))
-        xcodeServer.properties.append(NSAttributeDescription(name: "lastUpdate", type: .dateAttributeType))
-        xcodeServer.properties.append(NSAttributeDescription(name: "os", type: .stringAttributeType))
-        xcodeServer.properties.append(NSAttributeDescription(name: "server", type: .stringAttributeType))
-        xcodeServer.properties.append(NSAttributeDescription(name: "xcode", type: .stringAttributeType))
-        xcodeServer.properties.append(NSAttributeDescription(name: "xcodeServer", type: .stringAttributeType))
-        
         let asset_inverseArchive = NSRelationshipDescription(name: "inverseArchive", minCount: 0, maxCount: 1, deleteRule: .nullifyDeleteRule)
         let asset_inverseBuildServiceLog = NSRelationshipDescription(name: "inverseBuildServiceLog", minCount: 0, maxCount: 1, deleteRule: .nullifyDeleteRule)
         let asset_inverseProduct = NSRelationshipDescription(name: "inverseProduct", minCount: 0, maxCount: 1, deleteRule: .nullifyDeleteRule)
@@ -206,7 +235,7 @@ class Model_2_0_4: NSManagedObjectModel {
         let bot_configuration = NSRelationshipDescription(name: "configuration", minCount: 0, maxCount: 1, deleteRule: .cascadeDeleteRule)
         let bot_integrations = NSRelationshipDescription(name: "integrations", minCount: 0, maxCount: 0, deleteRule: .cascadeDeleteRule)
         let bot_stats = NSRelationshipDescription(name: "stats", minCount: 0, maxCount: 1, deleteRule: .cascadeDeleteRule)
-        let bot_xcodeServer = NSRelationshipDescription(name: "xcodeServer", minCount: 0, maxCount: 1, deleteRule: .nullifyDeleteRule)
+        let bot_server = NSRelationshipDescription(name: "server", minCount: 0, maxCount: 1, deleteRule: .nullifyDeleteRule)
         let buildResultSummary_integration = NSRelationshipDescription(name: "integration", minCount: 0, maxCount: 1, deleteRule: .nullifyDeleteRule)
         let commit_commitChanges = NSRelationshipDescription(name: "commitChanges", minCount: 0, maxCount: 0, deleteRule: .cascadeDeleteRule)
         let commit_commitContributor = NSRelationshipDescription(name: "commitContributor", minCount: 0, maxCount: 1, deleteRule: .cascadeDeleteRule)
@@ -279,6 +308,7 @@ class Model_2_0_4: NSManagedObjectModel {
         let repository_configurations = NSRelationshipDescription(name: "configurations", maxCount: 0, deleteRule: .nullifyDeleteRule)
         let revisionBlueprint_commit = NSRelationshipDescription(name: "commit", maxCount: 1, deleteRule: .nullifyDeleteRule)
         let revisionBlueprint_integration = NSRelationshipDescription(name: "integration", maxCount: 1, deleteRule: .nullifyDeleteRule)
+        let server_bots = NSRelationshipDescription(name: "bots", maxCount: 0, deleteRule: .cascadeDeleteRule)
         let stats_analysisWarnings = NSRelationshipDescription(name: "analysisWarnings", maxCount: 1, deleteRule: .cascadeDeleteRule)
         let stats_averageIntegrationTime = NSRelationshipDescription(name: "averageIntegrationTime", maxCount: 1, deleteRule: .cascadeDeleteRule)
         let stats_bestSuccessStreak = NSRelationshipDescription(name: "bestSuccessStreak", maxCount: 1, deleteRule: .nullifyDeleteRule)
@@ -301,7 +331,6 @@ class Model_2_0_4: NSManagedObjectModel {
         let trigger_conditions = NSRelationshipDescription(name: "conditions", maxCount: 1, deleteRule: .cascadeDeleteRule)
         let trigger_configuration = NSRelationshipDescription(name: "configuration", maxCount: 1, deleteRule: .nullifyDeleteRule)
         let trigger_emailConfiguration = NSRelationshipDescription(name: "emailConfiguration", maxCount: 1, deleteRule: .cascadeDeleteRule)
-        let xcodeServer_bots = NSRelationshipDescription(name: "bots", maxCount: 0, deleteRule: .cascadeDeleteRule)
         
         asset_inverseArchive.destinationEntity = integrationAssets
         asset_inverseArchive.inverseRelationship = integrationAssets_archive
@@ -324,8 +353,8 @@ class Model_2_0_4: NSManagedObjectModel {
         bot_integrations.inverseRelationship = integration_bot
         bot_stats.destinationEntity = stats
         bot_stats.inverseRelationship = stats_bot
-        bot_xcodeServer.destinationEntity = xcodeServer
-        bot_xcodeServer.inverseRelationship = xcodeServer_bots
+        bot_server.destinationEntity = server
+        bot_server.inverseRelationship = server_bots
         
         buildResultSummary_integration.destinationEntity = integration
         buildResultSummary_integration.inverseRelationship = integration_buildResultSummary
@@ -488,6 +517,9 @@ class Model_2_0_4: NSManagedObjectModel {
         revisionBlueprint_integration.destinationEntity = integration
         revisionBlueprint_integration.inverseRelationship = integration_revisionBluprints
         
+        server_bots.destinationEntity = bot
+        server_bots.inverseRelationship = bot_server
+        
         stats_analysisWarnings.destinationEntity = statsBreakdown
         stats_analysisWarnings.inverseRelationship = statsBreakdown_inverseAnalysisWarnings
         stats_averageIntegrationTime.destinationEntity = statsBreakdown
@@ -535,14 +567,11 @@ class Model_2_0_4: NSManagedObjectModel {
         trigger_emailConfiguration.destinationEntity = emailConfiguration
         trigger_emailConfiguration.inverseRelationship = emailConfiguration_trigger
         
-        xcodeServer_bots.destinationEntity = bot
-        xcodeServer_bots.inverseRelationship = bot_xcodeServer
-        
         entities = [
             asset, bot, buildResultSummary, commit, commitChange, commitContributor,
             conditions, configuration, device, deviceSpecification, emailConfiguration,
             filter, integration, integrationAssets, integrationIssues, issue, platform,
-            repository, revisionBlueprint, stats, statsBreakdown, trigger, xcodeServer,
+            repository, revisionBlueprint, server, stats, statsBreakdown, trigger,
         ]
     }
     

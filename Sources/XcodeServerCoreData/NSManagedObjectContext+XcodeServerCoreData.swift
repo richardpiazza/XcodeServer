@@ -5,11 +5,11 @@ import CoreData
 /// to XCServerCoreData
 public extension NSManagedObjectContext {
     
-    // MARK: - XcodeServer -
+    // MARK: - Server -
     
-    /// Retrieves all `XcodeServer` entities from the Core Data `NSManagedObjectContext`
-    func xcodeServers() -> [XcodeServer] {
-        let fetchRequest = NSFetchRequest<XcodeServer>(entityName: XcodeServer.entityName)
+    /// Retrieves all `Server` entities from the Core Data `NSManagedObjectContext`
+    func servers() -> [Server] {
+        let fetchRequest = NSFetchRequest<Server>(entityName: Server.entityName)
         do {
             return try self.fetch(fetchRequest)
         } catch {
@@ -19,10 +19,10 @@ public extension NSManagedObjectContext {
         return []
     }
     
-    /// Retrieves the first `XcodeServer` entity from the Core Data `NSManagedObjectContext`
+    /// Retrieves the first `Server` entity from the Core Data `NSManagedObjectContext`
     /// that matches the specified FQDN identifier.
-    func xcodeServer(withFQDN identifier: String) -> XcodeServer? {
-        let fetchRequest = NSFetchRequest<XcodeServer>(entityName: XcodeServer.entityName)
+    func server(withFQDN identifier: String) -> Server? {
+        let fetchRequest = NSFetchRequest<Server>(entityName: Server.entityName)
         fetchRequest.predicate = NSPredicate(format: "fqdn = %@", argumentArray: [identifier])
         do {
             let results = try self.fetch(fetchRequest)

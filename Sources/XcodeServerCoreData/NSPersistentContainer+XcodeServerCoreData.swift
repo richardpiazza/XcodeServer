@@ -3,8 +3,8 @@ import CoreData
 
 public extension NSPersistentContainer {
     
-    static var legacyXcodeServerCoreData: NSPersistentContainer = {
-        let model = Model_2_0_3.instance
+    static var xcodeServerCoreData: NSPersistentContainer = {
+        let model = Model_1_0_0()
         
         var storeURL: URL
         do {
@@ -21,10 +21,10 @@ public extension NSPersistentContainer {
         }
         
         let description = NSPersistentStoreDescription(url: storeURL)
-        description.shouldInferMappingModelAutomatically = true
-        description.shouldMigrateStoreAutomatically = true
+        description.shouldInferMappingModelAutomatically = false
+        description.shouldMigrateStoreAutomatically = false
         
-        let container = NSPersistentContainer(name: "XCServerCoreData", managedObjectModel: model)
+        let container = NSPersistentContainer(name: "XcodeServer", managedObjectModel: model)
         container.persistentStoreDescriptions = [description]
         container.loadPersistentStores { (_, error) in
             if let e = error {

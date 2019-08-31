@@ -9,7 +9,20 @@ public class CommitContributor: NSManagedObject {
         self.commit = commit
     }
     
-    public var initials: String? {
+}
+
+// MARK: - CoreData Properties
+public extension CommitContributor {
+    
+    @NSManaged var displayName: String?
+    @NSManaged var emailsData: Data?
+    @NSManaged var name: String?
+    @NSManaged var commit: Commit?
+    
+}
+
+public extension CommitContributor {
+    var initials: String? {
         var tempComponents: [String]? = nil
         
         if let name = self.name {
@@ -37,7 +50,7 @@ public class CommitContributor: NSManagedObject {
         return initials
     }
     
-    public var emailAddresses: [String] {
+    var emailAddresses: [String] {
         guard let data = self.emailsData else {
             return []
         }

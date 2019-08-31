@@ -8,3 +8,12 @@ public class CommitChange: NSManagedObject {
         self.commit = commit
     }
 }
+
+// MARK: - CoreData Properties
+public extension CommitChange {
+    
+    @NSManaged var filePath: String?
+    @NSManaged var status: NSNumber?
+    @NSManaged var commit: Commit?
+    
+}
