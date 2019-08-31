@@ -1,6 +1,7 @@
 import Foundation
 import CoreData
 
+@objc(RevisionBlueprint)
 public class RevisionBlueprint: NSManagedObject {
     
     public convenience init?(managedObjectContext: NSManagedObjectContext, commit: Commit, integration: Integration) {

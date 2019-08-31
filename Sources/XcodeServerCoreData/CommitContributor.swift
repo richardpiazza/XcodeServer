@@ -2,6 +2,7 @@ import Foundation
 import CoreData
 import XcodeServerCommon
 
+@objc(CommitContributor)
 public class CommitContributor: NSManagedObject {
     
     public convenience init?(managedObjectContext: NSManagedObjectContext, commit: Commit) {

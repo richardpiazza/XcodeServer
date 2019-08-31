@@ -5,6 +5,7 @@ import CoreData
 ///
 /// Each integration on your server generates a number of files, known as assets.
 /// Assets include log files, Xcode archives and installable products like IPA or PKG files.
+@objc(Asset)
 public class Asset: NSManagedObject {
     
 }

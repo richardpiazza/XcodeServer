@@ -1,6 +1,7 @@
 import Foundation
 import CoreData
 
+@objc(CommitChange)
 public class CommitChange: NSManagedObject {
     
     public convenience init?(managedObjectContext: NSManagedObjectContext, commit: Commit) {

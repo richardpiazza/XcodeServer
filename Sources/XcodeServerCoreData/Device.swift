@@ -1,6 +1,7 @@
 import Foundation
 import CoreData
 
+@objc(Device)
 public class Device: NSManagedObject {
     
     public convenience init?(managedObjectContext: NSManagedObjectContext, identifier: String) {

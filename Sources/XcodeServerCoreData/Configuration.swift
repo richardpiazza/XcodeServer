@@ -1,6 +1,7 @@
 import Foundation
 import CoreData
 
+@objc(Configuration)
 public class Configuration: NSManagedObject {
     
     public convenience init?(managedObjectContext: NSManagedObjectContext, bot: Bot) {

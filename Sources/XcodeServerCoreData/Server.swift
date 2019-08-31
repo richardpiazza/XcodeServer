@@ -4,6 +4,7 @@ import CoreData
 /// An `XcodeServer` is one of the root elements in the object graph.
 /// This represents a single Xcode Server, uniquely identified by its
 /// FQDN (Fully Qualified Domain Name).
+@objc(Server)
 public class Server: NSManagedObject {
     
     public convenience init?(managedObjectContext: NSManagedObjectContext, fqdn: String) {

@@ -1,6 +1,7 @@
 import Foundation
 import CoreData
 
+@objc(IntegrationAssets)
 public class IntegrationAssets: NSManagedObject {
     
     public convenience init?(managedObjectContext: NSManagedObjectContext, integration: Integration) {

@@ -1,6 +1,7 @@
 import Foundation
 import CoreData
 
+@objc(Filter)
 public class Filter: NSManagedObject {
     
     public convenience init?(managedObjectContext: NSManagedObjectContext, deviceSpecification: DeviceSpecification) {

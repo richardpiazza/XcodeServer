@@ -2,6 +2,7 @@ import Foundation
 import CoreData
 import XcodeServerCommon
 
+@objc(Issue)
 public class Issue: NSManagedObject {
     
     public var typeOfIssue: IssueType {

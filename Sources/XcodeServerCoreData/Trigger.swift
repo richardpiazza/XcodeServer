@@ -1,6 +1,7 @@
 import Foundation
 import CoreData
 
+@objc(Trigger)
 public class Trigger: NSManagedObject {
     
     public convenience init?(managedObjectContext: NSManagedObjectContext, configuration: Configuration) {

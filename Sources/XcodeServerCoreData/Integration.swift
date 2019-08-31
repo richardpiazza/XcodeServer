@@ -7,6 +7,7 @@ public typealias TestResult = (name: String, passed: Bool)
 /// ## Integration
 /// An Xcode Server Bot integration (run).
 /// "An integration is a single run of a bot. Integrations consist of building, analyzing, testing, and archiving the apps (or other software products) defined in your Xcode projects."
+@objc(Integration)
 public class Integration: NSManagedObject {
     
     public convenience init?(managedObjectContext: NSManagedObjectContext, identifier: String, bot: Bot? = nil) {

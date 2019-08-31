@@ -1,6 +1,7 @@
 import Foundation
 import CoreData
 
+@objc(Platform)
 public class Platform: NSManagedObject {
     
     public convenience init?(managedObjectContext: NSManagedObjectContext, filter: Filter) {

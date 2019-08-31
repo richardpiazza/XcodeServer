@@ -1,6 +1,7 @@
 import Foundation
 import CoreData
 
+@objc(StatsBreakdown)
 public class StatsBreakdown: NSManagedObject {
     
     

@@ -1,6 +1,7 @@
 import Foundation
 import CoreData
 
+@objc(BuildResultSummary)
 public class BuildResultSummary: NSManagedObject {
     
     public convenience init?(managedObjectContext: NSManagedObjectContext, integration: Integration) {

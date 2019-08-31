@@ -1,6 +1,7 @@
 import Foundation
 import CoreData
 
+@objc(Conditions)
 public class Conditions: NSManagedObject {
     
     public convenience init?(managedObjectContext: NSManagedObjectContext, trigger: Trigger) {

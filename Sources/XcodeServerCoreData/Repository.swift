@@ -1,6 +1,7 @@
 import Foundation
 import CoreData
 
+@objc(Repository)
 public class Repository: NSManagedObject {
     
     public convenience init?(managedObjectContext: NSManagedObjectContext, identifier: String) {

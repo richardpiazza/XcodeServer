@@ -5,6 +5,7 @@ import CoreData
 ///
 /// Bots are processes that Xcode Server runs to perform integrations on the current version of a project in a source
 /// code repository.
+@objc(Bot)
 public class Bot: NSManagedObject {
     
     public convenience init?(managedObjectContext: NSManagedObjectContext, identifier: String, server: Server) {

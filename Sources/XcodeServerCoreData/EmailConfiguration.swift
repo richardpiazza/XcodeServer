@@ -1,6 +1,7 @@
 import Foundation
 import CoreData
 
+@objc(EmailConfiguration)
 public class EmailConfiguration: NSManagedObject {
     
     public convenience init?(managedObjectContext: NSManagedObjectContext, trigger: Trigger) {

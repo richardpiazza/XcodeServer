@@ -76,7 +76,7 @@ public class Manager {
                     privateContext.automaticallyMergesChangesFromParent = true
                     
                     if let server = privateContext.object(with: xcodeServer.objectID) as? Server {
-                        server.update(withVersion: value.0)
+                        server.update(withVersion: value.0, api: value.1)
                         server.lastUpdate = Date()
                     }
                     
