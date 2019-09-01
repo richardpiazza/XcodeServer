@@ -18,6 +18,15 @@
           "revision": "5bb67f17dd575d458626293865f5b96f49d55bfe",
           "version": "6.6.0"
         }
+      },
+      {
+        "package": "ProcedureKit",
+        "repositoryURL": "https://github.com/ProcedureKit/ProcedureKit",
+        "state": {
+          "branch": null,
+          "revision": "a7fa565e648d90083c7f10c0c6be9bf249dcdbde",
+          "version": "5.2.0"
+        }
       }
     ]
   },

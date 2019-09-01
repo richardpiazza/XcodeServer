@@ -3,6 +3,7 @@ import CoreData
 import XcodeServerCommon
 import XcodeServerAPI
 import XcodeServerCoreData
+import XcodeServerProcedures
 
 public typealias ManagerErrorCompletion = (_ error: Swift.Error?) -> Void
 
