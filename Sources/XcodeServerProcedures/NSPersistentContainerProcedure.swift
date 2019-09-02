@@ -4,34 +4,14 @@ import ProcedureKit
 import XcodeServerAPI
 import XcodeServerCoreData
 
-open class NSPersistentContainerProcedure: Procedure, InputProcedure {
+open class NSPersistentContainerProcedure: Procedure {
     
-    public typealias Input = NSManagedObject
-    
-    open var input: Pending<Input> = .pending
+    open var object: NSManagedObject
     open var container: NSPersistentContainer = .xcodeServerCoreData
     
-    public init(input: Input? = nil) {
+    public init(object: NSManagedObject) {
+        self.object = object
+        
         super.init()
-        if let value = input {
-            self.input = .ready(value)
-        }
-    }
-    
-    open override func execute() {
-        guard !isCancelled else {
-            return
-        }
-        
-        guard let _ = input.value else {
-            finish(with: XcodeServerProcedureError.invalidInput)
-            return
-        }
-        
-        performTask()
-    }
-    
-    open func performTask() {
-        finish()
     }
 }

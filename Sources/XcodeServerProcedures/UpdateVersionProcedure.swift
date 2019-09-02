@@ -41,10 +41,13 @@ public class UpdateVersionProcedure: Procedure, InputProcedure {
                 return
             }
             
-            object.os = value.version.os
-            object.server = value.version.server
-            object.xcodeServer = value.version.xcodeServer
-            object.xcode = value.version.xcode
+            let version = value.version
+            
+            object.lastUpdate = Date()
+            object.os = version.os
+            object.server = version.server
+            object.xcodeServer = version.xcodeServer
+            object.xcode = version.xcode
             if let api = value.api {
                 object.apiVersion = api as NSNumber
             }
