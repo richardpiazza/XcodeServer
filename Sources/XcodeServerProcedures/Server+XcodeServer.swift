@@ -2,8 +2,8 @@ import Foundation
 import XcodeServerAPI
 import XcodeServerCoreData
 
-extension Server {
-    public func update(withVersion version: XCSVersion, api: Int? = nil) {
+public extension Server {
+    func update(withVersion version: XCSVersion, api: Int? = nil) {
         self.os = version.os
         self.server = version.server
         self.xcodeServer = version.xcodeServer
@@ -13,7 +13,7 @@ extension Server {
         }
     }
     
-    public func update(withBots data: [XCSBot]) {
+    func update(withBots data: [XCSBot]) {
         guard let moc = self.managedObjectContext else {
             return
         }

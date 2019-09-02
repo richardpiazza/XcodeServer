@@ -1,6 +1,7 @@
 import Foundation
 import CodeQuickKit
 import SWCompression
+import XcodeServerCommon
 
 public protocol APIClientAuthorizationDelegate: class {
     func authorization(for fqdn: String?) -> HTTP.Authorization?
@@ -34,30 +35,12 @@ public class APIClient: HTTPClient, HTTPCodable {
     public var baseURL: URL
     public var session: URLSession
     public var authorization: HTTP.Authorization?
-    public var jsonEncoder: JSONEncoder
-    public var jsonDecoder: JSONDecoder
+    public var jsonEncoder: JSONEncoder = XcodeServerCommon.jsonEncoder
+    public var jsonDecoder: JSONDecoder = XcodeServerCommon.jsonDecoder
     
     /// Delegate responsible for handling all authentication for
     /// `XCServerClient` instances.
     public static var authorizationDelegate: APIClientAuthorizationDelegate?
-    
-    private static var jsonDateFormatter: DateFormatter {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-        return formatter
-    }
-    
-    private static var jsonEncoder: JSONEncoder = {
-        let encoder = JSONEncoder()
-        encoder.dateEncodingStrategy = .formatted(jsonDateFormatter)
-        return encoder
-    }()
-    
-    private static var jsonDecoder: JSONDecoder = {
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .formatted(jsonDateFormatter)
-        return decoder
-    }()
     
     public init(fqdn: String) throws {
         guard let url = URL(string: "https://\(fqdn):20343/api") else {
@@ -66,8 +49,6 @@ public class APIClient: HTTPClient, HTTPCodable {
         
         baseURL = url
         session = URLSession(configuration: URLSessionConfiguration.default, delegate: SelfSignedSessionDelegate(), delegateQueue: nil)
-        jsonEncoder = type(of: self).jsonEncoder
-        jsonDecoder = type(of: self).jsonDecoder
     }
     
     fileprivate static var clients: [String : APIClient] = [:]
