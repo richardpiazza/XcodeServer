@@ -32,6 +32,6 @@ public extension Commit {
             return nil
         }
         
-        return dateFormatter.date(from: timestamp)
+        return JSON.dateFormatter.date(from: timestamp)
     }
 }

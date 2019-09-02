@@ -35,8 +35,8 @@ public class APIClient: HTTPClient, HTTPCodable {
     public var baseURL: URL
     public var session: URLSession
     public var authorization: HTTP.Authorization?
-    public var jsonEncoder: JSONEncoder = XcodeServerCommon.jsonEncoder
-    public var jsonDecoder: JSONDecoder = XcodeServerCommon.jsonDecoder
+    public var jsonEncoder: JSONEncoder = JSON.jsonEncoder
+    public var jsonDecoder: JSONDecoder = JSON.jsonDecoder
     
     /// Delegate responsible for handling all authentication for
     /// `XCServerClient` instances.

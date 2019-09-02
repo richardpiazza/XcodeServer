@@ -9,7 +9,7 @@ extension CommitContributor {
         self.displayName = contributor.displayName
         if let emails = contributor.emails {
             do {
-                self.emailsData = try jsonEncoder.encode(emails)
+                self.emailsData = try JSON.jsonEncoder.encode(emails)
             } catch {
                 print(error)
             }

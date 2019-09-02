@@ -4,19 +4,18 @@ import ProcedureKit
 import XcodeServerAPI
 import XcodeServerCoreData
 
-public class UpdateVersionProcedure: Procedure, InputProcedure {
+public class UpdateVersionProcedure: NSPersistentContainerProcedure, InputProcedure {
     
     public typealias Input = (version: XCSVersion, api: Int?)
     
     public var input: Pending<Input> = .pending
     
-    private var server: Server
-    private var container: NSPersistentContainer = .xcodeServerCoreData
+    private var server: Server {
+        return object as! Server
+    }
     
     public init(server: Server, input: Input? = nil) {
-        self.server = server
-        
-        super.init()
+        super.init(object: server)
         
         if let value = input {
             self.input = .ready(value)
@@ -37,20 +36,13 @@ public class UpdateVersionProcedure: Procedure, InputProcedure {
         
         container.performBackgroundTask { [weak self] (context) in
             guard let object = context.object(with: objectId) as? Server else {
+                self?.cancel()
                 self?.finish(with: XcodeServerProcedureError.invalidManagedObjectID(id: objectId))
                 return
             }
             
-            let version = value.version
-            
             object.lastUpdate = Date()
-            object.os = version.os
-            object.server = version.server
-            object.xcodeServer = version.xcodeServer
-            object.xcode = version.xcode
-            if let api = value.api {
-                object.apiVersion = api as NSNumber
-            }
+            object.update(withVersion: value.version, api: value.api)
             
             do {
                 try context.save()

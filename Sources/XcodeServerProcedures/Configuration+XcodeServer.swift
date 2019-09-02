@@ -39,7 +39,7 @@ extension Configuration {
         if #available(macOS 10.12, iOS 10.0, tvOS 10.0, watchOS 3.0, *) {
             if let buildArgs = configuration.additionalBuildArguments {
                 do {
-                    self.additionalBuildArgumentsData = try jsonEncoder.encode(buildArgs)
+                    self.additionalBuildArgumentsData = try JSON.jsonEncoder.encode(buildArgs)
                 } catch {
                     
                 }
@@ -47,7 +47,7 @@ extension Configuration {
             
             if let envVars = configuration.buildEnvironmentVariables {
                 do {
-                    self.buildEnvironmentVariablesData = try jsonEncoder.encode(envVars)
+                    self.buildEnvironmentVariablesData = try JSON.jsonEncoder.encode(envVars)
                 } catch {
                     
                 }

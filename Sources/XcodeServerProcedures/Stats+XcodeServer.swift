@@ -15,7 +15,7 @@ extension Stats {
         self.testAdditionRate = stats.testAdditionRate as NSNumber?
         self.codeCoveragePercentageDelta = stats.codeCoveragePercentageDelta as NSNumber?
         if let date = stats.sinceDate {
-            self.sinceDate = dateFormatter.string(from: date)
+            self.sinceDate = JSON.dateFormatter.string(from: date)
         }
         
         if let statsLastCleanIntegrationIdentifier = stats.lastCleanIntegration?.integrationID {

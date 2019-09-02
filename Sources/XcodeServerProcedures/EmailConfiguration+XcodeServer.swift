@@ -8,14 +8,14 @@ extension EmailConfiguration {
         if #available(macOS 10.12, iOS 10.0, tvOS 10.0, watchOS 3.0, *) {
             if let ccas = configuration.ccAddresses {
                 do {
-                    self.ccAddressesData = try jsonEncoder.encode(ccas)
+                    self.ccAddressesData = try JSON.jsonEncoder.encode(ccas)
                 } catch {
                     print(error)
                 }
             }
             if let adn = configuration.allowedDomainNames {
                 do {
-                    self.allowedDomainNamesData = try jsonEncoder.encode(adn)
+                    self.allowedDomainNamesData = try JSON.jsonEncoder.encode(adn)
                 } catch {
                     print(error)
                 }

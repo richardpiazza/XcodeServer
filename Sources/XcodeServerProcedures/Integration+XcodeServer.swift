@@ -21,7 +21,7 @@ public extension Integration {
         self.successStreak = integration.successStreak as NSNumber?
         if let value = integration.testHierarchy {
             do {
-                self.testHierachyData = try jsonEncoder.encode(value)
+                self.testHierachyData = try JSON.jsonEncoder.encode(value)
             } catch {
                 print(error)
             }
@@ -78,7 +78,7 @@ public extension Integration {
         
         let testHierachy: XCSTestHierarchy
         do {
-            testHierachy = try jsonDecoder.decode(XCSTestHierarchy.self, from: data)
+            testHierachy = try JSON.jsonDecoder.decode(XCSTestHierarchy.self, from: data)
         } catch {
             print(error)
             return []

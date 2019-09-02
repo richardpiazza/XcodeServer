@@ -2,8 +2,8 @@ import Foundation
 import XcodeServerAPI
 import XcodeServerCoreData
 
-extension Bot {
-    public func update(withBot bot: XCSBot) {
+public extension Bot {
+    func update(withBot bot: XCSBot) {
         guard let moc = self.managedObjectContext else {
             return
         }
@@ -29,7 +29,7 @@ extension Bot {
         }
     }
     
-    public func update(withIntegrations integrations: [XCSIntegration]) {
+    func update(withIntegrations integrations: [XCSIntegration]) {
         guard let moc = self.managedObjectContext else {
             return
         }
