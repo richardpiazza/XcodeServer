@@ -26,7 +26,7 @@ final class XcodeServerTests: XCTestCase {
         XCTAssertEqual(entityHashes[CommitContributor.entityName]!.hexString, "eb4840a647e444fa96e304d99c54dac6ea03c3515727eb8f4aae95fa36f35af1")
         XCTAssertEqual(entityHashes[Conditions.entityName]!.hexString, "43c75d8892334f5bb1ffc69d71366cc8341354bac4f5dda12d2cf04d1e4bbc29")
         XCTAssertEqual(entityHashes[Configuration.entityName]!.hexString, "fd2005a5c47103c342feb35f0c98f3adbfa3b2ef34b96bffb366946214a71a16")
-        XCTAssertEqual(entityHashes[Device.entityName]!.hexString, "344cfa9cb49f5d31667fcd29d656caa7d7d6edae0e90c472ed1c7bdc2467579a")
+        XCTAssertEqual(entityHashes[Device.entityName]!.hexString, "d7970b54509ea67e7b6a113095e1ee4df1dce98b63d2b5fbb22fbd5c1740d37a")
         XCTAssertEqual(entityHashes[DeviceSpecification.entityName]!.hexString, "d2f8ec60efc6be84488669ff6da365698d2299b895dfba81ebfd504a3e54f7fd")
         XCTAssertEqual(entityHashes[EmailConfiguration.entityName]!.hexString, "f787388ef7067b89ce93edcdf608aa062be90e1dce38afec535d29eed5f8c99b")
         XCTAssertEqual(entityHashes[Filter.entityName]!.hexString, "8543c3213eb7d51686e691f1ee4f7289ce2b85e161a3aa3874268d6939ab9232")

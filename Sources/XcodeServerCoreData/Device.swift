@@ -18,23 +18,23 @@ public extension Device {
     }
     
     @NSManaged var architecture: String?
-    @NSManaged var connected: NSNumber?
-    @NSManaged var deviceID: String?
     @NSManaged var deviceType: String?
-    @NSManaged var enabledForDevelopment: NSNumber?
     @NSManaged var identifier: String?
-    @NSManaged var isServer: NSNumber?
+    @NSManaged var isConnectedRawValue: NSNumber?
+    @NSManaged var isEnabledForDevelopmentRawValue: NSNumber?
+    @NSManaged var isRetinaRawValue: NSNumber?
+    @NSManaged var isServerRawValue: NSNumber?
+    @NSManaged var isSimulatorRawValue: NSNumber?
+    @NSManaged var isSupportedRawValue: NSNumber?
+    @NSManaged var isTrustedRawValue: NSNumber?
+    @NSManaged var isWirelessRawValue: NSNumber?
     @NSManaged var modelCode: String?
     @NSManaged var modelName: String?
     @NSManaged var modelUTI: String?
     @NSManaged var name: String?
     @NSManaged var osVersion: String?
     @NSManaged var platformIdentifier: String?
-    @NSManaged var retina: NSNumber?
-    @NSManaged var simulator: NSNumber?
-    @NSManaged var supported: NSNumber?
-    @NSManaged var trusted: NSNumber?
-    @NSManaged var revision: String?
+    
     @NSManaged var activeProxiedDevice: Device?
     @NSManaged var deviceSpecifications: Set<DeviceSpecification>?
     @NSManaged var integrations: Set<Integration>?
@@ -74,4 +74,114 @@ extension Device {
     @objc(removeIntegrations:)
     @NSManaged public func removeFromIntegrations(_ values: Set<Integration>)
     
+}
+
+public extension Device {
+    var isConnected: Bool {
+        get {
+            guard let rawValue = isConnectedRawValue else {
+                return false
+            }
+            
+            return Bool(exactly: rawValue) ?? false
+        }
+        set {
+            isConnectedRawValue = NSNumber(booleanLiteral: newValue)
+        }
+    }
+    
+    var isEnabledForDevelopment: Bool {
+        get {
+            guard let rawValue = isEnabledForDevelopmentRawValue else {
+                return false
+            }
+            
+            return Bool(exactly: rawValue) ?? false
+        }
+        set {
+            isEnabledForDevelopmentRawValue = NSNumber(booleanLiteral: newValue)
+        }
+    }
+    
+    var isRetina: Bool {
+        get {
+            guard let rawValue = isRetinaRawValue else {
+                return false
+            }
+            
+            return Bool(exactly: rawValue) ?? false
+        }
+        set {
+            isRetinaRawValue = NSNumber(booleanLiteral: newValue)
+        }
+    }
+    
+    var isServer: Bool {
+        get {
+            guard let rawValue = isServerRawValue else {
+                return false
+            }
+            
+            return Bool(exactly: rawValue) ?? false
+        }
+        set {
+            isServerRawValue = NSNumber(booleanLiteral: newValue)
+        }
+    }
+    
+    var isSimulator: Bool {
+        get {
+            guard let rawValue = isSimulatorRawValue else {
+                return false
+            }
+            
+            return Bool(exactly: rawValue) ?? false
+        }
+        set {
+            isSimulatorRawValue = NSNumber(booleanLiteral: newValue)
+        }
+    }
+    
+    var isSupported: Bool {
+        get {
+            guard let rawValue = isSupportedRawValue else {
+                return false
+            }
+            
+            return Bool(exactly: rawValue) ?? false
+        }
+        set {
+            isSupportedRawValue = NSNumber(booleanLiteral: newValue)
+        }
+    }
+    
+    var isTrusted: Bool {
+        get {
+            guard let rawValue = isTrustedRawValue else {
+                return false
+            }
+            
+            return Bool(exactly: rawValue) ?? false
+        }
+        set {
+            isTrustedRawValue = NSNumber(booleanLiteral: newValue)
+        }
+    }
+    
+    var isWireless: Bool? {
+        get {
+            guard let rawValue = isWirelessRawValue else {
+                return nil
+            }
+            
+            return Bool(exactly: rawValue)
+        }
+        set {
+            if let value = newValue {
+                isWirelessRawValue = NSNumber(booleanLiteral: value)
+            } else {
+                isWirelessRawValue = nil
+            }
+        }
+    }
 }

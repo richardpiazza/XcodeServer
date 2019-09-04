@@ -40,16 +40,12 @@ public extension Integration {
         // Tested Devices
         if let devices = integration.testedDevices {
             for testedDevice in devices {
-                guard let identifier = testedDevice.identifier else {
-                    continue
-                }
-                
-                if let device = moc.device(withIdentifier: identifier) {
+                if let device = moc.device(withIdentifier: testedDevice.identifier) {
                     self.testedDevices?.insert(device)
                     continue
                 }
                 
-                if let device = Device(managedObjectContext: moc, identifier: identifier) {
+                if let device = Device(managedObjectContext: moc, identifier: testedDevice.identifier) {
                     device.update(withDevice: testedDevice)
                     self.testedDevices?.insert(device)
                 }

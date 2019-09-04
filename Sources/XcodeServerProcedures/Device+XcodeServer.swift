@@ -4,17 +4,21 @@ import XcodeServerCoreData
 
 extension Device {
     public func update(withDevice device: XCSDevice) {
-        self.name = device.name
-        self.deviceType = device.deviceType
-        self.connected = device.connected as NSNumber?
-        self.simulator = device.simulator as NSNumber?
-        self.osVersion = device.osVersion
-        self.supported = device.supported as NSNumber?
-        self.enabledForDevelopment = device.enabledForDevelopment as NSNumber?
         self.architecture = device.architecture
-        self.isServer = device.isServer as NSNumber?
+        self.deviceType = device.deviceType
+        self.isConnected = device.isConnected
+        self.isEnabledForDevelopment = device.isEnabledForDevelopment
+        self.isRetina = device.isRetina
+        self.isServer = device.isServer
+        self.isSimulator = device.isSimulator
+        self.isSupported = device.isSupported
+        self.isTrusted = device.isTrusted
+        self.isWireless = device.isWireless
+        self.modelCode = device.modelCode
+        self.modelName = device.modelName
+        self.modelUTI = device.modelUTI
+        self.name = device.name
+        self.osVersion = device.osVersion
         self.platformIdentifier = device.platformIdentifier
-        self.retina = device.retina as NSNumber?
-        self.revision = device.revision
     }
 }
