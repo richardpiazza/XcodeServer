@@ -8,9 +8,9 @@ public extension Bot {
             return
         }
         
-        self.revision = bot._rev
         self.name = bot.name
-        self.type = bot.type as NSNumber?
+        self.botType = bot.typeRawValue
+        self.requiresUpgrade = bot.requiresUpgrade
         
         if let configuration = bot.configuration {
             self.configuration?.update(withConfiguration: configuration)

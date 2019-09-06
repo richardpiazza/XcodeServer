@@ -25,16 +25,16 @@ public extension Server {
         var ids: [String] = bots.map({ $0.identifier })
         
         for element in data {
-            if let index = ids.firstIndex(of: element._id) {
+            if let index = ids.firstIndex(of: element.identifier) {
                 ids.remove(at: index)
             }
             
-            if let bot = moc.bot(withIdentifier: element._id) {
+            if let bot = moc.bot(withIdentifier: element.identifier) {
                 bot.update(withBot: element)
                 continue
             }
             
-            if let bot = Bot(managedObjectContext: moc, identifier: element._id, server: self) {
+            if let bot = Bot(managedObjectContext: moc, identifier: element.identifier, server: self) {
                 bot.update(withBot: element)
             }
         }

@@ -3,32 +3,28 @@ import Foundation
 public struct XCSBot: Codable {
     
     enum CodingKeys: String, CodingKey {
-        case _id
-        case _rev
-        case group
-        case requiresUpgrade
-        case name
-        case type
-        case sourceControlBlueprintIdentifier
-        case integrationCounter = "integration_counter"
-        case docType = "doc_type"
-        case tinyID
         case configuration
+        case docType = "doc_type"
+        case group
+        case identifier = "_id"
+        case integrationCounter = "integration_counter"
         case lastRevisionBlueprint
+        case name
+        case requiresUpgrade
         case sourceControlBlueprint
+        case sourceControlBlueprintIdentifier
+        case typeRawValue = "type"
     }
     
-    public var _id: String
-    public var _rev: String
-    public var group: XCSGroup
-    public var requiresUpgrade: Bool
-    public var name: String
-    public var type: Int
-    public var sourceControlBlueprintIdentifier: String
-    public var integrationCounter: Int
-    public var docType: String
-    public var tinyID: String
     public var configuration: XCSConfiguration?
+    public var docType: String = "bot"
+    public var group: XCSGroup = XCSGroup()
+    public var identifier: String = UUID().uuidString
+    public var integrationCounter: Int = 0
     public var lastRevisionBlueprint: XCSRepositoryBlueprint?
+    public var name: String = ""
+    public var requiresUpgrade: Bool = false
     public var sourceControlBlueprint: XCSRepositoryBlueprint?
+    public var sourceControlBlueprintIdentifier: String = ""
+    public var typeRawValue: Int = 0
 }

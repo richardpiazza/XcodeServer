@@ -19,7 +19,7 @@ final class XcodeServerTests: XCTestCase {
         let entityHashes = model.entityVersionHashesByName
         
         XCTAssertEqual(entityHashes[Asset.entityName]!.hexString, "e26ed40dd5f67926b82284c93ff43345873e127230d177d63bc7c460ce02b22e")
-        XCTAssertEqual(entityHashes[Bot.entityName]!.hexString, "8f5a11e2bee30310dd9639be2491fcf189ff18a928d2f8d7e2790c611ba332b8")
+        XCTAssertEqual(entityHashes[Bot.entityName]!.hexString, "81045adbacfbf44fdafcbba23c25d173cce97c309f99185c656a6abc010ca1a4")
         XCTAssertEqual(entityHashes[BuildResultSummary.entityName]!.hexString, "bcccab1f241de0fd2ae266b8d9f0b419cc30cce281e0898564e851c3f6300528")
         XCTAssertEqual(entityHashes[Commit.entityName]!.hexString, "d5072780a250ba08ae20cbb11ad3cde0b705c3bf6aee7b4b84108b147bcb2ab6")
         XCTAssertEqual(entityHashes[CommitChange.entityName]!.hexString, "55bbc6abfc7b1d6ef6497cbaf3482c11805e09b6707cda708b8a7bad40c98f41")

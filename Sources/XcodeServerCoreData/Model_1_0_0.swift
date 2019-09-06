@@ -36,8 +36,8 @@ class Model_1_0_0: NSManagedObjectModel {
         bot.properties.append(bot_identifier)
         bot.properties.append(NSAttributeDescription(name: "lastUpdate", type: .dateAttributeType))
         bot.properties.append(NSAttributeDescription(name: "name", type: .stringAttributeType))
-        bot.properties.append(NSAttributeDescription(name: "revision", type: .stringAttributeType))
-        bot.properties.append(NSAttributeDescription(name: "type", type: .integer32AttributeType, defaultValue: 0))
+        bot.properties.append(NSAttributeDescription(name: "requiresUpgradeRawValue", type: .booleanAttributeType))
+        bot.properties.append(NSAttributeDescription(name: "typeRawValue", type: .integer32AttributeType, defaultValue: 0))
         bot.indexes.append(NSFetchIndexDescription(name: "byIdentifierIndex", elements: [NSFetchIndexElementDescription(property: bot_identifier, collationType: .binary)]))
         
         let buildResultSummary = NSEntityDescription(name: "BuildResultSummary")

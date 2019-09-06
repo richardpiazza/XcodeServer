@@ -25,16 +25,15 @@ public extension Bot {
         return NSFetchRequest<Bot>(entityName: entityName)
     }
     
+    @NSManaged var configuration: Configuration?
     @NSManaged var identifier: String
+    @NSManaged var integrations: Set<Integration>?
     @NSManaged var lastUpdate: Date?
     @NSManaged var name: String?
-    @NSManaged var type: NSNumber?
-    @NSManaged var revision: String?
-    @NSManaged var configuration: Configuration?
-    @NSManaged var integrations: Set<Integration>?
-    @NSManaged var stats: Stats?
+    @NSManaged var requiresUpgradeRawValue: NSNumber?
     @NSManaged var server: Server?
-    
+    @NSManaged var stats: Stats?
+    @NSManaged var typeRawValue: NSNumber?
 }
 
 // MARK: Generated accessors for integrations
@@ -52,4 +51,32 @@ extension Bot {
     @objc(removeIntegrations:)
     @NSManaged public func removeFromIntegrations(_ values: Set<Integration>)
     
+}
+
+public extension Bot {
+    var requiresUpgrade: Bool {
+        get {
+            guard let rawValue = requiresUpgradeRawValue else {
+                return false
+            }
+            
+            return Bool(exactly: rawValue) ?? false
+        }
+        set {
+            requiresUpgradeRawValue = NSNumber(booleanLiteral: newValue)
+        }
+    }
+    
+    var botType: Int? {
+        get {
+            return typeRawValue?.intValue
+        }
+        set {
+            if let value = newValue {
+                typeRawValue = value as NSNumber
+            } else {
+                typeRawValue = nil
+            }
+        }
+    }
 }
