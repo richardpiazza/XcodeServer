@@ -8,8 +8,9 @@ public extension Bot {
             return
         }
         
+        self.integrationCounter = Int32(bot.integrationCounter)
         self.name = bot.name
-        self.botType = bot.typeRawValue
+        self.typeRawValue = Int16(bot.typeRawValue)
         self.requiresUpgrade = bot.requiresUpgrade
         
         if let configuration = bot.configuration {

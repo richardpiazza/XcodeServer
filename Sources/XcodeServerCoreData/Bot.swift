@@ -8,9 +8,12 @@ import CoreData
 @objc(Bot)
 public class Bot: NSManagedObject {
     
-    public convenience init?(managedObjectContext: NSManagedObjectContext, identifier: String, server: Server) {
+    public convenience init?(managedObjectContext: NSManagedObjectContext, identifier: UUID, server: Server) {
         self.init(managedObjectContext: managedObjectContext)
         self.identifier = identifier
+        self.integrationCounter = 0
+        self.requiresUpgrade = false
+        self.typeRawValue = 0
         self.server = server
         self.integrations = Set<Integration>()
         self.configuration = Configuration(managedObjectContext: managedObjectContext, bot: self)
@@ -26,14 +29,15 @@ public extension Bot {
     }
     
     @NSManaged var configuration: Configuration?
-    @NSManaged var identifier: String
+    @NSManaged var identifier: UUID
+    @NSManaged var integrationCounter: Int32
     @NSManaged var integrations: Set<Integration>?
     @NSManaged var lastUpdate: Date?
     @NSManaged var name: String?
-    @NSManaged var requiresUpgradeRawValue: NSNumber?
+    @NSManaged var requiresUpgrade: Bool
     @NSManaged var server: Server?
     @NSManaged var stats: Stats?
-    @NSManaged var typeRawValue: NSNumber?
+    @NSManaged var typeRawValue: Int16
 }
 
 // MARK: Generated accessors for integrations
@@ -54,29 +58,44 @@ extension Bot {
 }
 
 public extension Bot {
-    var requiresUpgrade: Bool {
-        get {
-            guard let rawValue = requiresUpgradeRawValue else {
-                return false
-            }
-            
-            return Bool(exactly: rawValue) ?? false
+    // Reserve for BotType enumeration
+//    var botType: Int {
+//        get {
+//            return Int(typeRawValue)
+//        }
+//        set {
+//            typeRawValue = Int16(newValue)
+//        }
+//    }
+}
+
+public extension NSManagedObjectContext {
+    /// Retrieves all `Bot` entities from the Core Data `NSManagedObjectContext`
+    func bots() -> [Bot] {
+        let fetchRequest = NSFetchRequest<Bot>(entityName: Bot.entityName)
+        do {
+            return try self.fetch(fetchRequest)
+        } catch {
+            print(error)
         }
-        set {
-            requiresUpgradeRawValue = NSNumber(booleanLiteral: newValue)
-        }
+        
+        return []
     }
     
-    var botType: Int? {
-        get {
-            return typeRawValue?.intValue
-        }
-        set {
-            if let value = newValue {
-                typeRawValue = value as NSNumber
-            } else {
-                typeRawValue = nil
+    /// Retrieves the first `Bot` entity from the Core Data `NSManagedObjectContext`
+    /// that matches the specified identifier.
+    func bot(withIdentifier identifier: UUID) -> Bot? {
+        let fetchRequest = NSFetchRequest<Bot>(entityName: Bot.entityName)
+        fetchRequest.predicate = NSPredicate(format: "identifier = %@", argumentArray: [identifier])
+        do {
+            let results = try self.fetch(fetchRequest)
+            if let result = results.first {
+                return result
             }
+        } catch {
+            print(error)
         }
+        
+        return nil
     }
 }

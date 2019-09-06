@@ -32,13 +32,19 @@ class Model_1_0_0: NSManagedObjectModel {
         asset.properties.append(NSAttributeDescription(name: "triggerName", type: .stringAttributeType))
         
         let bot = NSEntityDescription(name: "Bot")
-        let bot_identifier = NSAttributeDescription(name: "identifier", type: .stringAttributeType, isOptional: false, defaultValue: "_identifier")
+        let bot_identifier = NSAttributeDescription(name: "identifier", type: .UUIDAttributeType, isOptional: false, defaultValue: "f8cf876e-0380-4ea5-85fe-6cb54bcca396")
+        let bot_name = NSAttributeDescription(name: "name", type: .stringAttributeType)
         bot.properties.append(bot_identifier)
+        bot.properties.append(NSAttributeDescription(name: "integrationCounter", type: .integer32AttributeType, defaultValue: 0))
         bot.properties.append(NSAttributeDescription(name: "lastUpdate", type: .dateAttributeType))
-        bot.properties.append(NSAttributeDescription(name: "name", type: .stringAttributeType))
-        bot.properties.append(NSAttributeDescription(name: "requiresUpgradeRawValue", type: .booleanAttributeType))
-        bot.properties.append(NSAttributeDescription(name: "typeRawValue", type: .integer32AttributeType, defaultValue: 0))
-        bot.indexes.append(NSFetchIndexDescription(name: "byIdentifierIndex", elements: [NSFetchIndexElementDescription(property: bot_identifier, collationType: .binary)]))
+        bot.properties.append(bot_name)
+        bot.properties.append(NSAttributeDescription(name: "requiresUpgrade", type: .booleanAttributeType, defaultValue: false))
+        bot.properties.append(NSAttributeDescription(name: "typeRawValue", type: .integer16AttributeType, defaultValue: 0))
+        
+        bot.indexes.append(NSFetchIndexDescription(name: "byPropertyIndex", elements: [
+            NSFetchIndexElementDescription(property: bot_identifier, collationType: .binary),
+            NSFetchIndexElementDescription(property: bot_name, collationType: .binary)
+            ]))
         
         let buildResultSummary = NSEntityDescription(name: "BuildResultSummary")
         buildResultSummary.properties.append(NSAttributeDescription(name: "analyzerWarningChange", type: .integer32AttributeType, defaultValue: 0))
