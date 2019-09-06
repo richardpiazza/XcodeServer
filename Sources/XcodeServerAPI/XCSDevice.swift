@@ -6,7 +6,6 @@ public struct XCSDevice: Codable {
         case activeProxiedDevice
         case architecture
         case deviceType
-        case docType = "doc_type"
         case identifier
         case isConnected = "connected"
         case isEnabledForDevelopment = "enabledForDevelopment"
@@ -22,17 +21,13 @@ public struct XCSDevice: Codable {
         case name
         case osVersion
         case platformIdentifier
-        
-        
-        case ID
-        case revision
-        case tinyID
     }
+    
+    public let docType: String = "device"
     
     public var activeProxiedDevice: XCSProxiedDeviceDocument?
     public var architecture: String = ""
     public var deviceType: String = ""
-    public var docType: String = "device"
     public var identifier: String = UUID().uuidString
     public var isConnected: Bool = false
     public var isEnabledForDevelopment: Bool = false
@@ -49,44 +44,29 @@ public struct XCSDevice: Codable {
     public var osVersion: String = ""
     public var platformIdentifier: String = ""
     
-    @available(*, deprecated)
-    public var ID: String?
-    
-    @available(*, deprecated)
-    public var revision: String?
-    
-    @available(*, deprecated)
-    public var tinyID: String?
-}
-
-public extension XCSDevice {
-    @available(*, deprecated, renamed: "isConnected")
-    var connected: Bool? {
-        return isConnected
+    public init() {
+        
     }
     
-    @available(*, deprecated, renamed: "isEnabledForDevelopment")
-    var enabledForDevelopment: Bool? {
-        return isEnabledForDevelopment
-    }
-    
-    @available(*, deprecated, renamed: "isRetina")
-    var retina: Bool? {
-        return isRetina
-    }
-    
-    @available(*, deprecated, renamed: "isSimulator")
-    var simulator: Bool? {
-        return isSimulator
-    }
-    
-    @available(*, deprecated, renamed: "isSupported")
-    var supported: Bool? {
-        return isSupported
-    }
-    
-    @available(*, deprecated, renamed: "isTrusted")
-    var trusted: Bool? {
-        return isTrusted
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        activeProxiedDevice = try container.decodeIfPresent(XCSProxiedDeviceDocument.self, forKey: .activeProxiedDevice)
+        architecture = try container.decodeIfPresent(String.self, forKey: .architecture) ?? ""
+        deviceType = try container.decode(String.self, forKey: .deviceType)
+        identifier = try container.decode(String.self, forKey: .identifier)
+        isConnected = try container.decode(Bool.self, forKey: .isConnected)
+        isEnabledForDevelopment = try container.decode(Bool.self, forKey: .isEnabledForDevelopment)
+        isRetina = try container.decode(Bool.self, forKey: .isRetina)
+        isServer = try container.decode(Bool.self, forKey: .isServer)
+        isSimulator = try container.decode(Bool.self, forKey: .isSimulator)
+        isSupported = try container.decode(Bool.self, forKey: .isSupported)
+        isTrusted = try container.decode(Bool.self, forKey: .isTrusted)
+        isWireless = try container.decodeIfPresent(Bool.self, forKey: .isWireless)
+        modelCode = try container.decode(String.self, forKey: .modelCode)
+        modelName = try container.decode(String.self, forKey: .modelName)
+        modelUTI = try container.decode(String.self, forKey: .modelUTI)
+        name = try container.decode(String.self, forKey: .name)
+        osVersion = try container.decode(String.self, forKey: .osVersion)
+        platformIdentifier = try container.decode(String.self, forKey: .platformIdentifier)
     }
 }
