@@ -11,30 +11,26 @@ extension Configuration {
         
         self.schemeName = configuration.schemeName
         
-        self.builtFromClean = configuration.builtFromClean?.rawValue as NSNumber?
-        self.disableAppThinning = configuration.disableAppThinning as NSNumber?
-        self.codeCoveragePreference = configuration.codeCoveragePreference?.rawValue as NSNumber?
-        self.useParallelDeviceTesting = configuration.useParallelDeviceTesting as NSNumber?
-        self.performsArchiveAction = configuration.performsArchiveAction as NSNumber?
-        self.performsAnalyzeAction = configuration.performsAnalyzeAction as NSNumber?
-        self.exportsProductFromArchive = configuration.exportsProductFromArchive as NSNumber?
+        self.cleanSchedule = configuration.builtFromClean ?? .never
+        self.disableAppThinning = configuration.disableAppThinning ?? false
+        self.codeCoveragePreference = configuration.codeCoveragePreference ?? .disabled
+        self.useParallelDeviceTesting = configuration.useParallelDeviceTesting ?? false
+        self.performsArchiveAction = configuration.performsArchiveAction ?? false
+        self.performsAnalyzeAction = configuration.performsAnalyzeAction ?? false
+        self.exportsProductFromArchive = configuration.exportsProductFromArchive ?? false
+        self.performsTestAction = configuration.performsTestAction ?? false
+        self.runOnlyDisabledTests = configuration.runOnlyDisabledTests ?? false
+        self.testingDestinationTypeRawValue = Int16(configuration.testingDestinationType ?? 0)
         
-        self.performsTestAction = configuration.performsTestAction as NSNumber?
-        self.runOnlyDisabledTests = configuration.runOnlyDisabledTests as NSNumber?
-        self.testingDestinationType = configuration.testingDestinationType as NSNumber?
-        // TODO: testLocalizations?
         
-        self.scheduleType = configuration.scheduleType?.rawValue as NSNumber?
-        self.periodicScheduleInterval = configuration.periodicScheduleInterval.rawValue as NSNumber?
-        self.weeklyScheduleDay = configuration.weeklyScheduleDay as NSNumber?
-        self.hourOfIntegration = configuration.hourOfIntegration as NSNumber?
-        self.minutesAfterHourToIntegrate = configuration.minutesAfterHourToIntegrate as NSNumber?
-        self.performsUpgradeIntegration = configuration.performsUpgradeIntegration as NSNumber?
-        
-        if let provConfig = configuration.provisioningConfiguration {
-            self.addMissingDeviceToTeams = provConfig.addMissingDevicesToTeams as NSNumber
-            self.manageCertsAndProfiles = provConfig.manageCertsAndProfiles as NSNumber
-        }
+        self.scheduleType = configuration.scheduleType ?? .periodic
+        self.periodicScheduleInterval = configuration.periodicScheduleInterval
+        self.weeklyScheduleDay = Int16(configuration.weeklyScheduleDay ?? 0)
+        self.hourOfIntegration = Int16(configuration.hourOfIntegration ?? 0)
+        self.minutesAfterHourToIntegrate = Int16(configuration.minutesAfterHourToIntegrate ?? 0)
+        self.performsUpgradeIntegration = configuration.performsUpgradeIntegration ?? false
+        self.addMissingDeviceToTeams = configuration.provisioningConfiguration?.addMissingDevicesToTeams ?? false
+        self.manageCertsAndProfiles = configuration.provisioningConfiguration?.manageCertsAndProfiles ?? false
         
         if #available(macOS 10.12, iOS 10.0, tvOS 10.0, watchOS 3.0, *) {
             if let buildArgs = configuration.additionalBuildArguments {

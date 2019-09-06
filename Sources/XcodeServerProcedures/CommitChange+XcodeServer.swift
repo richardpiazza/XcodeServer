@@ -4,7 +4,7 @@ import XcodeServerCoreData
 
 extension CommitChange {
     public func update(withCommitChange change: XCSCommitChangeFilePath) {
-        self.status = change.status as NSNumber?
+        self.statusRawValue = Int16(change.status)
         self.filePath = change.filePath
     }
 }

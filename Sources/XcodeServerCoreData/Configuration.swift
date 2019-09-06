@@ -1,5 +1,6 @@
 import Foundation
 import CoreData
+import XcodeServerCommon
 
 @objc(Configuration)
 public class Configuration: NSManagedObject {
@@ -8,6 +9,24 @@ public class Configuration: NSManagedObject {
         self.init(managedObjectContext: managedObjectContext)
         self.bot = bot
         self.deviceSpecification = DeviceSpecification(managedObjectContext: managedObjectContext, configuration: self)
+        self.codeCoveragePreferenceRawValue = 0
+        self.cleanScheduleRawValue = 0
+        self.disableAppThinning = false
+        self.useParallelDeviceTesting = false
+        self.performsAnalyzeAction = false
+        self.performsArchiveAction = false
+        self.performsTestAction = false
+        self.exportsProductFromArchive = false
+        self.runOnlyDisabledTests = false
+        self.testingDestinationTypeRawValue = 0
+        self.scheduleTypeRawValue = 0
+        self.periodicScheduleIntervalRawValue = 0
+        self.weeklyScheduleDay = 0
+        self.hourOfIntegration = 0
+        self.minutesAfterHourToIntegrate = 0
+        self.performsUpgradeIntegration = false
+        self.addMissingDeviceToTeams = false
+        self.manageCertsAndProfiles = false
     }
 }
 
@@ -18,33 +37,31 @@ public extension Configuration {
         return NSFetchRequest<Configuration>(entityName: entityName)
     }
     
-    @NSManaged var builtFromClean: NSNumber?
-    @NSManaged var codeCoveragePreference: NSNumber?
-    @NSManaged var hourOfIntegration: NSNumber?
-    @NSManaged var minutesAfterHourToIntegrate: NSNumber?
-    @NSManaged var performsAnalyzeAction: NSNumber?
-    @NSManaged var performsArchiveAction: NSNumber?
-    @NSManaged var performsTestAction: NSNumber?
-    @NSManaged var periodicScheduleInterval: NSNumber?
-    @NSManaged var scheduleType: NSNumber?
-    @NSManaged var schemeName: String?
-    @NSManaged var testingDestinationType: NSNumber?
-    @NSManaged var weeklyScheduleDay: NSNumber?
-    @NSManaged var disableAppThinning: NSNumber?
-    @NSManaged var useParallelDeviceTesting: NSNumber?
-    @NSManaged var exportsProductFromArchive: NSNumber?
-    @NSManaged var runOnlyDisabledTests: NSNumber?
-    @NSManaged var testingDestinationTypeRawValue: NSNumber?
-    @NSManaged var performsUpgradeIntegration: NSNumber?
-    @NSManaged var addMissingDeviceToTeams: NSNumber?
-    @NSManaged var manageCertsAndProfiles: NSNumber?
     @NSManaged var additionalBuildArgumentsData: Data?
-    @NSManaged var buildEnvironmentVariablesData: Data?
+    @NSManaged var addMissingDeviceToTeams: Bool // XCSProvisioningConfiguration
     @NSManaged var bot: Bot?
+    @NSManaged var buildEnvironmentVariablesData: Data?
+    @NSManaged var codeCoveragePreferenceRawValue: Int16
+    @NSManaged var cleanScheduleRawValue: Int16
     @NSManaged var deviceSpecification: DeviceSpecification?
+    @NSManaged var disableAppThinning: Bool
+    @NSManaged var exportsProductFromArchive: Bool
+    @NSManaged var hourOfIntegration: Int16
+    @NSManaged var manageCertsAndProfiles: Bool // XCSProvisioningConfiguration
+    @NSManaged var minutesAfterHourToIntegrate: Int16
+    @NSManaged var periodicScheduleIntervalRawValue: Int16
+    @NSManaged var performsAnalyzeAction: Bool
+    @NSManaged var performsArchiveAction: Bool
+    @NSManaged var performsTestAction: Bool
+    @NSManaged var performsUpgradeIntegration: Bool
     @NSManaged var repositories: Set<Repository>?
+    @NSManaged var runOnlyDisabledTests: Bool
+    @NSManaged var scheduleTypeRawValue: Int16
+    @NSManaged var schemeName: String?
+    @NSManaged var testingDestinationTypeRawValue: Int16
     @NSManaged var triggers: Set<Trigger>?
-    
+    @NSManaged var useParallelDeviceTesting: Bool
+    @NSManaged var weeklyScheduleDay: Int16
 }
 
 // MARK: Generated accessors for repositories
@@ -79,4 +96,42 @@ extension Configuration {
     @objc(removeTriggers:)
     @NSManaged public func removeFromTriggers(_ values: Set<Trigger>)
     
+}
+
+public extension Configuration {
+    var codeCoveragePreference: CodeCoveragePreference {
+        get {
+            return CodeCoveragePreference(rawValue: Int(codeCoveragePreferenceRawValue)) ?? .disabled
+        }
+        set {
+            codeCoveragePreferenceRawValue = Int16(newValue.rawValue)
+        }
+    }
+    
+    var cleanSchedule: CleanSchedule {
+        get {
+            return CleanSchedule(rawValue: Int(cleanScheduleRawValue)) ?? .never
+        }
+        set {
+            cleanScheduleRawValue = Int16(newValue.rawValue)
+        }
+    }
+    
+    var scheduleType: BotSchedule {
+        get {
+            return BotSchedule(rawValue: Int(scheduleTypeRawValue)) ?? .periodic
+        }
+        set {
+            scheduleTypeRawValue = Int16(newValue.rawValue)
+        }
+    }
+    
+    var periodicScheduleInterval: PeriodicScheduleInterval {
+        get {
+            return PeriodicScheduleInterval(rawValue: Int(periodicScheduleIntervalRawValue)) ?? .none
+        }
+        set {
+            periodicScheduleIntervalRawValue = Int16(newValue.rawValue)
+        }
+    }
 }

@@ -10,10 +10,7 @@ extension Commit {
         }
         
         self.message = commit.message
-        if let commitTimestamp = commit.timestamp {
-            // TODO: Commit Timestamp should be a DATE!
-            self.timestamp = JSON.dateFormatter.string(from: commitTimestamp)
-        }
+        self.date = commit.timestamp
         
         if let contributor = commit.contributor {
             if self.commitContributor == nil {

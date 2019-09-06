@@ -8,6 +8,16 @@ import CoreData
 @objc(Asset)
 public class Asset: NSManagedObject {
     
+    public convenience init?(into context: NSManagedObjectContext) {
+        guard let entityDescription = NSEntityDescription.entity(forEntityName: type(of: self).entityName, in: context) else {
+            return nil
+        }
+        
+        self.init(entity: entityDescription, insertInto: context)
+        self.allowAnonymousAccess = false
+        self.isDirectory = false
+        self.size = 0
+    }
 }
 
 // MARK: - CoreData Properties
@@ -17,11 +27,11 @@ public extension Asset {
         return NSFetchRequest<Asset>(entityName: entityName)
     }
     
-    @NSManaged var allowAnonymousAccess: NSNumber?
+    @NSManaged var allowAnonymousAccess: Bool
     @NSManaged var fileName: String?
-    @NSManaged var isDirectory: NSNumber?
+    @NSManaged var isDirectory: Bool
     @NSManaged var relativePath: String?
-    @NSManaged var size: NSNumber?
+    @NSManaged var size: Int32
     @NSManaged var triggerName: String?
     @NSManaged var inverseArchive: IntegrationAssets?
     @NSManaged var inverseBuildServiceLog: IntegrationAssets?

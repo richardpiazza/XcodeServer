@@ -13,7 +13,7 @@ extension Device {
         self.isSimulator = device.isSimulator
         self.isSupported = device.isSupported
         self.isTrusted = device.isTrusted
-        self.isWireless = device.isWireless
+        self.isWireless = device.isWireless ?? false
         self.modelCode = device.modelCode
         self.modelName = device.modelName
         self.modelUTI = device.modelUTI

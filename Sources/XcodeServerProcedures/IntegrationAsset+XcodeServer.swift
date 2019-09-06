@@ -15,7 +15,7 @@ extension IntegrationAssets {
                 self.archive = nil
             }
             
-            if let asset = Asset(managedObjectContext: moc) {
+            if let asset = Asset(into: moc) {
                 asset.inverseArchive = self
                 asset.update(withAsset: archiveAsset)
                 self.archive = asset
@@ -29,7 +29,7 @@ extension IntegrationAssets {
                 self.buildServiceLog = nil
             }
             
-            if let asset = Asset(managedObjectContext: moc) {
+            if let asset = Asset(into: moc) {
                 asset.inverseBuildServiceLog = self
                 asset.update(withAsset: logAsset)
                 self.buildServiceLog = asset
@@ -43,7 +43,7 @@ extension IntegrationAssets {
                 self.product = nil
             }
             
-            if let asset = Asset(managedObjectContext: moc) {
+            if let asset = Asset(into: moc) {
                 asset.inverseProduct = self
                 asset.update(withAsset: productAsset)
                 self.product = asset
@@ -57,7 +57,7 @@ extension IntegrationAssets {
                 self.sourceControlLog = nil
             }
             
-            if let asset = Asset(managedObjectContext: moc) {
+            if let asset = Asset(into: moc) {
                 asset.inverseSourceControlLog = self
                 asset.update(withAsset: logAsset)
                 self.sourceControlLog = asset
@@ -71,7 +71,7 @@ extension IntegrationAssets {
                 self.xcodebuildLog = nil
             }
             
-            if let asset = Asset(managedObjectContext: moc) {
+            if let asset = Asset(into: moc) {
                 asset.inverseXcodebuildLog = self
                 asset.update(withAsset: logAsset)
                 self.xcodebuildLog = asset
@@ -85,7 +85,7 @@ extension IntegrationAssets {
                 self.xcodebuildOutput = nil
             }
             
-            if let asset = Asset(managedObjectContext: moc) {
+            if let asset = Asset(into: moc) {
                 asset.inverseXcodebuildOutput = self
                 asset.update(withAsset: outputAsset)
                 self.xcodebuildOutput = asset
@@ -102,7 +102,7 @@ extension IntegrationAssets {
             }
             
             for triggerAsset in triggerAssets {
-                if let asset = Asset(managedObjectContext: moc) {
+                if let asset = Asset(into: moc) {
                     asset.inverseTriggerAssets = self
                     asset.update(withAsset: triggerAsset)
                 }
