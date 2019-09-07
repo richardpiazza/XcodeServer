@@ -8,8 +8,8 @@ extension Filter {
             return
         }
         
-        self.filterType = filter.filterType as NSNumber?
-        self.architectureType = filter.architectureType as NSNumber?
+        self.filterTypeRawValue = Int16(filter.filterType ?? 0)
+        self.architectureTypeRawValue = Int16(filter.architectureType ?? 0)
         
         if let filterPlatform = filter.platform {
             if self.platform == nil {

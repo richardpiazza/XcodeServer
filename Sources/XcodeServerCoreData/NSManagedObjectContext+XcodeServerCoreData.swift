@@ -129,37 +129,6 @@ public extension NSManagedObjectContext {
         return nil
     }
     
-    // MARK: - Device -
-    
-    /// Retrieves all `Device` entities from the Core Data `NSManagedObjectContext`
-    func devices() -> [Device] {
-        let fetchRequest = NSFetchRequest<Device>(entityName: Device.entityName)
-        do {
-            return try self.fetch(fetchRequest)
-        } catch {
-            print(error)
-        }
-        
-        return []
-    }
-    
-    /// Retrieves the first `Device` entity from the Core Data `NSManagedObjectContext`
-    /// that matches the specified identifier.
-    func device(withIdentifier identifier: String) -> Device? {
-        let fetchRequest = NSFetchRequest<Device>(entityName: Device.entityName)
-        fetchRequest.predicate = NSPredicate(format: "identifier = %@", argumentArray: [identifier])
-        do {
-            let results = try self.fetch(fetchRequest)
-            if let result = results.first {
-                return result
-            }
-        } catch {
-            print(error)
-        }
-        
-        return nil
-    }
-    
     // MARK: - Revision Blueprints -
     
     /// Retrieves all `RevisionBlueprint` entities from the Core Data `NSManagedObjectContext`

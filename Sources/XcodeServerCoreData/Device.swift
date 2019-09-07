@@ -4,7 +4,7 @@ import CoreData
 @objc(Device)
 public class Device: NSManagedObject {
     
-    public convenience init?(managedObjectContext: NSManagedObjectContext, identifier: String) {
+    public convenience init?(managedObjectContext: NSManagedObjectContext, identifier: UUID) {
         self.init(managedObjectContext: managedObjectContext)
         self.identifier = identifier
         self.isConnected = false
@@ -27,7 +27,7 @@ public extension Device {
     
     @NSManaged var architecture: String?
     @NSManaged var deviceType: String?
-    @NSManaged var identifier: String?
+    @NSManaged var identifier: UUID?
     @NSManaged var isConnected: Bool
     @NSManaged var isEnabledForDevelopment: Bool
     @NSManaged var isRetina: Bool
@@ -82,4 +82,35 @@ extension Device {
     @objc(removeIntegrations:)
     @NSManaged public func removeFromIntegrations(_ values: Set<Integration>)
     
+}
+
+public extension NSManagedObjectContext {
+    /// Retrieves all `Device` entities from the Core Data `NSManagedObjectContext`
+    func devices() -> [Device] {
+        let fetchRequest = NSFetchRequest<Device>(entityName: Device.entityName)
+        do {
+            return try self.fetch(fetchRequest)
+        } catch {
+            print(error)
+        }
+        
+        return []
+    }
+    
+    /// Retrieves the first `Device` entity from the Core Data `NSManagedObjectContext`
+    /// that matches the specified identifier.
+    func device(withIdentifier identifier: UUID) -> Device? {
+        let fetchRequest = NSFetchRequest<Device>(entityName: Device.entityName)
+        fetchRequest.predicate = NSPredicate(format: "identifier = %@", argumentArray: [identifier])
+        do {
+            let results = try self.fetch(fetchRequest)
+            if let result = results.first {
+                return result
+            }
+        } catch {
+            print(error)
+        }
+        
+        return nil
+    }
 }

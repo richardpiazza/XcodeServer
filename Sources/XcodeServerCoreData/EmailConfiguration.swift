@@ -1,5 +1,6 @@
 import Foundation
 import CoreData
+import XcodeServerCommon
 
 @objc(EmailConfiguration)
 public class EmailConfiguration: NSManagedObject {
@@ -7,6 +8,16 @@ public class EmailConfiguration: NSManagedObject {
     public convenience init?(managedObjectContext: NSManagedObjectContext, trigger: Trigger) {
         self.init(managedObjectContext: managedObjectContext)
         self.trigger = trigger
+        self.emailComitters = false
+        self.emailTypeRawValue = 0
+        self.hour = 0
+        self.includeBotConfiguration = false
+        self.includeCommitMessages = false
+        self.includeIssueDetails = false
+        self.includeLogs = false
+        self.includeResolvedIssues = false
+        self.minutesAfterHour = 0
+        self.weeklyScheduleDay = 0
     }
 }
 
@@ -18,20 +29,30 @@ public extension EmailConfiguration {
     }
     
     @NSManaged var additionalRecipients: String?
-    @NSManaged var emailComitters: NSNumber?
-    @NSManaged var includeCommitMessages: NSNumber?
-    @NSManaged var includeIssueDetails: NSNumber?
-    @NSManaged var ccAddressesData: Data?
     @NSManaged var allowedDomainNamesData: Data?
-    @NSManaged var includeLogs: NSNumber?
-    @NSManaged var replyToAddress: String?
-    @NSManaged var includeBotConfiguration: NSNumber?
+    @NSManaged var ccAddressesData: Data?
+    @NSManaged var emailComitters: Bool
+    @NSManaged var emailTypeRawValue: Int16
     @NSManaged var fromAddress: String?
-    @NSManaged var emailTypeRawValue: NSNumber?
-    @NSManaged var includeResolvedIssues: NSNumber?
-    @NSManaged var weeklyScheduleDay: NSNumber?
-    @NSManaged var minutesAfterHour: NSNumber?
-    @NSManaged var hour: NSNumber?
+    @NSManaged var hour: Int16
+    @NSManaged var includeBotConfiguration: Bool
+    @NSManaged var includeCommitMessages: Bool
+    @NSManaged var includeIssueDetails: Bool
+    @NSManaged var includeLogs: Bool
+    @NSManaged var includeResolvedIssues: Bool
+    @NSManaged var minutesAfterHour: Int16
+    @NSManaged var replyToAddress: String?
     @NSManaged var trigger: Trigger?
-    
+    @NSManaged var weeklyScheduleDay: Int16
+}
+
+public extension EmailConfiguration {
+    var emailType: EmailType {
+        get {
+            return EmailType(rawValue: Int(emailTypeRawValue)) ?? .integrationReport
+        }
+        set {
+            emailTypeRawValue = Int16(newValue.rawValue)
+        }
+    }
 }

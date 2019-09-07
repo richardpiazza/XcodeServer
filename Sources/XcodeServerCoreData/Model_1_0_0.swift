@@ -116,7 +116,7 @@ class Model_1_0_0: NSManagedObjectModel {
         
         
         let device = NSEntityDescription(name: "Device")
-        let device_identifier = NSAttributeDescription(name: "identifier", type: .stringAttributeType, isOptional: false, defaultValue: "_identifier")
+        let device_identifier = NSAttributeDescription(name: "identifier", type: .UUIDAttributeType, isOptional: false, defaultValue: "0a21bee5-e97f-43cd-9aad-daa31eceab29")
         device.properties.append(NSAttributeDescription(name: "architecture", type: .stringAttributeType))
         device.properties.append(NSAttributeDescription(name: "deviceType", type: .stringAttributeType))
         device.properties.append(device_identifier)
@@ -134,19 +134,33 @@ class Model_1_0_0: NSManagedObjectModel {
         device.properties.append(NSAttributeDescription(name: "name", type: .stringAttributeType))
         device.properties.append(NSAttributeDescription(name: "osVersion", type: .stringAttributeType))
         device.properties.append(NSAttributeDescription(name: "platformIdentifier", type: .stringAttributeType))
-        device.indexes.append(NSFetchIndexDescription(name: "byIdentifierIndex", elements: [NSFetchIndexElementDescription(property: device_identifier, collationType: .binary)]))
+        
+        device.indexes.append(NSFetchIndexDescription(name: "byPropertyIndex", elements: [
+            NSFetchIndexElementDescription(property: device_identifier, collationType: .binary)
+            ]))
         
         let deviceSpecification = NSEntityDescription(name: "DeviceSpecification")
         
         let emailConfiguration = NSEntityDescription(name: "EmailConfiguration")
         emailConfiguration.properties.append(NSAttributeDescription(name: "additionalRecipients", type: .stringAttributeType))
+        emailConfiguration.properties.append(NSAttributeDescription(name: "allowedDomainNamesData", type: .binaryDataAttributeType))
+        emailConfiguration.properties.append(NSAttributeDescription(name: "ccAddressesData", type: .binaryDataAttributeType))
         emailConfiguration.properties.append(NSAttributeDescription(name: "emailCommitters", type: .booleanAttributeType))
+        emailConfiguration.properties.append(NSAttributeDescription(name: "emailTypeRawValue", type: .integer16AttributeType))
+        emailConfiguration.properties.append(NSAttributeDescription(name: "fromAddress", type: .stringAttributeType))
+        emailConfiguration.properties.append(NSAttributeDescription(name: "hour", type: .integer16AttributeType))
+        emailConfiguration.properties.append(NSAttributeDescription(name: "includeBotConfiguration", type: .booleanAttributeType))
         emailConfiguration.properties.append(NSAttributeDescription(name: "includeCommitMessage", type: .booleanAttributeType))
         emailConfiguration.properties.append(NSAttributeDescription(name: "includeIssueDetails", type: .booleanAttributeType))
+        emailConfiguration.properties.append(NSAttributeDescription(name: "includeLogs", type: .booleanAttributeType))
+        emailConfiguration.properties.append(NSAttributeDescription(name: "includeResolvedIssues", type: .booleanAttributeType))
+        emailConfiguration.properties.append(NSAttributeDescription(name: "minutesAfterHour", type: .integer16AttributeType))
+        emailConfiguration.properties.append(NSAttributeDescription(name: "replyToAddress", type: .stringAttributeType))
+        emailConfiguration.properties.append(NSAttributeDescription(name: "weeklyScheduleDay", type: .integer16AttributeType))
         
         let filter = NSEntityDescription(name: "Filter")
-        filter.properties.append(NSAttributeDescription(name: "architectureType", type: .integer32AttributeType, defaultValue: 0))
-        filter.properties.append(NSAttributeDescription(name: "filterType", type: .integer32AttributeType, defaultValue: 0))
+        filter.properties.append(NSAttributeDescription(name: "architectureTypeRawValue", type: .integer16AttributeType, defaultValue: 0))
+        filter.properties.append(NSAttributeDescription(name: "filterTypeRawValue", type: .integer16AttributeType, defaultValue: 0))
         
         let integration = NSEntityDescription(name: "Integration")
         let integration_identifier = NSAttributeDescription(name: "identifier", type: .stringAttributeType, isOptional: false, defaultValue: "_identifier")

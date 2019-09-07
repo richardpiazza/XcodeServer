@@ -22,18 +22,18 @@ extension EmailConfiguration {
             }
         }
         
-        self.includeCommitMessages = configuration.includeCommitMessages as NSNumber?
-        self.includeLogs = configuration.includeLogs as NSNumber?
-        self.replyToAddress = configuration.replyToAddress
-        self.includeIssueDetails = configuration.includeIssueDetails as NSNumber?
-        self.includeBotConfiguration = configuration.includeBotConfiguration as NSNumber?
         self.additionalRecipients = configuration.additionalRecipients?.joined(separator: ",")
-        self.emailComitters = configuration.emailCommitters as NSNumber?
+        self.emailComitters = configuration.emailCommitters ?? false
+        self.emailType = configuration.type ?? .integrationReport
         self.fromAddress = configuration.fromAddress
-        self.emailTypeRawValue = configuration.type?.rawValue as NSNumber?
-        self.includeResolvedIssues = configuration.includeResolvedIssues as NSNumber?
-        self.weeklyScheduleDay = configuration.weeklyScheduleDay as NSNumber?
-        self.minutesAfterHour = configuration.minutesAfterHour as NSNumber?
-        self.hour = configuration.hour as NSNumber?
+        self.hour = Int16(configuration.hour ?? 0)
+        self.includeBotConfiguration = configuration.includeBotConfiguration ?? false
+        self.includeCommitMessages = configuration.includeCommitMessages ?? false
+        self.includeIssueDetails = configuration.includeIssueDetails ?? false
+        self.includeLogs = configuration.includeLogs ?? false
+        self.includeResolvedIssues = configuration.includeResolvedIssues ?? false
+        self.minutesAfterHour = Int16(configuration.minutesAfterHour ?? 0)
+        self.replyToAddress = configuration.replyToAddress
+        self.weeklyScheduleDay = Int16(configuration.weeklyScheduleDay ?? 0)
     }
 }
