@@ -2,11 +2,13 @@ import Foundation
 
 /// ### IntegrationStep
 /// Current state of the `Integration` as it moves through the lifecycle.
-public enum IntegrationStep: String {
+public enum IntegrationStep: String, Codable {
     case unknown
     case pending = "pending"
+//    case preparing = "preparing"
     case checkout = "checkout"
     case beforeTriggers = "before-triggers"
+//    case triggers = "triggers"
     case building = "building"
     case testing = "testing"
     case archiving = "archiving"

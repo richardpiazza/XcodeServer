@@ -8,7 +8,7 @@ public struct XCSIntegrationSnippet: Codable {
         case successStreak = "success_streak"
     }
     
-    public var integrationID: String
+    public var integrationID: UUID
     public var endedTime: Date
     public var successStreak: Int?
 }

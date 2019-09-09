@@ -324,7 +324,7 @@ public class Manager {
             return
         }
         
-        client.integration(withIdentifier: integration.identifier) { (result) in
+        client.integration(withIdentifier: integration.identifier.uuidString) { (result) in
             switch result {
             case .failure(let error):
                 completion(error)
@@ -372,7 +372,7 @@ public class Manager {
             return
         }
         
-        client.commits(forIntegrationWithIdentifier: integration.identifier) { (result) in
+        client.commits(forIntegrationWithIdentifier: integration.identifier.uuidString) { (result) in
             switch result {
             case .failure(let error):
                 completion(error)
@@ -424,7 +424,7 @@ public class Manager {
             return
         }
         
-        client.issues(forIntegrationWithIdentifier: integration.identifier) { (result) in
+        client.issues(forIntegrationWithIdentifier: integration.identifier.uuidString) { (result) in
             switch result {
             case .failure(let error):
                 completion(error)

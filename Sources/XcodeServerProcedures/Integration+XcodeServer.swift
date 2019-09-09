@@ -9,16 +9,16 @@ public extension Integration {
             return
         }
         
-        self.revision = integration._rev
-        self.number = integration.number as NSNumber?
-        self.shouldClean = integration.shouldClean as NSNumber?
-        self.currentStep = integration.currentStep.rawValue
-        self.result = integration.result.rawValue
-        self.queuedDate = integration.queuedDate
-        self.startedTime = integration.startedTime
+        self.currentStep = integration.currentStep
+        self.duration = integration.duration ?? 0.0
         self.endedTime = integration.endedTime
-        self.duration = integration.duration as NSNumber?
-        self.successStreak = integration.successStreak as NSNumber?
+        self.number = Int32(integration.number)
+        self.queuedDate = integration.queuedDate
+        self.result = integration.result
+        self.shouldClean = integration.shouldClean ?? false
+        self.startedTime = integration.startedTime
+        self.successStreak = Int32(integration.successStreak ?? 0)
+        
         if let value = integration.testHierarchy {
             do {
                 self.testHierachyData = try JSON.jsonEncoder.encode(value)

@@ -10,13 +10,20 @@ public typealias TestResult = (name: String, passed: Bool)
 @objc(Integration)
 public class Integration: NSManagedObject {
     
-    public convenience init?(managedObjectContext: NSManagedObjectContext, identifier: String, bot: Bot? = nil) {
+    public convenience init?(managedObjectContext: NSManagedObjectContext, identifier: UUID, bot: Bot? = nil) {
         self.init(managedObjectContext: managedObjectContext)
         self.identifier = identifier
         self.bot = bot
         self.buildResultSummary = BuildResultSummary(managedObjectContext: managedObjectContext, integration: self)
         self.assets = IntegrationAssets(managedObjectContext: managedObjectContext)
         self.issues = IntegrationIssues(managedObjectContext: managedObjectContext)
+        self.duration = 0.0
+        self.hasRetrievedAssets = false
+        self.hasRetrievedCommits = false
+        self.hasRetrievedIssues = false
+        self.number = 0
+        self.shouldClean = false
+        self.successStreak = 0
     }
 
 }
@@ -28,26 +35,26 @@ public extension Integration {
         return NSFetchRequest<Integration>(entityName: entityName)
     }
     
-    @NSManaged var currentStep: String?
-    @NSManaged var duration: NSNumber?
-    @NSManaged var endedTime: Date?
-    @NSManaged var hasRetrievedAssets: NSNumber?
-    @NSManaged var hasRetrievedCommits: NSNumber?
-    @NSManaged var hasRetrievedIssues: NSNumber?
-    @NSManaged var identifier: String
-    @NSManaged var lastUpdate: Date?
-    @NSManaged var number: NSNumber?
-    @NSManaged var queuedDate: Date?
-    @NSManaged var result: String?
-    @NSManaged var shouldClean: NSNumber?
-    @NSManaged var startedTime: Date?
-    @NSManaged var successStreak: NSNumber?
-    @NSManaged var testHierachy: NSObject?
-    @NSManaged var testHierachyData: Data?
-    @NSManaged var revision: String?
     @NSManaged var assets: IntegrationAssets?
     @NSManaged var bot: Bot?
     @NSManaged var buildResultSummary: BuildResultSummary?
+    @NSManaged var currentStepRawValue: String?
+    @NSManaged var duration: Double
+    @NSManaged var endedTime: Date?
+    @NSManaged var hasRetrievedAssets: Bool
+    @NSManaged var hasRetrievedCommits: Bool
+    @NSManaged var hasRetrievedIssues: Bool
+    @NSManaged var identifier: UUID
+    @NSManaged var lastUpdate: Date?
+    @NSManaged var number: Int32
+    @NSManaged var queuedDate: Date?
+    @NSManaged var resultRawValue: String?
+    @NSManaged var revision: String?
+    @NSManaged var shouldClean: Bool
+    @NSManaged var startedTime: Date?
+    @NSManaged var successStreak: Int32
+    @NSManaged var testHierachyData: Data?
+    
     @NSManaged var inverseBestSuccessStreak: Stats?
     @NSManaged var inverseLastCleanIntegration: Stats?
     @NSManaged var issues: IntegrationIssues?
@@ -92,34 +99,55 @@ extension Integration {
 
 public extension Integration {
     var integrationNumber: Int {
-        guard let value = self.number else {
-            return 0
-        }
-        
-        return value.intValue
+        return Int(number)
     }
     
-    var integrationStep: IntegrationStep {
-        guard let rawValue = self.currentStep else {
-            return .unknown
+    var currentStep: IntegrationStep {
+        get {
+            return IntegrationStep(rawValue: currentStepRawValue ?? "") ?? .unknown
         }
-        
-        guard let enumeration = IntegrationStep(rawValue: rawValue) else {
-            return .unknown
+        set {
+            currentStepRawValue = newValue.rawValue
         }
-        
-        return enumeration
     }
     
-    var integrationResult: IntegrationResult {
-        guard let rawValue = self.result else {
-            return .unknown
+    var result: IntegrationResult {
+        get {
+            return IntegrationResult(rawValue: resultRawValue ?? "") ?? .unknown
+        }
+        set {
+            resultRawValue = newValue.rawValue
+        }
+    }
+}
+
+public extension NSManagedObjectContext {
+    /// Retrieves all `Integration` entities from the Core Data `NSManagedObjectContext`
+    func integrations() -> [Integration] {
+        let fetchRequest = NSFetchRequest<Integration>(entityName: Integration.entityName)
+        do {
+            return try self.fetch(fetchRequest)
+        } catch {
+            print(error)
         }
         
-        guard let enumeration = IntegrationResult(rawValue: rawValue) else {
-            return .unknown
+        return []
+    }
+    
+    /// Retrieves the first `Integration` entity from the Core Data `NSManagedObjectContext`
+    /// that matches the specified identifier.
+    func integration(withIdentifier identifier: UUID) -> Integration? {
+        let fetchRequest = NSFetchRequest<Integration>(entityName: Integration.entityName)
+        fetchRequest.predicate = NSPredicate(format: "identifier = %@", argumentArray: [identifier])
+        do {
+            let results = try self.fetch(fetchRequest)
+            if let result = results.first {
+                return result
+            }
+        } catch {
+            print(error)
         }
         
-        return enumeration
+        return nil
     }
 }

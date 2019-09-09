@@ -18,7 +18,7 @@ extension IntegrationIssues {
         
         if let buildServiceErrors = issues.buildServiceErrors {
             for error in buildServiceErrors {
-                if let issue = Issue(managedObjectContext: moc) {
+                if let issue = Issue(managedObjectContext: moc, identifier: error.identifier) {
                     issue.update(withIssue: error)
                     issue.inverseBuildServiceErrors = self
                 }
@@ -35,7 +35,7 @@ extension IntegrationIssues {
         
         if let buildServiceWarnings = issues.buildServiceWarnings {
             for warning in buildServiceWarnings {
-                if let issue = Issue(managedObjectContext: moc) {
+                if let issue = Issue(managedObjectContext: moc, identifier: warning.identifier) {
                     issue.update(withIssue: warning)
                     issue.inverseBuildServiceWarnings = self
                 }
@@ -66,21 +66,21 @@ extension IntegrationIssues {
             }
             
             for unresolvedIssue in errors.unresolvedIssues {
-                if let issue = Issue(managedObjectContext: moc) {
+                if let issue = Issue(managedObjectContext: moc, identifier: unresolvedIssue.identifier) {
                     issue.update(withIssue: unresolvedIssue)
                     issue.inverseUnresolvedErrors = self
                 }
             }
             
             for resolvedIssue in errors.resolvedIssues {
-                if let issue = Issue(managedObjectContext: moc) {
+                if let issue = Issue(managedObjectContext: moc, identifier: resolvedIssue.identifier) {
                     issue.update(withIssue: resolvedIssue)
                     issue.inverseResolvedErrors = self
                 }
             }
             
             for freshIssue in errors.freshIssues {
-                if let issue = Issue(managedObjectContext: moc) {
+                if let issue = Issue(managedObjectContext: moc, identifier: freshIssue.identifier) {
                     issue.update(withIssue: freshIssue)
                     issue.inverseFreshErrors = self
                 }
@@ -111,21 +111,21 @@ extension IntegrationIssues {
             }
             
             for unresolvedIssue in warnings.unresolvedIssues {
-                if let issue = Issue(managedObjectContext: moc) {
+                if let issue = Issue(managedObjectContext: moc, identifier: unresolvedIssue.identifier) {
                     issue.update(withIssue: unresolvedIssue)
                     issue.inverseUnresolvedWarnings = self
                 }
             }
             
             for resolvedIssue in warnings.resolvedIssues {
-                if let issue = Issue(managedObjectContext: moc) {
+                if let issue = Issue(managedObjectContext: moc, identifier: resolvedIssue.identifier) {
                     issue.update(withIssue: resolvedIssue)
                     issue.inverseResolvedWarnings = self
                 }
             }
             
             for freshIssue in warnings.freshIssues {
-                if let issue = Issue(managedObjectContext: moc) {
+                if let issue = Issue(managedObjectContext: moc, identifier: freshIssue.identifier) {
                     issue.update(withIssue: freshIssue)
                     issue.inverseFreshWarnings = self
                 }
@@ -156,21 +156,21 @@ extension IntegrationIssues {
             }
             
             for unresolvedIssue in analyzerWarnings.unresolvedIssues {
-                if let issue = Issue(managedObjectContext: moc) {
+                if let issue = Issue(managedObjectContext: moc, identifier: unresolvedIssue.identifier) {
                     issue.update(withIssue: unresolvedIssue)
                     issue.inverseUnresolvedAnalyzerWarnings = self
                 }
             }
             
             for resolvedIssue in analyzerWarnings.resolvedIssues {
-                if let issue = Issue(managedObjectContext: moc) {
+                if let issue = Issue(managedObjectContext: moc, identifier: resolvedIssue.identifier) {
                     issue.update(withIssue: resolvedIssue)
                     issue.inverseResolvedAnalyzerWarnings = self
                 }
             }
             
             for freshIssue in analyzerWarnings.freshIssues {
-                if let issue = Issue(managedObjectContext: moc) {
+                if let issue = Issue(managedObjectContext: moc, identifier: freshIssue.identifier) {
                     issue.update(withIssue: freshIssue)
                     issue.inverseFreshAnalyserWarnings = self
                 }
@@ -201,21 +201,21 @@ extension IntegrationIssues {
             }
             
             for unresolvedIssue in testFailures.unresolvedIssues {
-                if let issue = Issue(managedObjectContext: moc) {
+                if let issue = Issue(managedObjectContext: moc, identifier: unresolvedIssue.identifier) {
                     issue.update(withIssue: unresolvedIssue)
                     issue.inverseUnresolvedTestFailures = self
                 }
             }
             
             for resolvedIssue in testFailures.resolvedIssues {
-                if let issue = Issue(managedObjectContext: moc) {
+                if let issue = Issue(managedObjectContext: moc, identifier: resolvedIssue.identifier) {
                     issue.update(withIssue: resolvedIssue)
                     issue.inverseResolvedAnalyzerWarnings = self
                 }
             }
             
             for freshIssue in testFailures.freshIssues {
-                if let issue = Issue(managedObjectContext: moc) {
+                if let issue = Issue(managedObjectContext: moc, identifier: freshIssue.identifier) {
                     issue.update(withIssue: freshIssue)
                     issue.inverseFreshTestFailures = self
                 }

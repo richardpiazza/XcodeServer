@@ -36,12 +36,12 @@ public extension Bot {
         }
         
         for element in integrations {
-            if let integration = moc.integration(withIdentifier: element._id) {
+            if let integration = moc.integration(withIdentifier: element.identifier) {
                 integration.update(withIntegration: element)
                 continue
             }
             
-            if let integration = Integration(managedObjectContext: moc, identifier: element._id, bot: self) {
+            if let integration = Integration(managedObjectContext: moc, identifier: element.identifier, bot: self) {
                 integration.update(withIntegration: element)
             }
         }

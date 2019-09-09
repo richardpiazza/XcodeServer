@@ -2,7 +2,7 @@ import Foundation
 
 /// ### IssueType
 /// Identifies the type of an `Integration` issue.
-public enum IssueType: String {
+public enum IssueType: String, Codable {
     case unknown = "unknown"
     case buildServiceError = "buildServiceError"
     case BuildServiceWarning = "buildServiceWarning"

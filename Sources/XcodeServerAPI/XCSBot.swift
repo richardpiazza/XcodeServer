@@ -4,7 +4,6 @@ public struct XCSBot: Codable {
     
     enum CodingKeys: String, CodingKey {
         case configuration
-        case docType = "doc_type"
         case group
         case identifier = "_id"
         case integrationCounter = "integration_counter"
@@ -16,8 +15,9 @@ public struct XCSBot: Codable {
         case typeRawValue = "type"
     }
     
+    public let docType: String = "bot"
+    
     public var configuration: XCSConfiguration?
-    public var docType: String = "bot"
     public var group: XCSGroup = XCSGroup()
     public var identifier: UUID = UUID()
     public var integrationCounter: Int = 0

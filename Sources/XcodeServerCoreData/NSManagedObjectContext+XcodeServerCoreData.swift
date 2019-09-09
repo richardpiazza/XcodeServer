@@ -36,37 +36,6 @@ public extension NSManagedObjectContext {
         return nil
     }
     
-    // MARK: - Integration -
-    
-    /// Retrieves all `Integration` entities from the Core Data `NSManagedObjectContext`
-    func integrations() -> [Integration] {
-        let fetchRequest = NSFetchRequest<Integration>(entityName: Integration.entityName)
-        do {
-            return try self.fetch(fetchRequest)
-        } catch {
-            print(error)
-        }
-        
-        return []
-    }
-    
-    /// Retrieves the first `Integration` entity from the Core Data `NSManagedObjectContext`
-    /// that matches the specified identifier.
-    func integration(withIdentifier identifier: String) -> Integration? {
-        let fetchRequest = NSFetchRequest<Integration>(entityName: Integration.entityName)
-        fetchRequest.predicate = NSPredicate(format: "identifier = %@", argumentArray: [identifier])
-        do {
-            let results = try self.fetch(fetchRequest)
-            if let result = results.first {
-                return result
-            }
-        } catch {
-            print(error)
-        }
-        
-        return nil
-    }
-    
     // MARK: - Repository -
     
     /// Retrieves all `Repository` entities from the Core Data `NSManagedObjectContext`

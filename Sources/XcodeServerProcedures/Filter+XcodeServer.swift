@@ -13,7 +13,7 @@ extension Filter {
         
         if let filterPlatform = filter.platform {
             if self.platform == nil {
-                self.platform = Platform(managedObjectContext: moc, filter: self)
+                self.platform = Platform(managedObjectContext: moc, identifier: filterPlatform.identifier, filter: self)
             }
             
             if let platform = self.platform {

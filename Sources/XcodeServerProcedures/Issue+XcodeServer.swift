@@ -4,16 +4,15 @@ import XcodeServerCoreData
 
 extension Issue {
     public func update(withIssue issue: XCSIssue) {
-        self.identifier = issue._id
-        self.revision = issue._rev
-        self.status = issue.status as NSNumber?
-        self.age = issue.age as NSNumber?
-        self.type = issue.type
-        self.issueType = issue.issueType
-        self.message = issue.message
-        self.fixItType = issue.fixItType
-        self.testCase = issue.testCase
+        self.age = Int32(issue.age ?? 0)
         self.documentFilePath = issue.documentFilePath
         self.documentLocationData = issue.documentLocationData
+        self.fixItType = issue.fixItType
+        self.issueType = issue.issueType
+        self.lineNumber = Int32(issue.lineNumber ?? 0)
+        self.message = issue.message
+        self.status = issue.status ?? .new
+        self.testCase = issue.testCase
+        self.type = issue.type ?? .unknown
     }
 }
