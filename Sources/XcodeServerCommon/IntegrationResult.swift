@@ -1,8 +1,20 @@
 import Foundation
 
 /// The outcome of the `Integration`.
+///
+/// /Applications/Xcode.app/Contents/Developer/usr/share/xcs/xcsd/constants.js
+///
+/// ```js
+/// // Integration results
+/// XCSIntegrationResultSucceeded: 'succeeded',
+/// XCSIntegrationResultBuildErrors: 'build-errors',
+/// XCSIntegrationResultTestFailures: 'test-failures',
+/// XCSIntegrationResultWarnings: 'warnings',
+/// XCSIntegrationResultAnalyzerWarnings: 'analyzer-warnings',
+/// XCSIntegrationResultCanceled: 'canceled',
+/// XCSIntegrationResultInternalError: 'internal-error',
+/// ```
 public enum IntegrationResult: String, Codable {
-    case unknown
     case analyzerWarnings = "analyzer-warnings"
     case buildErrors = "build-errors"
     case buildFailed = "build-failed"
@@ -17,7 +29,6 @@ public enum IntegrationResult: String, Codable {
     
     public var description: String {
         switch self {
-        case .unknown: return "Unknown"
         case .analyzerWarnings: return "Analyer Warnings"
         case .buildErrors: return "Build Errors"
         case .buildFailed: return "Build Failed"

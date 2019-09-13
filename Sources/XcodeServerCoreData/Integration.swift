@@ -55,7 +55,7 @@ public extension Integration {
     @NSManaged var shouldClean: Bool
     @NSManaged var startedTime: Date?
     @NSManaged var successStreak: Int32
-    @NSManaged var testHierachyData: Data?
+    @NSManaged var testHierarchyData: Data?
     
     @NSManaged var inverseBestSuccessStreak: Stats?
     @NSManaged var inverseLastCleanIntegration: Stats?
@@ -106,7 +106,7 @@ public extension Integration {
     
     var currentStep: IntegrationStep {
         get {
-            return IntegrationStep(rawValue: currentStepRawValue ?? "") ?? .unknown
+            return IntegrationStep(rawValue: currentStepRawValue ?? "") ?? .pending
         }
         set {
             currentStepRawValue = newValue.rawValue
@@ -115,7 +115,7 @@ public extension Integration {
     
     var result: IntegrationResult {
         get {
-            return IntegrationResult(rawValue: resultRawValue ?? "") ?? .unknown
+            return IntegrationResult(rawValue: resultRawValue ?? "") ?? .canceled
         }
         set {
             resultRawValue = newValue.rawValue

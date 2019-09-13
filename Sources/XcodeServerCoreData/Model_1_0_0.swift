@@ -49,7 +49,7 @@ class Model_1_0_0: NSManagedObjectModel {
         
         let buildResultSummary = NSEntityDescription(name: "BuildResultSummary")
         buildResultSummary.properties.append(NSAttributeDescription(name: "analyzerWarningChange", type: .integer32AttributeType, defaultValue: 0))
-        buildResultSummary.properties.append(NSAttributeDescription(name: "anazlyerWarningCount", type: .integer32AttributeType, defaultValue: 0))
+        buildResultSummary.properties.append(NSAttributeDescription(name: "analyzerWarningCount", type: .integer32AttributeType, defaultValue: 0))
         buildResultSummary.properties.append(NSAttributeDescription(name: "codeCoveragePercentage", type: .integer32AttributeType, defaultValue: 0))
         buildResultSummary.properties.append(NSAttributeDescription(name: "codeCoveragePercentageDelta", type: .integer32AttributeType, defaultValue: 0))
         buildResultSummary.properties.append(NSAttributeDescription(name: "errorChange", type: .integer32AttributeType, defaultValue: 0))
@@ -112,7 +112,7 @@ class Model_1_0_0: NSManagedObjectModel {
         configuration.properties.append(NSAttributeDescription(name: "scheduleTypeRawValue", type: .integer16AttributeType, defaultValue: 0))
         configuration.properties.append(NSAttributeDescription(name: "schemeName", type: .stringAttributeType))
         configuration.properties.append(NSAttributeDescription(name: "testingDestinationTypeRawValue", type: .integer16AttributeType, defaultValue: 0))
-        configuration.properties.append(NSAttributeDescription(name: "usePrallelDeviceTesting", type: .booleanAttributeType, defaultValue: false))
+        configuration.properties.append(NSAttributeDescription(name: "useParallelDeviceTesting", type: .booleanAttributeType, defaultValue: false))
         configuration.properties.append(NSAttributeDescription(name: "weeklyScheduleDay", type: .integer16AttributeType, defaultValue: 0))
         
         
@@ -257,6 +257,7 @@ class Model_1_0_0: NSManagedObjectModel {
         stats.properties.append(NSAttributeDescription(name: "codeCoveragePercentageDelta", type: .integer32AttributeType, defaultValue: 0))
         stats.properties.append(NSAttributeDescription(name: "numberOfCommits", type: .integer32AttributeType, defaultValue: 0))
         stats.properties.append(NSAttributeDescription(name: "numberOfIntegrations", type: .integer32AttributeType, defaultValue: 0))
+        stats.properties.append(NSAttributeDescription(name: "numberOfSuccessfulIntegrations", type: .integer32AttributeType, defaultValue: 0))
         stats.properties.append(NSAttributeDescription(name: "sinceDate", type: .stringAttributeType))
         stats.properties.append(NSAttributeDescription(name: "testAdditionRate", type: .integer32AttributeType, defaultValue: 0))
         
@@ -320,14 +321,14 @@ class Model_1_0_0: NSManagedObjectModel {
         let integrationAssets_integration = NSRelationshipDescription(name: "integration", maxCount: 1, deleteRule: .nullifyDeleteRule)
         let integrationAssets_product = NSRelationshipDescription(name: "product", maxCount: 1, deleteRule: .cascadeDeleteRule)
         let integrationAssets_sourceControlLog = NSRelationshipDescription(name: "sourceControlLog", maxCount: 1, deleteRule: .cascadeDeleteRule)
-        let integrationAssets_triggerAssets = NSRelationshipDescription(name: "triggerAssets", maxCount: 1, deleteRule: .cascadeDeleteRule)
+        let integrationAssets_triggerAssets = NSRelationshipDescription(name: "triggerAssets", maxCount: 0, deleteRule: .cascadeDeleteRule)
         let integrationAssets_xcodebuildLog = NSRelationshipDescription(name: "xcodebuildLog", maxCount: 1, deleteRule: .cascadeDeleteRule)
         let integrationAssets_xcodebuildOutput = NSRelationshipDescription(name: "xcodebuildOutput", maxCount: 1, deleteRule: .cascadeDeleteRule)
         let integrationIssues_buildServiceErrors = NSRelationshipDescription(name: "buildServiceErrors", maxCount: 0, deleteRule: .cascadeDeleteRule)
         let integrationIssues_buildServiceWarnings = NSRelationshipDescription(name: "buildServiceWarnings", maxCount: 0, deleteRule: .cascadeDeleteRule)
         let integrationIssues_freshAnalyzerWarnings = NSRelationshipDescription(name: "freshAnalyzerWarnings", maxCount: 0, deleteRule: .cascadeDeleteRule)
         let integrationIssues_freshErrors = NSRelationshipDescription(name: "freshErrors", maxCount: 0, deleteRule: .cascadeDeleteRule)
-        let integrationIssues_freshTestFailures = NSRelationshipDescription(name: "freshTextFailures", maxCount: 0, deleteRule: .cascadeDeleteRule)
+        let integrationIssues_freshTestFailures = NSRelationshipDescription(name: "freshTestFailures", maxCount: 0, deleteRule: .cascadeDeleteRule)
         let integrationIssues_freshWarnings = NSRelationshipDescription(name: "freshWarnings", maxCount: 0, deleteRule: .cascadeDeleteRule)
         let integrationIssues_integration = NSRelationshipDescription(name: "integration", maxCount: 1, deleteRule: .nullifyDeleteRule)
         let integrationIssues_resolvedAnalyzerWarnings = NSRelationshipDescription(name: "resolvedAnalyzerWarnings", maxCount: 0, deleteRule: .cascadeDeleteRule)
@@ -615,6 +616,181 @@ class Model_1_0_0: NSManagedObjectModel {
         trigger_configuration.inverseRelationship = configuration_triggers
         trigger_emailConfiguration.destinationEntity = emailConfiguration
         trigger_emailConfiguration.inverseRelationship = emailConfiguration_trigger
+        
+        asset.properties.append(contentsOf: [
+            asset_inverseArchive,
+            asset_inverseBuildServiceLog,
+            asset_inverseProduct,
+            asset_inverseSourceControlLog,
+            asset_inverseTriggerAssets,
+            asset_inverseXcodebuildLog,
+            asset_inverseXcodebuildOutput,
+            ])
+        
+        bot.properties.append(contentsOf: [
+            bot_configuration,
+            bot_integrations,
+            bot_stats,
+            bot_server,
+            ])
+        
+        buildResultSummary.properties.append(contentsOf: [
+            buildResultSummary_integration,
+            ])
+        
+        commit.properties.append(contentsOf: [
+            commit_commitChanges,
+            commit_commitContributor,
+            commit_repository,
+            commit_revisionBlueprints,
+            ])
+        
+        commitChange.properties.append(contentsOf: [
+            commitChange_commit,
+            ])
+        
+        commitContributor.properties.append(contentsOf: [
+            commitContributor_commit,
+            ])
+        
+        conditions.properties.append(contentsOf: [
+            conditions_trigger,
+            ])
+        
+        configuration.properties.append(contentsOf: [
+            configuration_bot,
+            configuration_deviceSpecification,
+            configuration_repositories,
+            configuration_triggers,
+            ])
+        
+        device.properties.append(contentsOf: [
+            device_activeProxiedDevice,
+            device_deviceSpecifications,
+            device_integrations,
+            device_inverseActiveProxiedDevice,
+            ])
+        
+        deviceSpecification.properties.append(contentsOf: [
+            deviceSpecification_configuration,
+            deviceSpecification_devices,
+            deviceSpecification_filters,
+            ])
+        
+        emailConfiguration.properties.append(contentsOf: [
+            emailConfiguration_trigger,
+            ])
+        
+        filter.properties.append(contentsOf: [
+            filter_deviceSpecification,
+            filter_platform,
+            ])
+        
+        integration.properties.append(contentsOf: [
+            integration_assets,
+            integration_bot,
+            integration_buildResultSummary,
+            integration_inverseBestSuccessStreak,
+            integration_inverseLastCleanIntegration,
+            integration_issues,
+            integration_revisionBluprints,
+            integration_testedDevices,
+            ])
+        
+        integrationAssets.properties.append(contentsOf: [
+            integrationAssets_archive,
+            integrationAssets_buildServiceLog,
+            integrationAssets_integration,
+            integrationAssets_product,
+            integrationAssets_sourceControlLog,
+            integrationAssets_triggerAssets,
+            integrationAssets_xcodebuildLog,
+            integrationAssets_xcodebuildOutput,
+            ])
+        
+        integrationIssues.properties.append(contentsOf: [
+            integrationIssues_buildServiceErrors,
+            integrationIssues_buildServiceWarnings,
+            integrationIssues_freshAnalyzerWarnings,
+            integrationIssues_freshErrors,
+            integrationIssues_freshTestFailures,
+            integrationIssues_freshWarnings,
+            integrationIssues_integration,
+            integrationIssues_resolvedAnalyzerWarnings,
+            integrationIssues_resolvedErrors,
+            integrationIssues_resolvedTestFailures,
+            integrationIssues_resolvedWarnings,
+            integrationIssues_unresolvedAnalyzerWarnings,
+            integrationIssues_unresolvedErrors,
+            integrationIssues_unresolvedTestFailures,
+            integrationIssues_unresolvedWarnings,
+            ])
+        
+        issue.properties.append(contentsOf: [
+            issue_inverseBuildServiceErrors,
+            issue_inverseBuildServiceWarnings,
+            issue_inverseFreshAnalyzerWarnings,
+            issue_inverseFreshErrors,
+            issue_inverseFreshTestFailures,
+            issue_inverseFreshWarnings,
+            issue_inverseResolvedAnalyzerWarnings,
+            issue_inverseResolvedErrors,
+            issue_inverseResolvedTestFailures,
+            issue_inverseResolvedWarnings,
+            issue_inverseUnresolvedAnalyzerWarnings,
+            issue_inverseUnresolvedErrors,
+            issue_inverseUnresolvedTestFailures,
+            issue_inverseUnresolvedWarnings,
+            ])
+        
+        platform.properties.append(contentsOf: [
+            platform_filter,
+            ])
+        
+        repository.properties.append(contentsOf: [
+            repository_commits,
+            repository_configurations,
+            ])
+        
+        revisionBlueprint.properties.append(contentsOf: [
+            revisionBlueprint_commit,
+            revisionBlueprint_integration,
+            ])
+        
+        server.properties.append(contentsOf: [
+            server_bots,
+            ])
+        
+        stats.properties.append(contentsOf: [
+            stats_analysisWarnings,
+            stats_averageIntegrationTime,
+            stats_bestSuccessStreak,
+            stats_bot,
+            stats_errors,
+            stats_improvedPerfTests,
+            stats_lastCleanIntegration,
+            stats_regressedPerfTests,
+            stats_testFailures,
+            stats_tests,
+            stats_warnings,
+            ])
+        
+        statsBreakdown.properties.append(contentsOf: [
+            statsBreakdown_inverseAnalysisWarnings,
+            statsBreakdown_inverseAverageIntegrationTime,
+            statsBreakdown_inverseErrors,
+            statsBreakdown_inverseImprovedPerfTests,
+            statsBreakdown_inverseRegressedPerfTests,
+            statsBreakdown_inverseTestFailures,
+            statsBreakdown_inverseTests,
+            statsBreakdown_inverseWarnings,
+            ])
+        
+        trigger.properties.append(contentsOf: [
+            trigger_conditions,
+            trigger_configuration,
+            trigger_emailConfiguration,
+            ])
         
         entities = [
             asset, bot, buildResultSummary, commit, commitChange, commitContributor,

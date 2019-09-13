@@ -1,7 +1,8 @@
 import Foundation
+import XcodeServerCommon
 
 public struct XCSSuspectStrategy: Codable {
-    public var confidence: Int?
+    public var confidence: IssueConfidence?
     public var reliability: Int?
-    public var identificationStrategy: Int?
+    public var identificationStrategy: IssueIdentificationStrategy?
 }

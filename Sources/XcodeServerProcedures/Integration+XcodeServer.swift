@@ -22,7 +22,7 @@ public extension Integration {
         
         if let value = integration.testHierarchy {
             do {
-                self.testHierachyData = try JSON.jsonEncoder.encode(value)
+                self.testHierarchyData = try JSON.jsonEncoder.encode(value)
             } catch {
                 print(error)
             }
@@ -69,7 +69,7 @@ public extension Integration {
     }
     
     var testResults: [TestResult] {
-        guard let data = self.testHierachyData else {
+        guard let data = self.testHierarchyData else {
             return []
         }
         
