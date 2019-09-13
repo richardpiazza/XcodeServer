@@ -11,6 +11,7 @@ public class Server: NSManagedObject {
     public convenience init?(managedObjectContext: NSManagedObjectContext, fqdn: String) {
         self.init(managedObjectContext: managedObjectContext)
         self.fqdn = fqdn
+        self.apiVersion = 0
     }
     
 }
@@ -28,7 +29,7 @@ public extension Server {
     @NSManaged var server: String?
     @NSManaged var xcode: String?
     @NSManaged var xcodeServer: String?
-    @NSManaged var apiVersion: NSNumber?
+    @NSManaged var apiVersion: Int32
     @NSManaged var bots: Set<Bot>?
     
 }

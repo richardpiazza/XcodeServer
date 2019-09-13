@@ -10,7 +10,7 @@ public extension Server {
         self.xcodeServer = version.xcodeServer
         self.xcode = version.xcode
         if let api = api {
-            self.apiVersion = api as NSNumber
+            self.apiVersion = Int32(api)
         }
     }
     
