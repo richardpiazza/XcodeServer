@@ -35,7 +35,7 @@ final class XcodeServerTests: XCTestCase {
         XCTAssertEqual(entityHashes[IntegrationAssets.entityName]!.hexString, "e4a0616aabb373aa0e0d81c5beb59684145f2a06b956ca41683c99b4ba8be987")
         XCTAssertEqual(entityHashes[IntegrationIssues.entityName]!.hexString, "362e374eae06027aea5fc37ef4dc459b99b0e676b99938566027a00840bf3b50")
         XCTAssertEqual(entityHashes[Issue.entityName]!.hexString, "7a7117a08f8060fbc30050658493064cede40214ec1254ebd6eeb800939487e0")
-        XCTAssertEqual(entityHashes[Platform.entityName]!.hexString, "c017f0c462fac8892967b95ca5a9146d9559eaf07b77702d7281f4345c0fb855")
+        XCTAssertEqual(entityHashes[Platform.entityName]!.hexString, "c5ae3363a983559a5328937d83349f41737e16c3221460e906ba9f538b3a149b")
         XCTAssertEqual(entityHashes[Repository.entityName]!.hexString, "3aa5bcf326bf07fb21d32388f45aea44b9b76d8c7e16d979229b438d11d25941")
         XCTAssertEqual(entityHashes[RevisionBlueprint.entityName]!.hexString, "d286d43fdd6a0cbf8300dab3da1861faa734fc32c0483802653ab6ed05d450ce")
         XCTAssertEqual(entityHashes[Server.entityName]!.hexString, "1a907887cecfd18bab0ff3854234aa67a118a63aa72795802f835fe7a781eacd")
@@ -70,15 +70,17 @@ final class XcodeServerTests: XCTestCase {
         #endif
     }
     
-//    func testModel_1_0_0_Metadata() throws {
-//        let bundle = Bundle(for: XcodeServerTests.self)
-//
-//        guard let url = bundle.url(forResource: "XcodeServer_1.0.0_empty", withExtension: "sqlite") else {
-//            throw CocoaError(.fileNoSuchFile)
-//        }
-//
-//        let metadata = try NSPersistentStoreCoordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: url, options: nil)
-//
-//        XCTAssertTrue(model.isConfiguration(withName: nil, compatibleWithStoreMetadata: metadata))
-//    }
+    func testModel_1_0_0_Metadata() throws {
+        #if canImport(CoreData)
+        let bundle = Bundle(for: XcodeServerTests.self)
+
+        guard let url = bundle.url(forResource: "XcodeServer_1.0.0_empty", withExtension: "sqlite") else {
+            throw CocoaError(.fileNoSuchFile)
+        }
+
+        let metadata = try NSPersistentStoreCoordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: url, options: nil)
+
+        XCTAssertTrue(model.isConfiguration(withName: nil, compatibleWithStoreMetadata: metadata))
+        #endif
+    }
 }

@@ -215,7 +215,7 @@ class Model_1_0_0: NSManagedObjectModel {
         platform.properties.append(NSAttributeDescription(name: "displayName", type: .stringAttributeType))
         platform.properties.append(platform_identifier)
         platform.properties.append(NSAttributeDescription(name: "platformIdentifier", type: .stringAttributeType))
-        platform.properties.append(NSAttributeDescription(name: "simulatorIdentifier", type: .UUIDAttributeType))
+        platform.properties.append(NSAttributeDescription(name: "simulatorIdentifier", type: .stringAttributeType))
         platform.properties.append(NSAttributeDescription(name: "version", type: .stringAttributeType))
         
         platform.indexes.append(NSFetchIndexDescription(name: "byPropertyIndex", elements: [

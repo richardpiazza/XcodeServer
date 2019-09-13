@@ -19,7 +19,7 @@ public extension Platform {
     @NSManaged var displayName: String?
     @NSManaged var identifier: String
     @NSManaged var platformIdentifier: String?
-    @NSManaged var simulatorIdentifier: UUID?
+    @NSManaged var simulatorIdentifier: String?
     @NSManaged var version: String?
     @NSManaged var filter: Filter?
     
