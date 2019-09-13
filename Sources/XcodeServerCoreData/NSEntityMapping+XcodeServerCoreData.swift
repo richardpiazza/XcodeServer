@@ -1,4 +1,5 @@
 import Foundation
+#if canImport(CoreData)
 import CoreData
 
 public extension NSEntityMapping {
@@ -14,3 +15,5 @@ public extension NSEntityMapping {
         relationshipMappings = []
     }
 }
+
+#endif

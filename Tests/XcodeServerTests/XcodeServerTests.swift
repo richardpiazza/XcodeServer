@@ -16,6 +16,7 @@ final class XcodeServerTests: XCTestCase {
     }()
     
     func testModel_1_0_0_Hashes() {
+        #if canImport(CoreData)
         let entityHashes = model.entityVersionHashesByName
         
         XCTAssertEqual(entityHashes[Asset.entityName]!.hexString, "e26ed40dd5f67926b82284c93ff43345873e127230d177d63bc7c460ce02b22e")
@@ -41,9 +42,11 @@ final class XcodeServerTests: XCTestCase {
         XCTAssertEqual(entityHashes[Stats.entityName]!.hexString, "3b4f4c9e57bb4e66d26d9ae7661f3581cf8f79988090a694bccd7a36cb451910")
         XCTAssertEqual(entityHashes[StatsBreakdown.entityName]!.hexString, "8b2f1bdac6b3b54862cc6ee0e43698a26fa594b3157b893e205e4d8d12b1b71f")
         XCTAssertEqual(entityHashes[Trigger.entityName]!.hexString, "fb6787e679b81cf51bda2e905e219a23bf68a4e853e6f3ff35598e2d693abc90")
+        #endif
     }
     
     func testModel_1_0_0_Initialization() {
+        #if canImport(CoreData)
         let exp = expectation(description: "\(#function)")
         
         let description = NSPersistentStoreDescription()
@@ -64,6 +67,7 @@ final class XcodeServerTests: XCTestCase {
         }
         
         wait(for: [exp], timeout: 1.0)
+        #endif
     }
     
 //    func testModel_1_0_0_Metadata() throws {

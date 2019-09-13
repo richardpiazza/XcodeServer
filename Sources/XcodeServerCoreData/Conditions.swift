@@ -1,4 +1,5 @@
 import Foundation
+#if canImport(CoreData)
 import CoreData
 
 @objc(Conditions)
@@ -36,3 +37,5 @@ public extension Conditions {
     @NSManaged var trigger: Trigger?
     
 }
+
+#endif

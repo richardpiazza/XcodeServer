@@ -1,5 +1,6 @@
 import Foundation
 import XcodeServerAPI
+#if canImport(CoreData)
 import XcodeServerCoreData
 
 extension Asset {
@@ -12,3 +13,5 @@ extension Asset {
         self.triggerName = asset.triggerName
     }
 }
+
+#endif

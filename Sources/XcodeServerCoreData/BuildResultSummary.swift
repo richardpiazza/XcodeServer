@@ -1,4 +1,5 @@
 import Foundation
+#if canImport(CoreData)
 import CoreData
 
 @objc(BuildResultSummary)
@@ -44,3 +45,5 @@ public extension BuildResultSummary {
     @NSManaged var integration: Integration?
     
 }
+
+#endif

@@ -1,5 +1,6 @@
 import Foundation
 import XcodeServerAPI
+#if canImport(CoreData)
 import XcodeServerCoreData
 
 extension IntegrationAssets {
@@ -110,3 +111,5 @@ extension IntegrationAssets {
         }
     }
 }
+
+#endif

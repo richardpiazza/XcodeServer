@@ -1,6 +1,7 @@
 import Foundation
-import CoreData
 import XcodeServerCommon
+#if canImport(CoreData)
+import CoreData
 
 @objc(CommitContributor)
 public class CommitContributor: NSManagedObject {
@@ -64,3 +65,5 @@ public extension CommitContributor {
         }
     }
 }
+
+#endif

@@ -1,5 +1,6 @@
 import Foundation
 import XcodeServerAPI
+#if canImport(CoreData)
 import XcodeServerCoreData
 
 extension Device {
@@ -22,3 +23,5 @@ extension Device {
         self.platformIdentifier = device.platformIdentifier
     }
 }
+
+#endif

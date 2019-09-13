@@ -1,5 +1,6 @@
 import Foundation
 import XcodeServerAPI
+#if canImport(CoreData)
 import XcodeServerCoreData
 
 extension BuildResultSummary {
@@ -18,3 +19,5 @@ extension BuildResultSummary {
         self.improvedPerfTestCount = Int32(summary.improvedPerfTestCount)
     }
 }
+
+#endif

@@ -1,6 +1,7 @@
 import Foundation
 import XcodeServerCommon
 import XcodeServerAPI
+#if canImport(CoreData)
 import XcodeServerCoreData
 
 extension Configuration {
@@ -108,3 +109,5 @@ extension Configuration {
         }
     }
 }
+
+#endif

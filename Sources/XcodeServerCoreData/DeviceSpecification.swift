@@ -1,4 +1,5 @@
 import Foundation
+#if canImport(CoreData)
 import CoreData
 
 @objc(DeviceSpecification)
@@ -18,3 +19,5 @@ public extension DeviceSpecification {
     @NSManaged var devices: Set<Device>?
     
 }
+
+#endif

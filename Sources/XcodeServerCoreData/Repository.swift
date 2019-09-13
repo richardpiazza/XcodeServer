@@ -1,4 +1,5 @@
 import Foundation
+#if canImport(CoreData)
 import CoreData
 
 @objc(Repository)
@@ -57,3 +58,5 @@ public extension NSManagedObjectContext {
         return nil
     }
 }
+
+#endif

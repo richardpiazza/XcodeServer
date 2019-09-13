@@ -1,7 +1,8 @@
 import Foundation
-import CoreData
 import ProcedureKit
 import XcodeServerAPI
+#if canImport(CoreData)
+import CoreData
 import XcodeServerCoreData
 
 public class UpdateVersionProcedure: NSPersistentContainerProcedure, InputProcedure {
@@ -54,3 +55,5 @@ public class UpdateVersionProcedure: NSPersistentContainerProcedure, InputProced
     }
     
 }
+
+#endif

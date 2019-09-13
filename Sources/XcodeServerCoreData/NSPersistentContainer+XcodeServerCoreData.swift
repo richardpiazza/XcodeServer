@@ -1,4 +1,5 @@
 import Foundation
+#if canImport(CoreData)
 import CoreData
 
 public extension NSPersistentContainer {
@@ -39,3 +40,5 @@ public extension NSPersistentContainer {
     }()
     
 }
+
+#endif

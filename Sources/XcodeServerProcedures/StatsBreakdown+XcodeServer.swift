@@ -1,5 +1,6 @@
 import Foundation
 import XcodeServerAPI
+#if canImport(CoreData)
 import XcodeServerCoreData
 
 extension StatsBreakdown {
@@ -12,3 +13,5 @@ extension StatsBreakdown {
         self.stdDev = breakdown.stdDev
     }
 }
+
+#endif

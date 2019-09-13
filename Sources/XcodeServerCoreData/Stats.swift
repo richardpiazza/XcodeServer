@@ -1,4 +1,5 @@
 import Foundation
+#if canImport(CoreData)
 import CoreData
 
 @objc(Stats)
@@ -41,3 +42,5 @@ public extension Stats {
     @NSManaged var warnings: StatsBreakdown?
     
 }
+
+#endif

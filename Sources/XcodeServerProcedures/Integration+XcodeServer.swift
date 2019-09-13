@@ -1,6 +1,7 @@
 import Foundation
 import XcodeServerCommon
 import XcodeServerAPI
+#if canImport(CoreData)
 import XcodeServerCoreData
 
 public extension Integration {
@@ -97,3 +98,5 @@ public extension Integration {
         return results
     }
 }
+
+#endif

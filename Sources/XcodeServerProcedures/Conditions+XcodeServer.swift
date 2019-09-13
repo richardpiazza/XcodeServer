@@ -1,5 +1,6 @@
 import Foundation
 import XcodeServerAPI
+#if canImport(CoreData)
 import XcodeServerCoreData
 
 extension Conditions {
@@ -13,3 +14,5 @@ extension Conditions {
         self.statusRawValue = Int16(conditions.status ?? 0)
     }
 }
+
+#endif

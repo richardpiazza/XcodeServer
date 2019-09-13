@@ -1,5 +1,7 @@
 import Foundation
+#if canImport(CoreData)
 import CoreData
+#endif
 
 public enum XcodeServerProcedureError: Swift.Error, LocalizedError {
     public enum UnassignedObjectType: String {
@@ -11,7 +13,9 @@ public enum XcodeServerProcedureError: Swift.Error, LocalizedError {
     case invalidInput
     case existingXcodeServer(fqdn: String)
     case failedToCreateXcodeServer(fqdn: String)
+    #if canImport(CoreData)
     case invalidManagedObjectID(id: NSManagedObjectID)
+    #endif
     case unassignedObject(type: UnassignedObjectType)
     case invalidAPIResponse
     case managedObjectContext
@@ -27,8 +31,10 @@ public enum XcodeServerProcedureError: Swift.Error, LocalizedError {
             return "An Xcode Server with FQDN '\(fqdn)' already exists."
         case .failedToCreateXcodeServer(let fqdn):
             return "Failed to create an Xcode Server with FQDN '\(fqdn)'."
+        #if canImport(CoreData)
         case .invalidManagedObjectID(let id):
             return "Object with id '\(id)' not found in NSManagedObjectContext."
+        #endif
         case .unassignedObject(let type):
             return "Expected object of type '\(type.rawValue)' is not assigned."
         case .invalidAPIResponse:

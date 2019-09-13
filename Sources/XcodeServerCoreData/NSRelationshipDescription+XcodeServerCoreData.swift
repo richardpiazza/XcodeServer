@@ -1,4 +1,5 @@
 import Foundation
+#if canImport(CoreData)
 import CoreData
 
 public extension NSRelationshipDescription {
@@ -11,3 +12,5 @@ public extension NSRelationshipDescription {
         self.isOptional = isOptional
     }
 }
+
+#endif

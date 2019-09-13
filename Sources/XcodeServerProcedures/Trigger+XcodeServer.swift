@@ -1,5 +1,6 @@
 import Foundation
 import XcodeServerAPI
+#if canImport(CoreData)
 import XcodeServerCoreData
 
 extension Trigger {
@@ -34,3 +35,5 @@ extension Trigger {
         }
     }
 }
+
+#endif

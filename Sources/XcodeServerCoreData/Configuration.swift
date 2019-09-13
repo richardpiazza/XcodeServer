@@ -1,6 +1,7 @@
 import Foundation
-import CoreData
 import XcodeServerCommon
+#if canImport(CoreData)
+import CoreData
 
 @objc(Configuration)
 public class Configuration: NSManagedObject {
@@ -135,3 +136,5 @@ public extension Configuration {
         }
     }
 }
+
+#endif

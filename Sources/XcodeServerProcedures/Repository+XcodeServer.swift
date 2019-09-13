@@ -1,5 +1,6 @@
 import Foundation
 import XcodeServerAPI
+#if canImport(CoreData)
 import XcodeServerCoreData
 
 extension Repository {
@@ -98,3 +99,5 @@ extension Repository {
         }
     }
 }
+
+#endif

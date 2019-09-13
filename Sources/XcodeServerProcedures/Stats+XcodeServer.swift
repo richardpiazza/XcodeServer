@@ -1,6 +1,7 @@
 import Foundation
 import XcodeServerCommon
 import XcodeServerAPI
+#if canImport(CoreData)
 import XcodeServerCoreData
 
 extension Stats {
@@ -99,3 +100,5 @@ extension Stats {
         }
     }
 }
+
+#endif

@@ -1,6 +1,7 @@
 import Foundation
 import XcodeServerCommon
 import XcodeServerAPI
+#if canImport(CoreData)
 import XcodeServerCoreData
 
 extension CommitContributor {
@@ -16,3 +17,5 @@ extension CommitContributor {
         }
     }
 }
+
+#endif

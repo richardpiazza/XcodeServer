@@ -1,6 +1,7 @@
 import Foundation
-import CoreData
 import XcodeServerCommon
+#if canImport(CoreData)
+import CoreData
 
 @objc(Trigger)
 public class Trigger: NSManagedObject {
@@ -45,3 +46,5 @@ public extension Trigger {
         }
     }
 }
+
+#endif

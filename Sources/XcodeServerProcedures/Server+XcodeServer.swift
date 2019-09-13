@@ -1,5 +1,6 @@
 import Foundation
 import XcodeServerAPI
+#if canImport(CoreData)
 import XcodeServerCoreData
 
 public extension Server {
@@ -47,3 +48,5 @@ public extension Server {
         }
     }
 }
+
+#endif

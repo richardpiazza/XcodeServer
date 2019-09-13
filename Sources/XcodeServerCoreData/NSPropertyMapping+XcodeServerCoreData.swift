@@ -1,4 +1,5 @@
 import Foundation
+#if canImport(CoreData)
 import CoreData
 
 public extension NSPropertyMapping {
@@ -20,3 +21,5 @@ public extension NSPropertyMapping {
         self.valueExpression = expression
     }
 }
+
+#endif

@@ -1,5 +1,6 @@
 import Foundation
 import XcodeServerAPI
+#if canImport(CoreData)
 import XcodeServerCoreData
 
 extension CommitChange {
@@ -8,3 +9,5 @@ extension CommitChange {
         self.filePath = change.filePath
     }
 }
+
+#endif

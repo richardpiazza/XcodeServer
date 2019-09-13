@@ -1,4 +1,5 @@
 import Foundation
+#if canImport(CoreData)
 import CoreData
 
 @objc(CommitChange)
@@ -19,3 +20,5 @@ public extension CommitChange {
     @NSManaged var commit: Commit?
     
 }
+
+#endif

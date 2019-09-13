@@ -1,5 +1,6 @@
 import Foundation
 import XcodeServerAPI
+#if canImport(CoreData)
 import XcodeServerCoreData
 
 extension Filter {
@@ -22,3 +23,5 @@ extension Filter {
         }
     }
 }
+
+#endif

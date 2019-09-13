@@ -1,24 +1,24 @@
 import Foundation
 import XcodeServerCommon
 import XcodeServerAPI
+#if canImport(CoreData)
 import XcodeServerCoreData
 
 extension EmailConfiguration {
     public func update(withEmailConfiguration configuration: XCSEmailConfiguration) {
-        if #available(macOS 10.12, iOS 10.0, tvOS 10.0, watchOS 3.0, *) {
-            if let ccas = configuration.ccAddresses {
-                do {
-                    self.ccAddressesData = try JSON.jsonEncoder.encode(ccas)
-                } catch {
-                    print(error)
-                }
+        if let ccas = configuration.ccAddresses {
+            do {
+                self.ccAddressesData = try JSON.jsonEncoder.encode(ccas)
+            } catch {
+                print(error)
             }
-            if let adn = configuration.allowedDomainNames {
-                do {
-                    self.allowedDomainNamesData = try JSON.jsonEncoder.encode(adn)
-                } catch {
-                    print(error)
-                }
+        }
+        
+        if let adn = configuration.allowedDomainNames {
+            do {
+                self.allowedDomainNamesData = try JSON.jsonEncoder.encode(adn)
+            } catch {
+                print(error)
             }
         }
         
@@ -37,3 +37,5 @@ extension EmailConfiguration {
         self.weeklyScheduleDay = Int16(configuration.weeklyScheduleDay ?? 0)
     }
 }
+
+#endif

@@ -1,6 +1,7 @@
 import Foundation
 import XcodeServerCommon
 import XcodeServerAPI
+#if canImport(CoreData)
 import XcodeServerCoreData
 
 extension Commit {
@@ -41,3 +42,5 @@ extension Commit {
         }
     }
 }
+
+#endif

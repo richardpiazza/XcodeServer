@@ -1,5 +1,6 @@
 import Foundation
 import XcodeServerAPI
+#if canImport(CoreData)
 import XcodeServerCoreData
 
 extension Platform {
@@ -11,3 +12,5 @@ extension Platform {
         self.version = platform.version
     }
 }
+
+#endif

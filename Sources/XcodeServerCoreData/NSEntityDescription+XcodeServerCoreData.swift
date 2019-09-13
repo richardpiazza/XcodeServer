@@ -1,4 +1,5 @@
 import Foundation
+#if canImport(CoreData)
 import CoreData
 
 public extension NSEntityDescription {
@@ -8,3 +9,5 @@ public extension NSEntityDescription {
         self.managedObjectClassName = name
     }
 }
+
+#endif

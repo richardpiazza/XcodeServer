@@ -1,4 +1,5 @@
 import Foundation
+#if canImport(CoreData)
 import CoreData
 
 /// An `Integration` asset
@@ -42,3 +43,5 @@ public extension Asset {
     @NSManaged var inverseXcodebuildOutput: IntegrationAssets?
     
 }
+
+#endif

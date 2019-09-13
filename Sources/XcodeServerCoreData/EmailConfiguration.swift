@@ -1,6 +1,7 @@
 import Foundation
-import CoreData
 import XcodeServerCommon
+#if canImport(CoreData)
+import CoreData
 
 @objc(EmailConfiguration)
 public class EmailConfiguration: NSManagedObject {
@@ -56,3 +57,5 @@ public extension EmailConfiguration {
         }
     }
 }
+
+#endif

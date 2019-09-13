@@ -1,4 +1,5 @@
 import Foundation
+#if canImport(CoreData)
 import CoreData
 
 public extension NSManagedObject {
@@ -20,3 +21,5 @@ public extension NSManagedObject {
         self.init(entity: entityDescription, insertInto: context)
     }
 }
+
+#endif

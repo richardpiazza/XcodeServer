@@ -1,8 +1,10 @@
 import Foundation
-import CoreData
 import XcodeServerCommon
 
 public typealias TestResult = (name: String, passed: Bool)
+
+#if canImport(CoreData)
+import CoreData
 
 /// ## Integration
 /// An Xcode Server Bot integration (run).
@@ -151,3 +153,5 @@ public extension NSManagedObjectContext {
         return nil
     }
 }
+
+#endif

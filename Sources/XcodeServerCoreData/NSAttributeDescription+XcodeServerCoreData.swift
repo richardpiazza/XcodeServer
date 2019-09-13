@@ -1,4 +1,5 @@
 import Foundation
+#if canImport(CoreData)
 import CoreData
 
 public extension NSAttributeDescription {
@@ -10,3 +11,5 @@ public extension NSAttributeDescription {
         self.defaultValue = defaultValue
     }
 }
+
+#endif

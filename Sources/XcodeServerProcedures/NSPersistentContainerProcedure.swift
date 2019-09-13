@@ -1,7 +1,8 @@
 import Foundation
-import CoreData
 import ProcedureKit
 import XcodeServerAPI
+#if canImport(CoreData)
+import CoreData
 import XcodeServerCoreData
 
 open class NSPersistentContainerProcedure: Procedure {
@@ -15,3 +16,5 @@ open class NSPersistentContainerProcedure: Procedure {
         super.init()
     }
 }
+
+#endif

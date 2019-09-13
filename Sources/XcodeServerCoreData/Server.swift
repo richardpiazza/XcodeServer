@@ -1,4 +1,5 @@
 import Foundation
+#if canImport(CoreData)
 import CoreData
 
 /// An `XcodeServer` is one of the root elements in the object graph.
@@ -87,3 +88,5 @@ public extension NSManagedObjectContext {
         return nil
     }
 }
+
+#endif

@@ -1,6 +1,7 @@
 import Foundation
-import CoreData
 import XcodeServerCommon
+#if canImport(CoreData)
+import CoreData
 
 @objc(Issue)
 public class Issue: NSManagedObject {
@@ -69,3 +70,5 @@ public extension Issue {
         }
     }
 }
+
+#endif

@@ -1,4 +1,5 @@
 import Foundation
+#if canImport(CoreData)
 import CoreData
 
 @objc(Filter)
@@ -21,3 +22,5 @@ public extension Filter {
     @NSManaged var platform: Platform?
     
 }
+
+#endif

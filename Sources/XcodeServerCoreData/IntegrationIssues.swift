@@ -1,4 +1,5 @@
 import Foundation
+#if canImport(CoreData)
 import CoreData
 
 @objc(IntegrationIssues)
@@ -30,3 +31,5 @@ public extension IntegrationIssues {
     @NSManaged var unresolvedWarnings: Set<Issue>?
     
 }
+
+#endif

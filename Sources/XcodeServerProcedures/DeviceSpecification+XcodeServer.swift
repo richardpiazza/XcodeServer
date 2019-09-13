@@ -1,5 +1,6 @@
 import Foundation
 import XcodeServerAPI
+#if canImport(CoreData)
 import XcodeServerCoreData
 
 extension DeviceSpecification {
@@ -44,3 +45,5 @@ extension DeviceSpecification {
         }
     }
 }
+
+#endif

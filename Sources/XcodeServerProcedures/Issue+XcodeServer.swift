@@ -1,5 +1,6 @@
 import Foundation
 import XcodeServerAPI
+#if canImport(CoreData)
 import XcodeServerCoreData
 
 extension Issue {
@@ -16,3 +17,5 @@ extension Issue {
         self.type = issue.type ?? .unknown
     }
 }
+
+#endif

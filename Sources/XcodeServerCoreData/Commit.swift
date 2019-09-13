@@ -1,6 +1,7 @@
 import Foundation
-import CoreData
 import XcodeServerCommon
+#if canImport(CoreData)
+import CoreData
 
 @objc(Commit)
 public class Commit: NSManagedObject {
@@ -56,3 +57,5 @@ public extension NSManagedObjectContext {
         return nil
     }
 }
+
+#endif

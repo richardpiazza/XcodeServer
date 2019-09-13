@@ -1,4 +1,5 @@
 import Foundation
+#if canImport(CoreData)
 import CoreData
 
 /// Represents an Xcode Server Bot.
@@ -87,3 +88,5 @@ public extension NSManagedObjectContext {
         return nil
     }
 }
+
+#endif
