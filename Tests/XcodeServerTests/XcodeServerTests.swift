@@ -70,7 +70,7 @@ final class XcodeServerTests: XCTestCase {
         #endif
     }
     
-    func testModel_1_0_0_Metadata() throws {
+    func testEmptyStore_Model_1_0_0_Metadata() throws {
         #if canImport(CoreData)
         let bundle = Bundle(for: XcodeServerTests.self)
 
@@ -80,6 +80,20 @@ final class XcodeServerTests: XCTestCase {
 
         let metadata = try NSPersistentStoreCoordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: url, options: nil)
 
+        XCTAssertTrue(model.isConfiguration(withName: nil, compatibleWithStoreMetadata: metadata))
+        #endif
+    }
+    
+    func testFullStore_Model_1_0_0_Metadata() throws {
+        #if canImport(CoreData)
+        let bundle = Bundle(for: XcodeServerTests.self)
+        
+        guard let url = bundle.url(forResource: "XcodeServer_1.0.0_full", withExtension: "sqlite") else {
+            throw CocoaError(.fileNoSuchFile)
+        }
+        
+        let metadata = try NSPersistentStoreCoordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: url, options: nil)
+        
         XCTAssertTrue(model.isConfiguration(withName: nil, compatibleWithStoreMetadata: metadata))
         #endif
     }

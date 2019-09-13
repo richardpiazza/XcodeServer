@@ -39,6 +39,18 @@ public extension NSPersistentContainer {
         return container
     }()
     
+    /// Removed all stores from the `persistentStoreCoordinator`/
+    ///
+    /// *WARNING*: The container & related context will be un-usable until a store has been reloaded.
+    func unload() {
+        for store in persistentStoreCoordinator.persistentStores {
+            do {
+                try persistentStoreCoordinator.remove(store)
+            } catch {
+                print(error)
+            }
+        }
+    }
 }
 
 #endif
