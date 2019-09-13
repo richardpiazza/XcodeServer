@@ -101,37 +101,37 @@ extension Configuration {
 public extension Configuration {
     var codeCoveragePreference: CodeCoveragePreference {
         get {
-            return CodeCoveragePreference(rawValue: Int(codeCoveragePreferenceRawValue)) ?? .disabled
+            return CodeCoveragePreference(rawValue: codeCoveragePreferenceRawValue) ?? .disabled
         }
         set {
-            codeCoveragePreferenceRawValue = Int16(newValue.rawValue)
+            codeCoveragePreferenceRawValue = newValue.rawValue
         }
     }
     
     var cleanSchedule: CleanSchedule {
         get {
-            return CleanSchedule(rawValue: Int(cleanScheduleRawValue)) ?? .never
+            return CleanSchedule(rawValue: cleanScheduleRawValue) ?? .never
         }
         set {
-            cleanScheduleRawValue = Int16(newValue.rawValue)
+            cleanScheduleRawValue = newValue.rawValue
         }
     }
     
     var scheduleType: BotSchedule {
         get {
-            return BotSchedule(rawValue: Int(scheduleTypeRawValue)) ?? .periodic
+            return BotSchedule(rawValue: scheduleTypeRawValue) ?? .periodic
         }
         set {
-            scheduleTypeRawValue = Int16(newValue.rawValue)
+            scheduleTypeRawValue = newValue.rawValue
         }
     }
     
     var periodicScheduleInterval: PeriodicScheduleInterval {
         get {
-            return PeriodicScheduleInterval(rawValue: Int(periodicScheduleIntervalRawValue)) ?? .none
+            return PeriodicScheduleInterval(rawValue: periodicScheduleIntervalRawValue) ?? .none
         }
         set {
-            periodicScheduleIntervalRawValue = Int16(newValue.rawValue)
+            periodicScheduleIntervalRawValue = newValue.rawValue
         }
     }
 }

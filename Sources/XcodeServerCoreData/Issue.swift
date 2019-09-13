@@ -54,10 +54,10 @@ public extension Issue {
 public extension Issue {
     var status: IssueStatus {
         get {
-            return IssueStatus(rawValue: Int(statusRawValue)) ?? .new
+            return IssueStatus(rawValue: statusRawValue) ?? .new
         }
         set {
-            statusRawValue = Int16(newValue.rawValue)
+            statusRawValue = newValue.rawValue
         }
     }
     

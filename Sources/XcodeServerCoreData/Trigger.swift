@@ -29,19 +29,19 @@ public extension Trigger {
 public extension Trigger {
     var phase: TriggerPhase {
         get {
-            return TriggerPhase(rawValue: Int(phaseRawValue)) ?? .beforeIntegration
+            return TriggerPhase(rawValue: phaseRawValue) ?? .beforeIntegration
         }
         set {
-            phaseRawValue = Int16(newValue.rawValue)
+            phaseRawValue = newValue.rawValue
         }
     }
     
     var type: TriggerType {
         get {
-            return TriggerType(rawValue: Int(typeRawValue)) ?? .script
+            return TriggerType(rawValue: typeRawValue) ?? .script
         }
         set {
-            typeRawValue = Int16(newValue.rawValue)
+            typeRawValue = newValue.rawValue
         }
     }
 }

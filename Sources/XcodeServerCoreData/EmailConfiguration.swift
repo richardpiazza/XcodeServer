@@ -49,10 +49,10 @@ public extension EmailConfiguration {
 public extension EmailConfiguration {
     var emailType: EmailType {
         get {
-            return EmailType(rawValue: Int(emailTypeRawValue)) ?? .integrationReport
+            return EmailType(rawValue: emailTypeRawValue) ?? .integrationReport
         }
         set {
-            emailTypeRawValue = Int16(newValue.rawValue)
+            emailTypeRawValue = newValue.rawValue
         }
     }
 }
