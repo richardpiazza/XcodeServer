@@ -5,7 +5,7 @@ import XcodeServerCommon
 @objc(Issue)
 public class Issue: NSManagedObject {
     
-    public convenience init?(managedObjectContext: NSManagedObjectContext, identifier: UUID) {
+    public convenience init?(managedObjectContext: NSManagedObjectContext, identifier: String) {
         self.init(managedObjectContext: managedObjectContext)
         self.identifier = identifier
         self.age = 0
@@ -25,7 +25,7 @@ public extension Issue {
     @NSManaged var documentFilePath: String?
     @NSManaged var documentLocationData: String?
     @NSManaged var fixItType: String?
-    @NSManaged var identifier: UUID?
+    @NSManaged var identifier: String
     @NSManaged var issueType: String?
     @NSManaged var lineNumber: Int32
     @NSManaged var message: String?

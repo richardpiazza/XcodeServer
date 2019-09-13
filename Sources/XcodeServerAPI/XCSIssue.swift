@@ -25,8 +25,8 @@ public struct XCSIssue: Codable {
     public var documentFilePath: String?
     public var documentLocationData: String?
     public var fixItType: String?
-    public var identifier: UUID
-    public var integrationID: UUID?
+    public var identifier: String
+    public var integrationID: String?
     public var issueAuthors: [XCSIssueAuthor]?
     public var issueType: String?
     public var lineNumber: Int?

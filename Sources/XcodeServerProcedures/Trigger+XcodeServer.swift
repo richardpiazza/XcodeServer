@@ -9,8 +9,8 @@ extension Trigger {
         }
         
         self.name = trigger.name
-        self.type = trigger.type?.rawValue as NSNumber?
-        self.phase = trigger.phase?.rawValue as NSNumber?
+        self.type = trigger.type ?? .script
+        self.phase = trigger.phase ?? .beforeIntegration
         self.scriptBody = trigger.scriptBody
         
         if let triggerConditions = trigger.conditions {

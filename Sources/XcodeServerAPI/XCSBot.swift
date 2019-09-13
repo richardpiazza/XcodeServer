@@ -19,7 +19,7 @@ public struct XCSBot: Codable {
     
     public var configuration: XCSConfiguration?
     public var group: XCSGroup = XCSGroup()
-    public var identifier: UUID = UUID()
+    public var identifier: String = ""
     public var integrationCounter: Int = 0
     public var lastRevisionBlueprint: XCSRepositoryBlueprint?
     public var name: String = ""

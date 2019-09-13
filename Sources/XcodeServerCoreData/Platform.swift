@@ -4,7 +4,7 @@ import CoreData
 @objc(Platform)
 public class Platform: NSManagedObject {
     
-    public convenience init?(managedObjectContext: NSManagedObjectContext, identifier: UUID, filter: Filter) {
+    public convenience init?(managedObjectContext: NSManagedObjectContext, identifier: String, filter: Filter) {
         self.init(managedObjectContext: managedObjectContext)
         self.identifier = identifier
         self.filter = filter
@@ -16,7 +16,7 @@ public extension Platform {
     
     @NSManaged var buildNumber: String?
     @NSManaged var displayName: String?
-    @NSManaged var identifier: UUID?
+    @NSManaged var identifier: String
     @NSManaged var platformIdentifier: String?
     @NSManaged var simulatorIdentifier: UUID?
     @NSManaged var version: String?

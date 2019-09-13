@@ -9,11 +9,11 @@ extension Stats {
             return
         }
         
-        self.numberOfIntegrations = stats.numberOfIntegrations as NSNumber?
-        self.numberOfCommits = stats.numberOfCommits as NSNumber?
-        self.numberOfSuccessfulIntegrations = stats.numberOfSuccessfulIntegrations as NSNumber?
-        self.testAdditionRate = stats.testAdditionRate as NSNumber?
-        self.codeCoveragePercentageDelta = stats.codeCoveragePercentageDelta as NSNumber?
+        self.numberOfIntegrations = Int32(stats.numberOfIntegrations ?? 0)
+        self.numberOfCommits = Int32(stats.numberOfCommits ?? 0)
+        self.numberOfSuccessfulIntegrations = Int32(stats.numberOfSuccessfulIntegrations ?? 0)
+        self.testAdditionRate = Int32(stats.testAdditionRate ?? 0)
+        self.codeCoveragePercentageDelta = Int32(stats.codeCoveragePercentageDelta ?? 0)
         if let date = stats.sinceDate {
             self.sinceDate = JSON.dateFormatter.string(from: date)
         }
@@ -28,7 +28,7 @@ extension Stats {
         
         if let statsBreakdown = stats.averageIntegrationTime {
             if self.averageIntegrationTime == nil {
-                self.averageIntegrationTime = StatsBreakdown(managedObjectContext: moc)
+                self.averageIntegrationTime = StatsBreakdown(into: moc)
                 self.averageIntegrationTime?.inverseAverageIntegrationTime = self
             }
             
@@ -37,7 +37,7 @@ extension Stats {
         
         if let statsBreakdown = stats.analysisWarnings {
             if self.analysisWarnings == nil {
-                self.analysisWarnings = StatsBreakdown(managedObjectContext: moc)
+                self.analysisWarnings = StatsBreakdown(into: moc)
                 self.analysisWarnings?.inverseAnalysisWarnings = self
             }
             
@@ -46,7 +46,7 @@ extension Stats {
         
         if let statsBreakdown = stats.testFailures {
             if self.testFailures == nil {
-                self.testFailures = StatsBreakdown(managedObjectContext: moc)
+                self.testFailures = StatsBreakdown(into: moc)
                 self.testFailures?.inverseTestFailures = self
             }
             
@@ -55,7 +55,7 @@ extension Stats {
         
         if let statsBreakdown = stats.errors {
             if self.errors == nil {
-                self.errors = StatsBreakdown(managedObjectContext: moc)
+                self.errors = StatsBreakdown(into: moc)
                 self.errors?.inverseErrors = self
             }
             
@@ -64,7 +64,7 @@ extension Stats {
         
         if let statsBreakdown = stats.regressedPerfTests {
             if self.regressedPerfTests == nil {
-                self.regressedPerfTests = StatsBreakdown(managedObjectContext: moc)
+                self.regressedPerfTests = StatsBreakdown(into: moc)
                 self.regressedPerfTests?.inverseRegressedPerfTests = self
             }
             
@@ -73,7 +73,7 @@ extension Stats {
         
         if let statsBreakdown = stats.warnings {
             if self.warnings == nil {
-                self.warnings = StatsBreakdown(managedObjectContext: moc)
+                self.warnings = StatsBreakdown(into: moc)
                 self.warnings?.inverseWarnings = self
             }
             
@@ -82,7 +82,7 @@ extension Stats {
         
         if let statsBreakdown = stats.improvedPerfTests {
             if self.improvedPerfTests == nil {
-                self.improvedPerfTests = StatsBreakdown(managedObjectContext: moc)
+                self.improvedPerfTests = StatsBreakdown(into: moc)
                 self.improvedPerfTests?.inverseImprovedPerfTests = self
             }
             
@@ -91,7 +91,7 @@ extension Stats {
         
         if let statsBreakdown = stats.tests {
             if self.tests == nil {
-                self.tests = StatsBreakdown(managedObjectContext: moc)
+                self.tests = StatsBreakdown(into: moc)
                 self.tests?.inverseTests = self
             }
             

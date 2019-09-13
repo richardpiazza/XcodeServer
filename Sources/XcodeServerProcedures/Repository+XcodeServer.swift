@@ -34,7 +34,7 @@ extension Repository {
         }
         
         self.branchIdentifier = blueprintLocation.branchIdentifier
-        self.branchOptions = blueprintLocation.branchOptions as NSNumber?
+        self.branchOptions = Int16(blueprintLocation.branchOptions ?? 0)
         self.locationType = blueprintLocation.locationType
         
         guard let integration = integration else {

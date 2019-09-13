@@ -8,7 +8,7 @@ import CoreData
 @objc(Bot)
 public class Bot: NSManagedObject {
     
-    public convenience init?(managedObjectContext: NSManagedObjectContext, identifier: UUID, server: Server) {
+    public convenience init?(managedObjectContext: NSManagedObjectContext, identifier: String, server: Server) {
         self.init(managedObjectContext: managedObjectContext)
         self.identifier = identifier
         self.integrationCounter = 0
@@ -29,7 +29,7 @@ public extension Bot {
     }
     
     @NSManaged var configuration: Configuration?
-    @NSManaged var identifier: UUID
+    @NSManaged var identifier: String
     @NSManaged var integrationCounter: Int32
     @NSManaged var integrations: Set<Integration>?
     @NSManaged var lastUpdate: Date?
@@ -57,18 +57,6 @@ extension Bot {
     
 }
 
-public extension Bot {
-    // Reserve for BotType enumeration
-//    var botType: Int {
-//        get {
-//            return Int(typeRawValue)
-//        }
-//        set {
-//            typeRawValue = Int16(newValue)
-//        }
-//    }
-}
-
 public extension NSManagedObjectContext {
     /// Retrieves all `Bot` entities from the Core Data `NSManagedObjectContext`
     func bots() -> [Bot] {
@@ -84,7 +72,7 @@ public extension NSManagedObjectContext {
     
     /// Retrieves the first `Bot` entity from the Core Data `NSManagedObjectContext`
     /// that matches the specified identifier.
-    func bot(withIdentifier identifier: UUID) -> Bot? {
+    func bot(withIdentifier identifier: String) -> Bot? {
         let fetchRequest = NSFetchRequest<Bot>(entityName: Bot.entityName)
         fetchRequest.predicate = NSPredicate(format: "identifier = %@", argumentArray: [identifier])
         do {

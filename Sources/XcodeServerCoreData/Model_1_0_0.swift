@@ -32,7 +32,7 @@ class Model_1_0_0: NSManagedObjectModel {
         asset.properties.append(NSAttributeDescription(name: "triggerName", type: .stringAttributeType))
         
         let bot = NSEntityDescription(name: "Bot")
-        let bot_identifier = NSAttributeDescription(name: "identifier", type: .UUIDAttributeType, isOptional: false, defaultValue: "f8cf876e-0380-4ea5-85fe-6cb54bcca396")
+        let bot_identifier = NSAttributeDescription(name: "identifier", type: .stringAttributeType, isOptional: false, defaultValue: "f8cf876e03804ea585fe6cb54bcca396")
         let bot_name = NSAttributeDescription(name: "name", type: .stringAttributeType)
         bot.properties.append(bot_identifier)
         bot.properties.append(NSAttributeDescription(name: "integrationCounter", type: .integer32AttributeType, defaultValue: 0))
@@ -116,7 +116,7 @@ class Model_1_0_0: NSManagedObjectModel {
         
         
         let device = NSEntityDescription(name: "Device")
-        let device_identifier = NSAttributeDescription(name: "identifier", type: .UUIDAttributeType, isOptional: false, defaultValue: "0a21bee5-e97f-43cd-9aad-daa31eceab29")
+        let device_identifier = NSAttributeDescription(name: "identifier", type: .stringAttributeType, isOptional: false, defaultValue: "0a21bee5e97f43cd9aaddaa31eceab29")
         device.properties.append(NSAttributeDescription(name: "architecture", type: .stringAttributeType))
         device.properties.append(NSAttributeDescription(name: "deviceType", type: .stringAttributeType))
         device.properties.append(device_identifier)
@@ -163,7 +163,7 @@ class Model_1_0_0: NSManagedObjectModel {
         filter.properties.append(NSAttributeDescription(name: "filterTypeRawValue", type: .integer16AttributeType, defaultValue: 0))
         
         let integration = NSEntityDescription(name: "Integration")
-        let integration_identifier = NSAttributeDescription(name: "identifier", type: .UUIDAttributeType, isOptional: false, defaultValue: "c7f172cb-9df2-4db9-bc4e-65f609800cbe")
+        let integration_identifier = NSAttributeDescription(name: "identifier", type: .stringAttributeType, isOptional: false, defaultValue: "c7f172cb9df24db9bc4e65f609800cbe")
         integration.properties.append(NSAttributeDescription(name: "currentStepRawValue", type: .stringAttributeType))
         integration.properties.append(NSAttributeDescription(name: "duration", type: .doubleAttributeType, defaultValue: 0))
         integration.properties.append(NSAttributeDescription(name: "endedTime", type: .dateAttributeType))
@@ -190,7 +190,7 @@ class Model_1_0_0: NSManagedObjectModel {
         let integrationIssues = NSEntityDescription(name: "IntegrationIssues")
         
         let issue = NSEntityDescription(name: "Issue")
-        let issue_identifier = NSAttributeDescription(name: "identifier", type: .UUIDAttributeType, isOptional: false, defaultValue: "aa250af6-7a17-4b81-92a9-50fabb457776")
+        let issue_identifier = NSAttributeDescription(name: "identifier", type: .stringAttributeType, isOptional: false, defaultValue: "aa250af67a174b8192a950fabb457776")
         issue.properties.append(NSAttributeDescription(name: "age", type: .integer32AttributeType, defaultValue: 0))
         issue.properties.append(NSAttributeDescription(name: "documentFilePath", type: .stringAttributeType))
         issue.properties.append(NSAttributeDescription(name: "documentLocationData", type: .stringAttributeType))
@@ -209,7 +209,7 @@ class Model_1_0_0: NSManagedObjectModel {
             ]))
         
         let platform = NSEntityDescription(name: "Platform")
-        let platform_identifier = NSAttributeDescription(name: "identifier", type: .UUIDAttributeType)
+        let platform_identifier = NSAttributeDescription(name: "identifier", type: .stringAttributeType)
         platform.properties.append(NSAttributeDescription(name: "buildNumber", type: .stringAttributeType))
         platform.properties.append(NSAttributeDescription(name: "displayName", type: .stringAttributeType))
         platform.properties.append(platform_identifier)
@@ -222,16 +222,19 @@ class Model_1_0_0: NSManagedObjectModel {
             ]))
         
         let repository = NSEntityDescription(name: "Repository")
-        let repository_identifier = NSAttributeDescription(name: "identifier", type: .stringAttributeType, isOptional: false, defaultValue: "_identifier")
+        let repository_identifier = NSAttributeDescription(name: "identifier", type: .stringAttributeType, isOptional: false, defaultValue: "a935c1bc28dc4ccd9b9074346afb62bd")
         repository.properties.append(NSAttributeDescription(name: "branchIdentifier", type: .stringAttributeType))
-        repository.properties.append(NSAttributeDescription(name: "branchOptions", type: .integer32AttributeType, defaultValue: 0))
+        repository.properties.append(NSAttributeDescription(name: "branchOptions", type: .integer16AttributeType, defaultValue: 0))
         repository.properties.append(repository_identifier)
         repository.properties.append(NSAttributeDescription(name: "locationType", type: .stringAttributeType))
         repository.properties.append(NSAttributeDescription(name: "system", type: .stringAttributeType))
         repository.properties.append(NSAttributeDescription(name: "url", type: .stringAttributeType))
         repository.properties.append(NSAttributeDescription(name: "workingCopyPath", type: .stringAttributeType))
         repository.properties.append(NSAttributeDescription(name: "workingCopyState", type: .integer32AttributeType, defaultValue: 0))
-        repository.indexes.append(NSFetchIndexDescription(name: "byIdentifierIndex", elements: [NSFetchIndexElementDescription(property: repository_identifier, collationType: .binary)]))
+        
+        repository.indexes.append(NSFetchIndexDescription(name: "byPropertyIndex", elements: [
+            NSFetchIndexElementDescription(property: repository_identifier, collationType: .binary)
+            ]))
         
         let revisionBlueprint = NSEntityDescription(name: "RevisionBlueprint")
         
@@ -244,7 +247,10 @@ class Model_1_0_0: NSManagedObjectModel {
         server.properties.append(NSAttributeDescription(name: "server", type: .stringAttributeType))
         server.properties.append(NSAttributeDescription(name: "xcode", type: .stringAttributeType))
         server.properties.append(NSAttributeDescription(name: "xcodeServer", type: .stringAttributeType))
-        server.indexes.append(NSFetchIndexDescription(name: "byFqdnIndex", elements: [NSFetchIndexElementDescription(property: server_fqdn, collationType: .binary)]))
+        
+        server.indexes.append(NSFetchIndexDescription(name: "byPropertyIndex", elements: [
+            NSFetchIndexElementDescription(property: server_fqdn, collationType: .binary)
+            ]))
         
         let stats = NSEntityDescription(name: "Stats")
         stats.properties.append(NSAttributeDescription(name: "codeCoveragePercentageDelta", type: .integer32AttributeType, defaultValue: 0))
@@ -254,18 +260,18 @@ class Model_1_0_0: NSManagedObjectModel {
         stats.properties.append(NSAttributeDescription(name: "testAdditionRate", type: .integer32AttributeType, defaultValue: 0))
         
         let statsBreakdown = NSEntityDescription(name: "StatsBreakdown")
-        statsBreakdown.properties.append(NSAttributeDescription(name: "avg", type: .floatAttributeType, defaultValue: 0.0))
+        statsBreakdown.properties.append(NSAttributeDescription(name: "avg", type: .doubleAttributeType, defaultValue: 0.0))
         statsBreakdown.properties.append(NSAttributeDescription(name: "count", type: .integer32AttributeType, defaultValue: 0))
-        statsBreakdown.properties.append(NSAttributeDescription(name: "max", type: .floatAttributeType, defaultValue: 0.0))
-        statsBreakdown.properties.append(NSAttributeDescription(name: "min", type: .floatAttributeType, defaultValue: 0.0))
-        statsBreakdown.properties.append(NSAttributeDescription(name: "stdDev", type: .floatAttributeType, defaultValue: 0.0))
-        statsBreakdown.properties.append(NSAttributeDescription(name: "sum", type: .floatAttributeType, defaultValue: 0.0))
+        statsBreakdown.properties.append(NSAttributeDescription(name: "max", type: .doubleAttributeType, defaultValue: 0.0))
+        statsBreakdown.properties.append(NSAttributeDescription(name: "min", type: .doubleAttributeType, defaultValue: 0.0))
+        statsBreakdown.properties.append(NSAttributeDescription(name: "stdDev", type: .doubleAttributeType, defaultValue: 0.0))
+        statsBreakdown.properties.append(NSAttributeDescription(name: "sum", type: .doubleAttributeType, defaultValue: 0.0))
         
         let trigger = NSEntityDescription(name: "Trigger")
         trigger.properties.append(NSAttributeDescription(name: "name", type: .stringAttributeType))
-        trigger.properties.append(NSAttributeDescription(name: "phase", type: .integer32AttributeType, defaultValue: 0))
+        trigger.properties.append(NSAttributeDescription(name: "phaseRawValue", type: .integer16AttributeType, defaultValue: 0))
         trigger.properties.append(NSAttributeDescription(name: "scriptBody", type: .stringAttributeType))
-        trigger.properties.append(NSAttributeDescription(name: "type", type: .integer32AttributeType, defaultValue: 0))
+        trigger.properties.append(NSAttributeDescription(name: "typeRawValue", type: .integer16AttributeType, defaultValue: 0))
         
         let asset_inverseArchive = NSRelationshipDescription(name: "inverseArchive", minCount: 0, maxCount: 1, deleteRule: .nullifyDeleteRule)
         let asset_inverseBuildServiceLog = NSRelationshipDescription(name: "inverseBuildServiceLog", minCount: 0, maxCount: 1, deleteRule: .nullifyDeleteRule)

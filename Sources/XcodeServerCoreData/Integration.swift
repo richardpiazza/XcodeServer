@@ -10,7 +10,7 @@ public typealias TestResult = (name: String, passed: Bool)
 @objc(Integration)
 public class Integration: NSManagedObject {
     
-    public convenience init?(managedObjectContext: NSManagedObjectContext, identifier: UUID, bot: Bot? = nil) {
+    public convenience init?(managedObjectContext: NSManagedObjectContext, identifier: String, bot: Bot? = nil) {
         self.init(managedObjectContext: managedObjectContext)
         self.identifier = identifier
         self.bot = bot
@@ -44,7 +44,7 @@ public extension Integration {
     @NSManaged var hasRetrievedAssets: Bool
     @NSManaged var hasRetrievedCommits: Bool
     @NSManaged var hasRetrievedIssues: Bool
-    @NSManaged var identifier: UUID
+    @NSManaged var identifier: String
     @NSManaged var lastUpdate: Date?
     @NSManaged var number: Int32
     @NSManaged var queuedDate: Date?
@@ -136,7 +136,7 @@ public extension NSManagedObjectContext {
     
     /// Retrieves the first `Integration` entity from the Core Data `NSManagedObjectContext`
     /// that matches the specified identifier.
-    func integration(withIdentifier identifier: UUID) -> Integration? {
+    func integration(withIdentifier identifier: String) -> Integration? {
         let fetchRequest = NSFetchRequest<Integration>(entityName: Integration.entityName)
         fetchRequest.predicate = NSPredicate(format: "identifier = %@", argumentArray: [identifier])
         do {

@@ -1,5 +1,6 @@
 import Foundation
 import CoreData
+import XcodeServerCommon
 
 @objc(Trigger)
 public class Trigger: NSManagedObject {
@@ -7,6 +8,8 @@ public class Trigger: NSManagedObject {
     public convenience init?(managedObjectContext: NSManagedObjectContext, configuration: Configuration) {
         self.init(managedObjectContext: managedObjectContext)
         self.configuration = configuration
+        phaseRawValue = 0
+        typeRawValue = 0
     }
 }
 
@@ -14,11 +17,31 @@ public class Trigger: NSManagedObject {
 public extension Trigger {
     
     @NSManaged var name: String?
-    @NSManaged var phase: NSNumber?
+    @NSManaged var phaseRawValue: Int16
     @NSManaged var scriptBody: String?
-    @NSManaged var type: NSNumber?
+    @NSManaged var typeRawValue: Int16
     @NSManaged var conditions: Conditions?
     @NSManaged var configuration: Configuration?
     @NSManaged var emailConfiguration: EmailConfiguration?
     
+}
+
+public extension Trigger {
+    var phase: TriggerPhase {
+        get {
+            return TriggerPhase(rawValue: Int(phaseRawValue)) ?? .beforeIntegration
+        }
+        set {
+            phaseRawValue = Int16(newValue.rawValue)
+        }
+    }
+    
+    var type: TriggerType {
+        get {
+            return TriggerType(rawValue: Int(typeRawValue)) ?? .script
+        }
+        set {
+            typeRawValue = Int16(newValue.rawValue)
+        }
+    }
 }

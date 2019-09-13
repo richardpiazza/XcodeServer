@@ -7,6 +7,11 @@ public class Stats: NSManagedObject {
     public convenience init?(managedObjectContext: NSManagedObjectContext, bot: Bot) {
         self.init(managedObjectContext: managedObjectContext)
         self.bot = bot
+        self.codeCoveragePercentageDelta = 0
+        self.numberOfCommits = 0
+        self.numberOfIntegrations = 0
+        self.testAdditionRate = 0
+        self.numberOfSuccessfulIntegrations = 0
     }
 }
 
@@ -17,12 +22,12 @@ public extension Stats {
         return NSFetchRequest<Stats>(entityName: entityName)
     }
     
-    @NSManaged var codeCoveragePercentageDelta: NSNumber?
-    @NSManaged var numberOfCommits: NSNumber?
-    @NSManaged var numberOfIntegrations: NSNumber?
+    @NSManaged var codeCoveragePercentageDelta: Int32
+    @NSManaged var numberOfCommits: Int32
+    @NSManaged var numberOfIntegrations: Int32
     @NSManaged var sinceDate: String?
-    @NSManaged var testAdditionRate: NSNumber?
-    @NSManaged var numberOfSuccessfulIntegrations: NSNumber?
+    @NSManaged var testAdditionRate: Int32
+    @NSManaged var numberOfSuccessfulIntegrations: Int32
     @NSManaged var analysisWarnings: StatsBreakdown?
     @NSManaged var averageIntegrationTime: StatsBreakdown?
     @NSManaged var bestSuccessStreak: Integration?

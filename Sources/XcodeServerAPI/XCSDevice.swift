@@ -28,7 +28,7 @@ public struct XCSDevice: Codable {
     public var activeProxiedDevice: XCSProxiedDeviceDocument?
     public var architecture: String = ""
     public var deviceType: String = ""
-    public var identifier: UUID = UUID()
+    public var identifier: String = ""
     public var isConnected: Bool = false
     public var isEnabledForDevelopment: Bool = false
     public var isRetina: Bool = false
@@ -53,7 +53,7 @@ public struct XCSDevice: Codable {
         activeProxiedDevice = try container.decodeIfPresent(XCSProxiedDeviceDocument.self, forKey: .activeProxiedDevice)
         architecture = try container.decodeIfPresent(String.self, forKey: .architecture) ?? ""
         deviceType = try container.decode(String.self, forKey: .deviceType)
-        identifier = try container.decode(UUID.self, forKey: .identifier)
+        identifier = try container.decode(String.self, forKey: .identifier)
         isConnected = try container.decode(Bool.self, forKey: .isConnected)
         isEnabledForDevelopment = try container.decode(Bool.self, forKey: .isEnabledForDevelopment)
         isRetina = try container.decode(Bool.self, forKey: .isRetina)

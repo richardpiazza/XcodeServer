@@ -41,7 +41,7 @@ public struct XCSIntegration: Codable {
     public var currentStep: IntegrationStep
     public var duration: Double?
     public var endedTime: Date?
-    public var identifier: UUID = UUID()
+    public var identifier: String = ""
     public var number: Int
     public var perfMetricKeyPaths: [String]?
     public var perfMetricNames: [String]?

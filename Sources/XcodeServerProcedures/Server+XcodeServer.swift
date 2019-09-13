@@ -22,7 +22,7 @@ public extension Server {
             return
         }
         
-        var ids: [UUID] = bots.compactMap({ $0.identifier })
+        var ids: [String] = bots.compactMap({ $0.identifier })
         
         for element in data {
             if let index = ids.firstIndex(of: element.identifier) {

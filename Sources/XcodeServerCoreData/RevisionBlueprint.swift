@@ -18,3 +18,34 @@ public extension RevisionBlueprint {
     @NSManaged var integration: Integration?
     
 }
+
+public extension NSManagedObjectContext {
+    /// Retrieves all `RevisionBlueprint` entities from the Core Data `NSManagedObjectContext`
+    func revisionBlueprints() -> [RevisionBlueprint] {
+        let fetchRequest = NSFetchRequest<RevisionBlueprint>(entityName: RevisionBlueprint.entityName)
+        do {
+            return try self.fetch(fetchRequest)
+        } catch {
+            print(error)
+        }
+        
+        return []
+    }
+    
+    /// Retrieves the first `RevisionBlueprint` entity from the Core Data `NSManagedObjectContext`
+    /// that has a specific `Commit` and `Integration` associated with it.
+    func revisionBlueprint(withCommit commit: Commit, andIntegration integration: Integration) -> RevisionBlueprint? {
+        let fetchRequest = NSFetchRequest<RevisionBlueprint>(entityName: RevisionBlueprint.entityName)
+        fetchRequest.predicate = NSPredicate(format: "commit = %@ AND integration = %@", argumentArray: [commit, integration])
+        do {
+            let results = try self.fetch(fetchRequest)
+            if let result = results.first {
+                return result
+            }
+        } catch {
+            print(error)
+        }
+        
+        return nil
+    }
+}

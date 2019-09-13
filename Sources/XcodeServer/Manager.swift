@@ -148,7 +148,7 @@ public class Manager {
             return
         }
         
-        client.bot(withIdentifier: bot.identifier.uuidString) { (result) in
+        client.bot(withIdentifier: bot.identifier) { (result) in
             switch result {
             case .failure(let error):
                 completion(error)
@@ -191,7 +191,7 @@ public class Manager {
             return
         }
         
-        client.stats(forBotWithIdentifier: bot.identifier.uuidString) { (result) in
+        client.stats(forBotWithIdentifier: bot.identifier) { (result) in
             switch result {
             case .failure(let error):
                 completion(error)
@@ -233,7 +233,7 @@ public class Manager {
             return
         }
         
-        client.runIntegration(forBotWithIdentifier: bot.identifier.uuidString) { (result) in
+        client.runIntegration(forBotWithIdentifier: bot.identifier) { (result) in
             switch result {
             case .failure(let error):
                 completion(error)
@@ -276,7 +276,7 @@ public class Manager {
             return
         }
         
-        client.integrations(forBotWithIdentifier: bot.identifier.uuidString) { (result) in
+        client.integrations(forBotWithIdentifier: bot.identifier) { (result) in
             switch result {
             case .failure(let error):
                 completion(error)
@@ -324,7 +324,7 @@ public class Manager {
             return
         }
         
-        client.integration(withIdentifier: integration.identifier.uuidString) { (result) in
+        client.integration(withIdentifier: integration.identifier) { (result) in
             switch result {
             case .failure(let error):
                 completion(error)
@@ -372,7 +372,7 @@ public class Manager {
             return
         }
         
-        client.commits(forIntegrationWithIdentifier: integration.identifier.uuidString) { (result) in
+        client.commits(forIntegrationWithIdentifier: integration.identifier) { (result) in
             switch result {
             case .failure(let error):
                 completion(error)
@@ -424,7 +424,7 @@ public class Manager {
             return
         }
         
-        client.issues(forIntegrationWithIdentifier: integration.identifier.uuidString) { (result) in
+        client.issues(forIntegrationWithIdentifier: integration.identifier) { (result) in
             switch result {
             case .failure(let error):
                 completion(error)

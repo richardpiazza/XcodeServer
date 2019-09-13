@@ -13,7 +13,7 @@ public struct XCSPlatform: Codable {
     
     public var buildNumber: String?
     public var displayName: String?
-    public var identifier: UUID
+    public var identifier: String
     public var platformIdentifier: String?
     public var simulatorIdentifier: UUID
     public var version: String?

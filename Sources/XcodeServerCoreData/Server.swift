@@ -56,3 +56,34 @@ public extension Server {
         return URL(string: "https://\(self.fqdn):20343/api")
     }
 }
+
+public extension NSManagedObjectContext {
+    /// Retrieves all `Server` entities from the Core Data `NSManagedObjectContext`
+    func servers() -> [Server] {
+        let fetchRequest = NSFetchRequest<Server>(entityName: Server.entityName)
+        do {
+            return try self.fetch(fetchRequest)
+        } catch {
+            print(error)
+        }
+        
+        return []
+    }
+    
+    /// Retrieves the first `Server` entity from the Core Data `NSManagedObjectContext`
+    /// that matches the specified FQDN identifier.
+    func server(withFQDN identifier: String) -> Server? {
+        let fetchRequest = NSFetchRequest<Server>(entityName: Server.entityName)
+        fetchRequest.predicate = NSPredicate(format: "fqdn = %@", argumentArray: [identifier])
+        do {
+            let results = try self.fetch(fetchRequest)
+            if let result = results.first {
+                return result
+            }
+        } catch {
+            print(error)
+        }
+        
+        return nil
+    }
+}
