@@ -7,19 +7,7 @@ public extension NSPersistentContainer {
     static var xcodeServerCoreData: NSPersistentContainer = {
         let model = Model_1_0_0()
         
-        var storeURL: URL
-        do {
-            var searchPathDirectory: FileManager.SearchPathDirectory
-            #if os(tvOS)
-            searchPathDirectory = .cachesDirectory
-            #else
-            searchPathDirectory = .documentDirectory
-            #endif
-            storeURL = try FileManager.default.url(for: searchPathDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("XCServerCoreData.sqlite")
-        } catch {
-            print(error)
-            fatalError(error.localizedDescription)
-        }
+        let storeURL = FileManager.default.storeURL
         
         let description = NSPersistentStoreDescription(url: storeURL)
         description.shouldInferMappingModelAutomatically = false
@@ -49,6 +37,35 @@ public extension NSPersistentContainer {
             } catch {
                 print(error)
             }
+        }
+    }
+}
+
+fileprivate extension FileManager {
+    var storeURL: URL {
+        let folder = "XcodeServer"
+        let name = "XcodeServer.sqlite"
+        
+        let root: URL
+        
+        do {
+            #if os(iOS)
+            root = try url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            #elseif os(tvOS)
+            root = try url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            #elseif os(watchOS)
+            root = try url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            #elseif os(macOS)
+            root = try url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            #elseif os(UIKitForMac)
+            root = try url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            #else
+            root = try url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            #endif
+            
+            return root.appendingPathComponent(folder, isDirectory: true).appendingPathComponent(name)
+        } catch {
+            fatalError(error.localizedDescription)
         }
     }
 }
