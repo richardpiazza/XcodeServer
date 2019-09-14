@@ -9,7 +9,7 @@ public typealias ManagerErrorCompletion = (_ error: Swift.Error?) -> Void
 
 public class Manager {
     
-    public static var container: NSPersistentContainer = NSPersistentContainer.xcodeServerCoreData
+    public static var container: NSPersistentContainer = NSPersistentContainer(model: .v1_0_0)
     
     public enum Error: Swift.Error, LocalizedError {
         case unhandled

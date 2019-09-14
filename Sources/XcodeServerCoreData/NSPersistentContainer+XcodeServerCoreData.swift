@@ -4,28 +4,51 @@ import CoreData
 
 public extension NSPersistentContainer {
     
-    static var xcodeServerCoreData: NSPersistentContainer = {
-        let model = Model_1_0_0()
-        
+    convenience init(model: Model) {
         let storeURL = FileManager.default.storeURL
         
         let description = NSPersistentStoreDescription(url: storeURL)
         description.shouldInferMappingModelAutomatically = false
         description.shouldMigrateStoreAutomatically = false
         
-        let container = NSPersistentContainer(name: "XcodeServer", managedObjectModel: model)
-        container.persistentStoreDescriptions = [description]
-        container.loadPersistentStores { (_, error) in
+        // check for migration
+        // perform if necessary
+        
+        self.init(name: "XcodeServer", managedObjectModel: model.model)
+        
+        persistentStoreDescriptions = [description]
+        loadPersistentStores { (_, error) in
             if let e = error {
                 fatalError(e.localizedDescription)
             }
             
-            container.viewContext.automaticallyMergesChangesFromParent = true
-            container.viewContext.mergePolicy = NSMergePolicy(merge: .mergeByPropertyObjectTrumpMergePolicyType)
+            self.viewContext.automaticallyMergesChangesFromParent = true
+            self.viewContext.mergePolicy = NSMergePolicy(merge: .mergeByPropertyObjectTrumpMergePolicyType)
         }
-        
-        return container
-    }()
+    }
+//    
+//    static var xcodeServerCoreData: NSPersistentContainer = {
+//        let model = Model_1_0_0.instance
+//        
+//        let storeURL = FileManager.default.storeURL
+//        
+//        let description = NSPersistentStoreDescription(url: storeURL)
+//        description.shouldInferMappingModelAutomatically = false
+//        description.shouldMigrateStoreAutomatically = false
+//        
+//        let container = NSPersistentContainer(name: "XcodeServer", managedObjectModel: model)
+//        container.persistentStoreDescriptions = [description]
+//        container.loadPersistentStores { (_, error) in
+//            if let e = error {
+//                fatalError(e.localizedDescription)
+//            }
+//            
+//            container.viewContext.automaticallyMergesChangesFromParent = true
+//            container.viewContext.mergePolicy = NSMergePolicy(merge: .mergeByPropertyObjectTrumpMergePolicyType)
+//        }
+//        
+//        return container
+//    }()
     
     /// Removed all stores from the `persistentStoreCoordinator`/
     ///
