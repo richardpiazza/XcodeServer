@@ -196,7 +196,11 @@ public extension APIClient {
             if let responseHeaders = headers {
                 if let version = responseHeaders[APIClientHeaders.xscAPIVersion] as? String {
                     apiVersion = Int(version)
+                } else if let version = responseHeaders[APIClientHeaders.xscAPIVersion] as? Int {
+                    apiVersion = version
                 }
+                
+                print("\(self.baseURL) API Version: \(apiVersion ?? -1)")
             }
             
             completion(.success((result, apiVersion)))

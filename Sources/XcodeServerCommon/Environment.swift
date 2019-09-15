@@ -10,7 +10,7 @@ public enum APIVersion: Int, Codable {
 /// MacOS Operation System Version
 public enum MacOSVersion: String, Codable {
     case v10_14_6 = "10.14.6 (18G95)"
-    case v10_15_0 = "10.15.0 (19A558D)"
+    case v10_15 = "10.15 (19A558d)"
 }
 
 /// MacOS Operation Server App Version
@@ -22,7 +22,7 @@ public enum MacOSServerVersion: String, Codable {
 /// Xcode.app Version
 public enum XcodeVersion: String, Codable {
     case v_10_3 = "10.3 (10G8)"
-    case v_11_0 = "11.0 (11A419C)"
+    case v_11_0 = "11.0 (11A419c)"
 }
 
 /// Xcode.app Server Version
