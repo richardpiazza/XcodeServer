@@ -5,9 +5,9 @@ import XcodeServerAPI
 import CoreData
 import XcodeServerCoreData
 
-public class UpdateVersionProcedure: NSManagedObjectProcedure<Server>, InputProcedure {
+public class UpdateServerBotsProcedure: NSManagedObjectProcedure<Server>, InputProcedure {
     
-    public typealias Input = (XCSVersion, Int?)
+    public typealias Input = [XCSBot]
     
     public var input: Pending<Input> = .pending
     
@@ -25,6 +25,7 @@ public class UpdateVersionProcedure: NSManagedObjectProcedure<Server>, InputProc
         }
         
         guard let value = input.value else {
+            cancel()
             finish(with: XcodeServerProcedureError.invalidInput)
             return
         }
@@ -34,8 +35,8 @@ public class UpdateVersionProcedure: NSManagedObjectProcedure<Server>, InputProc
         container.performBackgroundTask { [weak self] (context) in
             let server = context.object(with: id) as! Server
             
+            server.update(withBots: value)
             server.lastUpdate = Date()
-            server.update(withVersion: value.0, api: value.1)
             
             do {
                 try context.save()

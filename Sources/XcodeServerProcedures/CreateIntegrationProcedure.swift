@@ -5,14 +5,14 @@ import XcodeServerAPI
 import CoreData
 import XcodeServerCoreData
 
-public class UpdateVersionProcedure: NSManagedObjectProcedure<Server>, InputProcedure {
+public class CreateIntegrationProcedure: NSManagedObjectProcedure<Bot>, InputProcedure {
     
-    public typealias Input = (XCSVersion, Int?)
+    public typealias Input = XCSIntegration
     
     public var input: Pending<Input> = .pending
     
-    public init(container: NSPersistentContainer, server: Server, input: Input? = nil) {
-        super.init(container: container, object: server)
+    public init(container: NSPersistentContainer, bot: Bot, input: Input? = nil) {
+        super.init(container: container, object: bot)
         
         if let value = input {
             self.input = .ready(value)
@@ -25,6 +25,7 @@ public class UpdateVersionProcedure: NSManagedObjectProcedure<Server>, InputProc
         }
         
         guard let value = input.value else {
+            cancel()
             finish(with: XcodeServerProcedureError.invalidInput)
             return
         }
@@ -32,10 +33,15 @@ public class UpdateVersionProcedure: NSManagedObjectProcedure<Server>, InputProc
         let id = objectID
         
         container.performBackgroundTask { [weak self] (context) in
-            let server = context.object(with: id) as! Server
+            let bot = context.object(with: id) as! Bot
             
-            server.lastUpdate = Date()
-            server.update(withVersion: value.0, api: value.1)
+            guard let integration = Integration(managedObjectContext: context, identifier: value.identifier, bot: bot) else {
+                self?.finish(with: XcodeServerProcedureError.failedToCreateIntegration(id: value.identifier))
+                return
+            }
+            
+            bot.addToIntegrations(integration)
+            bot.lastUpdate = Date()
             
             do {
                 try context.save()

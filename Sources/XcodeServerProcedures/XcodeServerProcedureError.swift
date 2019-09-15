@@ -13,6 +13,7 @@ public enum XcodeServerProcedureError: Swift.Error, LocalizedError {
     case invalidInput
     case existingXcodeServer(fqdn: String)
     case failedToCreateXcodeServer(fqdn: String)
+    case failedToCreateIntegration(id: String)
     #if canImport(CoreData)
     case invalidManagedObjectID(id: NSManagedObjectID)
     #endif
@@ -31,6 +32,8 @@ public enum XcodeServerProcedureError: Swift.Error, LocalizedError {
             return "An Xcode Server with FQDN '\(fqdn)' already exists."
         case .failedToCreateXcodeServer(let fqdn):
             return "Failed to create an Xcode Server with FQDN '\(fqdn)'."
+        case .failedToCreateIntegration(let id):
+            return "Failed to create an Integration with ID '\(id)'."
         #if canImport(CoreData)
         case .invalidManagedObjectID(let id):
             return "Object with id '\(id)' not found in NSManagedObjectContext."

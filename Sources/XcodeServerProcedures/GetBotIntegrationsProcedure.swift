@@ -10,6 +10,13 @@ public class GetBotIntegrationsProcedure: APIClientProcedure, InputProcedure, Ou
     public var input: Pending<Input> = .pending
     public var output: Pending<ProcedureResult<Output>> = .pending
     
+    public init(client: APIClient, input: Input? = nil) {
+        super.init(client: client)
+        if let value = input {
+            self.input = .ready(value)
+        }
+    }
+    
     public override func execute() {
         guard !isCancelled else {
             return

@@ -8,36 +8,18 @@ import CoreData
 import XcodeServerCoreData
 import XcodeServerProcedures
 
-public typealias ManagerErrorCompletion = (_ error: Swift.Error?) -> Void
+public typealias ManagerErrorCompletion = (_ error: Error?) -> Void
 
 public class Manager {
     
     private let container: NSPersistentContainer
-    private var clients: [String : APIClient] = [:]
     private let procedureQueue: ProcedureQueue = ProcedureQueue()
+    private var clients: [String : APIClient] = [:]
+    private var authorizationDelegate: APIClientAuthorizationDelegate?
     
-    public enum Error: Swift.Error, LocalizedError {
-        case unhandled
-        case response
-        case managedObjectContext
-        case xcodeServer
-        case bot
-        case repository
-        
-        public var errorDescription: String? {
-            switch self {
-            case .unhandled: return "An unknown error occured."
-            case .response: return "The API response was unexpectedly nil."
-            case .managedObjectContext: return "The parameter entity has an invalid NSManagedObjectContext."
-            case .xcodeServer: return "An Xcode Server could not be identified for the supplied parameter entity."
-            case .bot: return "A Bot could not be identified for the supplied parameter entity."
-            case .repository: return "A Repository could not be identified for the supplied parameter entity."
-            }
-        }
-    }
-    
-    public init(container: NSPersistentContainer) {
+    public init(container: NSPersistentContainer, authorizationDelegate: APIClientAuthorizationDelegate? = nil) {
         self.container = container
+        self.authorizationDelegate = authorizationDelegate
         procedureQueue.delegate = self
     }
     
@@ -63,10 +45,10 @@ public class Manager {
     
     /// Ping the Xcode Server.
     /// A Status code of '204' indicates success.
-    public func ping(xcodeServer: Server, completion: @escaping ManagerErrorCompletion) {
+    public func ping(server: Server, completion: @escaping ManagerErrorCompletion) {
         let client: APIClient
         do {
-            client = try self.client(forFQDN: xcodeServer.fqdn)
+            client = try self.client(forFQDN: server.fqdn)
         } catch {
             completion(error)
             return
@@ -80,414 +62,258 @@ public class Manager {
         procedureQueue.addOperation(procedure)
     }
     
-    /// Retreive the version information about the `XcodeServer`
-    /// Updates the supplied `XcodeServer` entity with the response.
-    public func syncVersionData(forXcodeServer xcodeServer: Server, completion: @escaping ManagerErrorCompletion) {
+    /// Retreive the version information about the `Server`
+    /// Updates the supplied `Server` entity with the response.
+    public func syncVersionData(forServer server: Server, completion: @escaping ManagerErrorCompletion) {
         let client: APIClient
         do {
-            client = try self.client(forFQDN: xcodeServer.fqdn)
+            client = try self.client(forFQDN: server.fqdn)
         } catch {
             completion(error)
             return
         }
         
-        client.versions { (result) in
-            switch result {
-            case .failure(let error):
-                completion(error)
-            case .success(let value):
-                print("Retrieved Version Data for Server '\(xcodeServer.fqdn)'")
-                self.container.performBackgroundTask({ (privateContext) in
-                    privateContext.automaticallyMergesChangesFromParent = true
-                    
-                    if let server = privateContext.object(with: xcodeServer.objectID) as? Server {
-                        server.update(withVersion: value.0, api: value.1)
-                        server.lastUpdate = Date()
-                    }
-                    
-                    do {
-                        try privateContext.save()
-                    } catch {
-                        completion(error)
-                        return
-                    }
-                    
-                    completion(nil)
-                })
-            }
+        let retrieve = GetVersionProcedure(client: client)
+        let update = UpdateVersionProcedure(container: container, server: server)
+        update.injectResult(from: retrieve)
+        update.addDidFinishBlockObserver() { (proc, error) in
+            completion(error)
         }
+        
+        procedureQueue.addOperations([retrieve, update])
     }
     
-    /// Retrieves all `Bot`s from the `XcodeServer`
-    /// Updates the supplied `XcodeServer` entity with the response.
-    public func syncBots(forXcodeServer xcodeServer: Server, completion: @escaping ManagerErrorCompletion) {
+    /// Retrieves all `Bot`s from the `Server`
+    /// Updates the supplied `Server` entity with the response.
+    public func syncBots(forServer server: Server, completion: @escaping ManagerErrorCompletion) {
         let client: APIClient
         do {
-            client = try self.client(forFQDN: xcodeServer.fqdn)
+            client = try self.client(forFQDN: server.fqdn)
         } catch {
             completion(error)
             return
         }
         
-        client.bots { (result) in
-            switch result {
-            case .failure(let error):
-                completion(error)
-            case .success(let value):
-                print("Retrieved Bots for Server '\(xcodeServer.fqdn)'")
-                self.container.performBackgroundTask({ (privateContext) in
-                    privateContext.automaticallyMergesChangesFromParent = true
-                    
-                    if let server = privateContext.object(with: xcodeServer.objectID) as? Server {
-                        server.update(withBots: value)
-                        server.lastUpdate = Date()
-                    }
-                    
-                    do {
-                        try privateContext.save()
-                    } catch {
-                        completion(error)
-                        return
-                    }
-                    
-                    completion(nil)
-                })
-            }
+        let retrieve = GetBotsProcedure(client: client)
+        let update = UpdateServerBotsProcedure(container: container, server: server)
+        update.injectResult(from: retrieve)
+        update.addDidFinishBlockObserver() { (proc, error) in
+            completion(error)
         }
+        
+        procedureQueue.addOperations([retrieve, update])
     }
     
-    /// Retrieves the information for a given `Bot` from the `XcodeServer`.
+    /// Retrieves the information for a given `Bot` from the `Server`.
     /// Updates the supplied `Bot` entity with the response.
     public func syncBot(bot: Bot, completion: @escaping ManagerErrorCompletion) {
-        guard let xcodeServer = bot.server else {
-            completion(Error.xcodeServer)
+        guard let server = bot.server else {
+            completion(XcodeServerProcedureError.xcodeServer)
             return
         }
         
         let client: APIClient
         do {
-            client = try self.client(forFQDN: xcodeServer.fqdn)
+            client = try self.client(forFQDN: server.fqdn)
         } catch {
             completion(error)
             return
         }
         
-        client.bot(withIdentifier: bot.identifier) { (result) in
-            switch result {
-            case .failure(let error):
-                completion(error)
-            case .success(let value):
-                print("Retrieved Bot '\(bot.identifier)'")
-                self.container.performBackgroundTask({ (privateContext) in
-                    privateContext.automaticallyMergesChangesFromParent = true
-                    
-                    if let b = privateContext.object(with: bot.objectID) as? Bot {
-                        b.update(withBot: value)
-                        b.lastUpdate = Date()
-                    }
-                    
-                    do {
-                        try privateContext.save()
-                    } catch {
-                        completion(error)
-                        return
-                    }
-                    
-                    completion(nil)
-                })
-            }
+        let retrieve = GetBotProcedure(client: client, input: bot.identifier)
+        let update = UpdateBotProcedure(container: container, bot: bot)
+        update.injectResult(from: retrieve)
+        update.addDidFinishBlockObserver() { (proc, error) in
+            completion(error)
         }
+        
+        procedureQueue.addOperations([retrieve, update])
     }
     
     /// Gets the cumulative integration stats for the specified `Bot`.
     /// Updates the supplied `Bot` entity with the response.
     public func syncStats(forBot bot: Bot, completion: @escaping ManagerErrorCompletion) {
-        guard let xcodeServer = bot.server else {
-            completion(Error.xcodeServer)
+        guard let server = bot.server else {
+            completion(XcodeServerProcedureError.xcodeServer)
             return
         }
         
         let client: APIClient
         do {
-            client = try self.client(forFQDN: xcodeServer.fqdn)
+            client = try self.client(forFQDN: server.fqdn)
         } catch {
             completion(error)
             return
         }
         
-        client.stats(forBotWithIdentifier: bot.identifier) { (result) in
-            switch result {
-            case .failure(let error):
-                completion(error)
-            case .success(let value):
-                print("Retrieved Stats for Bot '\(bot.identifier)'")
-                self.container.performBackgroundTask({ (privateContext) in
-                    privateContext.automaticallyMergesChangesFromParent = true
-                    
-                    if let b = privateContext.object(with: bot.objectID) as? Bot {
-                        b.stats?.update(withStats: value)
-                    }
-                    
-                    do {
-                        try privateContext.save()
-                    } catch {
-                        completion(error)
-                        return
-                    }
-                    
-                    completion(nil)
-                })
-            }
+        let retrieve = GetBotStatsProcedure(client: client, input: bot.identifier)
+        let update = UpdateBotStatsProcedure(container: container, bot: bot)
+        update.injectResult(from: retrieve)
+        update.addDidFinishBlockObserver() { (proc, error) in
+            completion(error)
         }
+        
+        procedureQueue.addOperations([retrieve, update])
     }
     
     /// Begin a new integration for the specified `Bot`.
     /// Updates the supplied `Bot` entity with the response.
     public func triggerIntegration(forBot bot: Bot, completion: @escaping ManagerErrorCompletion) {
-        guard let xcodeServer = bot.server else {
-            completion(Error.xcodeServer)
+        guard let server = bot.server else {
+            completion(XcodeServerProcedureError.xcodeServer)
             return
         }
         
         let client: APIClient
         do {
-            client = try self.client(forFQDN: xcodeServer.fqdn)
+            client = try self.client(forFQDN: server.fqdn)
         } catch {
             completion(error)
             return
         }
         
-        client.runIntegration(forBotWithIdentifier: bot.identifier) { (result) in
-            switch result {
-            case .failure(let error):
-                completion(error)
-            case .success(let value):
-                print("Triggered Integration for Bot '\(bot.identifier)'")
-                self.container.performBackgroundTask({ (privateContext) in
-                    privateContext.automaticallyMergesChangesFromParent = true
-                    
-                    if let b = privateContext.object(with: bot.objectID) as? Bot {
-                        b.update(withIntegrations: [value])
-                        b.lastUpdate = Date()
-                    }
-                    
-                    do {
-                        try privateContext.save()
-                    } catch {
-                        completion(error)
-                        return
-                    }
-                    
-                    completion(nil)
-                })
-            }
+        let trigger = TriggerBotIntegrationProcedure(client: client, input: bot.identifier)
+        let create = CreateIntegrationProcedure(container: container, bot: bot)
+        create.injectResult(from: trigger)
+        create.addDidFinishBlockObserver() { (proc, error) in
+            completion(error)
         }
+        
+        procedureQueue.addOperations([trigger, create])
     }
     
     /// Gets a list of `Integration` for a specified `Bot`.
     /// Updates the supplied `Bot` entity with the response.
     public func syncIntegrations(forBot bot: Bot, completion: @escaping ManagerErrorCompletion) {
-        guard let xcodeServer = bot.server else {
-            completion(Error.xcodeServer)
+        guard let server = bot.server else {
+            completion(XcodeServerProcedureError.xcodeServer)
             return
         }
         
         let client: APIClient
         do {
-            client = try self.client(forFQDN: xcodeServer.fqdn)
+            client = try self.client(forFQDN: server.fqdn)
         } catch {
             completion(error)
             return
         }
         
-        client.integrations(forBotWithIdentifier: bot.identifier) { (result) in
-            switch result {
-            case .failure(let error):
-                completion(error)
-            case .success(let value):
-                print("Retrieved Integrations for Bot '\(bot.identifier)'")
-                self.container.performBackgroundTask({ (privateContext) in
-                    privateContext.automaticallyMergesChangesFromParent = true
-                    
-                    if let b = privateContext.object(with: bot.objectID) as? Bot {
-                        b.update(withIntegrations: value)
-                        b.lastUpdate = Date()
-                    }
-                    
-                    do {
-                        try privateContext.save()
-                    } catch {
-                        completion(error)
-                        return
-                    }
-                    
-                    completion(nil)
-                })
-            }
+        let retrieve = GetBotIntegrationsProcedure(client: client, input: bot.identifier)
+        let update = UpdateBotIntegrationsProcedure(container: container, bot: bot)
+        update.injectResult(from: retrieve)
+        update.addDidFinishBlockObserver() { (proc, error) in
+            completion(error)
         }
+        
+        procedureQueue.addOperations([retrieve, update])
     }
     
     /// Gets a single `Integration` from the `XcodeServer`.
     /// Updates the supplied `Integration` entity with the response.
     public func syncIntegration(integration: Integration, completion: @escaping ManagerErrorCompletion) {
         guard let bot = integration.bot else {
-            completion(Error.bot)
+            completion(XcodeServerProcedureError.bot)
             return
         }
         
-        guard let xcodeServer = bot.server else {
-            completion(Error.xcodeServer)
+        guard let server = bot.server else {
+            completion(XcodeServerProcedureError.xcodeServer)
             return
         }
         
         let client: APIClient
         do {
-            client = try self.client(forFQDN: xcodeServer.fqdn)
+            client = try self.client(forFQDN: server.fqdn)
         } catch {
             completion(error)
             return
         }
         
-        client.integration(withIdentifier: integration.identifier) { (result) in
-            switch result {
-            case .failure(let error):
-                completion(error)
-            case .success(let value):
-                print("Retrieved Integration '\(integration.identifier)'")
-                self.container.performBackgroundTask({ (privateContext) in
-                    privateContext.automaticallyMergesChangesFromParent = true
-                    
-                    if let i = privateContext.object(with: integration.objectID) as? Integration {
-                        i.update(withIntegration: value)
-                        i.lastUpdate = Date()
-                    }
-                    
-                    do {
-                        try privateContext.save()
-                    } catch {
-                        completion(error)
-                        return
-                    }
-                    
-                    completion(nil)
-                })
-            }
+        let retrieve = GetIntegrationProcedure(client: client, input: integration.identifier)
+        let update = UpdateIntegrationProcedure(container: container, integration: integration)
+        update.injectResult(from: retrieve)
+        update.addDidFinishBlockObserver() { (proc, error) in
+            completion(error)
         }
+        
+        procedureQueue.addOperations([retrieve, update])
     }
     
     /// Retrieves the `Repository` commits for a specified `Integration`.
     /// Updates the supplied `Integration` entity with the response.
     public func syncCommits(forIntegration integration: Integration, completion: @escaping ManagerErrorCompletion) {
         guard let bot = integration.bot else {
-            completion(Error.bot)
+            completion(XcodeServerProcedureError.bot)
             return
         }
         
-        guard let xcodeServer = bot.server else {
-            completion(Error.xcodeServer)
+        guard let server = bot.server else {
+            completion(XcodeServerProcedureError.xcodeServer)
             return
         }
         
         let client: APIClient
         do {
-            client = try self.client(forFQDN: xcodeServer.fqdn)
+            client = try self.client(forFQDN: server.fqdn)
         } catch {
             completion(error)
             return
         }
         
-        client.commits(forIntegrationWithIdentifier: integration.identifier) { (result) in
-            switch result {
-            case .failure(let error):
-                completion(error)
-            case .success(let value):
-                print("Retrieved Commits for Integration '\(integration.identifier)'")
-                self.container.performBackgroundTask({ (privateContext) in
-                    privateContext.automaticallyMergesChangesFromParent = true
-                    
-                    let repositories = privateContext.repositories()
-                    let privateContextIntegration = privateContext.object(with: integration.objectID) as? Integration
-                    
-                    for repository in repositories {
-                        repository.update(withIntegrationCommits: value, integration: privateContextIntegration)
-                    }
-                    
-                    privateContextIntegration?.hasRetrievedCommits = true
-                    
-                    do {
-                        try privateContext.save()
-                    } catch {
-                        completion(error)
-                        return
-                    }
-                    
-                    completion(nil)
-                })
-            }
+        let retrieve = GetIntegrationCommitsProcedure(client: client, input: integration.identifier)
+        let update = UpdateIntegrationCommitsProcedure(container: container, integration: integration)
+        update.injectResult(from: retrieve)
+        update.addDidFinishBlockObserver() { (proc, error) in
+            completion(error)
         }
+        
+        procedureQueue.addOperations([retrieve, update])
     }
     
     /// Retrieves `Issue` related to a given `Integration`.
     /// Updates the supplied `Integration` entity with the response.
     public func syncIssues(forIntegration integration: Integration, completion: @escaping ManagerErrorCompletion) {
         guard let bot = integration.bot else {
-            completion(Error.bot)
+            completion(XcodeServerProcedureError.bot)
             return
         }
         
-        guard let xcodeServer = bot.server else {
-            completion(Error.xcodeServer)
+        guard let server = bot.server else {
+            completion(XcodeServerProcedureError.xcodeServer)
             return
         }
         
         let client: APIClient
         do {
-            client = try self.client(forFQDN: xcodeServer.fqdn)
+            client = try self.client(forFQDN: server.fqdn)
         } catch {
             completion(error)
             return
         }
         
-        client.issues(forIntegrationWithIdentifier: integration.identifier) { (result) in
-            switch result {
-            case .failure(let error):
-                completion(error)
-            case .success(let value):
-                print("Retrieved Issues for Integration '\(integration.identifier)'")
-                self.container.performBackgroundTask({ (privateContext) in
-                    privateContext.automaticallyMergesChangesFromParent = true
-                    
-                    if let i = privateContext.object(with: integration.objectID) as? Integration {
-                        i.issues?.update(withIntegrationIssues: value)
-                        i.hasRetrievedIssues = true
-                    }
-                    
-                    do {
-                        try privateContext.save()
-                    } catch {
-                        completion(error)
-                        return
-                    }
-                    
-                    completion(nil)
-                })
-            }
+        let retrieve = GetIntegrationIssuesProcedure(client: client, input: integration.identifier)
+        let update = UpdateIntegrationIssuesProcedure(container: container, integration: integration)
+        update.injectResult(from: retrieve)
+        update.addDidFinishBlockObserver() { (proc, error) in
+            completion(error)
         }
+        
+        procedureQueue.addOperations([retrieve, update])
     }
 }
 
 extension Manager: APIClientAuthorizationDelegate {
     public func authorization(for fqdn: String?) -> HTTP.Authorization? {
-        return nil
+        return authorizationDelegate?.authorization(for: fqdn)
     }
     
     public func clearCredentials(for fqdn: String?) {
-        
+        authorizationDelegate?.clearCredentials(for: fqdn)
     }
 }
 
 extension Manager: ProcedureQueueDelegate {
-    public func procedureQueue(_ queue: ProcedureQueue, didFinishProcedure procedure: Procedure, with error: Swift.Error?) {
+    public func procedureQueue(_ queue: ProcedureQueue, didFinishProcedure procedure: Procedure, with error: Error?) {
         
     }
 }
