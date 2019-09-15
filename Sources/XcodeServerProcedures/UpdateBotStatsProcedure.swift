@@ -5,9 +5,9 @@ import XcodeServerAPI
 import CoreData
 import XcodeServerCoreData
 
-public class UpdateBotProcedure: NSManagedObjectProcedure<Bot>, InputProcedure {
+public class UpdateBotStatsProcedure: NSManagedObjectProcedure<Bot>, InputProcedure {
     
-    public typealias Input = XCSBot
+    public typealias Input = XCSStats
     
     public var input: Pending<Input> = .pending
     
@@ -35,8 +35,7 @@ public class UpdateBotProcedure: NSManagedObjectProcedure<Bot>, InputProcedure {
         container.performBackgroundTask { [weak self] (context) in
             let bot = context.object(with: id) as! Bot
             
-            bot.update(withBot: value)
-            bot.lastUpdate = Date()
+            bot.stats?.update(withStats: value)
             
             do {
                 try context.save()

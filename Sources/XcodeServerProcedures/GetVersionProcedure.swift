@@ -8,7 +8,11 @@ public class GetVersionProcedure: APIClientProcedure, OutputProcedure {
     
     public var output: Pending<ProcedureResult<Output>> = .pending
     
-    public override func performTask() {
+    public override func execute() {
+        guard !isCancelled else {
+            return
+        }
+        
         client.versions { [weak self] (result) in
             switch result {
             case .failure(let error):

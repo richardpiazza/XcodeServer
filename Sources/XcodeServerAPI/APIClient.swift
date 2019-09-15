@@ -40,38 +40,16 @@ public class APIClient: HTTPClient, HTTPCodable {
     
     /// Delegate responsible for handling all authentication for
     /// `XCServerClient` instances.
-    public static var authorizationDelegate: APIClientAuthorizationDelegate?
+    public var authorizationDelegate: APIClientAuthorizationDelegate?
     
-    public init(fqdn: String) throws {
+    public init(fqdn: String, authorizationDelegate: APIClientAuthorizationDelegate? = nil) throws {
         guard let url = URL(string: "https://\(fqdn):20343/api") else {
             throw APIClientError.fqdn
         }
         
         baseURL = url
         session = URLSession(configuration: URLSessionConfiguration.default, delegate: SelfSignedSessionDelegate(), delegateQueue: nil)
-    }
-    
-    fileprivate static var clients: [String : APIClient] = [:]
-    
-    public static func client(forFQDN fqdn: String) throws -> APIClient {
-        if let client = clients[fqdn] {
-            return client
-        }
-        
-        let client = try APIClient(fqdn: fqdn)
-        client.session.configuration.timeoutIntervalForRequest = 8
-        client.session.configuration.timeoutIntervalForResource = 16
-        client.session.configuration.httpCookieAcceptPolicy = .never
-        client.session.configuration.httpShouldSetCookies = false
-        
-        clients[fqdn] = client
-        
-        return client
-    }
-    
-    public static func resetClient(forFQDN fqdn: String) {
-        authorizationDelegate?.clearCredentials(for: fqdn)
-        clients[fqdn] = nil
+        self.authorizationDelegate = authorizationDelegate
     }
     
     public func request(method: HTTP.RequestMethod, path: String, queryItems: [URLQueryItem]?, data: Data?) throws -> URLRequest {
@@ -94,10 +72,8 @@ public class APIClient: HTTPClient, HTTPCodable {
         request.setValue(HTTP.MIMEType.applicationJson.rawValue, forHTTPHeader: HTTP.Header.accept)
         request.setValue(HTTP.MIMEType.applicationJson.rawValue, forHTTPHeader: HTTP.Header.contentType)
         
-        if let authorizationDelegate = type(of: self).authorizationDelegate {
-            if let authorization = authorizationDelegate.authorization(for: url.host) {
-                request.setValue(authorization.headerValue, forHTTPHeader: HTTP.Header.authorization)
-            }
+        if let authorization = authorizationDelegate?.authorization(for: url.host) {
+            request.setValue(authorization.headerValue, forHTTPHeader: HTTP.Header.authorization)
         }
         
         return request
@@ -201,6 +177,8 @@ public extension APIClient {
                 }
                 
                 print("\(self.baseURL) API Version: \(apiVersion ?? -1)")
+            } else {
+                print("No Response Headers!")
             }
             
             completion(.success((result, apiVersion)))

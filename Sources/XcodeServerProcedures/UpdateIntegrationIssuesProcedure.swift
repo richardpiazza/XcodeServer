@@ -5,14 +5,14 @@ import XcodeServerAPI
 import CoreData
 import XcodeServerCoreData
 
-public class UpdateBotProcedure: NSManagedObjectProcedure<Bot>, InputProcedure {
+public class UpdateIntegrationIssuesProcedure: NSManagedObjectProcedure<Integration>, InputProcedure {
     
-    public typealias Input = XCSBot
+    public typealias Input = XCSIssues
     
     public var input: Pending<Input> = .pending
     
-    public init(container: NSPersistentContainer, bot: Bot, input: Input? = nil) {
-        super.init(container: container, object: bot)
+    public init(container: NSPersistentContainer, integration: Integration, input: Input? = nil) {
+        super.init(container: container, object: integration)
         
         if let value = input {
             self.input = .ready(value)
@@ -33,10 +33,10 @@ public class UpdateBotProcedure: NSManagedObjectProcedure<Bot>, InputProcedure {
         let id = objectID
         
         container.performBackgroundTask { [weak self] (context) in
-            let bot = context.object(with: id) as! Bot
+            let integration = context.object(with: id) as! Integration
             
-            bot.update(withBot: value)
-            bot.lastUpdate = Date()
+            integration.issues?.update(withIntegrationIssues: value)
+            integration.hasRetrievedIssues = true
             
             do {
                 try context.save()

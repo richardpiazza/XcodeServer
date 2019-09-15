@@ -2,14 +2,27 @@ import Foundation
 import ProcedureKit
 import XcodeServerAPI
 
-public class GetIntegrationCommitsProcedure: APIClientProcedure, OutputProcedure {
+public class GetIntegrationCommitsProcedure: APIClientProcedure, InputProcedure, OutputProcedure {
     
+    public typealias Input = String
     public typealias Output = [XCSCommit]
     
+    public var input: Pending<Input> = .pending
     public var output: Pending<ProcedureResult<Output>> = .pending
     
-    public override func performTask() {
-        guard let id = input.value?.id else {
+    public init(client: APIClient, input: Input? = nil) {
+        super.init(client: client)
+        if let value = input {
+            self.input = .ready(value)
+        }
+    }
+    
+    public override func execute() {
+        guard !isCancelled else {
+            return
+        }
+        
+        guard let id = input.value else {
             output = .ready(.failure(XcodeServerProcedureError.invalidInput))
             finish(with: XcodeServerProcedureError.invalidInput)
             return

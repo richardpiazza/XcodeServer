@@ -1,7 +1,10 @@
 import Foundation
-import CoreData
+import CodeQuickKit
+import ProcedureKit
 import XcodeServerCommon
 import XcodeServerAPI
+#if canImport(CoreData)
+import CoreData
 import XcodeServerCoreData
 import XcodeServerProcedures
 
@@ -9,7 +12,9 @@ public typealias ManagerErrorCompletion = (_ error: Swift.Error?) -> Void
 
 public class Manager {
     
-    public static var container: NSPersistentContainer = NSPersistentContainer(model: .v1_0_0)
+    private let container: NSPersistentContainer
+    private var clients: [String : APIClient] = [:]
+    private let procedureQueue: ProcedureQueue = ProcedureQueue()
     
     public enum Error: Swift.Error, LocalizedError {
         case unhandled
@@ -31,37 +36,56 @@ public class Manager {
         }
     }
     
-    private init() {
+    public init(container: NSPersistentContainer) {
+        self.container = container
+        procedureQueue.delegate = self
+    }
+    
+    private func client(forFQDN fqdn: String) throws -> APIClient {
+        if let client = clients[fqdn] {
+            return client
+        }
+        
+        let client = try APIClient(fqdn: fqdn, authorizationDelegate: self)
+        client.session.configuration.timeoutIntervalForRequest = 8
+        client.session.configuration.timeoutIntervalForResource = 16
+        client.session.configuration.httpCookieAcceptPolicy = .never
+        client.session.configuration.httpShouldSetCookies = false
+        
+        clients[fqdn] = client
+        
+        return client
+    }
+    
+    private func resetClient(forFQDN fqdn: String) {
+        clients[fqdn] = nil
     }
     
     /// Ping the Xcode Server.
     /// A Status code of '204' indicates success.
-    public static func ping(xcodeServer: Server, completion: @escaping ManagerErrorCompletion) {
+    public func ping(xcodeServer: Server, completion: @escaping ManagerErrorCompletion) {
         let client: APIClient
         do {
-            client = try APIClient.client(forFQDN: xcodeServer.fqdn)
+            client = try self.client(forFQDN: xcodeServer.fqdn)
         } catch {
             completion(error)
             return
         }
         
-        client.ping { (result) in
-            switch result {
-            case .failure(let error):
-                completion(error)
-            case .success:
-                print("Pinged Server '\(xcodeServer.fqdn)'")
-                completion(nil)
-            }
+        let procedure = CheckConnectionProcedure(client: client)
+        procedure.addDidFinishBlockObserver() { (proc, error) in
+            completion(error)
         }
+        
+        procedureQueue.addOperation(procedure)
     }
     
     /// Retreive the version information about the `XcodeServer`
     /// Updates the supplied `XcodeServer` entity with the response.
-    public static func syncVersionData(forXcodeServer xcodeServer: Server, completion: @escaping ManagerErrorCompletion) {
+    public func syncVersionData(forXcodeServer xcodeServer: Server, completion: @escaping ManagerErrorCompletion) {
         let client: APIClient
         do {
-            client = try APIClient.client(forFQDN: xcodeServer.fqdn)
+            client = try self.client(forFQDN: xcodeServer.fqdn)
         } catch {
             completion(error)
             return
@@ -73,7 +97,7 @@ public class Manager {
                 completion(error)
             case .success(let value):
                 print("Retrieved Version Data for Server '\(xcodeServer.fqdn)'")
-                container.performBackgroundTask({ (privateContext) in
+                self.container.performBackgroundTask({ (privateContext) in
                     privateContext.automaticallyMergesChangesFromParent = true
                     
                     if let server = privateContext.object(with: xcodeServer.objectID) as? Server {
@@ -96,10 +120,10 @@ public class Manager {
     
     /// Retrieves all `Bot`s from the `XcodeServer`
     /// Updates the supplied `XcodeServer` entity with the response.
-    public static func syncBots(forXcodeServer xcodeServer: Server, completion: @escaping ManagerErrorCompletion) {
+    public func syncBots(forXcodeServer xcodeServer: Server, completion: @escaping ManagerErrorCompletion) {
         let client: APIClient
         do {
-            client = try APIClient.client(forFQDN: xcodeServer.fqdn)
+            client = try self.client(forFQDN: xcodeServer.fqdn)
         } catch {
             completion(error)
             return
@@ -111,7 +135,7 @@ public class Manager {
                 completion(error)
             case .success(let value):
                 print("Retrieved Bots for Server '\(xcodeServer.fqdn)'")
-                container.performBackgroundTask({ (privateContext) in
+                self.container.performBackgroundTask({ (privateContext) in
                     privateContext.automaticallyMergesChangesFromParent = true
                     
                     if let server = privateContext.object(with: xcodeServer.objectID) as? Server {
@@ -134,7 +158,7 @@ public class Manager {
     
     /// Retrieves the information for a given `Bot` from the `XcodeServer`.
     /// Updates the supplied `Bot` entity with the response.
-    public static func syncBot(bot: Bot, completion: @escaping ManagerErrorCompletion) {
+    public func syncBot(bot: Bot, completion: @escaping ManagerErrorCompletion) {
         guard let xcodeServer = bot.server else {
             completion(Error.xcodeServer)
             return
@@ -142,7 +166,7 @@ public class Manager {
         
         let client: APIClient
         do {
-            client = try APIClient.client(forFQDN: xcodeServer.fqdn)
+            client = try self.client(forFQDN: xcodeServer.fqdn)
         } catch {
             completion(error)
             return
@@ -154,7 +178,7 @@ public class Manager {
                 completion(error)
             case .success(let value):
                 print("Retrieved Bot '\(bot.identifier)'")
-                container.performBackgroundTask({ (privateContext) in
+                self.container.performBackgroundTask({ (privateContext) in
                     privateContext.automaticallyMergesChangesFromParent = true
                     
                     if let b = privateContext.object(with: bot.objectID) as? Bot {
@@ -177,7 +201,7 @@ public class Manager {
     
     /// Gets the cumulative integration stats for the specified `Bot`.
     /// Updates the supplied `Bot` entity with the response.
-    public static func syncStats(forBot bot: Bot, completion: @escaping ManagerErrorCompletion) {
+    public func syncStats(forBot bot: Bot, completion: @escaping ManagerErrorCompletion) {
         guard let xcodeServer = bot.server else {
             completion(Error.xcodeServer)
             return
@@ -185,7 +209,7 @@ public class Manager {
         
         let client: APIClient
         do {
-            client = try APIClient.client(forFQDN: xcodeServer.fqdn)
+            client = try self.client(forFQDN: xcodeServer.fqdn)
         } catch {
             completion(error)
             return
@@ -197,7 +221,7 @@ public class Manager {
                 completion(error)
             case .success(let value):
                 print("Retrieved Stats for Bot '\(bot.identifier)'")
-                container.performBackgroundTask({ (privateContext) in
+                self.container.performBackgroundTask({ (privateContext) in
                     privateContext.automaticallyMergesChangesFromParent = true
                     
                     if let b = privateContext.object(with: bot.objectID) as? Bot {
@@ -219,7 +243,7 @@ public class Manager {
     
     /// Begin a new integration for the specified `Bot`.
     /// Updates the supplied `Bot` entity with the response.
-    public static func triggerIntegration(forBot bot: Bot, completion: @escaping ManagerErrorCompletion) {
+    public func triggerIntegration(forBot bot: Bot, completion: @escaping ManagerErrorCompletion) {
         guard let xcodeServer = bot.server else {
             completion(Error.xcodeServer)
             return
@@ -227,7 +251,7 @@ public class Manager {
         
         let client: APIClient
         do {
-            client = try APIClient.client(forFQDN: xcodeServer.fqdn)
+            client = try self.client(forFQDN: xcodeServer.fqdn)
         } catch {
             completion(error)
             return
@@ -239,7 +263,7 @@ public class Manager {
                 completion(error)
             case .success(let value):
                 print("Triggered Integration for Bot '\(bot.identifier)'")
-                container.performBackgroundTask({ (privateContext) in
+                self.container.performBackgroundTask({ (privateContext) in
                     privateContext.automaticallyMergesChangesFromParent = true
                     
                     if let b = privateContext.object(with: bot.objectID) as? Bot {
@@ -262,7 +286,7 @@ public class Manager {
     
     /// Gets a list of `Integration` for a specified `Bot`.
     /// Updates the supplied `Bot` entity with the response.
-    public static func syncIntegrations(forBot bot: Bot, completion: @escaping ManagerErrorCompletion) {
+    public func syncIntegrations(forBot bot: Bot, completion: @escaping ManagerErrorCompletion) {
         guard let xcodeServer = bot.server else {
             completion(Error.xcodeServer)
             return
@@ -270,7 +294,7 @@ public class Manager {
         
         let client: APIClient
         do {
-            client = try APIClient.client(forFQDN: xcodeServer.fqdn)
+            client = try self.client(forFQDN: xcodeServer.fqdn)
         } catch {
             completion(error)
             return
@@ -282,7 +306,7 @@ public class Manager {
                 completion(error)
             case .success(let value):
                 print("Retrieved Integrations for Bot '\(bot.identifier)'")
-                container.performBackgroundTask({ (privateContext) in
+                self.container.performBackgroundTask({ (privateContext) in
                     privateContext.automaticallyMergesChangesFromParent = true
                     
                     if let b = privateContext.object(with: bot.objectID) as? Bot {
@@ -305,7 +329,7 @@ public class Manager {
     
     /// Gets a single `Integration` from the `XcodeServer`.
     /// Updates the supplied `Integration` entity with the response.
-    public static func syncIntegration(integration: Integration, completion: @escaping ManagerErrorCompletion) {
+    public func syncIntegration(integration: Integration, completion: @escaping ManagerErrorCompletion) {
         guard let bot = integration.bot else {
             completion(Error.bot)
             return
@@ -318,7 +342,7 @@ public class Manager {
         
         let client: APIClient
         do {
-            client = try APIClient.client(forFQDN: xcodeServer.fqdn)
+            client = try self.client(forFQDN: xcodeServer.fqdn)
         } catch {
             completion(error)
             return
@@ -330,7 +354,7 @@ public class Manager {
                 completion(error)
             case .success(let value):
                 print("Retrieved Integration '\(integration.identifier)'")
-                container.performBackgroundTask({ (privateContext) in
+                self.container.performBackgroundTask({ (privateContext) in
                     privateContext.automaticallyMergesChangesFromParent = true
                     
                     if let i = privateContext.object(with: integration.objectID) as? Integration {
@@ -353,7 +377,7 @@ public class Manager {
     
     /// Retrieves the `Repository` commits for a specified `Integration`.
     /// Updates the supplied `Integration` entity with the response.
-    public static func syncCommits(forIntegration integration: Integration, completion: @escaping ManagerErrorCompletion) {
+    public func syncCommits(forIntegration integration: Integration, completion: @escaping ManagerErrorCompletion) {
         guard let bot = integration.bot else {
             completion(Error.bot)
             return
@@ -366,7 +390,7 @@ public class Manager {
         
         let client: APIClient
         do {
-            client = try APIClient.client(forFQDN: xcodeServer.fqdn)
+            client = try self.client(forFQDN: xcodeServer.fqdn)
         } catch {
             completion(error)
             return
@@ -378,7 +402,7 @@ public class Manager {
                 completion(error)
             case .success(let value):
                 print("Retrieved Commits for Integration '\(integration.identifier)'")
-                container.performBackgroundTask({ (privateContext) in
+                self.container.performBackgroundTask({ (privateContext) in
                     privateContext.automaticallyMergesChangesFromParent = true
                     
                     let repositories = privateContext.repositories()
@@ -405,7 +429,7 @@ public class Manager {
     
     /// Retrieves `Issue` related to a given `Integration`.
     /// Updates the supplied `Integration` entity with the response.
-    public static func syncIssues(forIntegration integration: Integration, completion: @escaping ManagerErrorCompletion) {
+    public func syncIssues(forIntegration integration: Integration, completion: @escaping ManagerErrorCompletion) {
         guard let bot = integration.bot else {
             completion(Error.bot)
             return
@@ -418,7 +442,7 @@ public class Manager {
         
         let client: APIClient
         do {
-            client = try APIClient.client(forFQDN: xcodeServer.fqdn)
+            client = try self.client(forFQDN: xcodeServer.fqdn)
         } catch {
             completion(error)
             return
@@ -430,7 +454,7 @@ public class Manager {
                 completion(error)
             case .success(let value):
                 print("Retrieved Issues for Integration '\(integration.identifier)'")
-                container.performBackgroundTask({ (privateContext) in
+                self.container.performBackgroundTask({ (privateContext) in
                     privateContext.automaticallyMergesChangesFromParent = true
                     
                     if let i = privateContext.object(with: integration.objectID) as? Integration {
@@ -451,3 +475,21 @@ public class Manager {
         }
     }
 }
+
+extension Manager: APIClientAuthorizationDelegate {
+    public func authorization(for fqdn: String?) -> HTTP.Authorization? {
+        return nil
+    }
+    
+    public func clearCredentials(for fqdn: String?) {
+        
+    }
+}
+
+extension Manager: ProcedureQueueDelegate {
+    public func procedureQueue(_ queue: ProcedureQueue, didFinishProcedure procedure: Procedure, with error: Swift.Error?) {
+        
+    }
+}
+
+#endif

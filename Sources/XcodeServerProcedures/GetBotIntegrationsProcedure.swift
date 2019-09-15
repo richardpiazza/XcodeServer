@@ -2,14 +2,20 @@ import Foundation
 import ProcedureKit
 import XcodeServerAPI
 
-public class GetBotIntegrationsProcedure: APIClientProcedure, OutputProcedure {
+public class GetBotIntegrationsProcedure: APIClientProcedure, InputProcedure, OutputProcedure {
     
+    public typealias Input = String
     public typealias Output = [XCSIntegration]
     
+    public var input: Pending<Input> = .pending
     public var output: Pending<ProcedureResult<Output>> = .pending
     
-    public override func performTask() {
-        guard let id = input.value?.id else {
+    public override func execute() {
+        guard !isCancelled else {
+            return
+        }
+        
+        guard let id = input.value else {
             output = .ready(.failure(XcodeServerProcedureError.invalidInput))
             finish(with: XcodeServerProcedureError.invalidInput)
             return

@@ -5,14 +5,14 @@ import XcodeServerAPI
 import CoreData
 import XcodeServerCoreData
 
-public class UpdateBotProcedure: NSManagedObjectProcedure<Bot>, InputProcedure {
+public class CreateServerProcedure: NSPersistentContainerProcedure, InputProcedure {
     
-    public typealias Input = XCSBot
+    public typealias Input = String
     
     public var input: Pending<Input> = .pending
     
-    public init(container: NSPersistentContainer, bot: Bot, input: Input? = nil) {
-        super.init(container: container, object: bot)
+    public init(container: NSPersistentContainer, input: Input? = nil) {
+        super.init(container: container)
         
         if let value = input {
             self.input = .ready(value)
@@ -25,18 +25,20 @@ public class UpdateBotProcedure: NSManagedObjectProcedure<Bot>, InputProcedure {
         }
         
         guard let value = input.value else {
-            cancel()
             finish(with: XcodeServerProcedureError.invalidInput)
             return
         }
         
-        let id = objectID
+        guard container.viewContext.server(withFQDN: value) == nil else {
+            finish()
+            return
+        }
         
-        container.performBackgroundTask { [weak self] (context) in
-            let bot = context.object(with: id) as! Bot
-            
-            bot.update(withBot: value)
-            bot.lastUpdate = Date()
+        container.performBackgroundTask({ [weak self] (context) in
+            guard let _ = Server(managedObjectContext: context, fqdn: value) else {
+                self?.finish(with: XcodeServerProcedureError.failedToCreateXcodeServer(fqdn: value))
+                return
+            }
             
             do {
                 try context.save()
@@ -44,7 +46,7 @@ public class UpdateBotProcedure: NSManagedObjectProcedure<Bot>, InputProcedure {
             } catch {
                 self?.finish(with: error)
             }
-        }
+        })
     }
 }
 

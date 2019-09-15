@@ -13,7 +13,11 @@ public class GetDevicesProcedure: APIClientProcedure, OutputProcedure {
     
     public var output: Pending<ProcedureResult<Output>> = .pending
     
-    public override func performTask() {
+    public override func execute() {
+        guard !isCancelled else {
+            return
+        }
+        
         client.get("devices") { [weak self] (statusCode, headers, data: Response?, error) in
             guard error == nil else {
                 self?.output = .ready(.failure(error!))
