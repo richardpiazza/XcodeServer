@@ -126,9 +126,10 @@ public extension Integration {
 public extension NSManagedObjectContext {
     /// Retrieves all `Integration` entities from the Core Data `NSManagedObjectContext`
     func integrations() -> [Integration] {
-        let fetchRequest = NSFetchRequest<Integration>(entityName: Integration.entityName)
+        let request: NSFetchRequest<Integration> = Integration.fetchRequest()
+        
         do {
-            return try self.fetch(fetchRequest)
+            return try fetch(request)
         } catch {
             print(error)
         }
@@ -139,10 +140,11 @@ public extension NSManagedObjectContext {
     /// Retrieves the first `Integration` entity from the Core Data `NSManagedObjectContext`
     /// that matches the specified identifier.
     func integration(withIdentifier identifier: String) -> Integration? {
-        let fetchRequest = NSFetchRequest<Integration>(entityName: Integration.entityName)
-        fetchRequest.predicate = NSPredicate(format: "identifier = %@", argumentArray: [identifier])
+        let request: NSFetchRequest<Integration> = Integration.fetchRequest()
+        request.predicate = NSPredicate(format: "identifier = %@", argumentArray: [identifier])
+        
         do {
-            let results = try self.fetch(fetchRequest)
+            let results = try fetch(request)
             if let result = results.first {
                 return result
             }
@@ -151,6 +153,20 @@ public extension NSManagedObjectContext {
         }
         
         return nil
+    }
+    
+    /// All Integrations that are not in the 'completed' step.
+    func incompleteIntegrations() -> [Integration] {
+        let request: NSFetchRequest<Integration> = Integration.fetchRequest()
+        request.predicate = NSPredicate(format: "currentStepRawValue != %@", argumentArray: [IntegrationStep.completed.rawValue])
+        
+        do {
+            return try fetch(request)
+        } catch {
+            print(error)
+        }
+        
+        return []
     }
 }
 

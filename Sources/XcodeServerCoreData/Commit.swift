@@ -17,6 +17,10 @@ public class Commit: NSManagedObject {
 // MARK: - CoreData Properties
 public extension Commit {
     
+    @nonobjc class func fetchRequest() -> NSFetchRequest<Commit> {
+        return NSFetchRequest<Commit>(entityName: entityName)
+    }
+    
     @NSManaged var commitHash: String
     @NSManaged var message: String?
     @NSManaged var date: Date?
@@ -30,9 +34,10 @@ public extension Commit {
 public extension NSManagedObjectContext {
     /// Retrieves all `Commit` entities from the Core Data `NSManagedObjectContext`
     func commits() -> [Commit] {
-        let fetchRequest = NSFetchRequest<Commit>(entityName: Commit.entityName)
+        let request = NSFetchRequest<Commit>(entityName: Commit.entityName)
+        
         do {
-            return try self.fetch(fetchRequest)
+            return try fetch(request)
         } catch {
             print(error)
         }
@@ -43,10 +48,11 @@ public extension NSManagedObjectContext {
     /// Retrieves the first `Commit` entity from the Core Data `NSManagedObjectContext`
     /// that matches the specified Hash identifier.
     func commit(withHash identifier: String) -> Commit? {
-        let fetchRequest = NSFetchRequest<Commit>(entityName: Commit.entityName)
-        fetchRequest.predicate = NSPredicate(format: "commitHash = %@", argumentArray: [identifier])
+        let request = NSFetchRequest<Commit>(entityName: Commit.entityName)
+        request.predicate = NSPredicate(format: "commitHash = %@", argumentArray: [identifier])
+        
         do {
-            let results = try self.fetch(fetchRequest)
+            let results = try fetch(request)
             if let result = results.first {
                 return result
             }
@@ -55,6 +61,19 @@ public extension NSManagedObjectContext {
         }
         
         return nil
+    }
+    
+    func incompleteCommits() -> [Commit] {
+        let request: NSFetchRequest<Commit> = Commit.fetchRequest()
+        request.predicate = NSPredicate(format: "message == nil OR commitContributor == nil", argumentArray: nil)
+        
+        do {
+            return try fetch(request)
+        } catch {
+            print(error)
+        }
+        
+        return []
     }
 }
 

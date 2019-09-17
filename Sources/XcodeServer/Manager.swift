@@ -300,6 +300,68 @@ public class Manager {
         
         procedureQueue.addOperations([retrieve, update])
     }
+    
+    public func syncIncompleteIntegrations(completion: @escaping ManagerErrorCompletion) {
+        let integrations = container.viewContext.incompleteIntegrations()
+        let fqdns = integrations.compactMap({ $0.bot?.server?.fqdn })
+        
+        var apiClients: [String: APIClient] = [:]
+        
+        fqdns.forEach({ (fqdn) in
+            do {
+                let client = try self.client(forFQDN: fqdn)
+                apiClients[fqdn] = client
+            } catch {
+                print(error)
+            }
+        })
+        
+        let sync = SyncIncompleteIntegrationsProcedure(container: container, apiClients: apiClients)
+        sync.addDidFinishBlockObserver() { (proc, error) in
+            completion(error)
+        }
+        
+        procedureQueue.addOperation(sync)
+    }
+    
+    public func syncIncompleteCommits(completion: @escaping ManagerErrorCompletion) {
+        let commits = container.viewContext.incompleteCommits()
+        var fqdns = [String]()
+        
+        commits.forEach({
+            guard let revisionBluerints = $0.revisionBlueprints else {
+                return
+            }
+            
+            revisionBluerints.forEach({ (revisionBlueprint) in
+                guard let integration = revisionBlueprint.integration else {
+                    return
+                }
+                
+                if let fqdn = integration.bot?.server?.fqdn {
+                    fqdns.append(fqdn)
+                }
+            })
+        })
+        
+        var apiClients: [String: APIClient] = [:]
+        
+        fqdns.forEach({ (fqdn) in
+            do {
+                let client = try self.client(forFQDN: fqdn)
+                apiClients[fqdn] = client
+            } catch {
+                print(error)
+            }
+        })
+        
+        let sync = SyncIncompleteCommitsProcedure(container: container, apiClients: apiClients)
+        sync.addDidFinishBlockObserver() { (proc, error) in
+            completion(error)
+        }
+        
+        procedureQueue.addOperation(sync)
+    }
 }
 
 extension Manager: APIClientAuthorizationDelegate {

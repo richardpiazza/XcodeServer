@@ -28,4 +28,15 @@ open class NSManagedObjectProcedure<T: NSManagedObject>: NSPersistentContainerPr
     
 }
 
+open class NSPersistentContainerGroupProcedure: GroupProcedure {
+    
+    public let container: NSPersistentContainer
+    
+    public init(container: NSPersistentContainer, operations: [Procedure]) {
+        self.container = container
+        super.init(operations: operations)
+    }
+    
+}
+
 #endif
