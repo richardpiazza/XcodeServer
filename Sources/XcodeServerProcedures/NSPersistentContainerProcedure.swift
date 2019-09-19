@@ -39,4 +39,17 @@ open class NSPersistentContainerGroupProcedure: GroupProcedure {
     
 }
 
+open class NSManagedObjectGroupProcedure<T: NSManagedObject>: NSPersistentContainerGroupProcedure {
+    
+    public let objectID: NSManagedObjectID
+    public let managedObject: T
+    
+    public init(container: NSPersistentContainer, object: T, operations: [Procedure]) {
+        self.objectID = object.objectID
+        self.managedObject = object
+        super.init(container: container, operations: operations)
+    }
+    
+}
+
 #endif

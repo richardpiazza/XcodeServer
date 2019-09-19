@@ -362,6 +362,23 @@ public class Manager {
         
         procedureQueue.addOperation(sync)
     }
+    
+    public func syncOutOfDateServers(since date: Date) {
+        let servers = container.viewContext.serversLastUpdatedOnOrBefore(date)
+        
+        for server in servers {
+            let client: APIClient
+            do {
+                client = try self.client(forFQDN: server.fqdn)
+            } catch {
+                print(error)
+                continue
+            }
+            
+            let sync = SyncServerProcedure(container: container, server: server, apiClient: client)
+            procedureQueue.addOperation(sync)
+        }
+    }
 }
 
 extension Manager: APIClientAuthorizationDelegate {
@@ -376,7 +393,53 @@ extension Manager: APIClientAuthorizationDelegate {
 
 extension Manager: ProcedureQueueDelegate {
     public func procedureQueue(_ queue: ProcedureQueue, didFinishProcedure procedure: Procedure, with error: Error?) {
-        
+        switch procedure {
+        case is SyncServerProcedure:
+            guard error == nil else {
+                return
+            }
+            
+            let sync = procedure as! SyncServerProcedure
+            let server = container.viewContext.object(with: sync.objectID) as! Server
+            let next = SyncServerBotsProcedure(container: container, server: server, apiClient: sync.apiClient)
+            queue.addOperation(next)
+        case is SyncServerBotsProcedure:
+            guard error == nil else {
+                return
+            }
+            
+            let sync = procedure as! SyncServerBotsProcedure
+            let server = container.viewContext.object(with: sync.objectID) as! Server
+            for bot in (server.bots ?? []) {
+                let next = SyncBotIntegrationsProcedure(container: container, bot: bot, apiClient: sync.apiClient)
+                queue.addOperation(next)
+            }
+        case is SyncBotIntegrationsProcedure:
+            guard error == nil else {
+                return
+            }
+            
+            let sync = procedure as! SyncBotIntegrationsProcedure
+            let bot = container.viewContext.object(with: sync.objectID) as! Bot
+            for integration in (bot.integrations ?? []) {
+                let next = SyncIntegrationProcedure(container: container, integration: integration, apiClient: sync.apiClient)
+                queue.addOperation(next)
+            }
+        case is SyncIntegrationProcedure:
+            guard error == nil else {
+                return
+            }
+            
+            let sync = procedure as! SyncIntegrationProcedure
+            let integration = container.viewContext.object(with: sync.objectID) as! Integration
+            
+            let issues = SyncIntegrationIssuesProcedure(container: container, integration: integration, apiClient: sync.apiClient)
+            let commits = SyncIntegrationCommitsProcedure(container: container, integration: integration, apiClient: sync.apiClient)
+            
+            queue.addOperations([issues, commits])
+        default:
+            break
+        }
     }
 }
 

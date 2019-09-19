@@ -88,6 +88,19 @@ public extension NSManagedObjectContext {
         
         return nil
     }
+    
+    func serversLastUpdatedOnOrBefore(_ date: Date) -> [Server] {
+        let fetchRequest = NSFetchRequest<Server>(entityName: Server.entityName)
+        fetchRequest.predicate = NSPredicate(format: "lastUpdate == nil OR lastUpdate < %@", argumentArray: [date])
+        
+        do {
+            return try self.fetch(fetchRequest)
+        } catch {
+            print(error)
+        }
+        
+        return []
+    }
 }
 
 #endif
