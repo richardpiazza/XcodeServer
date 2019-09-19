@@ -14,6 +14,7 @@ public class SyncServerProcedure: NSManagedObjectProcedure<Server> {
         self.apiClient = apiClient
         super.init(container: container, object: server)
         procedureQueue.delegate = self
+        procedureQueue.maxConcurrentOperationCount = 1
     }
     
     public override func execute() {
