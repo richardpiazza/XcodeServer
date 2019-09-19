@@ -32,7 +32,7 @@ public class UpdateBotProcedure: NSManagedObjectProcedure<Bot>, InputProcedure {
         
         let id = objectID
         
-        print("Updating Bot '\(id)'")
+        print("Updating Bot '\(managedObject.identifier)'")
         
         container.performBackgroundTask { [weak self] (context) in
             let bot = context.object(with: id) as! Bot

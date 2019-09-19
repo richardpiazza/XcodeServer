@@ -21,6 +21,7 @@ public class Manager {
         self.container = container
         self.authorizationDelegate = authorizationDelegate
         procedureQueue.delegate = self
+        procedureQueue.maxConcurrentOperationCount = 1
     }
     
     private func client(forFQDN fqdn: String) throws -> APIClient {
@@ -375,8 +376,11 @@ public class Manager {
                 continue
             }
             
-            let sync = SyncServerProcedure(container: container, server: server, apiClient: client)
-            procedureQueue.addOperation(sync)
+            let version = SyncServerProcedure(container: container, server: server, apiClient: client)
+            let bots = SyncServerBotsProcedure(container: container, server: server, apiClient: client)
+            bots.addDependency(version)
+            
+            procedureQueue.addOperations([version, bots])
         }
     }
 }
@@ -394,28 +398,23 @@ extension Manager: APIClientAuthorizationDelegate {
 extension Manager: ProcedureQueueDelegate {
     public func procedureQueue(_ queue: ProcedureQueue, didFinishProcedure procedure: Procedure, with error: Error?) {
         switch procedure {
-        case is SyncServerProcedure:
-            guard error == nil else {
-                return
-            }
-            
-            let sync = procedure as! SyncServerProcedure
-            let server = container.viewContext.object(with: sync.objectID) as! Server
-            let next = SyncServerBotsProcedure(container: container, server: server, apiClient: sync.apiClient)
-            queue.addOperation(next)
         case is SyncServerBotsProcedure:
             guard error == nil else {
+                print(error!)
                 return
             }
             
             let sync = procedure as! SyncServerBotsProcedure
             let server = container.viewContext.object(with: sync.objectID) as! Server
             for bot in (server.bots ?? []) {
+                let stats = SyncBotStatsProcedure(container: container, bot: bot, apiClient: sync.apiClient)
                 let next = SyncBotIntegrationsProcedure(container: container, bot: bot, apiClient: sync.apiClient)
-                queue.addOperation(next)
+                next.addDependency(stats)
+                queue.addOperations([stats, next])
             }
         case is SyncBotIntegrationsProcedure:
             guard error == nil else {
+                print(error!)
                 return
             }
             
@@ -427,6 +426,7 @@ extension Manager: ProcedureQueueDelegate {
             }
         case is SyncIntegrationProcedure:
             guard error == nil else {
+                print(error!)
                 return
             }
             

@@ -32,7 +32,7 @@ public class UpdateIntegrationProcedure: NSManagedObjectProcedure<Integration>, 
         
         let id = objectID
         
-        print("Updating Integration '\(id)'")
+        print("Updating Integration '\(managedObject.identifier)'")
         
         container.performBackgroundTask { [weak self] (context) in
             let integration = context.object(with: id) as! Integration
