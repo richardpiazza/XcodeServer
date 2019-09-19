@@ -5,7 +5,6 @@ import XcodeServerCommon
 
 public protocol APIClientAuthorizationDelegate: class {
     func authorization(for fqdn: String?) -> HTTP.Authorization?
-    func clearCredentials(for fqdn: String?)
 }
 
 public enum APIClientError: Swift.Error, LocalizedError {

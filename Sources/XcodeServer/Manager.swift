@@ -9,15 +9,20 @@ import XcodeServerCoreData
 import XcodeServerProcedures
 
 public typealias ManagerErrorCompletion = (_ error: Error?) -> Void
+public typealias ManagerCredentials = (username: String, password: String)
+
+public protocol ManagerAuthorizationDelegate {
+    func credentialsForServer(withFQDN fqdn: String?) -> ManagerCredentials?
+}
 
 public class Manager {
     
     private let container: NSPersistentContainer
     private let procedureQueue: ProcedureQueue = ProcedureQueue()
     private var clients: [String : APIClient] = [:]
-    private var authorizationDelegate: APIClientAuthorizationDelegate?
+    private var authorizationDelegate: ManagerAuthorizationDelegate?
     
-    public init(container: NSPersistentContainer, authorizationDelegate: APIClientAuthorizationDelegate? = nil) {
+    public init(container: NSPersistentContainer, authorizationDelegate: ManagerAuthorizationDelegate? = nil) {
         self.container = container
         self.authorizationDelegate = authorizationDelegate
         procedureQueue.delegate = self
@@ -40,7 +45,7 @@ public class Manager {
         return client
     }
     
-    private func resetClient(forFQDN fqdn: String) {
+    public func resetClient(forFQDN fqdn: String) {
         clients[fqdn] = nil
     }
     
@@ -364,8 +369,16 @@ public class Manager {
         procedureQueue.addOperation(sync)
     }
     
-    public func syncOutOfDateServers(since date: Date) {
+    public func syncOutOfDateServers(since date: Date, completion: @escaping ManagerErrorCompletion) {
         let servers = container.viewContext.serversLastUpdatedOnOrBefore(date)
+        
+        guard servers.count > 0 else {
+            completion(nil)
+            return
+        }
+        
+        var syncCount: Int = 0
+        var completeCount: Int = 0
         
         for server in servers {
             let client: APIClient
@@ -376,70 +389,35 @@ public class Manager {
                 continue
             }
             
-            let version = SyncServerProcedure(container: container, server: server, apiClient: client)
-            let bots = SyncServerBotsProcedure(container: container, server: server, apiClient: client)
-            bots.addDependency(version)
+            syncCount += 1
             
-            procedureQueue.addOperations([version, bots])
+            let sync = SyncServerProcedure(container: container, server: server, apiClient: client)
+            sync.addDidFinishBlockObserver() { (proc, error) in
+                completeCount += 1
+                
+                if syncCount == completeCount {
+                    completion(nil)
+                }
+            }
+            
+            procedureQueue.addOperation(sync)
         }
     }
 }
 
 extension Manager: APIClientAuthorizationDelegate {
     public func authorization(for fqdn: String?) -> HTTP.Authorization? {
-        return authorizationDelegate?.authorization(for: fqdn)
-    }
-    
-    public func clearCredentials(for fqdn: String?) {
-        authorizationDelegate?.clearCredentials(for: fqdn)
+        guard let credentials = authorizationDelegate?.credentialsForServer(withFQDN: fqdn) else {
+            return nil
+        }
+        
+        return .basic(username: credentials.username, password: credentials.password)
     }
 }
 
 extension Manager: ProcedureQueueDelegate {
     public func procedureQueue(_ queue: ProcedureQueue, didFinishProcedure procedure: Procedure, with error: Error?) {
-        switch procedure {
-        case is SyncServerBotsProcedure:
-            guard error == nil else {
-                print(error!)
-                return
-            }
-            
-            let sync = procedure as! SyncServerBotsProcedure
-            let server = container.viewContext.object(with: sync.objectID) as! Server
-            for bot in (server.bots ?? []) {
-                let stats = SyncBotStatsProcedure(container: container, bot: bot, apiClient: sync.apiClient)
-                let next = SyncBotIntegrationsProcedure(container: container, bot: bot, apiClient: sync.apiClient)
-                next.addDependency(stats)
-                queue.addOperations([stats, next])
-            }
-        case is SyncBotIntegrationsProcedure:
-            guard error == nil else {
-                print(error!)
-                return
-            }
-            
-            let sync = procedure as! SyncBotIntegrationsProcedure
-            let bot = container.viewContext.object(with: sync.objectID) as! Bot
-            for integration in (bot.integrations ?? []) {
-                let next = SyncIntegrationProcedure(container: container, integration: integration, apiClient: sync.apiClient)
-                queue.addOperation(next)
-            }
-        case is SyncIntegrationProcedure:
-            guard error == nil else {
-                print(error!)
-                return
-            }
-            
-            let sync = procedure as! SyncIntegrationProcedure
-            let integration = container.viewContext.object(with: sync.objectID) as! Integration
-            
-            let issues = SyncIntegrationIssuesProcedure(container: container, integration: integration, apiClient: sync.apiClient)
-            let commits = SyncIntegrationCommitsProcedure(container: container, integration: integration, apiClient: sync.apiClient)
-            
-            queue.addOperations([issues, commits])
-        default:
-            break
-        }
+        
     }
 }
 
