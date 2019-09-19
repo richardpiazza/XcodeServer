@@ -32,6 +32,8 @@ public class UpdateIntegrationProcedure: NSManagedObjectProcedure<Integration>, 
         
         let id = objectID
         
+        print("Updating Integration '\(id)'")
+        
         container.performBackgroundTask { [weak self] (context) in
             let integration = context.object(with: id) as! Integration
             
@@ -41,6 +43,7 @@ public class UpdateIntegrationProcedure: NSManagedObjectProcedure<Integration>, 
                 try context.save()
                 self?.finish()
             } catch {
+                print(error)
                 self?.finish(with: error)
             }
         }

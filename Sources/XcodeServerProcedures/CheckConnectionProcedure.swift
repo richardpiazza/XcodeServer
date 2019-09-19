@@ -13,9 +13,12 @@ public class CheckConnectionProcedure: APIClientProcedure, OutputProcedure {
             return
         }
         
+        print("Ping: \(client.baseURL)")
+        
         client.ping { [weak self] (result) in
             switch result {
             case .failure(let error):
+                print(error)
                 self?.output = .ready(.failure(error))
                 self?.finish(with: error)
             case .success:

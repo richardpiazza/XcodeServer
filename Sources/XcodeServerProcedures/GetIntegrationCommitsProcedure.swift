@@ -28,9 +28,12 @@ public class GetIntegrationCommitsProcedure: APIClientProcedure, InputProcedure,
             return
         }
         
+        print("Getting Commits for Integration '\(id)'")
+        
         client.commits(forIntegrationWithIdentifier: id) { [weak self] (result) in
             switch result {
             case .failure(let error):
+                print(error)
                 self?.output = .ready(.failure(error))
                 self?.finish(with: error)
             case .success(let value):

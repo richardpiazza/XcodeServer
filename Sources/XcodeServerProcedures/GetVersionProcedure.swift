@@ -13,9 +13,12 @@ public class GetVersionProcedure: APIClientProcedure, OutputProcedure {
             return
         }
         
+        print("Getting Version '\(client.baseURL)'")
+        
         client.versions { [weak self] (result) in
             switch result {
             case .failure(let error):
+                print(error)
                 self?.output = .ready(.failure(error))
                 self?.finish(with: error)
             case .success(let value):

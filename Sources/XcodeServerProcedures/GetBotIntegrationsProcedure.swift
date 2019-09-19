@@ -28,9 +28,12 @@ public class GetBotIntegrationsProcedure: APIClientProcedure, InputProcedure, Ou
             return
         }
         
+        print("Getting Integrations for Bot '\(id)'")
+        
         client.integrations(forBotWithIdentifier: id) { [weak self] (result) in
             switch result {
             case .failure(let error):
+                print(error)
                 self?.output = .ready(.failure(error))
                 self?.finish(with: error)
             case .success(let value):

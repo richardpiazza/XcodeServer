@@ -18,8 +18,11 @@ public class GetDevicesProcedure: APIClientProcedure, OutputProcedure {
             return
         }
         
+        print("Getting Devices '\(client.baseURL)'")
+        
         client.get("devices") { [weak self] (statusCode, headers, data: Response?, error) in
             guard error == nil else {
+                print(error!)
                 self?.output = .ready(.failure(error!))
                 self?.finish(with: error!)
                 return

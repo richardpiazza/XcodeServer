@@ -28,6 +28,8 @@ public class GetBotStatsProcedure: APIClientProcedure, InputProcedure, OutputPro
             return
         }
         
+        print("Getting Stats for Bot '\(id)'")
+        
         client.stats(forBotWithIdentifier: id) { [weak self] (result) in
             switch result {
             case .failure(let error):

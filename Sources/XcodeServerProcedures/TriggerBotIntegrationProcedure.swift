@@ -28,9 +28,12 @@ public class TriggerBotIntegrationProcedure: APIClientProcedure, InputProcedure,
             return
         }
         
+        print("Trigger Integration for Bot '\(id)'")
+        
         client.runIntegration(forBotWithIdentifier: id) { [weak self] (result) in
             switch result {
             case .failure(let error):
+                print(error)
                 self?.output = .ready(.failure(error))
                 self?.finish(with: error)
             case .success(let value):

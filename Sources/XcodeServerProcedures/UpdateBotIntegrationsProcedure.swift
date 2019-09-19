@@ -32,6 +32,8 @@ public class UpdateBotIntegrationsProcedure: NSManagedObjectProcedure<Bot>, Inpu
         
         let id = objectID
         
+        print("Updating Integrations for Bot '\(id)'")
+        
         container.performBackgroundTask { [weak self] (context) in
             let bot = context.object(with: id) as! Bot
             
@@ -42,6 +44,7 @@ public class UpdateBotIntegrationsProcedure: NSManagedObjectProcedure<Bot>, Inpu
                 try context.save()
                 self?.finish()
             } catch {
+                print(error)
                 self?.finish(with: error)
             }
         }

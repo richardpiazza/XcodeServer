@@ -34,6 +34,8 @@ public class CreateServerProcedure: NSPersistentContainerProcedure, InputProcedu
             return
         }
         
+        print("Creating Server '\(value)'")
+        
         container.performBackgroundTask({ [weak self] (context) in
             guard let _ = Server(managedObjectContext: context, fqdn: value) else {
                 self?.finish(with: XcodeServerProcedureError.failedToCreateXcodeServer(fqdn: value))
@@ -44,6 +46,7 @@ public class CreateServerProcedure: NSPersistentContainerProcedure, InputProcedu
                 try context.save()
                 self?.finish()
             } catch {
+                print(error)
                 self?.finish(with: error)
             }
         })

@@ -31,6 +31,8 @@ public class UpdateVersionProcedure: NSManagedObjectProcedure<Server>, InputProc
         
         let id = objectID
         
+        print("Updating Versions for Server '\(managedObject.fqdn)'")
+        
         container.performBackgroundTask { [weak self] (context) in
             let server = context.object(with: id) as! Server
             
@@ -41,6 +43,7 @@ public class UpdateVersionProcedure: NSManagedObjectProcedure<Server>, InputProc
                 try context.save()
                 self?.finish()
             } catch {
+                print(error)
                 self?.finish(with: error)
             }
         }

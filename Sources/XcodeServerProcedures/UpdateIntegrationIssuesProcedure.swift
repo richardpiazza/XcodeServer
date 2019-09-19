@@ -32,6 +32,8 @@ public class UpdateIntegrationIssuesProcedure: NSManagedObjectProcedure<Integrat
         
         let id = objectID
         
+        print("Updating Issues for Integration '\(id)'")
+        
         container.performBackgroundTask { [weak self] (context) in
             let integration = context.object(with: id) as! Integration
             
@@ -42,6 +44,7 @@ public class UpdateIntegrationIssuesProcedure: NSManagedObjectProcedure<Integrat
                 try context.save()
                 self?.finish()
             } catch {
+                print(error)
                 self?.finish(with: error)
             }
         }

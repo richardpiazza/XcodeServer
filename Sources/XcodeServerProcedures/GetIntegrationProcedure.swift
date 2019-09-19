@@ -28,9 +28,12 @@ public class GetIntegrationProcedure: APIClientProcedure, InputProcedure, Output
             return
         }
         
+        print("Getting Integration '\(id)'")
+        
         client.integration(withIdentifier: id) { [weak self] (result) in
             switch result {
             case .failure(let error):
+                print(error)
                 self?.output = .ready(.failure(error))
                 self?.finish(with: error)
             case .success(let value):

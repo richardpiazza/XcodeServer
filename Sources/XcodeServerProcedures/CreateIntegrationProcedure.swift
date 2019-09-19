@@ -32,6 +32,8 @@ public class CreateIntegrationProcedure: NSManagedObjectProcedure<Bot>, InputPro
         
         let id = objectID
         
+        print("Creating Integration '\(value.identifier)' for Bot  '\(managedObject.identifier)'")
+        
         container.performBackgroundTask { [weak self] (context) in
             let bot = context.object(with: id) as! Bot
             
@@ -47,6 +49,7 @@ public class CreateIntegrationProcedure: NSManagedObjectProcedure<Bot>, InputPro
                 try context.save()
                 self?.finish()
             } catch {
+                print(error)
                 self?.finish(with: error)
             }
         }

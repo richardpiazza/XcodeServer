@@ -14,6 +14,8 @@ public class DeleteServerProcedure: NSManagedObjectProcedure<Server> {
         
         let id = objectID
         
+        print("Deleting Server '\(managedObject.fqdn)'")
+        
         container.performBackgroundTask({ [weak self] (context) in
             let server = context.object(with: id) as! Server
             
@@ -23,6 +25,7 @@ public class DeleteServerProcedure: NSManagedObjectProcedure<Server> {
                 try context.save()
                 self?.finish()
             } catch {
+                print(error)
                 self?.finish(with: error)
             }
         })

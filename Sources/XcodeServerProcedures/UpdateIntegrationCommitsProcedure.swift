@@ -32,6 +32,8 @@ public class UpdateIntegrationCommitsProcedure: NSManagedObjectProcedure<Integra
         
         let id = objectID
         
+        print("Updating Commits for Integration '\(id)'")
+        
         container.performBackgroundTask { [weak self] (context) in
             let integration = context.object(with: id) as! Integration
             let repositories = context.repositories()
@@ -46,6 +48,7 @@ public class UpdateIntegrationCommitsProcedure: NSManagedObjectProcedure<Integra
                 try context.save()
                 self?.finish()
             } catch {
+                print(error)
                 self?.finish(with: error)
             }
         }
