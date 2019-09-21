@@ -14,13 +14,16 @@ public extension Server {
         }
     }
     
-    func update(withBots data: [XCSBot]) {
+    @discardableResult
+    func update(withBots data: [XCSBot]) -> [XcodeServerProcedureEvent] {
+        var events: [XcodeServerProcedureEvent] = []
+        
         guard let moc = self.managedObjectContext else {
-            return
+            return events
         }
         
         guard let bots = self.bots else {
-            return
+            return events
         }
         
         var ids: [String] = bots.compactMap({ $0.identifier })
@@ -31,21 +34,27 @@ public extension Server {
             }
             
             if let bot = moc.bot(withIdentifier: element.identifier) {
-                bot.update(withBot: element)
+                let botEvents = bot.update(withBot: element)
+                events.append(contentsOf: botEvents)
                 continue
             }
             
             if let bot = Bot(managedObjectContext: moc, identifier: element.identifier, server: self) {
-                bot.update(withBot: element)
+                events.append(.bot(action: .create, identifier: element.identifier, name: element.name))
+                let botEvents = bot.update(withBot: element)
+                events.append(contentsOf: botEvents)
             }
         }
         
         for id in ids {
             if let bot = moc.bot(withIdentifier: id) {
+                events.append(.bot(action: .delete, identifier: bot.identifier, name: bot.name ?? ""))
                 bot.server = nil
                 moc.delete(bot)
             }
         }
+        
+        return events
     }
 }
 

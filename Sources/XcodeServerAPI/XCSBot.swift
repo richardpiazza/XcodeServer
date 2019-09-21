@@ -20,11 +20,11 @@ public struct XCSBot: Codable {
     public var configuration: XCSConfiguration?
     public var group: XCSGroup = XCSGroup()
     public var identifier: String = ""
-    public var integrationCounter: Int = 0
+    public var integrationCounter: Int32 = 0
     public var lastRevisionBlueprint: XCSRepositoryBlueprint?
     public var name: String = ""
     public var requiresUpgrade: Bool = false
     public var sourceControlBlueprint: XCSRepositoryBlueprint?
     public var sourceControlBlueprintIdentifier: String = ""
-    public var typeRawValue: Int = 0
+    public var typeRawValue: Int16 = 0
 }

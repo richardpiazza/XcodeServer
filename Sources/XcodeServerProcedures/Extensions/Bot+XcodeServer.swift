@@ -4,14 +4,21 @@ import XcodeServerAPI
 import XcodeServerCoreData
 
 public extension Bot {
-    func update(withBot bot: XCSBot) {
+    @discardableResult
+    func update(withBot bot: XCSBot) -> [XcodeServerProcedureEvent] {
+        var events: [XcodeServerProcedureEvent] = []
+        
         guard let moc = self.managedObjectContext else {
-            return
+            return events
         }
         
-        self.integrationCounter = Int32(bot.integrationCounter)
+        if (integrationCounter != bot.integrationCounter) || (requiresUpgrade != bot.requiresUpgrade) {
+            events.append(.bot(action: .update, identifier: identifier, name: name ?? ""))
+        }
+        
+        self.integrationCounter = bot.integrationCounter
         self.name = bot.name
-        self.typeRawValue = Int16(bot.typeRawValue)
+        self.typeRawValue = bot.typeRawValue
         self.requiresUpgrade = bot.requiresUpgrade
         
         if let configuration = bot.configuration {
@@ -24,28 +31,39 @@ public extension Bot {
                     repository.update(withRevisionBlueprint: blueprint)
                     continue
                 }
+                
                 if let repository = Repository(managedObjectContext: moc, identifier: id) {
                     repository.update(withRevisionBlueprint: blueprint)
                 }
             }
         }
+        
+        return events
     }
     
-    func update(withIntegrations integrations: [XCSIntegration]) {
+    @discardableResult
+    func update(withIntegrations integrations: [XCSIntegration]) -> [XcodeServerProcedureEvent] {
+        var events: [XcodeServerProcedureEvent] = []
+        
         guard let moc = self.managedObjectContext else {
-            return
+            return events
         }
         
         for element in integrations {
             if let integration = moc.integration(withIdentifier: element.identifier) {
-                integration.update(withIntegration: element)
+                let integrationEvents = integration.update(withIntegration: element)
+                events.append(contentsOf: integrationEvents)
                 continue
             }
             
             if let integration = Integration(managedObjectContext: moc, identifier: element.identifier, bot: self) {
-                integration.update(withIntegration: element)
+                events.append(.integration(action: .create, identifier: element.identifier, number: element.number))
+                let integrationEvents = integration.update(withIntegration: element)
+                events.append(contentsOf: integrationEvents)
             }
         }
+        
+        return events
     }
 }
 

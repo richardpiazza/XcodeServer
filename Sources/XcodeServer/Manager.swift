@@ -9,6 +9,7 @@ import XcodeServerCoreData
 import XcodeServerProcedures
 
 public typealias ManagerErrorCompletion = (_ error: Error?) -> Void
+public typealias ManagerEventsCompletion = (_ events: [XcodeServerProcedureEvent]) -> Void
 public typealias ManagerCredentials = (username: String, password: String)
 
 public protocol ManagerAuthorizationDelegate {
@@ -369,11 +370,12 @@ public class Manager {
         procedureQueue.addOperation(sync)
     }
     
-    public func syncOutOfDateServers(since date: Date, completion: @escaping ManagerErrorCompletion) {
+    public func syncOutOfDateServers(since date: Date, completion: @escaping ManagerEventsCompletion) {
         let servers = container.viewContext.serversLastUpdatedOnOrBefore(date)
+        var events: [XcodeServerProcedureEvent] = []
         
         guard servers.count > 0 else {
-            completion(nil)
+            completion(events)
             return
         }
         
@@ -395,8 +397,12 @@ public class Manager {
             sync.addDidFinishBlockObserver() { (proc, error) in
                 completeCount += 1
                 
+                if let output = proc.output.success {
+                    events.append(contentsOf: output)
+                }
+                
                 if syncCount == completeCount {
-                    completion(nil)
+                    completion(events)
                 }
             }
             

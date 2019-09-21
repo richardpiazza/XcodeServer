@@ -5,10 +5,15 @@ import XcodeServerAPI
 import CoreData
 import XcodeServerCoreData
 
-public class SyncServerProcedure: NSManagedObjectProcedure<Server> {
+public class SyncServerProcedure: NSManagedObjectProcedure<Server>, OutputProcedure {
+    
+    public typealias Output = [XcodeServerProcedureEvent]
     
     public let apiClient: APIClient
     private let procedureQueue: ProcedureQueue = ProcedureQueue()
+    
+    public var output: Pending<ProcedureResult<Output>> = .pending
+    private var events: [XcodeServerProcedureEvent] = []
     
     public init(container: NSPersistentContainer, server: Server, apiClient: APIClient) {
         self.apiClient = apiClient
@@ -80,12 +85,34 @@ extension SyncServerProcedure: ProcedureQueueDelegate {
             queue.addOperations([issues, commits])
             
             return
+        case is UpdateServerBotsProcedure:
+            let proc = procedure as! UpdateServerBotsProcedure
+            guard let output = proc.output.success else {
+                return
+            }
+            
+            events.append(contentsOf: output)
+        case is UpdateBotProcedure:
+            let proc = procedure as! UpdateBotProcedure
+            guard let output = proc.output.success else {
+                return
+            }
+            
+            events.append(contentsOf: output)
+        case is UpdateIntegrationProcedure:
+            let proc = procedure as! UpdateIntegrationProcedure
+            guard let output = proc.output.success else {
+                return
+            }
+            
+            events.append(contentsOf: output)
         default:
             break
         }
         
         if queue.operationCount == 0 {
-            self.finish()
+            output = .ready(.success(events))
+            finish()
         }
     }
 }

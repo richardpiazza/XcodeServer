@@ -42,7 +42,7 @@ public struct XCSIntegration: Codable {
     public var duration: Double?
     public var endedTime: Date?
     public var identifier: String = ""
-    public var number: Int
+    public var number: Int32
     public var perfMetricKeyPaths: [String]?
     public var perfMetricNames: [String]?
     public var queuedDate: Date?
@@ -50,7 +50,7 @@ public struct XCSIntegration: Codable {
     public var revisionBlueprint: XCSRepositoryBlueprint?
     public var shouldClean: Bool?
     public var startedTime: Date?
-    public var successStreak: Int?
+    public var successStreak: Int32?
     public var tags: [String]?
     public var testedDevices: [XCSDevice]?
     public var testHierarchy: XCSTestHierarchy?

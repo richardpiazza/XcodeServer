@@ -5,20 +5,27 @@ import XcodeServerAPI
 import XcodeServerCoreData
 
 public extension Integration {
-    func update(withIntegration integration: XCSIntegration) {
+    @discardableResult
+    func update(withIntegration integration: XCSIntegration) -> [XcodeServerProcedureEvent] {
+        var events: [XcodeServerProcedureEvent] = []
+        
         guard let moc = self.managedObjectContext else {
-            return
+            return events
+        }
+        
+        if (currentStep != integration.currentStep) || (result != integration.result) {
+            events.append(.integration(action: .update, identifier: identifier, number: number))
         }
         
         self.currentStep = integration.currentStep
         self.duration = integration.duration ?? 0.0
         self.endedTime = integration.endedTime
-        self.number = Int32(integration.number)
+        self.number = integration.number
         self.queuedDate = integration.queuedDate
         self.result = integration.result
         self.shouldClean = integration.shouldClean ?? false
         self.startedTime = integration.startedTime
-        self.successStreak = Int32(integration.successStreak ?? 0)
+        self.successStreak = integration.successStreak ?? 0
         
         if let value = integration.testHierarchy {
             do {
@@ -66,6 +73,8 @@ public extension Integration {
                 }
             }
         }
+        
+        return events
     }
     
     var testResults: [TestResult] {

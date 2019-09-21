@@ -5,11 +5,13 @@ import XcodeServerAPI
 import CoreData
 import XcodeServerCoreData
 
-public class UpdateIntegrationProcedure: NSManagedObjectProcedure<Integration>, InputProcedure {
+public class UpdateIntegrationProcedure: NSManagedObjectProcedure<Integration>, InputProcedure, OutputProcedure {
     
     public typealias Input = XCSIntegration
+    public typealias Output = [XcodeServerProcedureEvent]
     
     public var input: Pending<Input> = .pending
+    public var output: Pending<ProcedureResult<Output>> = .pending
     
     public init(container: NSPersistentContainer, integration: Integration, input: Input? = nil) {
         super.init(container: container, object: integration)
@@ -37,13 +39,15 @@ public class UpdateIntegrationProcedure: NSManagedObjectProcedure<Integration>, 
         container.performBackgroundTask { [weak self] (context) in
             let integration = context.object(with: id) as! Integration
             
-            integration.update(withIntegration: value)
+            let events = integration.update(withIntegration: value)
             
             do {
                 try context.save()
+                self?.output = .ready(.success(events))
                 self?.finish()
             } catch {
                 print(error)
+                self?.output = .ready(.failure(error))
                 self?.finish(with: error)
             }
         }
