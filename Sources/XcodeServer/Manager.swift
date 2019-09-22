@@ -69,6 +69,24 @@ public class Manager {
         procedureQueue.addOperation(procedure)
     }
     
+    public func createServer(withFQDN fqdn: String, completion: @escaping ManagerErrorCompletion) {
+        let procedure = CreateServerProcedure(container: container, input: fqdn)
+        procedure.addDidFinishBlockObserver { (proc, error) in
+            completion(error)
+        }
+        
+        procedureQueue.addOperation(procedure)
+    }
+    
+    public func deleteServer(_ server: Server, completion: @escaping ManagerErrorCompletion) {
+        let procedure = DeleteServerProcedure(container: container, object: server)
+        procedure.addDidFinishBlockObserver { (proc, error) in
+            completion(error)
+        }
+        
+        procedureQueue.addOperation(procedure)
+    }
+    
     /// Retreive the version information about the `Server`
     /// Updates the supplied `Server` entity with the response.
     public func syncVersionData(forServer server: Server, completion: @escaping ManagerErrorCompletion) {

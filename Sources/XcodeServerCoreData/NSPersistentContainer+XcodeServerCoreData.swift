@@ -80,7 +80,7 @@ fileprivate extension FileManager {
             root = try url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
             #elseif os(macOS)
             root = try url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-            #elseif os(UIKitForMac)
+            #elseif targetEnvironment(macCatalyst)
             root = try url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
             #else
             root = try url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)

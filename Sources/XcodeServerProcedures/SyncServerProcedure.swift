@@ -47,6 +47,9 @@ extension SyncServerProcedure: ProcedureQueueDelegate {
             }
             
             let sync = procedure as! SyncServerBotsProcedure
+            if let events = sync.output.success {
+                self.events.append(contentsOf: events)
+            }
             let server = container.viewContext.object(with: sync.objectID) as! Server
             for bot in (server.bots ?? []) {
                 let stats = SyncBotStatsProcedure(container: container, bot: bot, apiClient: sync.apiClient)
@@ -63,6 +66,9 @@ extension SyncServerProcedure: ProcedureQueueDelegate {
             }
             
             let sync = procedure as! SyncBotIntegrationsProcedure
+            if let events = sync.output.success {
+                self.events.append(contentsOf: events)
+            }
             let bot = container.viewContext.object(with: sync.objectID) as! Bot
             for integration in (bot.integrations ?? []) {
                 let next = SyncIntegrationProcedure(container: container, integration: integration, apiClient: sync.apiClient)
@@ -77,6 +83,9 @@ extension SyncServerProcedure: ProcedureQueueDelegate {
             }
             
             let sync = procedure as! SyncIntegrationProcedure
+            if let events = sync.output.success {
+                self.events.append(contentsOf: events)
+            }
             let integration = container.viewContext.object(with: sync.objectID) as! Integration
             
             let issues = SyncIntegrationIssuesProcedure(container: container, integration: integration, apiClient: sync.apiClient)
@@ -85,27 +94,6 @@ extension SyncServerProcedure: ProcedureQueueDelegate {
             queue.addOperations([issues, commits])
             
             return
-        case is UpdateServerBotsProcedure:
-            let proc = procedure as! UpdateServerBotsProcedure
-            guard let output = proc.output.success else {
-                return
-            }
-            
-            events.append(contentsOf: output)
-        case is UpdateBotProcedure:
-            let proc = procedure as! UpdateBotProcedure
-            guard let output = proc.output.success else {
-                return
-            }
-            
-            events.append(contentsOf: output)
-        case is UpdateIntegrationProcedure:
-            let proc = procedure as! UpdateIntegrationProcedure
-            guard let output = proc.output.success else {
-                return
-            }
-            
-            events.append(contentsOf: output)
         default:
             break
         }

@@ -5,11 +5,13 @@ import XcodeServerAPI
 import CoreData
 import XcodeServerCoreData
 
-public class UpdateBotIntegrationsProcedure: NSManagedObjectProcedure<Bot>, InputProcedure {
+public class UpdateBotIntegrationsProcedure: NSManagedObjectProcedure<Bot>, InputProcedure, OutputProcedure {
     
     public typealias Input = [XCSIntegration]
+    public typealias Output = [XcodeServerProcedureEvent]
     
     public var input: Pending<Input> = .pending
+    public var output: Pending<ProcedureResult<Output>> = .pending
     
     public init(container: NSPersistentContainer, bot: Bot, input: Input? = nil) {
         super.init(container: container, object: bot)
@@ -37,14 +39,16 @@ public class UpdateBotIntegrationsProcedure: NSManagedObjectProcedure<Bot>, Inpu
         container.performBackgroundTask { [weak self] (context) in
             let bot = context.object(with: id) as! Bot
             
-            bot.update(withIntegrations: value)
+            let events = bot.update(withIntegrations: value)
             bot.lastUpdate = Date()
             
             do {
                 try context.save()
+                self?.output = .ready(.success(events))
                 self?.finish()
             } catch {
                 print(error)
+                self?.output = .ready(.failure(error))
                 self?.finish(with: error)
             }
         }

@@ -5,9 +5,12 @@ import XcodeServerAPI
 import CoreData
 import XcodeServerCoreData
 
-public class SyncServerBotsProcedure: NSManagedObjectGroupProcedure<Server> {
+public class SyncServerBotsProcedure: NSManagedObjectGroupProcedure<Server>, OutputProcedure {
+    
+    public typealias Output = [XcodeServerProcedureEvent]
     
     public let apiClient: APIClient
+    public var output: Pending<ProcedureResult<Output>> = .pending
     
     public init(container: NSPersistentContainer, server: Server, apiClient: APIClient) {
         self.apiClient = apiClient
@@ -18,6 +21,10 @@ public class SyncServerBotsProcedure: NSManagedObjectGroupProcedure<Server> {
         update.injectResult(from: get)
         
         super.init(container: container, object: server, operations: [get, update])
+        
+        update.addDidFinishBlockObserver { (proc, error) in
+            self.output = proc.output
+        }
     }
 }
 
