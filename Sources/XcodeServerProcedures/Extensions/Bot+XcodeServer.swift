@@ -13,7 +13,7 @@ public extension Bot {
         }
         
         if (integrationCounter != bot.integrationCounter) || (requiresUpgrade != bot.requiresUpgrade) {
-            events.append(.bot(action: .update, identifier: identifier, name: name ?? ""))
+            events.append(.bot(action: .update, identifier: bot.identifier, name: bot.name))
         }
         
         self.integrationCounter = bot.integrationCounter
