@@ -14,9 +14,9 @@
         "package": "CodeQuickKit",
         "repositoryURL": "https://github.com/richardpiazza/CodeQuickKit.git",
         "state": {
-          "branch": null,
-          "revision": "5bb67f17dd575d458626293865f5b96f49d55bfe",
-          "version": "6.6.0"
+          "branch": "develop",
+          "revision": "71f3e65aed9b08480ad5b66c763a2703c78d4f40",
+          "version": null
         }
       },
       {

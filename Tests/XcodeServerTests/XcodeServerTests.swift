@@ -14,7 +14,7 @@ final class XcodeServerTests: XCTestCase {
     ]
     
     lazy var model: NSManagedObjectModel = {
-        return Model_1_0_0()
+        return Model_1_0_0.instance
     }()
     
     func testModel_1_0_0_Hashes() {
