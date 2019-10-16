@@ -1,8 +1,6 @@
 import Foundation
 import XcodeServerCommon
 
-public typealias TestResult = (name: String, passed: Bool)
-
 #if canImport(CoreData)
 import CoreData
 
@@ -120,6 +118,41 @@ public extension Integration {
         set {
             resultRawValue = newValue.rawValue
         }
+    }
+    
+    var testHierarchy: TestHierarchy? {
+        guard let data = testHierarchyData else {
+            return nil
+        }
+        
+        do {
+            return try JSON.jsonDecoder.decode(TestHierarchy.self, from: data)
+        } catch {
+            print(error)
+            return nil
+        }
+    }
+    
+    var testResults: [TestResult] {
+        guard let testHierarchy = self.testHierarchy else {
+            return []
+        }
+        
+        guard testHierarchy.suites.count > 0 else {
+            return []
+        }
+        
+        var results: [TestResult] = []
+        
+        testHierarchy.suites.forEach { (suite) in
+            suite.classes.forEach { (`class`) in
+                `class`.methods.forEach { (method) in
+                    results.append(TestResult(name: method.name.xcServerTestMethodName, passed: !method.hasFailures))
+                }
+            }
+        }
+        
+        return results
     }
 }
 

@@ -76,36 +76,6 @@ public extension Integration {
         
         return events
     }
-    
-    var testResults: [TestResult] {
-        guard let data = self.testHierarchyData else {
-            return []
-        }
-        
-        let testHierachy: XCSTestHierarchy
-        do {
-            testHierachy = try JSON.jsonDecoder.decode(XCSTestHierarchy.self, from: data)
-        } catch {
-            print(error)
-            return []
-        }
-        
-        guard testHierachy.suites.count > 0 else {
-            return []
-        }
-        
-        var results = [TestResult]()
-        
-        for suite in testHierachy.suites {
-            for `class` in suite.classes {
-                for method in `class`.methods {
-                    results.append(TestResult(name: method.name.xcServerTestMethodName, passed: !method.hasFailures))
-                }
-            }
-        }
-        
-        return results
-    }
 }
 
 #endif

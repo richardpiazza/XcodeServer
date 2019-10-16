@@ -53,5 +53,5 @@ public struct XCSIntegration: Codable {
     public var successStreak: Int32?
     public var tags: [String]?
     public var testedDevices: [XCSDevice]?
-    public var testHierarchy: XCSTestHierarchy?
+    public var testHierarchy: TestHierarchy?
 }
