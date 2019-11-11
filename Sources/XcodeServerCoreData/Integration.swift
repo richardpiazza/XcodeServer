@@ -129,8 +129,9 @@ public extension Integration {
             return try JSON.jsonDecoder.decode(TestHierarchy.self, from: data)
         } catch {
             print(error)
-            return nil
         }
+        
+        return nil
     }
     
     var testResults: [TestResult] {

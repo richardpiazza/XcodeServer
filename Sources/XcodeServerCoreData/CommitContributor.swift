@@ -61,8 +61,9 @@ public extension CommitContributor {
             return try JSON.jsonDecoder.decode([String].self, from: data)
         } catch {
             print(error)
-            return []
         }
+        
+        return []
     }
 }
 

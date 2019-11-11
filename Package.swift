@@ -20,7 +20,7 @@ let package = Package(
     dependencies: [
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
-        .package(url: "https://github.com/richardpiazza/CodeQuickKit.git", .branch("develop")),
+        .package(url: "https://github.com/richardpiazza/CodeQuickKit.git", .upToNextMinor(from: "6.7.0")),
         .package(url: "https://github.com/tsolomko/BitByteData.git", from: "1.4.0"),
         .package(url: "https://github.com/ProcedureKit/ProcedureKit", .upToNextMinor(from: "5.2.0")),
     ],

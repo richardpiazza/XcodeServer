@@ -3,6 +3,9 @@ import XCTest
 @testable import XcodeServerCommon
 @testable import XcodeServerAPI
 @testable import XcodeServerCoreData
+#if canImport(CoreData)
+import CoreData
+#endif
 
 final class XcodeServerTests: XCTestCase {
     

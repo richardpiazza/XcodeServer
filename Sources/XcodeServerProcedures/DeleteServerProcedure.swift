@@ -25,7 +25,6 @@ public class DeleteServerProcedure: NSManagedObjectProcedure<Server> {
                 try context.save()
                 self?.finish()
             } catch {
-                print(error)
                 self?.finish(with: error)
             }
         })

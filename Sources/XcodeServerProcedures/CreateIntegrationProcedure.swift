@@ -25,8 +25,9 @@ public class CreateIntegrationProcedure: NSManagedObjectProcedure<Bot>, InputPro
         }
         
         guard let value = input.value else {
-            cancel()
-            finish(with: XcodeServerProcedureError.invalidInput)
+            let error = XcodeServerProcedureError.invalidInput
+            cancel(with: error)
+            finish(with: error)
             return
         }
         
@@ -49,7 +50,6 @@ public class CreateIntegrationProcedure: NSManagedObjectProcedure<Bot>, InputPro
                 try context.save()
                 self?.finish()
             } catch {
-                print(error)
                 self?.finish(with: error)
             }
         }

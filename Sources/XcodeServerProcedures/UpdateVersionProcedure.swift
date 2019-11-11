@@ -25,7 +25,9 @@ public class UpdateVersionProcedure: NSManagedObjectProcedure<Server>, InputProc
         }
         
         guard let value = input.value else {
-            finish(with: XcodeServerProcedureError.invalidInput)
+            let error = XcodeServerProcedureError.invalidInput
+            cancel(with: error)
+            finish(with: error)
             return
         }
         
@@ -43,7 +45,6 @@ public class UpdateVersionProcedure: NSManagedObjectProcedure<Server>, InputProc
                 try context.save()
                 self?.finish()
             } catch {
-                print(error)
                 self?.finish(with: error)
             }
         }

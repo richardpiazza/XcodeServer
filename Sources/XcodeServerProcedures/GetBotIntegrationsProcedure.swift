@@ -12,6 +12,7 @@ public class GetBotIntegrationsProcedure: APIClientProcedure, InputProcedure, Ou
     
     public init(client: APIClient, input: Input? = nil) {
         super.init(client: client)
+        
         if let value = input {
             self.input = .ready(value)
         }
@@ -23,8 +24,10 @@ public class GetBotIntegrationsProcedure: APIClientProcedure, InputProcedure, Ou
         }
         
         guard let id = input.value else {
-            output = .ready(.failure(XcodeServerProcedureError.invalidInput))
-            finish(with: XcodeServerProcedureError.invalidInput)
+            let error = XcodeServerProcedureError.invalidInput
+            cancel(with: error)
+            output = .ready(.failure(error))
+            finish(with: error)
             return
         }
         
@@ -32,13 +35,12 @@ public class GetBotIntegrationsProcedure: APIClientProcedure, InputProcedure, Ou
         
         client.integrations(forBotWithIdentifier: id) { [weak self] (result) in
             switch result {
-            case .failure(let error):
-                print(error)
-                self?.output = .ready(.failure(error))
-                self?.finish(with: error)
             case .success(let value):
                 self?.output = .ready(.success(value))
                 self?.finish()
+            case .failure(let error):
+                self?.output = .ready(.failure(error))
+                self?.finish(with: error)
             }
         }
     }

@@ -17,13 +17,12 @@ public class CheckConnectionProcedure: APIClientProcedure, OutputProcedure {
         
         client.ping { [weak self] (result) in
             switch result {
-            case .failure(let error):
-                print(error)
-                self?.output = .ready(.failure(error))
-                self?.finish(with: error)
             case .success:
                 self?.output = .ready(.success(true))
                 self?.finish()
+            case .failure(let error):
+                self?.output = .ready(.failure(error))
+                self?.finish(with: error)
             }
         }
     }

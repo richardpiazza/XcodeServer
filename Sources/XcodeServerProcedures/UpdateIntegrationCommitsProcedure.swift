@@ -25,8 +25,9 @@ public class UpdateIntegrationCommitsProcedure: NSManagedObjectProcedure<Integra
         }
         
         guard let value = input.value else {
-            cancel()
-            finish(with: XcodeServerProcedureError.invalidInput)
+            let error = XcodeServerProcedureError.invalidInput
+            cancel(with: error)
+            finish(with: error)
             return
         }
         
@@ -48,7 +49,6 @@ public class UpdateIntegrationCommitsProcedure: NSManagedObjectProcedure<Integra
                 try context.save()
                 self?.finish()
             } catch {
-                print(error)
                 self?.finish(with: error)
             }
         }

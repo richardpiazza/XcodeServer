@@ -21,16 +21,16 @@ public class GetDevicesProcedure: APIClientProcedure, OutputProcedure {
         print("Getting Devices '\(client.baseURL)'")
         
         client.get("devices") { [weak self] (statusCode, headers, data: Response?, error) in
-            guard error == nil else {
-                print(error!)
-                self?.output = .ready(.failure(error!))
-                self?.finish(with: error!)
-                return
+            switch error {
+            case .none:
+                let value = data?.results ?? []
+                self?.output = .ready(.success(value))
+                self?.finish()
+            case .some(let e):
+                print(e)
+                self?.output = .ready(.failure(e))
+                self?.finish(with: e)
             }
-            
-            let value = data?.results ?? []
-            self?.output = .ready(.success(value))
-            self?.finish()
         }
     }
 }

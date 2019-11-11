@@ -26,29 +26,6 @@ public extension NSPersistentContainer {
             self.viewContext.mergePolicy = NSMergePolicy(merge: .mergeByPropertyObjectTrumpMergePolicyType)
         }
     }
-//    
-//    static var xcodeServerCoreData: NSPersistentContainer = {
-//        let model = Model_1_0_0.instance
-//        
-//        let storeURL = FileManager.default.storeURL
-//        
-//        let description = NSPersistentStoreDescription(url: storeURL)
-//        description.shouldInferMappingModelAutomatically = false
-//        description.shouldMigrateStoreAutomatically = false
-//        
-//        let container = NSPersistentContainer(name: "XcodeServer", managedObjectModel: model)
-//        container.persistentStoreDescriptions = [description]
-//        container.loadPersistentStores { (_, error) in
-//            if let e = error {
-//                fatalError(e.localizedDescription)
-//            }
-//            
-//            container.viewContext.automaticallyMergesChangesFromParent = true
-//            container.viewContext.mergePolicy = NSMergePolicy(merge: .mergeByPropertyObjectTrumpMergePolicyType)
-//        }
-//        
-//        return container
-//    }()
     
     /// Removed all stores from the `persistentStoreCoordinator`/
     ///

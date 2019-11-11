@@ -25,8 +25,9 @@ public class UpdateBotStatsProcedure: NSManagedObjectProcedure<Bot>, InputProced
         }
         
         guard let value = input.value else {
-            cancel()
-            finish(with: XcodeServerProcedureError.invalidInput)
+            let error = XcodeServerProcedureError.invalidInput
+            cancel(with: error)
+            finish(with: error)
             return
         }
         
@@ -43,7 +44,6 @@ public class UpdateBotStatsProcedure: NSManagedObjectProcedure<Bot>, InputProced
                 try context.save()
                 self?.finish()
             } catch {
-                print(error)
                 self?.finish(with: error)
             }
         }

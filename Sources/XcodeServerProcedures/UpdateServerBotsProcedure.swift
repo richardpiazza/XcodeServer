@@ -27,8 +27,10 @@ public class UpdateServerBotsProcedure: NSManagedObjectProcedure<Server>, InputP
         }
         
         guard let value = input.value else {
-            cancel()
-            finish(with: XcodeServerProcedureError.invalidInput)
+            let error = XcodeServerProcedureError.invalidInput
+            cancel(with: error)
+            output = .ready(.failure(error))
+            finish(with: error)
             return
         }
         
@@ -47,7 +49,6 @@ public class UpdateServerBotsProcedure: NSManagedObjectProcedure<Server>, InputP
                 self?.output = .ready(.success(events))
                 self?.finish()
             } catch {
-                print(error)
                 self?.output = .ready(.failure(error))
                 self?.finish(with: error)
             }
