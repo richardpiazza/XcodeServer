@@ -26,6 +26,7 @@ public enum IntegrationResult: String, Codable {
     case testFailures = "test-failures"
     case triggerError = "trigger-error"
     case warnings = "warnings"
+    case unknown = "unknown"
     
     public var description: String {
         switch self {
@@ -40,6 +41,7 @@ public enum IntegrationResult: String, Codable {
         case .testFailures: return "Test Failures"
         case .triggerError: return "Trigger Error"
         case .warnings: return "Warnings"
+        case .unknown: return "Unknown"
         }
     }
 }
