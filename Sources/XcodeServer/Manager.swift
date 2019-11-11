@@ -51,45 +51,62 @@ public class Manager {
     }
     
     /// Ping the Xcode Server.
-    /// A Status code of '204' indicates success.
-    public func ping(server: Server, completion: @escaping ManagerErrorCompletion) {
+    ///
+    /// Sends a simple request to the Xcode Server api endpoint `/ping`.
+    ///
+    /// - note: A status code of '204' indicates success.
+    ///
+    /// - parameter server: The `Server` of which to test connectivity
+    /// - parameter queue: `DispatchQueue` on which the `completion` block will be executed.
+    /// - parameter completion: Block result handler to execute upon completion of operations.
+    public func ping(server: Server, queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
         let client: APIClient
         do {
             client = try self.client(forFQDN: server.fqdn)
         } catch {
-            completion(error)
+            queue.async {
+                completion(error)
+            }
             return
         }
         
         let procedure = CheckConnectionProcedure(client: client)
         procedure.addDidFinishBlockObserver() { (proc, error) in
-            completion(error)
+            queue.async {
+                completion(error)
+            }
         }
         
         procedureQueue.addOperation(procedure)
     }
     
-    public func createServer(withFQDN fqdn: String, completion: @escaping ManagerErrorCompletion) {
+    public func createServer(withFQDN fqdn: String, queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
         let procedure = CreateServerProcedure(container: container, input: fqdn)
         procedure.addDidFinishBlockObserver { (proc, error) in
-            completion(error)
+            queue.async {
+                completion(error)
+            }
         }
         
         procedureQueue.addOperation(procedure)
     }
     
-    public func deleteServer(_ server: Server, completion: @escaping ManagerErrorCompletion) {
+    public func deleteServer(_ server: Server, queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
         let procedure = DeleteServerProcedure(container: container, object: server)
         procedure.addDidFinishBlockObserver { (proc, error) in
-            completion(error)
+            queue.async {
+                completion(error)
+            }
         }
         
         procedureQueue.addOperation(procedure)
     }
     
-    public func syncServer(withFQDN fqdn: String, completion: @escaping ManagerErrorCompletion) {
+    public func syncServer(withFQDN fqdn: String, queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
         guard let server = container.viewContext.server(withFQDN: fqdn) else {
-            completion(XcodeServerProcedureError.xcodeServer)
+            queue.async {
+                completion(XcodeServerProcedureError.xcodeServer)
+            }
             return
         }
         
@@ -97,13 +114,17 @@ public class Manager {
         do {
             client = try self.client(forFQDN: server.fqdn)
         } catch {
-            completion(error)
+            queue.async {
+                completion(error)
+            }
             return
         }
         
         let sync = SyncServerProcedure(container: container, server: server, apiClient: client)
         sync.addDidFinishBlockObserver { (proc, error) in
-            completion(error)
+            queue.async {
+                completion(error)
+            }
         }
         
         procedureQueue.addOperation(sync)
@@ -111,12 +132,14 @@ public class Manager {
     
     /// Retreive the version information about the `Server`
     /// Updates the supplied `Server` entity with the response.
-    public func syncVersionData(forServer server: Server, completion: @escaping ManagerErrorCompletion) {
+    public func syncVersionData(forServer server: Server, queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
         let client: APIClient
         do {
             client = try self.client(forFQDN: server.fqdn)
         } catch {
-            completion(error)
+            queue.async {
+                completion(error)
+            }
             return
         }
         
@@ -124,7 +147,9 @@ public class Manager {
         let update = UpdateVersionProcedure(container: container, server: server)
         update.injectResult(from: retrieve)
         update.addDidFinishBlockObserver() { (proc, error) in
-            completion(error)
+            queue.async {
+                completion(error)
+            }
         }
         
         procedureQueue.addOperations([retrieve, update])
@@ -132,12 +157,14 @@ public class Manager {
     
     /// Retrieves all `Bot`s from the `Server`
     /// Updates the supplied `Server` entity with the response.
-    public func syncBots(forServer server: Server, completion: @escaping ManagerErrorCompletion) {
+    public func syncBots(forServer server: Server, queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
         let client: APIClient
         do {
             client = try self.client(forFQDN: server.fqdn)
         } catch {
-            completion(error)
+            queue.async {
+                completion(error)
+            }
             return
         }
         
@@ -145,7 +172,9 @@ public class Manager {
         let update = UpdateServerBotsProcedure(container: container, server: server)
         update.injectResult(from: retrieve)
         update.addDidFinishBlockObserver() { (proc, error) in
-            completion(error)
+            queue.async {
+                completion(error)
+            }
         }
         
         procedureQueue.addOperations([retrieve, update])
@@ -153,9 +182,11 @@ public class Manager {
     
     /// Retrieves the information for a given `Bot` from the `Server`.
     /// Updates the supplied `Bot` entity with the response.
-    public func syncBot(bot: Bot, completion: @escaping ManagerErrorCompletion) {
+    public func syncBot(bot: Bot, queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
         guard let server = bot.server else {
-            completion(XcodeServerProcedureError.xcodeServer)
+            queue.async {
+                completion(XcodeServerProcedureError.xcodeServer)
+            }
             return
         }
         
@@ -163,7 +194,9 @@ public class Manager {
         do {
             client = try self.client(forFQDN: server.fqdn)
         } catch {
-            completion(error)
+            queue.async {
+                completion(error)
+            }
             return
         }
         
@@ -171,7 +204,9 @@ public class Manager {
         let update = UpdateBotProcedure(container: container, bot: bot)
         update.injectResult(from: retrieve)
         update.addDidFinishBlockObserver() { (proc, error) in
-            completion(error)
+            queue.async {
+                completion(error)
+            }
         }
         
         procedureQueue.addOperations([retrieve, update])
@@ -179,9 +214,11 @@ public class Manager {
     
     /// Gets the cumulative integration stats for the specified `Bot`.
     /// Updates the supplied `Bot` entity with the response.
-    public func syncStats(forBot bot: Bot, completion: @escaping ManagerErrorCompletion) {
+    public func syncStats(forBot bot: Bot, queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
         guard let server = bot.server else {
-            completion(XcodeServerProcedureError.xcodeServer)
+            queue.async {
+                completion(XcodeServerProcedureError.xcodeServer)
+            }
             return
         }
         
@@ -189,7 +226,9 @@ public class Manager {
         do {
             client = try self.client(forFQDN: server.fqdn)
         } catch {
-            completion(error)
+            queue.async {
+                completion(error)
+            }
             return
         }
         
@@ -197,7 +236,9 @@ public class Manager {
         let update = UpdateBotStatsProcedure(container: container, bot: bot)
         update.injectResult(from: retrieve)
         update.addDidFinishBlockObserver() { (proc, error) in
-            completion(error)
+            queue.async {
+                completion(error)
+            }
         }
         
         procedureQueue.addOperations([retrieve, update])
@@ -205,9 +246,11 @@ public class Manager {
     
     /// Begin a new integration for the specified `Bot`.
     /// Updates the supplied `Bot` entity with the response.
-    public func triggerIntegration(forBot bot: Bot, completion: @escaping ManagerErrorCompletion) {
+    public func triggerIntegration(forBot bot: Bot, queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
         guard let server = bot.server else {
-            completion(XcodeServerProcedureError.xcodeServer)
+            queue.async {
+                completion(XcodeServerProcedureError.xcodeServer)
+            }
             return
         }
         
@@ -215,7 +258,9 @@ public class Manager {
         do {
             client = try self.client(forFQDN: server.fqdn)
         } catch {
-            completion(error)
+            queue.async {
+                completion(error)
+            }
             return
         }
         
@@ -223,7 +268,9 @@ public class Manager {
         let create = CreateIntegrationProcedure(container: container, bot: bot)
         create.injectResult(from: trigger)
         create.addDidFinishBlockObserver() { (proc, error) in
-            completion(error)
+            queue.async {
+                completion(error)
+            }
         }
         
         procedureQueue.addOperations([trigger, create])
@@ -231,9 +278,11 @@ public class Manager {
     
     /// Gets a list of `Integration` for a specified `Bot`.
     /// Updates the supplied `Bot` entity with the response.
-    public func syncIntegrations(forBot bot: Bot, completion: @escaping ManagerErrorCompletion) {
+    public func syncIntegrations(forBot bot: Bot, queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
         guard let server = bot.server else {
-            completion(XcodeServerProcedureError.xcodeServer)
+            queue.async {
+                completion(XcodeServerProcedureError.xcodeServer)
+            }
             return
         }
         
@@ -241,7 +290,9 @@ public class Manager {
         do {
             client = try self.client(forFQDN: server.fqdn)
         } catch {
-            completion(error)
+            queue.async {
+                completion(error)
+            }
             return
         }
         
@@ -249,7 +300,9 @@ public class Manager {
         let update = UpdateBotIntegrationsProcedure(container: container, bot: bot)
         update.injectResult(from: retrieve)
         update.addDidFinishBlockObserver() { (proc, error) in
-            completion(error)
+            queue.async {
+                completion(error)
+            }
         }
         
         procedureQueue.addOperations([retrieve, update])
@@ -257,14 +310,18 @@ public class Manager {
     
     /// Gets a single `Integration` from the `XcodeServer`.
     /// Updates the supplied `Integration` entity with the response.
-    public func syncIntegration(integration: Integration, completion: @escaping ManagerErrorCompletion) {
+    public func syncIntegration(integration: Integration, queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
         guard let bot = integration.bot else {
-            completion(XcodeServerProcedureError.bot)
+            queue.async {
+                completion(XcodeServerProcedureError.bot)
+            }
             return
         }
         
         guard let server = bot.server else {
-            completion(XcodeServerProcedureError.xcodeServer)
+            queue.async {
+                completion(XcodeServerProcedureError.xcodeServer)
+            }
             return
         }
         
@@ -272,7 +329,9 @@ public class Manager {
         do {
             client = try self.client(forFQDN: server.fqdn)
         } catch {
-            completion(error)
+            queue.async {
+                completion(error)
+            }
             return
         }
         
@@ -280,7 +339,9 @@ public class Manager {
         let update = UpdateIntegrationProcedure(container: container, integration: integration)
         update.injectResult(from: retrieve)
         update.addDidFinishBlockObserver() { (proc, error) in
-            completion(error)
+            queue.async {
+                completion(error)
+            }
         }
         
         procedureQueue.addOperations([retrieve, update])
@@ -288,14 +349,18 @@ public class Manager {
     
     /// Retrieves the `Repository` commits for a specified `Integration`.
     /// Updates the supplied `Integration` entity with the response.
-    public func syncCommits(forIntegration integration: Integration, completion: @escaping ManagerErrorCompletion) {
+    public func syncCommits(forIntegration integration: Integration, queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
         guard let bot = integration.bot else {
-            completion(XcodeServerProcedureError.bot)
+            queue.async {
+                completion(XcodeServerProcedureError.bot)
+            }
             return
         }
         
         guard let server = bot.server else {
-            completion(XcodeServerProcedureError.xcodeServer)
+            queue.async {
+                completion(XcodeServerProcedureError.xcodeServer)
+            }
             return
         }
         
@@ -303,7 +368,9 @@ public class Manager {
         do {
             client = try self.client(forFQDN: server.fqdn)
         } catch {
-            completion(error)
+            queue.async {
+                completion(error)
+            }
             return
         }
         
@@ -311,7 +378,9 @@ public class Manager {
         let update = UpdateIntegrationCommitsProcedure(container: container, integration: integration)
         update.injectResult(from: retrieve)
         update.addDidFinishBlockObserver() { (proc, error) in
-            completion(error)
+            queue.async {
+                completion(error)
+            }
         }
         
         procedureQueue.addOperations([retrieve, update])
@@ -319,14 +388,18 @@ public class Manager {
     
     /// Retrieves `Issue` related to a given `Integration`.
     /// Updates the supplied `Integration` entity with the response.
-    public func syncIssues(forIntegration integration: Integration, completion: @escaping ManagerErrorCompletion) {
+    public func syncIssues(forIntegration integration: Integration, queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
         guard let bot = integration.bot else {
-            completion(XcodeServerProcedureError.bot)
+            queue.async {
+                completion(XcodeServerProcedureError.bot)
+            }
             return
         }
         
         guard let server = bot.server else {
-            completion(XcodeServerProcedureError.xcodeServer)
+            queue.async {
+                completion(XcodeServerProcedureError.xcodeServer)
+            }
             return
         }
         
@@ -334,7 +407,9 @@ public class Manager {
         do {
             client = try self.client(forFQDN: server.fqdn)
         } catch {
-            completion(error)
+            queue.async {
+                completion(error)
+            }
             return
         }
         
@@ -342,13 +417,15 @@ public class Manager {
         let update = UpdateIntegrationIssuesProcedure(container: container, integration: integration)
         update.injectResult(from: retrieve)
         update.addDidFinishBlockObserver() { (proc, error) in
-            completion(error)
+            queue.async {
+                completion(error)
+            }
         }
         
         procedureQueue.addOperations([retrieve, update])
     }
     
-    public func syncIncompleteIntegrations(completion: @escaping ManagerErrorCompletion) {
+    public func syncIncompleteIntegrations(queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
         let integrations = container.viewContext.incompleteIntegrations()
         let fqdns = integrations.compactMap({ $0.bot?.server?.fqdn })
         
@@ -365,13 +442,15 @@ public class Manager {
         
         let sync = SyncIncompleteIntegrationsProcedure(container: container, apiClients: apiClients)
         sync.addDidFinishBlockObserver() { (proc, error) in
-            completion(error)
+            queue.async {
+                completion(error)
+            }
         }
         
         procedureQueue.addOperation(sync)
     }
     
-    public func syncIncompleteCommits(completion: @escaping ManagerErrorCompletion) {
+    public func syncIncompleteCommits(queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
         let commits = container.viewContext.incompleteCommits()
         var fqdns = [String]()
         
@@ -404,18 +483,22 @@ public class Manager {
         
         let sync = SyncIncompleteCommitsProcedure(container: container, apiClients: apiClients)
         sync.addDidFinishBlockObserver() { (proc, error) in
-            completion(error)
+            queue.async {
+                completion(error)
+            }
         }
         
         procedureQueue.addOperation(sync)
     }
     
-    public func syncOutOfDateServers(since date: Date, completion: @escaping ManagerEventsCompletion) {
+    public func syncOutOfDateServers(since date: Date, queue: DispatchQueue = .main, completion: @escaping ManagerEventsCompletion) {
         let servers = container.viewContext.serversLastUpdatedOnOrBefore(date)
         var events: [XcodeServerProcedureEvent] = []
         
         guard servers.count > 0 else {
-            completion(events)
+            queue.async {
+                completion(events)
+            }
             return
         }
         
@@ -442,7 +525,9 @@ public class Manager {
                 }
                 
                 if syncCount == completeCount {
-                    completion(events)
+                    queue.async {
+                        completion(events)
+                    }
                 }
             }
             
