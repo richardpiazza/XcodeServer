@@ -87,6 +87,28 @@ public class Manager {
         procedureQueue.addOperation(procedure)
     }
     
+    public func syncServer(withFQDN fqdn: String, completion: @escaping ManagerErrorCompletion) {
+        guard let server = container.viewContext.server(withFQDN: fqdn) else {
+            completion(XcodeServerProcedureError.xcodeServer)
+            return
+        }
+        
+        let client: APIClient
+        do {
+            client = try self.client(forFQDN: server.fqdn)
+        } catch {
+            completion(error)
+            return
+        }
+        
+        let sync = SyncServerProcedure(container: container, server: server, apiClient: client)
+        sync.addDidFinishBlockObserver { (proc, error) in
+            completion(error)
+        }
+        
+        procedureQueue.addOperation(sync)
+    }
+    
     /// Retreive the version information about the `Server`
     /// Updates the supplied `Server` entity with the response.
     public func syncVersionData(forServer server: Server, completion: @escaping ManagerErrorCompletion) {
