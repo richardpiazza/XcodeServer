@@ -52,7 +52,7 @@ fileprivate extension FileManager {
             #if os(iOS)
             root = try url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
             #elseif os(tvOS)
-            root = try url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            root = try url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
             #elseif os(watchOS)
             root = try url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
             #elseif os(macOS)
