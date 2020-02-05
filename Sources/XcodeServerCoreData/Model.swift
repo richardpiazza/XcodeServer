@@ -15,6 +15,7 @@ public enum Model {
     }
     #endif
     
+    /// API Version number reported by the Xcode Server API
     public var compatibleAPIVersions: [APIVersion] {
         switch self {
         case .v1_0_0:
@@ -22,31 +23,11 @@ public enum Model {
         }
     }
     
-    public var compatibleMacOSVersions: [MacOSVersion] {
-        switch self {
-        case .v1_0_0:
-            return [.v10_14_6, .v10_15]
-        }
-    }
-    
-    public var compatibleMacOSServerVersions: [MacOSServerVersion] {
-        switch self {
-        case .v1_0_0:
-            return [.v5_7_1, .v5_8]
-        }
-    }
-    
-    public var compatibleXcodeVersions: [XcodeVersion] {
-        switch self {
-        case .v1_0_0:
-            return [.v_10_3, .v_11_0]
-        }
-    }
-    
+    /// Xcode Server version information reported by the Xcode Server API
     public var compatibleXcodeServerVersions: [XcodeServerVersion] {
         switch self {
         case .v1_0_0:
-            return [.v_2_0]
+            return [.v2_0]
         }
     }
 }
