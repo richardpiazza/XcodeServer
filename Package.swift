@@ -1,4 +1,4 @@
-// swift-tools-version:5.0
+// swift-tools-version:5.2
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -21,7 +21,7 @@ let package = Package(
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
         .package(url: "https://github.com/richardpiazza/CodeQuickKit.git", .upToNextMinor(from: "6.7.0")),
-        .package(url: "https://github.com/tsolomko/BitByteData.git", from: "1.4.0"),
+        .package(url: "https://github.com/tsolomko/BitByteData.git", .upToNextMinor(from: "1.4.3")),
         .package(url: "https://github.com/ProcedureKit/ProcedureKit", .upToNextMinor(from: "5.2.0")),
     ],
     targets: [
