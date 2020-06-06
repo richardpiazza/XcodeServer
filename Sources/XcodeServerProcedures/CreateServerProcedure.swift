@@ -10,7 +10,7 @@ import XcodeServerCoreData
 /// This procedure will complete in one of four expected ways:
 /// * _Failure_; An error reason will be provided
 /// * _Cancelation_: Invalid input provided to complete the operation.
-/// * _Success, with events_: The server was created successfully and a `.crete` event will be provided.
+/// * _Success, with events_: The server was created successfully and a `.create` event will be provided.
 /// * _Success, no events_: The server already existed and no action was taken.
 public class CreateServerProcedure: NSPersistentContainerProcedure, InputProcedure, OutputProcedure {
     

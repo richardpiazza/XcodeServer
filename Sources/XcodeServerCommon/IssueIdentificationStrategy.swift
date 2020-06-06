@@ -6,6 +6,6 @@ public enum IssueIdentificationStrategy: Int16, Codable {
     case blameLine = 2
     case lastCommitFromFile = 3
     case mostCommitterInFile = 4
-    case singleCOmmitInIntegration = 5
-    case multipleCOmmitsSingleUserInIntegration = 6
+    case singleCommitInIntegration = 5
+    case multipleCommitsSingleUserInIntegration = 6
 }

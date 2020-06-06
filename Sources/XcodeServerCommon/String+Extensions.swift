@@ -40,8 +40,8 @@ public extension String {
         return characterSet.contains(UnicodeScalar(c)!)
     }
     
-    /// ## xcServerTestMethodName
-    /// Provides a human-readable form of a method named (in particular XCTest method names).
+    /// A human-readable form of a method named (in particular XCTest method names).
+    ///
     /// - example: testPerformSomeAction() -> 'Perform Some Action'
     var xcServerTestMethodName: String {
         let characterSet = CharacterSet.uppercaseLetters

@@ -17,7 +17,7 @@ public struct XCSConfiguration: Codable {
     public var performsTestAction: Bool?
     public var runOnlyDisabledTests: Bool?
     public var testingDestinationType: Int?
-    public var testLocalizations: [XCSTestLocalzation]?
+    public var testLocalizations: [XCSTestLocalization]?
     
     // Schedule
     public var scheduleType: BotSchedule?

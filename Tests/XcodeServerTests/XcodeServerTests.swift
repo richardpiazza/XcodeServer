@@ -78,12 +78,10 @@ final class XcodeServerTests: XCTestCase {
     func testEmptyStore_Model_1_0_0_Metadata() throws {
         #if canImport(CoreData)
         let bundle = Bundle(for: XcodeServerTests.self)
+        let url = bundle.url(forResource: "XcodeServer_1.0.0_empty", withExtension: "sqlite")
+        try XCTSkipUnless(url != nil, "Bundle Resources Unavailable.")
 
-        guard let url = bundle.url(forResource: "XcodeServer_1.0.0_empty", withExtension: "sqlite") else {
-            throw CocoaError(.fileNoSuchFile)
-        }
-
-        let metadata = try NSPersistentStoreCoordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: url, options: nil)
+        let metadata = try NSPersistentStoreCoordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: url!, options: nil)
 
         XCTAssertTrue(model.isConfiguration(withName: nil, compatibleWithStoreMetadata: metadata))
         #endif
@@ -92,12 +90,10 @@ final class XcodeServerTests: XCTestCase {
     func testFullStore_Model_1_0_0_Metadata() throws {
         #if canImport(CoreData)
         let bundle = Bundle(for: XcodeServerTests.self)
+        let url = bundle.url(forResource: "XcodeServer_1.0.0_full", withExtension: "sqlite")
+        try XCTSkipUnless(url != nil, "Bundle Resources Unavailable.")
         
-        guard let url = bundle.url(forResource: "XcodeServer_1.0.0_full", withExtension: "sqlite") else {
-            throw CocoaError(.fileNoSuchFile)
-        }
-        
-        let metadata = try NSPersistentStoreCoordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: url, options: nil)
+        let metadata = try NSPersistentStoreCoordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: url!, options: nil)
         
         XCTAssertTrue(model.isConfiguration(withName: nil, compatibleWithStoreMetadata: metadata))
         #endif

@@ -1,5 +1,5 @@
 import Foundation
 
-public struct XCSTestLocalzation: Codable {
+public struct XCSTestLocalization: Codable {
     
 }

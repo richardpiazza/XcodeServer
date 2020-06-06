@@ -23,7 +23,7 @@ extension EmailConfiguration {
         }
         
         self.additionalRecipients = configuration.additionalRecipients?.joined(separator: ",")
-        self.emailComitters = configuration.emailCommitters ?? false
+        self.emailCommitters = configuration.emailCommitters ?? false
         self.emailType = configuration.type ?? .integrationReport
         self.fromAddress = configuration.fromAddress
         self.hour = Int16(configuration.hour ?? 0)

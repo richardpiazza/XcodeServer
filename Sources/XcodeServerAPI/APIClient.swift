@@ -12,7 +12,7 @@ public enum APIClientError: Swift.Error, LocalizedError {
     case xcodeServer
     case authorization
     case response(innerError: Swift.Error?)
-    case serilization(innerError: Swift.Error?)
+    case serialization(innerError: Swift.Error?)
     
     public var errorDescription: String? {
         switch self {
@@ -20,7 +20,7 @@ public enum APIClientError: Swift.Error, LocalizedError {
         case .xcodeServer: return "This class was initialized without an XcodeServer entity."
         case .authorization: return "The server returned a 401 response code."
         case .response: return "The response did not contain valid data."
-        case .serilization: return "The response object could not be cast into the requested type."
+        case .serialization: return "The response object could not be cast into the requested type."
         }
     }
 }
@@ -102,7 +102,7 @@ extension APIClient {
         }
         
         guard let result = data else {
-            return .failure(APIClientError.serilization(innerError: error))
+            return .failure(APIClientError.serialization(innerError: error))
         }
         
         return .success(result)
@@ -112,22 +112,22 @@ extension APIClient {
         let decompressedData = try BZip2.decompress(data: data)
         
         guard let decompressedString = String(data: decompressedData, encoding: .utf8) else {
-            throw APIClientError.serilization(innerError: nil)
+            throw APIClientError.serialization(innerError: nil)
         }
         
         guard let firstBrace = decompressedString.range(of: "{") else {
-            throw APIClientError.serilization(innerError: nil)
+            throw APIClientError.serialization(innerError: nil)
         }
         
         guard let lastBrace = decompressedString.range(of: "}", options: .backwards, range: nil, locale: nil) else {
-            throw APIClientError.serilization(innerError: nil)
+            throw APIClientError.serialization(innerError: nil)
         }
         
         let range = decompressedString.index(firstBrace.lowerBound, offsetBy: 0)..<decompressedString.index(lastBrace.lowerBound, offsetBy: 1)
         let json = decompressedString[range]
         
         guard let validData = json.data(using: .utf8) else {
-            throw APIClientError.serilization(innerError: nil)
+            throw APIClientError.serialization(innerError: nil)
         }
         
         return validData
@@ -162,7 +162,7 @@ public extension APIClient {
             }
             
             guard let result = data else {
-                completion(.failure(APIClientError.serilization(innerError: error)))
+                completion(.failure(APIClientError.serialization(innerError: error)))
                 return
             }
             
@@ -290,7 +290,7 @@ public extension APIClient {
             }
             
             guard let result = data else {
-                completion(.failure(APIClientError.serilization(innerError: error)))
+                completion(.failure(APIClientError.serialization(innerError: error)))
                 return
             }
             

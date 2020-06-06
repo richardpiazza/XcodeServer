@@ -9,7 +9,7 @@ public class EmailConfiguration: NSManagedObject {
     public convenience init?(managedObjectContext: NSManagedObjectContext, trigger: Trigger) {
         self.init(managedObjectContext: managedObjectContext)
         self.trigger = trigger
-        self.emailComitters = false
+        self.emailCommitters = false
         self.emailTypeRawValue = 0
         self.hour = 0
         self.includeBotConfiguration = false
@@ -32,7 +32,7 @@ public extension EmailConfiguration {
     @NSManaged var additionalRecipients: String?
     @NSManaged var allowedDomainNamesData: Data?
     @NSManaged var ccAddressesData: Data?
-    @NSManaged var emailComitters: Bool
+    @NSManaged var emailCommitters: Bool
     @NSManaged var emailTypeRawValue: Int16
     @NSManaged var fromAddress: String?
     @NSManaged var hour: Int16

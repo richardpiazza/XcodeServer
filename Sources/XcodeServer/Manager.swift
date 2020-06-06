@@ -455,11 +455,11 @@ public class Manager {
         var fqdns = [String]()
         
         commits.forEach({
-            guard let revisionBluerints = $0.revisionBlueprints else {
+            guard let revisionBlueprints = $0.revisionBlueprints else {
                 return
             }
             
-            revisionBluerints.forEach({ (revisionBlueprint) in
+            revisionBlueprints.forEach({ (revisionBlueprint) in
                 guard let integration = revisionBlueprint.integration else {
                     return
                 }

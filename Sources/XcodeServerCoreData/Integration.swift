@@ -1,12 +1,12 @@
 import Foundation
 import XcodeServerCommon
-
 #if canImport(CoreData)
 import CoreData
 
-/// ## Integration
 /// An Xcode Server Bot integration (run).
-/// "An integration is a single run of a bot. Integrations consist of building, analyzing, testing, and archiving the apps (or other software products) defined in your Xcode projects."
+///
+/// An integration is a single run of a bot. Integrations consist of building, analyzing, testing, and archiving the
+/// apps (or other software products) defined in your Xcode projects.
 @objc(Integration)
 public class Integration: NSManagedObject {
     
