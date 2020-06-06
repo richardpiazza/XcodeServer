@@ -20,7 +20,7 @@ let package = Package(
     dependencies: [
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
-        .package(url: "https://github.com/richardpiazza/CodeQuickKit.git", .upToNextMinor(from: "6.7.0")),
+        .package(url: "https://github.com/richardpiazza/SessionPlus.git", from: "1.0.0-rc.1"),
         .package(url: "https://github.com/tsolomko/BitByteData.git", .upToNextMinor(from: "1.4.3")),
         .package(url: "https://github.com/ProcedureKit/ProcedureKit", .upToNextMinor(from: "5.2.0")),
     ],
@@ -35,7 +35,7 @@ let package = Package(
             dependencies: []),
         .target(
             name: "XcodeServerAPI",
-            dependencies: ["XcodeServerCommon", "SWCompression", "CodeQuickKit"]),
+            dependencies: ["XcodeServerCommon", "SWCompression", "SessionPlus"]),
         .target(
             name: "XcodeServerCoreData",
             dependencies: ["XcodeServerCommon"]),

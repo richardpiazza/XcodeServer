@@ -11,21 +11,21 @@
         }
       },
       {
-        "package": "CodeQuickKit",
-        "repositoryURL": "https://github.com/richardpiazza/CodeQuickKit.git",
-        "state": {
-          "branch": null,
-          "revision": "3081e1798274d86ce85db2202151d0223f6e93dd",
-          "version": "6.7.0"
-        }
-      },
-      {
         "package": "ProcedureKit",
         "repositoryURL": "https://github.com/ProcedureKit/ProcedureKit",
         "state": {
           "branch": null,
           "revision": "a7fa565e648d90083c7f10c0c6be9bf249dcdbde",
           "version": "5.2.0"
+        }
+      },
+      {
+        "package": "SessionPlus",
+        "repositoryURL": "https://github.com/richardpiazza/SessionPlus.git",
+        "state": {
+          "branch": null,
+          "revision": "fe7f5125399e698cd8290de7918173f9d5b06fd7",
+          "version": "1.0.0-rc.1"
         }
       }
     ]

@@ -1,5 +1,5 @@
 import Foundation
-import CodeQuickKit
+import SessionPlus
 import ProcedureKit
 import XcodeServerCommon
 import XcodeServerAPI
@@ -130,7 +130,7 @@ public class Manager {
         procedureQueue.addOperation(sync)
     }
     
-    /// Retreive the version information about the `Server`
+    /// Retrieve the version information about the `Server`
     /// Updates the supplied `Server` entity with the response.
     public func syncVersionData(forServer server: Server, queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
         let client: APIClient
