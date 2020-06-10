@@ -11,6 +11,15 @@ public extension NSPersistentContainer {
         description.shouldInferMappingModelAutomatically = false
         description.shouldMigrateStoreAutomatically = false
         
+        do {
+            let metadata = try NSPersistentStoreCoordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: storeURL, options: nil)
+            if !Model.v1_0_0.model.isConfiguration(withName: "XcodeServer", compatibleWithStoreMetadata: metadata) {
+                try FileManager.default.removeItem(at: storeURL)
+            }
+        } catch {
+            print(error)
+        }
+        
         // check for migration
         // perform if necessary
         
