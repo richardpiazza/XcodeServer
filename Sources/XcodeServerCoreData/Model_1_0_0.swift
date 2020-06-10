@@ -153,7 +153,7 @@ class Model_1_0_0: NSManagedObjectModel {
         emailConfiguration.properties.append(NSAttributeDescription(name: "fromAddress", type: .stringAttributeType))
         emailConfiguration.properties.append(NSAttributeDescription(name: "hour", type: .integer16AttributeType))
         emailConfiguration.properties.append(NSAttributeDescription(name: "includeBotConfiguration", type: .booleanAttributeType))
-        emailConfiguration.properties.append(NSAttributeDescription(name: "includeCommitMessage", type: .booleanAttributeType))
+        emailConfiguration.properties.append(NSAttributeDescription(name: "includeCommitMessages", type: .booleanAttributeType))
         emailConfiguration.properties.append(NSAttributeDescription(name: "includeIssueDetails", type: .booleanAttributeType))
         emailConfiguration.properties.append(NSAttributeDescription(name: "includeLogs", type: .booleanAttributeType))
         emailConfiguration.properties.append(NSAttributeDescription(name: "includeResolvedIssues", type: .booleanAttributeType))
