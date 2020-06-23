@@ -26,7 +26,7 @@ public enum APIClientError: Swift.Error, LocalizedError {
 }
 
 public struct APIClientHeaders {
-    public static let xscAPIVersion = "x-xscapiversion"
+    public static let xscAPIVersion = "x-xcsapiversion"
 }
 
 public class APIClient: HTTPClient, HTTPCodable {
