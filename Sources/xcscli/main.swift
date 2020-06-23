@@ -7,7 +7,9 @@ struct Command: ParsableCommand {
         
         var subcommands: [ParsableCommand.Type] = [
             Ping.self,
-            Version.self
+            Versions.self,
+            Bots.self,
+            Integrations.self
         ]
         
         return CommandConfiguration(

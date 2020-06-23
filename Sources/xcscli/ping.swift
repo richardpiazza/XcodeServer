@@ -4,7 +4,7 @@ import XcodeServer
 import XcodeServerAPI
 import SessionPlus
 
-final class Ping: ParsableCommand {
+final class Ping: ParsableCommand, Route {
     
     static var configuration: CommandConfiguration = {
         return CommandConfiguration(
@@ -19,22 +19,21 @@ final class Ping: ParsableCommand {
         )
     }()
     
-    @Argument(help: "The host name of the Xcode Server.")
-    var host: String
+    @Argument(help: "Fully Qualified Domain Name of the Xcode Server.")
+    var server: String
+    
+    @Option(help: "Username credential for the Xcode Server. (Optional).")
+    var username: String?
+    
+    @Option(help: "Password credential for the Xcode Server. (Optional).")
+    var password: String?
     
     func validate() throws {
-        guard !host.isEmpty else {
-            throw ValidationError("Host not provided or empty.")
-        }
-        
-        guard let _ = URL(string: host) else {
-            throw ValidationError("Host malformed: '\(host)'")
-        }
+        try validateServer()
     }
     
     func run() throws {
-        print("PING...")
-        let client = try APIClient(fqdn: host, authorizationDelegate: self)
+        let client = try APIClient(fqdn: server, authorizationDelegate: self)
         client.ping { (result) in
             switch result {
             case .success:
@@ -43,15 +42,9 @@ final class Ping: ParsableCommand {
                 print(error.localizedDescription)
             }
             
-            Ping.exit()
+            Self.exit()
         }
         
         dispatchMain()
-    }
-}
-
-extension Ping: APIClientAuthorizationDelegate {
-    func authorization(for fqdn: String?) -> HTTP.Authorization? {
-        return nil
     }
 }
