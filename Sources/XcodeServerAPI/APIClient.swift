@@ -314,3 +314,45 @@ public extension APIClient {
         }
     }
 }
+
+// MARK: - Assets
+public extension APIClient {
+    
+    /// Requests the '`/integrations/{id}/assets`' endpoint from the Xcode Server API.
+    func assets(forIntegrationWithIdentifier identifier: String, completion: @escaping (Result<(String, Data), Error>) -> Void) {
+        get("integrations/\(identifier)/assets") { (statusCode, headers, data: Data?, error) in
+            guard statusCode != 401 else {
+                completion(.failure(APIClientError.authorization))
+                return
+            }
+            
+            guard statusCode == 200 else {
+                completion(.failure(APIClientError.response(innerError: error)))
+                return
+            }
+            
+            var filename: String = "File.tar.gz"
+            if let disposition = (headers?["Content-Disposition"] as? String)?.filenameFromContentDisposition() {
+                filename = disposition
+            }
+            
+            guard let result = data else {
+                completion(.failure(APIClientError.serialization(innerError: error)))
+                return
+            }
+            
+            completion(.success((filename, result)))
+        }
+    }
+}
+
+private extension StringProtocol {
+    func filenameFromContentDisposition() -> String? {
+        guard let firstQuote = self.firstIndex(of: "\"") else {
+            return nil
+        }
+        let start = self.index(firstQuote, offsetBy: 1)
+        let end = self.index(endIndex, offsetBy: -1)
+        return String(self[start..<end])
+    }
+}

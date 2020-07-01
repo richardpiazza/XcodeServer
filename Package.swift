@@ -24,7 +24,7 @@ let package = Package(
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
         .package(url: "https://github.com/richardpiazza/SessionPlus.git", from: "1.0.0-rc.1"),
-        .package(url: "https://github.com/tsolomko/BitByteData.git", .upToNextMinor(from: "1.4.3")),
+        .package(url: "https://github.com/tsolomko/SWCompression", .upToNextMinor(from: "4.5.5")),
         .package(url: "https://github.com/ProcedureKit/ProcedureKit.git", .upToNextMinor(from: "5.2.0")),
         .package(url: "https://github.com/apple/swift-argument-parser.git", .upToNextMinor(from: "0.1.0")),
     ],
@@ -52,9 +52,6 @@ let package = Package(
         .target(
             name: "XcodeServerProcedures",
             dependencies: ["XcodeServerCommon", "XcodeServerAPI", "XcodeServerCoreData", "ProcedureKit"]),
-        .target(
-            name: "SWCompression",
-            dependencies: ["BitByteData"]),
         .testTarget(
             name: "XcodeServerTests",
             dependencies: ["XcodeServer", "XcodeServerCommon", "XcodeServerAPI", "XcodeServerCoreData"]),
