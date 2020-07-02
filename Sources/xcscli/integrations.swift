@@ -23,6 +23,7 @@ final class Integrations: ParsableCommand, Route {
         case commits
         case issues
         case coverage
+        case assets
     }
     
     @Argument(help: "Fully Qualified Domain Name of the Xcode Server.")
@@ -37,7 +38,7 @@ final class Integrations: ParsableCommand, Route {
     @Option(help: "Unique identifier of the Integration to request.")
     var id: String
     
-    @Option(help: "Specified the additional path component for the Integration. [commits | issues | coverage]")
+    @Option(help: "Specified the additional path component for the Integration. [commits | issues | coverage | assets]")
     var path: Path?
     
     func validate() throws {
@@ -74,6 +75,24 @@ final class Integrations: ParsableCommand, Route {
                 switch result {
                 case .success(let coverage):
                     print(coverage.asPrettyJSON() ?? "OK")
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+                
+                Self.exit()
+            }
+        case .some(.assets):
+            client.assets(forIntegrationWithIdentifier: id) { (result) in
+                switch result {
+                case .success(let asset):
+                    print("Filename: \(asset.0)")
+                    let directory = URL(fileURLWithPath: FileManager.default.currentDirectoryPath, isDirectory: true)
+                    let url = directory.appendingPathComponent(asset.0)
+                    do {
+                        try asset.1.write(to: url)
+                    } catch {
+                        print(error.localizedDescription)
+                    }
                 case .failure(let error):
                     print(error.localizedDescription)
                 }
