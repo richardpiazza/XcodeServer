@@ -316,7 +316,7 @@ class Model_1_0_0: NSManagedObjectModel {
         let integration_inverseBestSuccessStreak = NSRelationshipDescription(name: "inverseBestSuccessStreak", maxCount: 1, deleteRule: .nullifyDeleteRule)
         let integration_inverseLastCleanIntegration = NSRelationshipDescription(name: "inverseLastCleanIntegration", maxCount: 1, deleteRule: .nullifyDeleteRule)
         let integration_issues = NSRelationshipDescription(name: "issues", maxCount: 1, deleteRule: .cascadeDeleteRule)
-        let integration_revisionBluprints = NSRelationshipDescription(name: "revisionBlueprints", maxCount: 0, deleteRule: .cascadeDeleteRule)
+        let integration_revisionBlueprints = NSRelationshipDescription(name: "revisionBlueprints", maxCount: 0, deleteRule: .cascadeDeleteRule)
         let integration_testedDevices = NSRelationshipDescription(name: "testedDevices", maxCount: 0, deleteRule: .nullifyDeleteRule)
         let integrationAssets_archive = NSRelationshipDescription(name: "archive", maxCount: 1, deleteRule: .cascadeDeleteRule)
         let integrationAssets_buildServiceLog = NSRelationshipDescription(name: "buildServiceLog", maxCount: 1, deleteRule: .cascadeDeleteRule)
@@ -474,8 +474,8 @@ class Model_1_0_0: NSManagedObjectModel {
         integration_inverseLastCleanIntegration.inverseRelationship = stats_lastCleanIntegration
         integration_issues.destinationEntity = integrationIssues
         integration_issues.inverseRelationship = integrationIssues_integration
-        integration_revisionBluprints.destinationEntity = revisionBlueprint
-        integration_revisionBluprints.inverseRelationship = revisionBlueprint_integration
+        integration_revisionBlueprints.destinationEntity = revisionBlueprint
+        integration_revisionBlueprints.inverseRelationship = revisionBlueprint_integration
         integration_testedDevices.destinationEntity = device
         integration_testedDevices.inverseRelationship = device_integrations
         
@@ -567,7 +567,7 @@ class Model_1_0_0: NSManagedObjectModel {
         revisionBlueprint_commit.destinationEntity = commit
         revisionBlueprint_commit.inverseRelationship = commit_revisionBlueprints
         revisionBlueprint_integration.destinationEntity = integration
-        revisionBlueprint_integration.inverseRelationship = integration_revisionBluprints
+        revisionBlueprint_integration.inverseRelationship = integration_revisionBlueprints
         
         server_bots.destinationEntity = bot
         server_bots.inverseRelationship = bot_server
@@ -695,7 +695,7 @@ class Model_1_0_0: NSManagedObjectModel {
             integration_inverseBestSuccessStreak,
             integration_inverseLastCleanIntegration,
             integration_issues,
-            integration_revisionBluprints,
+            integration_revisionBlueprints,
             integration_testedDevices,
             ])
         
