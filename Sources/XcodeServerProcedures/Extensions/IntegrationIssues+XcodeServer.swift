@@ -151,7 +151,7 @@ extension IntegrationIssues {
             
             if let set = self.freshAnalyzerWarnings {
                 for issue in set {
-                    issue.inverseFreshAnalyserWarnings = nil
+                    issue.inverseFreshAnalyzerWarnings = nil
                     moc.delete(issue)
                 }
             }
@@ -173,7 +173,7 @@ extension IntegrationIssues {
             for freshIssue in analyzerWarnings.freshIssues {
                 if let issue = Issue(managedObjectContext: moc, identifier: freshIssue.identifier) {
                     issue.update(withIssue: freshIssue)
-                    issue.inverseFreshAnalyserWarnings = self
+                    issue.inverseFreshAnalyzerWarnings = self
                 }
             }
         }

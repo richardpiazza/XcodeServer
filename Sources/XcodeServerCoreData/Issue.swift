@@ -37,7 +37,7 @@ public extension Issue {
     
     @NSManaged var inverseBuildServiceErrors: IntegrationIssues?
     @NSManaged var inverseBuildServiceWarnings: IntegrationIssues?
-    @NSManaged var inverseFreshAnalyserWarnings: IntegrationIssues?
+    @NSManaged var inverseFreshAnalyzerWarnings: IntegrationIssues?
     @NSManaged var inverseFreshErrors: IntegrationIssues?
     @NSManaged var inverseFreshTestFailures: IntegrationIssues?
     @NSManaged var inverseFreshWarnings: IntegrationIssues?
