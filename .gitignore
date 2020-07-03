@@ -70,3 +70,4 @@ fastlane/test_output
 
 XcodeServer.xcodeproj
 XcodeServer.xcodeproj/*
+.DS_Store

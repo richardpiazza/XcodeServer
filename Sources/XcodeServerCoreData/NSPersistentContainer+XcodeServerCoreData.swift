@@ -50,7 +50,7 @@ public extension NSPersistentContainer {
     }
 }
 
-fileprivate extension FileManager {
+public extension FileManager {
     var storeURL: URL {
         let folder = "XcodeServer"
         let name = "XcodeServer.sqlite"

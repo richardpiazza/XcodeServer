@@ -12,6 +12,10 @@ struct Command: ParsableCommand {
             Integrations.self
         ]
         
+        #if canImport(CoreData)
+        subcommands.append(Sync.self)
+        #endif
+        
         return CommandConfiguration(
             commandName: "xcscli",
             abstract: "XcodeServer Framework Command Line Interface",
