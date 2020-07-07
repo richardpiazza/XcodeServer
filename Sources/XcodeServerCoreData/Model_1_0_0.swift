@@ -23,6 +23,18 @@ class Model_1_0_0: NSManagedObjectModel {
     
     public static let instance: Model_1_0_0 = Model_1_0_0()
     
+    public static var bundle: NSManagedObjectModel? {
+        guard let url = Bundle.module.url(forResource: "XcodeServer", withExtension: "momd") else {
+            return nil
+        }
+        
+        guard let model = NSManagedObjectModel(contentsOf: url) else {
+            return nil
+        }
+        
+        return model
+    }
+    
     private override init() {
         super.init()
         
