@@ -1,6 +1,8 @@
 import Foundation
 import XcodeServerCommon
 
+public typealias XCSBuildArgument = String
+
 public struct XCSConfiguration: Codable {
     public var schemeName: String?
     
