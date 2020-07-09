@@ -30,10 +30,11 @@ public struct XCSConfiguration: Codable {
     public var performsUpgradeIntegration: Bool?
     
     // Additional Configuration
-    public var buildEnvironmentVariables: [String : String]?
+    public var archiveExportOptions: XCSArchiveExportOptions?
     public var additionalBuildArguments: [XCSBuildArgument]?
-    public var provisioningConfiguration: XCSProvisioningConfiguration?
+    public var buildEnvironmentVariables: [String : String]?
     public var deviceSpecification: XCSDeviceSpecification?
+    public var provisioningConfiguration: XCSProvisioningConfiguration?
     public var sourceControlBlueprint: XCSRepositoryBlueprint?
     public var triggers: [XCSTrigger]?
 }
