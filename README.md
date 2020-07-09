@@ -5,9 +5,6 @@ A swift framework for interacting with, and persisting data from an "Xcode Serve
 <p>
     <img src="https://github.com/richardpiazza/XcodeServer/workflows/Swift/badge.svg?branch=master" />
     <img src="https://img.shields.io/badge/Swift-5.2-orange.svg" />
-    <a href="https://swift.org/package-manager">
-        <img src="https://img.shields.io/badge/swiftpm-compatible-brightgreen.svg?style=flat" alt="Swift Package Manager" />
-    </a>
     <a href="https://twitter.com/richardpiazza">
         <img src="https://img.shields.io/badge/twitter-@richardpiazza-blue.svg?style=flat" alt="Twitter: @richardpiazza" />
     </a>
@@ -21,7 +18,7 @@ XcodeServer is distributed using the [Swift Package Manager](https://swift.org/p
 let package = Package(
     ...
     dependencies: [
-        .package(url: "https://github.com/richardpiazza/XcodeServer.git", from: "1.0.0")
+        .package(url: "https://github.com/richardpiazza/XcodeServer.git", .upToNextMinor(from: "1.0.3")
     ],
     ...
 )
@@ -37,13 +34,29 @@ import XcodeServer
 
 ### XcodeServerCommon
 
+Provides shared resources for the other packages, this includes:
+
+* Enumerations
+
+* JSON utilities
+
+* Test Hierarchy Definitions
+
 ### XcodeServerAPI
+
+All of the DTO definitions for the Xcode Server API. The `APIClient` class provides endpoint definitions and utilities for downloading Integration coverage data & assets.
 
 ### XcodeServerCoreData
 
+A CoreData (on Apple platforms) driven implementation of primary Xcode Server entities and their relationships to one another.
+
 ### XcodeServerProcedures
 
+A operation-driven level that combines the api and persisted storage.
+
 ### XcodeServer
+
+A `Manager` class that interacts with the procedures the query and persist data from the server API.
 
 ### `xcscli`
 
@@ -85,7 +98,7 @@ Performs a HTTP GET on the `/bots` endpoint. Without any additional options this
 
 #### integrations
 
-Performs a HTTP GET on the `/integrations` endpoint. A unique identifer must be supplied with `--id/-i`. `--path` is available to additional resources.
+Performs a HTTP GET on the `/integrations` endpoint. A unique identifier must be supplied with `--id/-i`. `--path` is available to additional resources.
 
 *Paths*:
 
@@ -94,6 +107,10 @@ Performs a HTTP GET on the `/integrations` endpoint. A unique identifer must be 
 * **issues**: Issues that are identified as new/resolved for the Integration.
 
 * **coverage**: Unit testing coverage data (can take a while).
+
+#### sync
+
+On Apple platforms this command will download and persist data from a requested server.
 
 ## References
 
