@@ -1,5 +1,3 @@
-import Foundation
-
 public struct XCSBlueprintLocation: Codable {
     
     enum CodingKeys: String, CodingKey {

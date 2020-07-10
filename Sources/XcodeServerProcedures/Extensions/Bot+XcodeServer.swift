@@ -12,13 +12,13 @@ public extension Bot {
             return events
         }
         
-        if (integrationCounter != bot.integrationCounter) || (requiresUpgrade != bot.requiresUpgrade) {
-            events.append(.bot(action: .update, identifier: bot.identifier, name: bot.name))
+        if (integrationCounter != bot.nextIntegrationNumber) || (requiresUpgrade != bot.requiresUpgrade) {
+            events.append(.bot(action: .update, identifier: bot.id, name: bot.name))
         }
         
-        self.integrationCounter = bot.integrationCounter
+        self.integrationCounter = Int32(bot.nextIntegrationNumber)
         self.name = bot.name
-        self.typeRawValue = bot.typeRawValue
+        self.typeRawValue = Int16(bot.type)
         self.requiresUpgrade = bot.requiresUpgrade
         
         if let configuration = bot.configuration {

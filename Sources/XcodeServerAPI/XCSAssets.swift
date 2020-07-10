@@ -1,5 +1,3 @@
-import Foundation
-
 public struct XCSAssets: Codable {
     public var xcodebuildOutput: XCSIntegrationAsset?
     public var buildServiceLog: XCSIntegrationAsset?

@@ -1,5 +1,3 @@
-import Foundation
-
 public struct XCSAuthenticationStrategy: Codable {
     
     enum CodingKeys: String, CodingKey {

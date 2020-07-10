@@ -1,5 +1,9 @@
-import Foundation
-
+/// A set of instructions telling the bot what to check out and how.
+///
+/// It provides the URIs for all repositories to check out files from, the branch to check out, the relative layout on
+/// disk, and the relative location of the project or workspace to build out of. It also can include the authentication
+/// information to use when checking out, although this information is sent only to the server and is never returned
+/// from it.
 public struct XCSRepositoryBlueprint: Codable {
     
     enum CodingKeys: String, CodingKey {
