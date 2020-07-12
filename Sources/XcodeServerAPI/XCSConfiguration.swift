@@ -1,4 +1,3 @@
-import Foundation
 import XcodeServerCommon
 
 public typealias XCSBuildArgument = String

@@ -1,35 +1,48 @@
 import Foundation
 import XcodeServerCommon
 
+/// A single run of a bot.
+///
+/// Integrations consist of building, analyzing, testing, and archiving the apps (or other software products) defined in
+/// your Xcode projects.
 public struct XCSIntegration: Codable {
     
     enum CodingKeys: String, CodingKey {
-        case identifier = "_id"
-        case number
-        case currentStep
-        case result
-        case queuedDate
-        case successStreak = "success_streak"
-        case shouldClean
+        case _id
+        case _rev
         case assets
-        case buildServiceFingerprint
-        case tags
-        case startedTime
+        case bot
         case buildResultSummary
-        case endedTime
-        case duration
+        case buildServiceFingerprint
         case ccPercentage
         case ccPercentageDelta
-        case perfMetricNames
-        case perfMetricKeyPaths
-        case bot
+        case controlledChanges
+        case currentStep
+        case docType = "doc_type"
+        case duration
+        case endedTime
+        case number
+        case queuedDate
+        case result
         case revisionBlueprint
+        case shouldClean
+        case startedTime
+        case successStreak = "success_streak"
+        case tags
         case testedDevices
         case testHierarchy
-        case controlledChanges
     }
     
-    public let docType: String = "integration"
+    // MARK: - Document
+    
+    /// Document ID
+    public var _id: String = ""
+    /// Document Revision
+    public var _rev: String = ""
+    /// Document Type
+    public var docType: String = "integration"
+    
+    // MARK: - Properties
     
     public var assets: XCSAssets?
     public var bot: XCSBot?
@@ -54,4 +67,21 @@ public struct XCSIntegration: Codable {
     public var tags: [String]?
     public var testedDevices: [XCSDevice]?
     public var testHierarchy: TestHierarchy?
+}
+
+// MARK: - Identifiable
+extension XCSIntegration: Identifiable {
+    public var id: String {
+        get { _id }
+        set { _id = newValue }
+    }
+}
+
+// MARK: - Deprecations
+public extension XCSIntegration {
+    @available(*, deprecated, renamed: "id")
+    var identifier: String {
+        get { _id }
+        set { _id = newValue }
+    }
 }

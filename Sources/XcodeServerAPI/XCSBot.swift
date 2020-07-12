@@ -39,13 +39,13 @@ public struct XCSBot: Codable {
     ///
     /// This number dictates the number to which the next integration will be set.
     public var nextIntegrationNumber: Int = 0
-    ///
+    /// Indicates if a bot needs to be upgraded to match the server?
     public var requiresUpgrade: Bool = false
-    ///
+    /// When present, indicates the source control configuration used for a run of the bot.
     public var sourceControlBlueprint: XCSRepositoryBlueprint?
-    ///
+    /// ?
     public var sourceControlBlueprintIdentifier: String = ""
-    ///
+    /// ?
     public var type: Int = 0
     
     public init() {
