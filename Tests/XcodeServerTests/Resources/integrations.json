@@ -1,0 +1,1218 @@
+{
+  "count": 4,
+  "results": [
+    {
+      "_id": "ce5f34cace5a2142835263cd2f210744",
+      "_rev": "18-79bfb0aa658ba4160c9e121b18cea24b",
+      "bot": {
+        "_id": "ce5f34cace5a2142835263cd2f00f60b",
+        "_rev": "10-7a27e0e8d93a60c194e28f9164ee871b",
+        "group": {
+          "name": "B16F99AC-B16A-4645-8F26-EAE119D76973"
+        },
+        "configuration": {
+          "triggers": [],
+          "hourOfIntegration": 0,
+          "performsUpgradeIntegration": true,
+          "disableAppThinning": true,
+          "provisioningConfiguration": {
+            "addMissingDevicesToTeams": false,
+            "manageCertsAndProfiles": true
+          },
+          "periodicScheduleInterval": 0,
+          "deviceSpecification": {
+            "filters": [
+              {
+                "platform": {
+                  "_id": "ce5f34cace5a2142835263cd2f003b7b",
+                  "displayName": "iOS",
+                  "_rev": "3-cf36726805924099882be1c34af0fe7e",
+                  "simulatorIdentifier": "com.apple.platform.iphonesimulator",
+                  "identifier": "com.apple.platform.iphoneos",
+                  "buildNumber": "18A5301v",
+                  "version": "14.0"
+                },
+                "filterType": 0,
+                "architectureType": 0
+              }
+            ],
+            "deviceIdentifiers": []
+          },
+          "buildEnvironmentVariables": {},
+          "schemeName": "Bakeshop",
+          "additionalBuildArguments": [],
+          "codeCoveragePreference": 2,
+          "performsTestAction": true,
+          "scheduleType": 3,
+          "useParallelDeviceTesting": true,
+          "performsArchiveAction": true,
+          "archiveExportOptions": {
+            "name": "ExportOptions.plist",
+            "createdAt": "2020-06-23T21:46:09.234Z",
+            "exportOptions": {
+              "iCloudContainerEnvironment": "Production"
+            }
+          },
+          "builtFromClean": 0,
+          "performsAnalyzeAction": true,
+          "exportsProductFromArchive": true,
+          "weeklyScheduleDay": 0,
+          "testLocalizations": [],
+          "runOnlyDisabledTests": false,
+          "minutesAfterHourToIntegrate": 0,
+          "testingDestinationType": 0,
+          "sourceControlBlueprint": {
+            "DVTSourceControlWorkspaceBlueprintVersion": 205,
+            "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey": "Bakeshop.xcodeproj",
+            "DVTSourceControlWorkspaceBlueprintIdentifierKey": "F80BF518-6278-408A-A842-19D24BA543AE",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey": [
+              {
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "https://github.com/richardpiazza/Bakeshop.git",
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryTrustedCertFingerprintKey": "1627ACA576282D36631B564DEBDFA648",
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF",
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryTrustSelfSignedCertKey": true
+              }
+            ],
+            "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey": "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF",
+            "DVTSourceControlWorkspaceBlueprintLocationsKey": {
+              "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF": {
+                "DVTSourceControlBranchIdentifierKey": "develop",
+                "DVTSourceControlBranchOptionsKey": 4,
+                "DVTSourceControlWorkspaceBlueprintLocationTypeKey": "DVTSourceControlBranch"
+              }
+            },
+            "DVTSourceControlWorkspaceBlueprintAdditionalValidationRemoteRepositoriesKey": [
+              {
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryEnforceTrustCertFingerprintKey": true,
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "https://github.com/richardpiazza/CodeQuickKit",
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "3CBDEDAE95CE25E53B615AC684AAEE3F90A98DFE"
+              },
+              {
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryEnforceTrustCertFingerprintKey": true,
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "https://github.com/richardpiazza/MiseEnPlace",
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "E72555C40C59CF258F530ADBA0314A60534D9864"
+              },
+              {
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryEnforceTrustCertFingerprintKey": true,
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "https://github.com/richardpiazza/ProcedureKit/",
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "3A999A0044F026F7ADF66A6D83E1CB8EDCDF46AF"
+              }
+            ],
+            "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey": {
+              "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF": 0
+            },
+            "DVTSourceControlWorkspaceBlueprintNameKey": "Bakeshop",
+            "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey": {},
+            "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey": {
+              "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF": "Bakeshop/"
+            },
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryAuthenticationStrategiesKey": {
+              "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF": {
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryAuthenticationTypeKey": "DVTSourceControlAuthenticationStrategy"
+              }
+            }
+          }
+        },
+        "requiresUpgrade": false,
+        "name": "Bakeshop Bot",
+        "type": 1,
+        "sourceControlBlueprintIdentifier": "4DC00268-878A-406B-9B36-8B2EDC3B8DAB",
+        "integration_counter": 4,
+        "doc_type": "bot",
+        "tinyID": "47FF2F2",
+        "lastRevisionBlueprint": {
+          "DVTSourceControlWorkspaceBlueprintAdditionalValidationRemoteRepositoriesKey": [],
+          "DVTSourceControlWorkspaceBlueprintLocationsKey": {
+            "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF": {
+              "DVTSourceControlBranchIdentifierKey": "develop",
+              "DVTSourceControlLocationRevisionKey": "6326065e4e681e7ece55a872b7328b88061cc8ee",
+              "DVTSourceControlBranchOptionsKey": 4,
+              "DVTSourceControlBranchRemoteNameKey": "origin",
+              "DVTSourceControlWorkspaceBlueprintLocationTypeKey": "DVTSourceControlBranch"
+            }
+          },
+          "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey": "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF",
+          "DVTSourceControlWorkspaceBlueprintIdentifierKey": "A8E8C91A-79A4-4C95-9C25-1F3C43F5A920",
+          "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey": {
+            "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF": "Bakeshop/"
+          },
+          "DVTSourceControlWorkspaceBlueprintNameKey": "Bakeshop",
+          "DVTSourceControlWorkspaceBlueprintVersion": 205,
+          "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey": "Bakeshop.xcodeproj",
+          "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey": [
+            {
+              "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "https://github.com/richardpiazza/Bakeshop.git",
+              "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+              "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF"
+            }
+          ]
+        }
+      },
+      "number": 4,
+      "currentStep": "completed",
+      "result": "succeeded",
+      "queuedDate": "2020-07-01T13:57:26.868Z",
+      "success_streak": 2,
+      "shouldClean": false,
+      "assets": {
+        "xcodebuildOutput": {
+          "size": 1334725,
+          "fileName": "xcodebuild_result.xcresult.zip",
+          "allowAnonymousAccess": false,
+          "isDirectory": true,
+          "relativePath": "ce5f34cace5a2142835263cd2f00f60b-Bakeshop Bot/4/xcodebuild_result.xcresult.zip"
+        },
+        "buildServiceLog": {
+          "size": 50412,
+          "fileName": "buildService.log",
+          "allowAnonymousAccess": false,
+          "relativePath": "ce5f34cace5a2142835263cd2f00f60b-Bakeshop Bot/4/buildService.log"
+        },
+        "product": {
+          "size": 2517947,
+          "fileName": "Bakeshop.ipa",
+          "allowAnonymousAccess": false,
+          "infoDictionary": {
+            "UIRequiredDeviceCapabilities": [
+              "arm64"
+            ],
+            "UIRequiresFullScreen": false,
+            "CFBundleInfoDictionaryVersion": "6.0",
+            "UISupportedInterfaceOrientations~ipad": [
+              "UIInterfaceOrientationLandscapeRight",
+              "UIInterfaceOrientationLandscapeLeft",
+              "UIInterfaceOrientationPortrait",
+              "UIInterfaceOrientationPortraitUpsideDown"
+            ],
+            "DTPlatformVersion": "14.0",
+            "CFBundleName": "Bakeshop",
+            "DTSDKName": "iphoneos14.0",
+            "UIViewControllerBasedStatusBarAppearance": false,
+            "DTAppStoreToolsBuild": "12A6159",
+            "NSPhotoLibraryUsageDescription": "Allows for selection of existing photos to assign to ingredients and recipes.",
+            "CFBundleIcons": {
+              "CFBundlePrimaryIcon": {
+                "CFBundleIconFiles": [
+                  "AppIcon60x60"
+                ],
+                "CFBundleIconName": "AppIcon"
+              }
+            },
+            "UIStatusBarStyle": "UIStatusBarStyleDefault",
+            "LSRequiresIPhoneOS": true,
+            "CFBundleDisplayName": "Bakeshop",
+            "UIStatusBarHidden~ipad": false,
+            "UIBackgroundModes": [
+              "fetch",
+              "remote-notification"
+            ],
+            "NSCameraUsageDescription": "Allows for capturing images to assign to ingredients and recipes.",
+            "DTSDKBuild": "18A5301v",
+            "CFBundleShortVersionString": "5.4.0",
+            "UISupportedInterfaceOrientations": [
+              "UIInterfaceOrientationPortrait"
+            ],
+            "CFBundleSupportedPlatforms": [
+              "iPhoneOS"
+            ],
+            "BuildMachineOSBuild": "20A4299v",
+            "DTPlatformBuild": "18A5301v",
+            "CFBundlePackageType": "APPL",
+            "MinimumOSVersion": "13.0",
+            "CFBundleDevelopmentRegion": "English",
+            "DTXcodeBuild": "12A6159",
+            "CFBundleVersion": "169",
+            "UIStatusBarHidden": false,
+            "UILaunchStoryboardName": "Launch Screen",
+            "UIDeviceFamily": [
+              1,
+              2
+            ],
+            "CFBundleIdentifier": "com.richardpiazza.bakeshop",
+            "DTXcode": "1200",
+            "CFBundleExecutable": "Bakeshop",
+            "UIMainStoryboardFile": "Main",
+            "CFBundleIcons~ipad": {
+              "CFBundlePrimaryIcon": {
+                "CFBundleIconFiles": [
+                  "AppIcon60x60",
+                  "AppIcon76x76"
+                ],
+                "CFBundleIconName": "AppIcon"
+              }
+            },
+            "CFBundleSignature": "????",
+            "DTPlatformName": "iphoneos",
+            "ITSAppUsesNonExemptEncryption": false,
+            "DTCompiler": "com.apple.compilers.llvm.clang.1_0"
+          },
+          "relativePath": "ce5f34cace5a2142835263cd2f00f60b-Bakeshop Bot/4/Bakeshop.ipa"
+        },
+        "xcodebuildLog": {
+          "size": 1090940,
+          "fileName": "xcodebuild.log",
+          "allowAnonymousAccess": false,
+          "relativePath": "ce5f34cace5a2142835263cd2f00f60b-Bakeshop Bot/4/xcodebuild.log"
+        },
+        "sourceControlLog": {
+          "size": 2884,
+          "fileName": "sourceControl.log",
+          "allowAnonymousAccess": false,
+          "relativePath": "ce5f34cace5a2142835263cd2f00f60b-Bakeshop Bot/4/sourceControl.log"
+        },
+        "archive": {
+          "size": 11942556,
+          "fileName": "Bakeshop.xcarchive.zip",
+          "allowAnonymousAccess": false,
+          "relativePath": "ce5f34cace5a2142835263cd2f00f60b-Bakeshop Bot/4/Bakeshop.xcarchive.zip"
+        }
+      },
+      "doc_type": "integration",
+      "tinyID": "75B2217",
+      "buildServiceFingerprint": "A4:49:99:96:D9:C8:6E:F3:63:35:41:65:C3:09:F9:25:C8:20:F4:64",
+      "tags": [],
+      "startedTime": "2020-07-01T13:57:27.587Z",
+      "revisionBlueprint": {
+        "DVTSourceControlWorkspaceBlueprintAdditionalValidationRemoteRepositoriesKey": [],
+        "DVTSourceControlWorkspaceBlueprintLocationsKey": {
+          "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF": {
+            "DVTSourceControlBranchIdentifierKey": "develop",
+            "DVTSourceControlLocationRevisionKey": "3350983c1849476b448d7844a8795bad50afe5cd",
+            "DVTSourceControlBranchOptionsKey": 4,
+            "DVTSourceControlBranchRemoteNameKey": "origin",
+            "DVTSourceControlWorkspaceBlueprintLocationTypeKey": "DVTSourceControlBranch"
+          }
+        },
+        "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey": "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF",
+        "DVTSourceControlWorkspaceBlueprintIdentifierKey": "55EA4BDD-A9EF-40B9-B4DE-A3EC800F2DF6",
+        "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey": {
+          "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF": "Bakeshop/"
+        },
+        "DVTSourceControlWorkspaceBlueprintNameKey": "Bakeshop",
+        "DVTSourceControlWorkspaceBlueprintVersion": 205,
+        "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey": "Bakeshop.xcodeproj",
+        "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey": [
+          {
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "https://github.com/richardpiazza/Bakeshop.git",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF"
+          }
+        ]
+      },
+      "buildResultSummary": {
+        "analyzerWarningCount": 0,
+        "testFailureCount": 0,
+        "testsChange": 11,
+        "errorCount": 0,
+        "testsCount": 55,
+        "testFailureChange": 0,
+        "warningChange": 0,
+        "regressedPerfTestCount": 0,
+        "warningCount": 0,
+        "errorChange": 0,
+        "improvedPerfTestCount": 0,
+        "analyzerWarningChange": 0,
+        "codeCoveragePercentage": 18,
+        "codeCoveragePercentageDelta": 1
+      },
+      "endedTime": "2020-07-01T14:03:35.260Z",
+      "endedTimeDate": [
+        2020,
+        7,
+        1,
+        14,
+        3,
+        35,
+        260
+      ],
+      "duration": 367.673,
+      "ccPercentage": 0,
+      "ccPercentageDelta": 0
+    },
+    {
+      "_id": "ce5f34cace5a2142835263cd2f159f48",
+      "_rev": "18-0086b2f1e7f97790aab2822e96141097",
+      "bot": {
+        "_id": "ce5f34cace5a2142835263cd2f00f60b",
+        "_rev": "8-3f82707a4a9e5d71547c5d5542bdb042",
+        "group": {
+          "name": "B16F99AC-B16A-4645-8F26-EAE119D76973"
+        },
+        "configuration": {
+          "triggers": [],
+          "hourOfIntegration": 0,
+          "performsUpgradeIntegration": true,
+          "disableAppThinning": true,
+          "provisioningConfiguration": {
+            "addMissingDevicesToTeams": false,
+            "manageCertsAndProfiles": true
+          },
+          "periodicScheduleInterval": 0,
+          "deviceSpecification": {
+            "filters": [
+              {
+                "platform": {
+                  "_id": "ce5f34cace5a2142835263cd2f003b7b",
+                  "displayName": "iOS",
+                  "_rev": "3-cf36726805924099882be1c34af0fe7e",
+                  "simulatorIdentifier": "com.apple.platform.iphonesimulator",
+                  "identifier": "com.apple.platform.iphoneos",
+                  "buildNumber": "18A5301v",
+                  "version": "14.0"
+                },
+                "filterType": 0,
+                "architectureType": 0
+              }
+            ],
+            "deviceIdentifiers": []
+          },
+          "buildEnvironmentVariables": {},
+          "schemeName": "Bakeshop",
+          "additionalBuildArguments": [],
+          "codeCoveragePreference": 2,
+          "performsTestAction": true,
+          "scheduleType": 3,
+          "useParallelDeviceTesting": true,
+          "performsArchiveAction": true,
+          "archiveExportOptions": {
+            "name": "ExportOptions.plist",
+            "createdAt": "2020-06-23T21:46:09.234Z",
+            "exportOptions": {
+              "iCloudContainerEnvironment": "Production"
+            }
+          },
+          "builtFromClean": 0,
+          "performsAnalyzeAction": true,
+          "exportsProductFromArchive": true,
+          "weeklyScheduleDay": 0,
+          "testLocalizations": [],
+          "runOnlyDisabledTests": false,
+          "minutesAfterHourToIntegrate": 0,
+          "testingDestinationType": 0,
+          "sourceControlBlueprint": {
+            "DVTSourceControlWorkspaceBlueprintVersion": 205,
+            "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey": "Bakeshop.xcodeproj",
+            "DVTSourceControlWorkspaceBlueprintIdentifierKey": "F80BF518-6278-408A-A842-19D24BA543AE",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey": [
+              {
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "https://github.com/richardpiazza/Bakeshop.git",
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryTrustedCertFingerprintKey": "1627ACA576282D36631B564DEBDFA648",
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF",
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryTrustSelfSignedCertKey": true
+              }
+            ],
+            "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey": "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF",
+            "DVTSourceControlWorkspaceBlueprintLocationsKey": {
+              "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF": {
+                "DVTSourceControlBranchIdentifierKey": "develop",
+                "DVTSourceControlBranchOptionsKey": 4,
+                "DVTSourceControlWorkspaceBlueprintLocationTypeKey": "DVTSourceControlBranch"
+              }
+            },
+            "DVTSourceControlWorkspaceBlueprintAdditionalValidationRemoteRepositoriesKey": [
+              {
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryEnforceTrustCertFingerprintKey": true,
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "https://github.com/richardpiazza/CodeQuickKit",
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "3CBDEDAE95CE25E53B615AC684AAEE3F90A98DFE"
+              },
+              {
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryEnforceTrustCertFingerprintKey": true,
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "https://github.com/richardpiazza/MiseEnPlace",
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "E72555C40C59CF258F530ADBA0314A60534D9864"
+              },
+              {
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryEnforceTrustCertFingerprintKey": true,
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "https://github.com/richardpiazza/ProcedureKit/",
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "3A999A0044F026F7ADF66A6D83E1CB8EDCDF46AF"
+              }
+            ],
+            "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey": {
+              "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF": 0
+            },
+            "DVTSourceControlWorkspaceBlueprintNameKey": "Bakeshop",
+            "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey": {},
+            "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey": {
+              "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF": "Bakeshop/"
+            },
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryAuthenticationStrategiesKey": {
+              "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF": {
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryAuthenticationTypeKey": "DVTSourceControlAuthenticationStrategy"
+              }
+            }
+          }
+        },
+        "requiresUpgrade": false,
+        "name": "Bakeshop Bot",
+        "type": 1,
+        "sourceControlBlueprintIdentifier": "4DC00268-878A-406B-9B36-8B2EDC3B8DAB",
+        "integration_counter": 3,
+        "doc_type": "bot",
+        "tinyID": "47FF2F2",
+        "lastRevisionBlueprint": {
+          "DVTSourceControlWorkspaceBlueprintAdditionalValidationRemoteRepositoriesKey": [],
+          "DVTSourceControlWorkspaceBlueprintLocationsKey": {
+            "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF": {
+              "DVTSourceControlBranchIdentifierKey": "develop",
+              "DVTSourceControlLocationRevisionKey": "028de1c860eedf1d7ce6ad26eeac2e59c8850e1f",
+              "DVTSourceControlBranchOptionsKey": 4,
+              "DVTSourceControlBranchRemoteNameKey": "origin",
+              "DVTSourceControlWorkspaceBlueprintLocationTypeKey": "DVTSourceControlBranch"
+            }
+          },
+          "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey": "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF",
+          "DVTSourceControlWorkspaceBlueprintIdentifierKey": "8B9ADBD0-D823-431B-A31E-AF30C223041C",
+          "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey": {
+            "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF": "Bakeshop/"
+          },
+          "DVTSourceControlWorkspaceBlueprintNameKey": "Bakeshop",
+          "DVTSourceControlWorkspaceBlueprintVersion": 205,
+          "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey": "Bakeshop.xcodeproj",
+          "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey": [
+            {
+              "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "https://github.com/richardpiazza/Bakeshop.git",
+              "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+              "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF"
+            }
+          ]
+        }
+      },
+      "number": 3,
+      "currentStep": "completed",
+      "result": "succeeded",
+      "queuedDate": "2020-06-23T21:56:45.447Z",
+      "success_streak": 1,
+      "shouldClean": false,
+      "assets": {
+        "xcodebuildOutput": {
+          "size": 1317398,
+          "fileName": "xcodebuild_result.xcresult.zip",
+          "allowAnonymousAccess": false,
+          "isDirectory": true,
+          "relativePath": "ce5f34cace5a2142835263cd2f00f60b-Bakeshop Bot/3/xcodebuild_result.xcresult.zip"
+        },
+        "buildServiceLog": {
+          "size": 50579,
+          "fileName": "buildService.log",
+          "allowAnonymousAccess": false,
+          "relativePath": "ce5f34cace5a2142835263cd2f00f60b-Bakeshop Bot/3/buildService.log"
+        },
+        "product": {
+          "size": 2517984,
+          "fileName": "Bakeshop.ipa",
+          "allowAnonymousAccess": false,
+          "infoDictionary": {
+            "UIRequiredDeviceCapabilities": [
+              "arm64"
+            ],
+            "UIRequiresFullScreen": false,
+            "UISupportedInterfaceOrientations~ipad": [
+              "UIInterfaceOrientationLandscapeRight",
+              "UIInterfaceOrientationLandscapeLeft",
+              "UIInterfaceOrientationPortrait",
+              "UIInterfaceOrientationPortraitUpsideDown"
+            ],
+            "CFBundleInfoDictionaryVersion": "6.0",
+            "DTPlatformVersion": "14.0",
+            "CFBundleName": "Bakeshop",
+            "DTSDKName": "iphoneos14.0",
+            "NSPhotoLibraryUsageDescription": "Allows for selection of existing photos to assign to ingredients and recipes.",
+            "DTAppStoreToolsBuild": "12A6159",
+            "UIViewControllerBasedStatusBarAppearance": false,
+            "CFBundleIcons": {
+              "CFBundlePrimaryIcon": {
+                "CFBundleIconFiles": [
+                  "AppIcon60x60"
+                ],
+                "CFBundleIconName": "AppIcon"
+              }
+            },
+            "UIStatusBarStyle": "UIStatusBarStyleDefault",
+            "CFBundleDisplayName": "Bakeshop",
+            "LSRequiresIPhoneOS": true,
+            "UIStatusBarHidden~ipad": false,
+            "UIBackgroundModes": [
+              "fetch",
+              "remote-notification"
+            ],
+            "DTSDKBuild": "18A5301v",
+            "NSCameraUsageDescription": "Allows for capturing images to assign to ingredients and recipes.",
+            "CFBundleSupportedPlatforms": [
+              "iPhoneOS"
+            ],
+            "UISupportedInterfaceOrientations": [
+              "UIInterfaceOrientationPortrait"
+            ],
+            "CFBundleShortVersionString": "5.4.0",
+            "BuildMachineOSBuild": "20A4299v",
+            "DTPlatformBuild": "18A5301v",
+            "MinimumOSVersion": "13.0",
+            "DTXcodeBuild": "12A6159",
+            "CFBundlePackageType": "APPL",
+            "CFBundleDevelopmentRegion": "English",
+            "CFBundleVersion": "169",
+            "UIStatusBarHidden": false,
+            "UILaunchStoryboardName": "Launch Screen",
+            "UIDeviceFamily": [
+              1,
+              2
+            ],
+            "CFBundleIdentifier": "com.richardpiazza.bakeshop",
+            "DTXcode": "1200",
+            "CFBundleExecutable": "Bakeshop",
+            "CFBundleSignature": "????",
+            "UIMainStoryboardFile": "Main",
+            "CFBundleIcons~ipad": {
+              "CFBundlePrimaryIcon": {
+                "CFBundleIconFiles": [
+                  "AppIcon60x60",
+                  "AppIcon76x76"
+                ],
+                "CFBundleIconName": "AppIcon"
+              }
+            },
+            "DTPlatformName": "iphoneos",
+            "ITSAppUsesNonExemptEncryption": false,
+            "DTCompiler": "com.apple.compilers.llvm.clang.1_0"
+          },
+          "relativePath": "ce5f34cace5a2142835263cd2f00f60b-Bakeshop Bot/3/Bakeshop.ipa"
+        },
+        "xcodebuildLog": {
+          "size": 1094406,
+          "fileName": "xcodebuild.log",
+          "allowAnonymousAccess": false,
+          "relativePath": "ce5f34cace5a2142835263cd2f00f60b-Bakeshop Bot/3/xcodebuild.log"
+        },
+        "sourceControlLog": {
+          "size": 3022,
+          "fileName": "sourceControl.log",
+          "allowAnonymousAccess": false,
+          "relativePath": "ce5f34cace5a2142835263cd2f00f60b-Bakeshop Bot/3/sourceControl.log"
+        },
+        "archive": {
+          "size": 11943080,
+          "fileName": "Bakeshop.xcarchive.zip",
+          "allowAnonymousAccess": false,
+          "relativePath": "ce5f34cace5a2142835263cd2f00f60b-Bakeshop Bot/3/Bakeshop.xcarchive.zip"
+        }
+      },
+      "doc_type": "integration",
+      "tinyID": "82E5D67",
+      "buildServiceFingerprint": "A4:49:99:96:D9:C8:6E:F3:63:35:41:65:C3:09:F9:25:C8:20:F4:64",
+      "tags": [],
+      "startedTime": "2020-06-23T21:56:45.831Z",
+      "revisionBlueprint": {
+        "DVTSourceControlWorkspaceBlueprintAdditionalValidationRemoteRepositoriesKey": [],
+        "DVTSourceControlWorkspaceBlueprintLocationsKey": {
+          "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF": {
+            "DVTSourceControlBranchIdentifierKey": "develop",
+            "DVTSourceControlLocationRevisionKey": "6326065e4e681e7ece55a872b7328b88061cc8ee",
+            "DVTSourceControlBranchOptionsKey": 4,
+            "DVTSourceControlBranchRemoteNameKey": "origin",
+            "DVTSourceControlWorkspaceBlueprintLocationTypeKey": "DVTSourceControlBranch"
+          }
+        },
+        "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey": "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF",
+        "DVTSourceControlWorkspaceBlueprintIdentifierKey": "A8E8C91A-79A4-4C95-9C25-1F3C43F5A920",
+        "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey": {
+          "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF": "Bakeshop/"
+        },
+        "DVTSourceControlWorkspaceBlueprintNameKey": "Bakeshop",
+        "DVTSourceControlWorkspaceBlueprintVersion": 205,
+        "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey": "Bakeshop.xcodeproj",
+        "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey": [
+          {
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "https://github.com/richardpiazza/Bakeshop.git",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF"
+          }
+        ]
+      },
+      "buildResultSummary": {
+        "analyzerWarningCount": 0,
+        "testFailureCount": 0,
+        "testsChange": 0,
+        "errorCount": 0,
+        "testsCount": 44,
+        "testFailureChange": 0,
+        "warningChange": -2,
+        "regressedPerfTestCount": 0,
+        "warningCount": 0,
+        "errorChange": 0,
+        "improvedPerfTestCount": 0,
+        "analyzerWarningChange": 0,
+        "codeCoveragePercentage": 17,
+        "codeCoveragePercentageDelta": 0
+      },
+      "endedTime": "2020-06-23T22:01:55.700Z",
+      "endedTimeDate": [
+        2020,
+        6,
+        23,
+        22,
+        1,
+        55,
+        700
+      ],
+      "duration": 309.869,
+      "ccPercentage": 0,
+      "ccPercentageDelta": 0
+    },
+    {
+      "_id": "ce5f34cace5a2142835263cd2f0a9f9d",
+      "_rev": "18-af06483e9a0368df78d43e6264af9884",
+      "bot": {
+        "_id": "ce5f34cace5a2142835263cd2f00f60b",
+        "_rev": "6-61afac6cd628b5d86389e14b9e447491",
+        "group": {
+          "name": "B16F99AC-B16A-4645-8F26-EAE119D76973"
+        },
+        "configuration": {
+          "triggers": [],
+          "testLocalizations": [],
+          "performsUpgradeIntegration": true,
+          "disableAppThinning": true,
+          "provisioningConfiguration": {
+            "addMissingDevicesToTeams": false,
+            "manageCertsAndProfiles": true
+          },
+          "periodicScheduleInterval": 0,
+          "deviceSpecification": {
+            "filters": [
+              {
+                "platform": {
+                  "_id": "ce5f34cace5a2142835263cd2f003b7b",
+                  "displayName": "iOS",
+                  "_rev": "3-cf36726805924099882be1c34af0fe7e",
+                  "simulatorIdentifier": "com.apple.platform.iphonesimulator",
+                  "identifier": "com.apple.platform.iphoneos",
+                  "buildNumber": "18A5301v",
+                  "version": "14.0"
+                },
+                "filterType": 0,
+                "architectureType": 0
+              }
+            ],
+            "deviceIdentifiers": []
+          },
+          "buildEnvironmentVariables": {},
+          "schemeName": "Bakeshop",
+          "additionalBuildArguments": [],
+          "codeCoveragePreference": 2,
+          "performsTestAction": true,
+          "scheduleType": 3,
+          "useParallelDeviceTesting": true,
+          "performsArchiveAction": true,
+          "archiveExportOptions": {
+            "name": "ExportOptions.plist",
+            "createdAt": "2020-06-23T21:46:09.234Z",
+            "exportOptions": {
+              "iCloudContainerEnvironment": "Production"
+            }
+          },
+          "builtFromClean": 0,
+          "performsAnalyzeAction": true,
+          "sourceControlBlueprint": {
+            "DVTSourceControlWorkspaceBlueprintVersion": 205,
+            "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey": "Bakeshop.xcodeproj",
+            "DVTSourceControlWorkspaceBlueprintIdentifierKey": "F80BF518-6278-408A-A842-19D24BA543AE",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey": [
+              {
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "https://github.com/richardpiazza/Bakeshop.git",
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryTrustedCertFingerprintKey": "1627ACA576282D36631B564DEBDFA648",
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF",
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryTrustSelfSignedCertKey": true
+              }
+            ],
+            "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey": "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF",
+            "DVTSourceControlWorkspaceBlueprintLocationsKey": {
+              "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF": {
+                "DVTSourceControlBranchIdentifierKey": "develop",
+                "DVTSourceControlBranchOptionsKey": 4,
+                "DVTSourceControlWorkspaceBlueprintLocationTypeKey": "DVTSourceControlBranch"
+              }
+            },
+            "DVTSourceControlWorkspaceBlueprintAdditionalValidationRemoteRepositoriesKey": [
+              {
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryEnforceTrustCertFingerprintKey": true,
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "https://github.com/richardpiazza/CodeQuickKit",
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "3CBDEDAE95CE25E53B615AC684AAEE3F90A98DFE"
+              },
+              {
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryEnforceTrustCertFingerprintKey": true,
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "https://github.com/richardpiazza/MiseEnPlace",
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "E72555C40C59CF258F530ADBA0314A60534D9864"
+              },
+              {
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryEnforceTrustCertFingerprintKey": true,
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "https://github.com/richardpiazza/ProcedureKit/",
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "3A999A0044F026F7ADF66A6D83E1CB8EDCDF46AF"
+              }
+            ],
+            "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey": {
+              "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF": 0
+            },
+            "DVTSourceControlWorkspaceBlueprintNameKey": "Bakeshop",
+            "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey": {},
+            "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey": {
+              "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF": "Bakeshop/"
+            },
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryAuthenticationStrategiesKey": {
+              "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF": {
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryAuthenticationTypeKey": "DVTSourceControlAuthenticationStrategy"
+              }
+            }
+          },
+          "exportsProductFromArchive": true,
+          "weeklyScheduleDay": 0,
+          "runOnlyDisabledTests": false,
+          "minutesAfterHourToIntegrate": 0,
+          "testingDestinationType": 0,
+          "hourOfIntegration": 0
+        },
+        "requiresUpgrade": false,
+        "name": "Bakeshop Bot",
+        "type": 1,
+        "sourceControlBlueprintIdentifier": "4DC00268-878A-406B-9B36-8B2EDC3B8DAB",
+        "integration_counter": 2,
+        "doc_type": "bot",
+        "tinyID": "47FF2F2",
+        "lastRevisionBlueprint": {
+          "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey": [
+            {
+              "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+              "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "https://github.com/richardpiazza/Bakeshop.git",
+              "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF"
+            }
+          ],
+          "DVTSourceControlWorkspaceBlueprintLocationsKey": {
+            "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF": {
+              "DVTSourceControlBranchIdentifierKey": "develop",
+              "DVTSourceControlLocationRevisionKey": "028de1c860eedf1d7ce6ad26eeac2e59c8850e1f",
+              "DVTSourceControlBranchOptionsKey": 4,
+              "DVTSourceControlBranchRemoteNameKey": "origin",
+              "DVTSourceControlWorkspaceBlueprintLocationTypeKey": "DVTSourceControlBranch"
+            }
+          },
+          "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey": "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF",
+          "DVTSourceControlWorkspaceBlueprintIdentifierKey": "1DE8F9E6-AA3D-4909-8550-841508CDE59F",
+          "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey": {
+            "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF": "Bakeshop/"
+          },
+          "DVTSourceControlWorkspaceBlueprintNameKey": "Bakeshop",
+          "DVTSourceControlWorkspaceBlueprintVersion": 205,
+          "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey": "Bakeshop.xcodeproj",
+          "DVTSourceControlWorkspaceBlueprintAdditionalValidationRemoteRepositoriesKey": []
+        }
+      },
+      "number": 2,
+      "currentStep": "completed",
+      "result": "warnings",
+      "queuedDate": "2020-06-23T21:46:25.530Z",
+      "success_streak": 0,
+      "shouldClean": false,
+      "assets": {
+        "xcodebuildOutput": {
+          "size": 1316838,
+          "fileName": "xcodebuild_result.xcresult.zip",
+          "allowAnonymousAccess": false,
+          "isDirectory": true,
+          "relativePath": "ce5f34cace5a2142835263cd2f00f60b-Bakeshop Bot/2/xcodebuild_result.xcresult.zip"
+        },
+        "buildServiceLog": {
+          "size": 52056,
+          "fileName": "buildService.log",
+          "allowAnonymousAccess": false,
+          "relativePath": "ce5f34cace5a2142835263cd2f00f60b-Bakeshop Bot/2/buildService.log"
+        },
+        "product": {
+          "size": 2518487,
+          "fileName": "Bakeshop.ipa",
+          "allowAnonymousAccess": false,
+          "infoDictionary": {
+            "UIRequiredDeviceCapabilities": [
+              "arm64"
+            ],
+            "UIRequiresFullScreen": false,
+            "UISupportedInterfaceOrientations~ipad": [
+              "UIInterfaceOrientationLandscapeRight",
+              "UIInterfaceOrientationLandscapeLeft",
+              "UIInterfaceOrientationPortrait",
+              "UIInterfaceOrientationPortraitUpsideDown"
+            ],
+            "CFBundleInfoDictionaryVersion": "6.0",
+            "DTPlatformVersion": "14.0",
+            "DTSDKName": "iphoneos14.0",
+            "CFBundleName": "Bakeshop",
+            "UIViewControllerBasedStatusBarAppearance": false,
+            "DTAppStoreToolsBuild": "12A6159",
+            "NSPhotoLibraryUsageDescription": "Allows for selection of existing photos to assign to ingredients and recipes.",
+            "CFBundleIcons": {
+              "CFBundlePrimaryIcon": {
+                "CFBundleIconFiles": [
+                  "AppIcon60x60"
+                ],
+                "CFBundleIconName": "AppIcon"
+              }
+            },
+            "UIStatusBarStyle": "UIStatusBarStyleDefault",
+            "LSRequiresIPhoneOS": true,
+            "CFBundleDisplayName": "Bakeshop",
+            "UIStatusBarHidden~ipad": false,
+            "UIBackgroundModes": [
+              "fetch",
+              "remote-notification"
+            ],
+            "DTSDKBuild": "18A5301v",
+            "NSCameraUsageDescription": "Allows for capturing images to assign to ingredients and recipes.",
+            "CFBundleShortVersionString": "5.4.0",
+            "UISupportedInterfaceOrientations": [
+              "UIInterfaceOrientationPortrait"
+            ],
+            "CFBundleSupportedPlatforms": [
+              "iPhoneOS"
+            ],
+            "BuildMachineOSBuild": "20A4299v",
+            "DTPlatformBuild": "18A5301v",
+            "CFBundlePackageType": "APPL",
+            "MinimumOSVersion": "13.0",
+            "CFBundleDevelopmentRegion": "English",
+            "DTXcodeBuild": "12A6159",
+            "CFBundleVersion": "169",
+            "UIStatusBarHidden": false,
+            "UILaunchStoryboardName": "Launch Screen",
+            "UIDeviceFamily": [
+              1,
+              2
+            ],
+            "CFBundleIdentifier": "com.richardpiazza.bakeshop",
+            "DTXcode": "1200",
+            "CFBundleExecutable": "Bakeshop",
+            "CFBundleIcons~ipad": {
+              "CFBundlePrimaryIcon": {
+                "CFBundleIconFiles": [
+                  "AppIcon60x60",
+                  "AppIcon76x76"
+                ],
+                "CFBundleIconName": "AppIcon"
+              }
+            },
+            "CFBundleSignature": "????",
+            "UIMainStoryboardFile": "Main",
+            "DTPlatformName": "iphoneos",
+            "ITSAppUsesNonExemptEncryption": false,
+            "DTCompiler": "com.apple.compilers.llvm.clang.1_0"
+          },
+          "relativePath": "ce5f34cace5a2142835263cd2f00f60b-Bakeshop Bot/2/Bakeshop.ipa"
+        },
+        "xcodebuildLog": {
+          "size": 1103621,
+          "fileName": "xcodebuild.log",
+          "allowAnonymousAccess": false,
+          "relativePath": "ce5f34cace5a2142835263cd2f00f60b-Bakeshop Bot/2/xcodebuild.log"
+        },
+        "sourceControlLog": {
+          "size": 2700,
+          "fileName": "sourceControl.log",
+          "allowAnonymousAccess": false,
+          "relativePath": "ce5f34cace5a2142835263cd2f00f60b-Bakeshop Bot/2/sourceControl.log"
+        },
+        "archive": {
+          "size": 11943482,
+          "fileName": "Bakeshop.xcarchive.zip",
+          "allowAnonymousAccess": false,
+          "relativePath": "ce5f34cace5a2142835263cd2f00f60b-Bakeshop Bot/2/Bakeshop.xcarchive.zip"
+        }
+      },
+      "doc_type": "integration",
+      "tinyID": "D196FAD",
+      "buildServiceFingerprint": "A4:49:99:96:D9:C8:6E:F3:63:35:41:65:C3:09:F9:25:C8:20:F4:64",
+      "tags": [],
+      "startedTime": "2020-06-23T21:46:25.887Z",
+      "revisionBlueprint": {
+        "DVTSourceControlWorkspaceBlueprintAdditionalValidationRemoteRepositoriesKey": [],
+        "DVTSourceControlWorkspaceBlueprintLocationsKey": {
+          "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF": {
+            "DVTSourceControlBranchIdentifierKey": "develop",
+            "DVTSourceControlLocationRevisionKey": "028de1c860eedf1d7ce6ad26eeac2e59c8850e1f",
+            "DVTSourceControlBranchOptionsKey": 4,
+            "DVTSourceControlBranchRemoteNameKey": "origin",
+            "DVTSourceControlWorkspaceBlueprintLocationTypeKey": "DVTSourceControlBranch"
+          }
+        },
+        "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey": "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF",
+        "DVTSourceControlWorkspaceBlueprintIdentifierKey": "8B9ADBD0-D823-431B-A31E-AF30C223041C",
+        "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey": {
+          "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF": "Bakeshop/"
+        },
+        "DVTSourceControlWorkspaceBlueprintNameKey": "Bakeshop",
+        "DVTSourceControlWorkspaceBlueprintVersion": 205,
+        "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey": "Bakeshop.xcodeproj",
+        "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey": [
+          {
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "https://github.com/richardpiazza/Bakeshop.git",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF"
+          }
+        ]
+      },
+      "buildResultSummary": {
+        "analyzerWarningCount": 0,
+        "testFailureCount": 0,
+        "testsChange": 0,
+        "errorCount": 0,
+        "testsCount": 44,
+        "testFailureChange": 0,
+        "warningChange": 0,
+        "regressedPerfTestCount": 0,
+        "warningCount": 2,
+        "errorChange": 0,
+        "improvedPerfTestCount": 0,
+        "analyzerWarningChange": 0,
+        "codeCoveragePercentage": 17,
+        "codeCoveragePercentageDelta": -1
+      },
+      "endedTime": "2020-06-23T21:51:38.649Z",
+      "endedTimeDate": [
+        2020,
+        6,
+        23,
+        21,
+        51,
+        38,
+        649
+      ],
+      "duration": 312.762,
+      "ccPercentage": 0,
+      "ccPercentageDelta": 0
+    },
+    {
+      "_id": "ce5f34cace5a2142835263cd2f00f906",
+      "_rev": "19-0bed308890b2f1e19a777caad19f9891",
+      "bot": {
+        "_id": "ce5f34cace5a2142835263cd2f00f60b",
+        "_rev": "3-d497d13a1cbaf3bc568f15d28a599833",
+        "group": {
+          "name": "B16F99AC-B16A-4645-8F26-EAE119D76973"
+        },
+        "configuration": {
+          "triggers": [],
+          "hourOfIntegration": 0,
+          "performsUpgradeIntegration": true,
+          "disableAppThinning": false,
+          "provisioningConfiguration": {
+            "addMissingDevicesToTeams": false,
+            "manageCertsAndProfiles": true
+          },
+          "periodicScheduleInterval": 0,
+          "deviceSpecification": {
+            "filters": [
+              {
+                "platform": {
+                  "_id": "ce5f34cace5a2142835263cd2f003b7b",
+                  "displayName": "iOS",
+                  "_rev": "3-cf36726805924099882be1c34af0fe7e",
+                  "simulatorIdentifier": "com.apple.platform.iphonesimulator",
+                  "identifier": "com.apple.platform.iphoneos",
+                  "buildNumber": "18A5301v",
+                  "version": "14.0"
+                },
+                "filterType": 0,
+                "architectureType": 0
+              }
+            ],
+            "deviceIdentifiers": []
+          },
+          "buildEnvironmentVariables": {},
+          "schemeName": "Bakeshop",
+          "additionalBuildArguments": [],
+          "codeCoveragePreference": 2,
+          "performsTestAction": true,
+          "scheduleType": 3,
+          "useParallelDeviceTesting": true,
+          "performsArchiveAction": true,
+          "builtFromClean": 0,
+          "performsAnalyzeAction": true,
+          "sourceControlBlueprint": {
+            "DVTSourceControlWorkspaceBlueprintIdentifierKey": "C2BCB38B-0AE8-4D68-B261-D74F1412173A",
+            "DVTSourceControlWorkspaceBlueprintLocationsKey": {
+              "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF": {
+                "DVTSourceControlBranchIdentifierKey": "develop",
+                "DVTSourceControlBranchOptionsKey": 4,
+                "DVTSourceControlWorkspaceBlueprintLocationTypeKey": "DVTSourceControlBranch"
+              }
+            },
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey": [
+              {
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryEnforceTrustCertFingerprintKey": true,
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "https://github.com/richardpiazza/Bakeshop.git",
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF"
+              }
+            ],
+            "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey": {
+              "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF": "Bakeshop/"
+            },
+            "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey": {},
+            "DVTSourceControlWorkspaceBlueprintAdditionalValidationRemoteRepositoriesKey": [
+              {
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryEnforceTrustCertFingerprintKey": true,
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "https://github.com/richardpiazza/CodeQuickKit",
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "3CBDEDAE95CE25E53B615AC684AAEE3F90A98DFE"
+              },
+              {
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryEnforceTrustCertFingerprintKey": true,
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "https://github.com/richardpiazza/MiseEnPlace",
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "E72555C40C59CF258F530ADBA0314A60534D9864"
+              },
+              {
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryEnforceTrustCertFingerprintKey": true,
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "https://github.com/richardpiazza/ProcedureKit/",
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "3A999A0044F026F7ADF66A6D83E1CB8EDCDF46AF"
+              }
+            ],
+            "DVTSourceControlWorkspaceBlueprintVersion": 205,
+            "DVTSourceControlWorkspaceBlueprintNameKey": "Bakeshop",
+            "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey": "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF",
+            "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey": "Bakeshop.xcodeproj",
+            "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey": {
+              "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF": 0
+            },
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryAuthenticationStrategiesKey": {
+              "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF": {
+                "DVTSourceControlWorkspaceBlueprintRemoteRepositoryAuthenticationTypeKey": "DVTSourceControlBasicAuthenticationStrategy"
+              }
+            }
+          },
+          "exportsProductFromArchive": true,
+          "weeklyScheduleDay": 0,
+          "runOnlyDisabledTests": false,
+          "testingDestinationType": 0,
+          "minutesAfterHourToIntegrate": 0,
+          "testLocalizations": []
+        },
+        "requiresUpgrade": false,
+        "name": "Bakeshop Bot",
+        "type": 1,
+        "sourceControlBlueprintIdentifier": "3BA794D5-6529-43EB-B459-34C4F8E1FED3",
+        "integration_counter": 1,
+        "doc_type": "bot",
+        "tinyID": "47FF2F2"
+      },
+      "number": 1,
+      "currentStep": "completed",
+      "result": "build-failed",
+      "queuedDate": "2020-06-23T21:20:20.142Z",
+      "success_streak": 0,
+      "shouldClean": false,
+      "assets": {
+        "xcodebuildOutput": {
+          "size": 1392445,
+          "fileName": "xcodebuild_result.xcresult.zip",
+          "allowAnonymousAccess": false,
+          "isDirectory": true,
+          "relativePath": "ce5f34cace5a2142835263cd2f00f60b-Bakeshop Bot/1/xcodebuild_result.xcresult.zip"
+        },
+        "buildServiceLog": {
+          "size": 51366,
+          "fileName": "buildService.log",
+          "allowAnonymousAccess": false,
+          "relativePath": "ce5f34cace5a2142835263cd2f00f60b-Bakeshop Bot/1/buildService.log"
+        },
+        "xcodebuildLog": {
+          "size": 5645645,
+          "fileName": "xcodebuild.log",
+          "allowAnonymousAccess": false,
+          "relativePath": "ce5f34cace5a2142835263cd2f00f60b-Bakeshop Bot/1/xcodebuild.log"
+        },
+        "archive": {
+          "size": 11315726,
+          "fileName": "Bakeshop.xcarchive.zip",
+          "allowAnonymousAccess": false,
+          "relativePath": "ce5f34cace5a2142835263cd2f00f60b-Bakeshop Bot/1/Bakeshop.xcarchive.zip"
+        },
+        "sourceControlLog": {
+          "size": 2386,
+          "fileName": "sourceControl.log",
+          "allowAnonymousAccess": false,
+          "relativePath": "ce5f34cace5a2142835263cd2f00f60b-Bakeshop Bot/1/sourceControl.log"
+        }
+      },
+      "doc_type": "integration",
+      "tinyID": "D8A6F00",
+      "buildServiceFingerprint": "A4:49:99:96:D9:C8:6E:F3:63:35:41:65:C3:09:F9:25:C8:20:F4:64",
+      "tags": [],
+      "startedTime": "2020-06-23T21:20:20.625Z",
+      "revisionBlueprint": {
+        "DVTSourceControlWorkspaceBlueprintAdditionalValidationRemoteRepositoriesKey": [],
+        "DVTSourceControlWorkspaceBlueprintLocationsKey": {
+          "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF": {
+            "DVTSourceControlBranchIdentifierKey": "develop",
+            "DVTSourceControlLocationRevisionKey": "028de1c860eedf1d7ce6ad26eeac2e59c8850e1f",
+            "DVTSourceControlBranchOptionsKey": 4,
+            "DVTSourceControlBranchRemoteNameKey": "origin",
+            "DVTSourceControlWorkspaceBlueprintLocationTypeKey": "DVTSourceControlBranch"
+          }
+        },
+        "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey": "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF",
+        "DVTSourceControlWorkspaceBlueprintIdentifierKey": "1DE8F9E6-AA3D-4909-8550-841508CDE59F",
+        "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey": {
+          "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF": "Bakeshop/"
+        },
+        "DVTSourceControlWorkspaceBlueprintNameKey": "Bakeshop",
+        "DVTSourceControlWorkspaceBlueprintVersion": 205,
+        "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey": "Bakeshop.xcodeproj",
+        "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey": [
+          {
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "https://github.com/richardpiazza/Bakeshop.git",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "6139C8319FDE4527BFD4EA6334BA1CE5BC0DE9DF"
+          }
+        ]
+      },
+      "buildResultSummary": {
+        "analyzerWarningCount": 0,
+        "testFailureCount": 0,
+        "testsChange": 44,
+        "errorCount": 0,
+        "testsCount": 44,
+        "testFailureChange": 0,
+        "warningChange": 2,
+        "regressedPerfTestCount": 0,
+        "warningCount": 2,
+        "errorChange": 0,
+        "improvedPerfTestCount": 0,
+        "analyzerWarningChange": 0,
+        "codeCoveragePercentage": 18,
+        "codeCoveragePercentageDelta": 0
+      },
+      "endedTime": "2020-06-23T21:28:47.135Z",
+      "endedTimeDate": [
+        2020,
+        6,
+        23,
+        21,
+        28,
+        47,
+        135
+      ],
+      "duration": 506.51,
+      "ccPercentage": 0,
+      "ccPercentageDelta": 0
+    }
+  ]
+}
