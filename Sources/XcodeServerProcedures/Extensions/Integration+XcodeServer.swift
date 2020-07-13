@@ -14,7 +14,7 @@ public extension Integration {
         }
         
         if (currentStep != integration.currentStep) || (result != integration.result) {
-            events.append(.integration(action: .update, identifier: integration.identifier, number: integration.number))
+            events.append(.integration(action: .update, identifier: integration.id, number: integration.number))
         }
         
         self.currentStep = integration.currentStep
