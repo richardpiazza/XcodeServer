@@ -4,13 +4,13 @@ _Xcode Server_: `2.0` | _Xcode_: `11.0`
 
 ## Overview
 
-Apple provides docuementation for the Xcode Server API at [https://developer.apple.com/library/content/documentation/Xcode/Conceptual/XcodeServerAPIReference/index.htm](https://developer.apple.com/library/content/documentation/Xcode/Conceptual/XcodeServerAPIReference/index.htm)
+Apple provides documentation for the Xcode Server API at [https://developer.apple.com/library/content/documentation/Xcode/Conceptual/XcodeServerAPIReference/index.htm](https://developer.apple.com/library/content/documentation/Xcode/Conceptual/XcodeServerAPIReference/index.htm)
 
 This guide acts as an extension with additional routes and information.
 
 ## Endpoint
 
-All calls to the API must be made over HTTPS. The API enpoint is
+All calls to the API must be made over HTTPS. The API endpoint is
 
 ```
 https://{hostname}:20343/api
@@ -34,7 +34,7 @@ __Request__: `[GET] /ping`
 
 __Response__: `204 (no content)`
 
-The response from the server will include the HTTP Header __x-xscapiversion__ with the current API version the server is running. As of Xcode Server 2.0 & Xcode 9.0 the version is 18.
+The response from the server will include the HTTP Header __x-xscapiversion__ with the current API version the server is running. As of Xcode Server 2.0 & Xcode 11.0 the version is 19.
 
 ### _Versions_
 
