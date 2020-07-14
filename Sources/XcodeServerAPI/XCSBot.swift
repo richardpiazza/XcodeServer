@@ -61,12 +61,12 @@ extension XCSBot: Identifiable {
 }
 
 // MARK: - Equatable
-//extension XCSBot: Equatable {
-//}
+extension XCSBot: Equatable {
+}
 
 // MARK: - Hashable
-//extension XCSBot: Hashable {
-//}
+extension XCSBot: Hashable {
+}
 
 // MARK: - Deprecations
 public extension XCSBot {

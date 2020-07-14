@@ -1,5 +1,3 @@
-import Foundation
-
 public struct XCSIssueAuthor: Codable {
     enum CodingKeys: String, CodingKey {
         case suspectStrategy = "XCSIssueSuspectstrategy"
@@ -10,4 +8,12 @@ public struct XCSIssueAuthor: Codable {
     public var suspectStrategy: XCSSuspectStrategy?
     public var blueprintRepository: String?
     public var commitHash: String?
+}
+
+// MARK: - Equatable
+extension XCSIssueAuthor: Equatable {
+}
+
+// MARK: - Hashable
+extension XCSIssueAuthor: Hashable {
 }

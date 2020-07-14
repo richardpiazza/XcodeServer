@@ -1,5 +1,4 @@
-import Foundation
-
+///
 public struct XCSProxiedDeviceDocument: Codable {
     
     enum CodingKeys: String, CodingKey {
@@ -39,4 +38,20 @@ public struct XCSProxiedDeviceDocument: Codable {
     public var architecture: String?
     public var retina: Bool?
     public var isServer: Bool?
+}
+
+// MARK: - Identifiable
+extension XCSProxiedDeviceDocument: Identifiable {
+    public var id: String {
+        get { identifier ?? "" }
+        set { identifier = newValue }
+    }
+}
+
+// MARK: - Equatable
+extension XCSProxiedDeviceDocument: Equatable {
+}
+
+// MARK: - Hashable
+extension XCSProxiedDeviceDocument: Hashable {
 }

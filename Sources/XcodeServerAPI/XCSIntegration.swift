@@ -49,6 +49,7 @@ public struct XCSIntegration: Codable {
     public var bot: XCSBot?
     /// A summary of the build errors & warnings encountered during the integration.
     public var buildResultSummary: XCSBuildResultSummary?
+    ///
     public var buildServiceFingerprint: String?
     /// The overall 'Code Coverage' percentage.
     public var ccPercentage: Int?
@@ -64,20 +65,27 @@ public struct XCSIntegration: Codable {
     public var endedTime: Date?
     /// THe integration counter.
     public var number: Int32
+    ///
     public var perfMetricKeyPaths: [String]?
+    ///
     public var perfMetricNames: [String]?
     /// Timestamp of when the integration was first requests.
     public var queuedDate: Date?
     /// Overall result of the integration.
     public var result: IntegrationResult
+    ///
     public var revisionBlueprint: XCSRepositoryBlueprint?
+    ///
     public var shouldClean: Bool?
     /// Timestamp of when the integration began processing.
     public var startedTime: Date?
     /// The number of successful integrations in a row.
     public var successStreak: Int32?
+    ///
     public var tags: [String]?
+    /// Devices used to perform unit/ui testing
     public var testedDevices: [XCSDevice]?
+    /// Unit/UI Test results
     public var testHierarchy: TestHierarchy?
 }
 

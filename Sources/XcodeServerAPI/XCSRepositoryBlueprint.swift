@@ -35,6 +35,22 @@ public struct XCSRepositoryBlueprint: Codable {
     public var additionalValidationRemoteRepositories: [XCSRemoteRepository]?
 }
 
+// MARK: - Identifiable
+extension XCSRepositoryBlueprint: Identifiable {
+    public var id: String {
+        get { identifier }
+        set { identifier = newValue }
+    }
+}
+
+// MARK: - Equatable
+extension XCSRepositoryBlueprint: Equatable {
+}
+
+// MARK: - Hashable
+extension XCSRepositoryBlueprint: Hashable {
+}
+
 public extension XCSRepositoryBlueprint {
     var repositoryIds: [String] {
         return locations?.compactMap({ $0.key }).sorted() ?? []

@@ -1,5 +1,4 @@
-import Foundation
-
+///
 public struct XCSControlledChangePlatforms: Codable {
     
     enum CodingKeys: String, CodingKey {
@@ -13,4 +12,12 @@ public struct XCSControlledChangePlatforms: Codable {
     public var iOS: XCSControlledChangeTraits?
     public var macOS: XCSControlledChangeTraits?
     public var watchOS: XCSControlledChangeTraits?
+}
+
+// MARK: - Equatable
+extension XCSControlledChangePlatforms: Equatable {
+}
+
+// MARK: - Hashable
+extension XCSControlledChangePlatforms: Hashable {
 }

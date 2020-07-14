@@ -1,5 +1,4 @@
-import Foundation
-
+///
 public struct XCSCoverageMethod: Codable {
     
     enum CodingKeys: String, CodingKey {
@@ -15,3 +14,10 @@ public struct XCSCoverageMethod: Codable {
     public var delta: Double?
 }
 
+// MARK: - Equatable
+extension XCSCoverageMethod: Equatable {
+}
+
+// MARK: - Hashable
+extension XCSCoverageMethod: Hashable {
+}

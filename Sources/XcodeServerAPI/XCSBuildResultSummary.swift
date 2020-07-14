@@ -1,5 +1,4 @@
-import Foundation
-
+///
 public struct XCSBuildResultSummary: Codable {
     public var errorCount: Int = 0
     public var errorChange: Int = 0
@@ -15,4 +14,12 @@ public struct XCSBuildResultSummary: Codable {
     public var improvedPerfTestCount: Int = 0
     public var codeCoveragePercentage: Int = 0
     public var codeCoveragePercentageDelta: Int = 0
+}
+
+// MARK: - Equatable
+extension XCSBuildResultSummary: Equatable {
+}
+
+// MARK: - Hashable
+extension XCSBuildResultSummary: Hashable {
 }

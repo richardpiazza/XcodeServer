@@ -1,6 +1,6 @@
-import Foundation
 import XcodeServerCommon
 
+///
 public struct XCSEmailConfiguration: Codable {
     public var additionalRecipients: [String]?
     public var allowedDomainNames: [String]?
@@ -18,4 +18,12 @@ public struct XCSEmailConfiguration: Codable {
     public var replyToAddress: String?
     public var scmOptions: [String : Int]?
     public var weeklyScheduleDay: Int?
+}
+
+// MARK: - Equatable
+extension XCSEmailConfiguration: Equatable {
+}
+
+// MARK: - Hashable
+extension XCSEmailConfiguration: Hashable {
 }
