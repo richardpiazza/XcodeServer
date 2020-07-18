@@ -43,6 +43,7 @@ public class CreateIntegrationProcedure: NSManagedObjectProcedure<Bot>, InputPro
                 return
             }
             
+            integration.number = value.number
             bot.addToIntegrations(integration)
             bot.lastUpdate = Date()
             
