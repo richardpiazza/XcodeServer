@@ -1,4 +1,4 @@
-///
+/// A source control repository.
 public struct XCSRemoteRepository: Codable {
     
     enum CodingKeys: String, CodingKey {

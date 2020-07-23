@@ -1,6 +1,6 @@
 import Foundation
 
-///
+/// Bot configuration localization metadata.
 public struct XCSTestLocalization: Codable {
     
 }

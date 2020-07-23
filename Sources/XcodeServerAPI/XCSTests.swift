@@ -1,4 +1,4 @@
-///
+/// XCTest results hierarchy
 public struct XCSTests: Codable {
     
     struct TestKey: CodingKey {

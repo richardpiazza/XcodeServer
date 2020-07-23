@@ -1,4 +1,4 @@
-///
+/// The details for a contributor for source control commits.
 public struct XCSCommitContributor: Codable {
     
     enum CodingKeys: String, CodingKey {

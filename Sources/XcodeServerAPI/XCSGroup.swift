@@ -1,4 +1,4 @@
-/// 
+/// Bot stuff.
 public struct XCSGroup: Codable {
     public var name: String = ""
     

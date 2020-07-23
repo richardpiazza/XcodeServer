@@ -1,4 +1,4 @@
-///
+/// Limits on device selection for compilation/testing during an integration.
 public struct XCSFilter: Codable {
     public var platform: XCSPlatform?
     public var filterType: Int?

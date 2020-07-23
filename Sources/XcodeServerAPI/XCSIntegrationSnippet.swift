@@ -1,6 +1,6 @@
 import Foundation
 
-///
+/// Limited identifier information about a specific integration.
 public struct XCSIntegrationSnippet: Codable {
     
     enum CodingKeys: String, CodingKey {

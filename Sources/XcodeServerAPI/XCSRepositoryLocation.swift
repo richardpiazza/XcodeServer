@@ -1,4 +1,4 @@
-///
+/// Source control metadata.
 public struct XCSRepositoryLocation: Codable {
     
 }

@@ -1,4 +1,4 @@
-///
+/// The conditions on which a defined trigger will be executed.
 public struct XCSConditions: Codable {
     public var status: Int?
     public var onAllIssuesResolved: Bool?

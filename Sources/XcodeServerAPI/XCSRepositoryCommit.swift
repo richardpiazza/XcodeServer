@@ -1,6 +1,6 @@
 import Foundation
 
-///
+/// A published set of changes to a source control repository.
 public struct XCSRepositoryCommit: Codable {
     
     enum CodingKeys: String, CodingKey {

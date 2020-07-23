@@ -1,4 +1,4 @@
-///
+/// The count and change of tests/warning/failures encountered during an integration.
 public struct XCSBuildResultSummary: Codable {
     public var errorCount: Int = 0
     public var errorChange: Int = 0

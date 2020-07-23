@@ -1,4 +1,4 @@
-///
+/// Code coverage target details.
 public struct XCSCoverageTarget: Codable {
     
     enum CodingKeys: String, CodingKey {

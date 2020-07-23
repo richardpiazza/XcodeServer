@@ -1,4 +1,4 @@
-///
+/// Settings to use for automated emails.
 public struct XCSEmailConfiguration: Codable {
     /// Type of email being sent.
     ///

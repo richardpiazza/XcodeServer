@@ -1,4 +1,4 @@
-///
+/// Code coverage information.
 public struct XCSCoverageHierarchy: Codable {
     
     public enum CodingKeys: String, CodingKey {

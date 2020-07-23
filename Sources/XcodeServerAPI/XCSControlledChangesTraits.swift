@@ -1,4 +1,4 @@
-///
+/// The versioning information pertaining to a controlled change.
 public struct XCSControlledChangeTraits: Codable {
     
     enum CodingKeys: String, CodingKey {

@@ -1,4 +1,4 @@
-///
+/// Details the selected devices for a specific bot to use.
 public struct XCSDeviceSpecification: Codable {
     ///
     public var filters: [XCSFilter]?

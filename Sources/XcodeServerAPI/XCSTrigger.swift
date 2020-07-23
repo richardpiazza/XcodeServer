@@ -1,4 +1,4 @@
-///
+/// A bot configuration automation performed before/after and integration.
 public struct XCSTrigger: Codable {
     
     /// The type of trigger being executed.

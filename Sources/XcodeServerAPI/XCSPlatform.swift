@@ -1,4 +1,4 @@
-///
+/// Descriptive information about an integration environment.
 public struct XCSPlatform: Codable {
     
     enum CodingKeys: String, CodingKey {

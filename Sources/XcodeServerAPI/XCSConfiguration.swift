@@ -1,6 +1,6 @@
 public typealias XCSBuildArgument = String
 
-///
+/// The settings for a Bot.
 public struct XCSConfiguration: Codable {
     public enum CleanSchedule: Int, Codable {
         case never = 0

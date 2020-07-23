@@ -1,4 +1,4 @@
-///
+/// A collection of assets produced during an integration.
 public struct XCSAssets: Codable {
     ///
     public var archive: XCSIntegrationAsset?

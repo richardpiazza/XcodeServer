@@ -1,4 +1,4 @@
-///
+/// The before & after state of a controlled change.
 public struct XCSControlledChangeValues: Codable {
     
     enum CodingKeys: String, CodingKey {

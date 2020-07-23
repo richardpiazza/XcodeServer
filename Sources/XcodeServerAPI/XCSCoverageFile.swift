@@ -1,4 +1,4 @@
-///
+/// Testing coverage data.
 public struct XCSCoverageFile: Codable {
     
     enum CodingKeys: String, CodingKey {

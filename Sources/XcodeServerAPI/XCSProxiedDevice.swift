@@ -1,4 +1,4 @@
-///
+/// A device that is paired with another `XCSDevice`.
 public struct XCSProxiedDeviceDocument: Codable {
     
     enum CodingKeys: String, CodingKey {

@@ -1,4 +1,4 @@
-///
+/// Metadata about how the author of a specific issue was identified.
 public struct XCSSuspectStrategy: Codable {
     
     public enum IssueConfidence: Int, Codable {

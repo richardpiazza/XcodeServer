@@ -1,4 +1,4 @@
-///
+/// Metadata about a specific asset produced during an integration.
 public struct XCSIntegrationAsset: Codable {
     public var size: Int?
     public var fileName: String?

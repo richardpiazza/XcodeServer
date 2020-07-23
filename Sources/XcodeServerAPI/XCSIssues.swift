@@ -1,4 +1,4 @@
-///
+/// A collection of issues grouped by their type.
 public struct XCSIssues: Codable {
     public var buildServiceErrors: [XCSIssue]?
     public var buildServiceWarnings: [XCSIssue]?

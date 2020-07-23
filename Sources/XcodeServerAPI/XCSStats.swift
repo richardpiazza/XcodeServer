@@ -1,6 +1,6 @@
 import Foundation
 
-///
+/// Statistical information about a specific bot.
 public struct XCSStats: Codable {
     public var lastCleanIntegration: XCSIntegrationSnippet?
     public var bestSuccessStreak: XCSIntegrationSnippet?

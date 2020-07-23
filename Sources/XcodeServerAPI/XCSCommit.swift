@@ -1,6 +1,6 @@
 import Foundation
 
-///
+/// A reference to the source control commits that contributed to an integration.
 public struct XCSCommit: Codable {
     
     enum CodingKeys: String, CodingKey {

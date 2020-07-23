@@ -1,4 +1,4 @@
-///
+/// The strategy for how to authenticate against remote source control repositories.
 public struct XCSAuthenticationStrategy: Codable {
     
     enum CodingKeys: String, CodingKey {

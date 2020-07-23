@@ -1,4 +1,4 @@
-///
+/// A concern/problem that is detected during an integration.
 public struct XCSIssue: Codable {
     
     /// The status of an integration issue.

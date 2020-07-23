@@ -1,4 +1,4 @@
-///
+/// Options pertaining to an exported project archive.
 public struct XCSArchiveExportOptions: Codable {
     ///
     public var name: String?

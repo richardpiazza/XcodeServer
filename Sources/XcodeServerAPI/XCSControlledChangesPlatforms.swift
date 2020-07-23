@@ -1,4 +1,4 @@
-///
+/// A tracked change to the integration platforms.
 public struct XCSControlledChangePlatforms: Codable {
     
     enum CodingKeys: String, CodingKey {

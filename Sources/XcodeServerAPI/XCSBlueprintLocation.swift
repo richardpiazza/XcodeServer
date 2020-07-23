@@ -1,4 +1,4 @@
-///
+/// Source control branch/location information.
 public struct XCSBlueprintLocation: Codable {
     
     enum CodingKeys: String, CodingKey {

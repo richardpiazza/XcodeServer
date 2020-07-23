@@ -1,6 +1,7 @@
-///
+/// Trace information to identify the source control point where from which an issue originated.
 public struct XCSIssueAuthor: Codable {
     enum CodingKeys: String, CodingKey {
+        /// - note: 'strategy' is lowercased.
         case suspectStrategy = "XCSIssueSuspectstrategy"
         case blueprintRepository = "XCSBlueprintRepositoryID"
         case commitHash = "XCSCommitHash"

@@ -1,4 +1,4 @@
-///
+/// Values pertaining to a single piece of statistical data.
 public struct XCSStatsSummary: Codable {
     public var sum: Double
     public var count: Int

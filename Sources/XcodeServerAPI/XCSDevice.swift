@@ -1,4 +1,4 @@
-///
+/// Information pertaining to a specific testing device.
 public struct XCSDevice: Codable {
     
     enum CodingKeys: String, CodingKey {

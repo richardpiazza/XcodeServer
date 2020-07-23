@@ -1,4 +1,4 @@
-///
+/// A tracked change to the integration environment.
 public struct XCSControlledChanges: Codable {
     
     enum CodingKeys: String, CodingKey {
