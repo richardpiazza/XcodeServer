@@ -33,16 +33,17 @@ public class CreateIntegrationProcedure: NSManagedObjectProcedure<Bot>, InputPro
         
         let id = objectID
         
-        print("Creating Integration '\(value.identifier)' for Bot  '\(managedObject.identifier)'")
+        print("Creating Integration '\(value.id)' for Bot  '\(managedObject.identifier)'")
         
         container.performBackgroundTask { [weak self] (context) in
             let bot = context.object(with: id) as! Bot
             
-            guard let integration = Integration(managedObjectContext: context, identifier: value.identifier, bot: bot) else {
-                self?.finish(with: XcodeServerProcedureError.failedToCreateIntegration(id: value.identifier))
+            guard let integration = Integration(managedObjectContext: context, identifier: value.id, bot: bot) else {
+                self?.finish(with: XcodeServerProcedureError.failedToCreateIntegration(id: value.id))
                 return
             }
             
+            integration.number = value.number
             bot.addToIntegrations(integration)
             bot.lastUpdate = Date()
             

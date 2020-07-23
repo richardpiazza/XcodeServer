@@ -1,5 +1,6 @@
 import Foundation
 
+/// A published set of changes to a source control repository.
 public struct XCSRepositoryCommit: Codable {
     
     enum CodingKeys: String, CodingKey {
@@ -21,4 +22,12 @@ public struct XCSRepositoryCommit: Codable {
     public var isMerge: String?
     public var timestamp: Date?
     public var timestampDate: [Int]?
+}
+
+// MARK: - Equatable
+extension XCSRepositoryCommit: Equatable {
+}
+
+// MARK: - Hashable
+extension XCSRepositoryCommit: Hashable {
 }

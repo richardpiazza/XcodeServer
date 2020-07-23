@@ -1,5 +1,4 @@
-import Foundation
-
+/// Code coverage target details.
 public struct XCSCoverageTarget: Codable {
     
     enum CodingKeys: String, CodingKey {
@@ -17,3 +16,10 @@ public struct XCSCoverageTarget: Codable {
     public var count: Int?
 }
 
+// MARK: - Equatable
+extension XCSCoverageTarget: Equatable {
+}
+
+// MARK: - Hashable
+extension XCSCoverageTarget: Hashable {
+}

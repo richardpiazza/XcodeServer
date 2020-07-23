@@ -24,7 +24,7 @@ extension EmailConfiguration {
         
         self.additionalRecipients = configuration.additionalRecipients?.joined(separator: ",")
         self.emailCommitters = configuration.emailCommitters ?? false
-        self.emailType = configuration.type ?? .integrationReport
+        self.emailType = EmailType(rawValue: Int16(configuration.type?.rawValue ?? 0)) ?? .integrationReport
         self.fromAddress = configuration.fromAddress
         self.hour = Int16(configuration.hour ?? 0)
         self.includeBotConfiguration = configuration.includeBotConfiguration ?? false

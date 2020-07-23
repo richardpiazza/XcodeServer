@@ -1,5 +1,4 @@
-import Foundation
-
+/// The before & after state of a controlled change.
 public struct XCSControlledChangeValues: Codable {
     
     enum CodingKeys: String, CodingKey {
@@ -9,4 +8,12 @@ public struct XCSControlledChangeValues: Codable {
     
     public var after: String?
     public var before: String?
+}
+
+// MARK: - Equatable
+extension XCSControlledChangeValues: Equatable {
+}
+
+// MARK: - Hashable
+extension XCSControlledChangeValues: Hashable {
 }

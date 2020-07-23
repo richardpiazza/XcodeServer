@@ -12,9 +12,9 @@ extension Configuration {
         
         self.schemeName = configuration.schemeName
         
-        self.cleanSchedule = configuration.builtFromClean ?? .never
+        self.cleanSchedule = CleanSchedule(rawValue: Int16(configuration.builtFromClean?.rawValue ?? 0)) ?? .never
         self.disableAppThinning = configuration.disableAppThinning ?? false
-        self.codeCoveragePreference = configuration.codeCoveragePreference ?? .disabled
+        self.codeCoveragePreference = CodeCoveragePreference(rawValue: Int16(configuration.codeCoveragePreference?.rawValue ?? 0)) ?? .disabled
         self.useParallelDeviceTesting = configuration.useParallelDeviceTesting ?? false
         self.performsArchiveAction = configuration.performsArchiveAction ?? false
         self.performsAnalyzeAction = configuration.performsAnalyzeAction ?? false
@@ -24,8 +24,8 @@ extension Configuration {
         self.testingDestinationTypeRawValue = Int16(configuration.testingDestinationType ?? 0)
         
         
-        self.scheduleType = configuration.scheduleType ?? .periodic
-        self.periodicScheduleInterval = configuration.periodicScheduleInterval
+        self.scheduleType = BotSchedule(rawValue: Int16(configuration.scheduleType?.rawValue ?? 0)) ?? .periodic
+        self.periodicScheduleInterval = PeriodicScheduleInterval(rawValue: Int16(configuration.periodicScheduleInterval.rawValue)) ?? .none
         self.weeklyScheduleDay = Int16(configuration.weeklyScheduleDay ?? 0)
         self.hourOfIntegration = Int16(configuration.hourOfIntegration ?? 0)
         self.minutesAfterHourToIntegrate = Int16(configuration.minutesAfterHourToIntegrate ?? 0)

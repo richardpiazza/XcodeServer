@@ -5,7 +5,7 @@ import XcodeServerCoreData
 
 extension Filter {
     public func update(withFilter filter: XCSFilter) {
-        guard let moc = self.managedObjectContext else {
+        guard let context = self.managedObjectContext else {
             return
         }
         
@@ -14,7 +14,7 @@ extension Filter {
         
         if let filterPlatform = filter.platform {
             if self.platform == nil {
-                self.platform = Platform(managedObjectContext: moc, identifier: filterPlatform.identifier, filter: self)
+                self.platform = Platform(managedObjectContext: context, identifier: filterPlatform.id, filter: self)
             }
             
             if let platform = self.platform {

@@ -1,5 +1,4 @@
-import Foundation
-
+/// A source control repository.
 public struct XCSRemoteRepository: Codable {
     
     enum CodingKeys: String, CodingKey {
@@ -15,4 +14,12 @@ public struct XCSRemoteRepository: Codable {
     public var url: String?
     public var trustedCertFingerprint: String?
     public var enforceTrustCertFingerprint: Bool?
+}
+
+// MARK: - Equatable
+extension XCSRemoteRepository: Equatable {
+}
+
+// MARK: - Hashable
+extension XCSRemoteRepository: Hashable {
 }
