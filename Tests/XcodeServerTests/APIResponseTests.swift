@@ -18,11 +18,10 @@ final class APIResponseTests: XCTestCase {
         XCTAssertEqual(versions._id, "bba9b6ff6d6f0899a63d1e347e000bd9")
         XCTAssertEqual(versions._rev, "334951-d449e2bcab5f311a242d44f285495a43")
         XCTAssertEqual(versions.docType, "version")
-        XCTAssertEqual(versions.tinyID, "72EFA69")
-        XCTAssertEqual(versions.os, "10.15.5 (19F101)")
-        XCTAssertEqual(versions.xcode, "11.5 (11E608c)")
-        XCTAssertEqual(versions.xcodeServer, "2.0")
-        XCTAssertEqual(versions.server, "5.7.1 (18S1178)")
+        XCTAssertEqual(versions.macOSVersion, "10.15.5 (19F101)")
+        XCTAssertEqual(versions.xcodeAppVersion, "11.5 (11E608c)")
+        XCTAssertEqual(versions.xcodeServerVersion, "2.0")
+        XCTAssertEqual(versions.serverAppVersion, "5.7.1 (18S1178)")
     }
     
     func testBots() throws {
@@ -44,7 +43,7 @@ final class APIResponseTests: XCTestCase {
         let data = try Data(contentsOf: url)
         let bot = try decoder.decode(XCSBot.self, from: data)
         
-        XCTAssertEqual(bot.identifier, "705d82e27dbb120dddc09af79100116b")
+        XCTAssertEqual(bot.id, "705d82e27dbb120dddc09af79100116b")
     }
     
     func testStats() throws {
@@ -74,7 +73,7 @@ final class APIResponseTests: XCTestCase {
         let data = try Data(contentsOf: url)
         let integration = try decoder.decode(XCSIntegration.self, from: data)
         
-        XCTAssertEqual(integration.identifier, "2ce4a2fd2f57d53039edddc51e0009cf")
+        XCTAssertEqual(integration.id, "2ce4a2fd2f57d53039edddc51e0009cf")
     }
     
     func testRunIntegration() throws {
@@ -82,7 +81,7 @@ final class APIResponseTests: XCTestCase {
         let data = try Data(contentsOf: url)
         let integration = try decoder.decode(XCSIntegration.self, from: data)
         
-        XCTAssertEqual(integration.identifier, "2ce4a2fd2f57d53039edddc51e0009cf")
+        XCTAssertEqual(integration.id, "2ce4a2fd2f57d53039edddc51e0009cf")
     }
     
     func testIssues() throws {
