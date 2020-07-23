@@ -1,5 +1,4 @@
-import Foundation
-
+/// Code coverage result details.
 public struct XCSCoverageResult: Codable {
     
     enum CodingKeys: String, CodingKey {
@@ -11,4 +10,12 @@ public struct XCSCoverageResult: Codable {
     public var tinyID: String?
     public var percent: Double?
     public var delta: Double?
+}
+
+// MARK: - Equatable
+extension XCSCoverageResult: Equatable {
+}
+
+// MARK: - Hashable
+extension XCSCoverageResult: Hashable {
 }

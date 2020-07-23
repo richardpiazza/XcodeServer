@@ -1,5 +1,4 @@
-import Foundation
-
+/// A tracked change to the integration environment.
 public struct XCSControlledChanges: Codable {
     
     enum CodingKeys: String, CodingKey {
@@ -9,4 +8,12 @@ public struct XCSControlledChanges: Codable {
  
     public var xcode: XCSControlledChangeTraits?
     public var platforms: XCSControlledChangePlatforms?
+}
+
+// MARK: - Equatable
+extension XCSControlledChanges: Equatable {
+}
+
+// MARK: - Hashable
+extension XCSControlledChanges: Hashable {
 }

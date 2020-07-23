@@ -1,6 +1,6 @@
 public typealias XCSProvisioningProfiles = [String : String]
 
-///
+/// Parameters used during the export of a compiled/signed application.
 public struct XCSExportOptions: Codable {
     ///
     public var method: String?

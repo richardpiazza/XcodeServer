@@ -1,5 +1,4 @@
-import Foundation
-
+/// The versioning information pertaining to a controlled change.
 public struct XCSControlledChangeTraits: Codable {
     
     enum CodingKeys: String, CodingKey {
@@ -9,4 +8,12 @@ public struct XCSControlledChangeTraits: Codable {
     
     public var version: XCSControlledChangeValues?
     public var buildNumber: XCSControlledChangeValues?
+}
+
+// MARK: - Equatable
+extension XCSControlledChangeTraits: Equatable {
+}
+
+// MARK: - Hashable
+extension XCSControlledChangeTraits: Hashable {
 }

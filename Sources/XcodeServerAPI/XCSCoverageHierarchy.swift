@@ -1,5 +1,4 @@
-import Foundation
-
+/// Code coverage information.
 public struct XCSCoverageHierarchy: Codable {
     
     public enum CodingKeys: String, CodingKey {
@@ -19,3 +18,10 @@ public struct XCSCoverageHierarchy: Codable {
     public var delta: Double?
 }
 
+// MARK: - Equatable
+extension XCSCoverageHierarchy: Equatable {
+}
+
+// MARK: - Hashable
+extension XCSCoverageHierarchy: Hashable {
+}

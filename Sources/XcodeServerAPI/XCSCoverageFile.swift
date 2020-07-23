@@ -1,5 +1,4 @@
-import Foundation
-
+/// Testing coverage data.
 public struct XCSCoverageFile: Codable {
     
     enum CodingKeys: String, CodingKey {
@@ -19,3 +18,10 @@ public struct XCSCoverageFile: Codable {
     public var count: Int?
 }
 
+// MARK: - Equatable
+extension XCSCoverageFile: Equatable {
+}
+
+// MARK: - Hashable
+extension XCSCoverageFile: Hashable {
+}

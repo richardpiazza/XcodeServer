@@ -1,5 +1,4 @@
-import Foundation
-
+/// Information pertaining to a specific testing device.
 public struct XCSDevice: Codable {
     
     enum CodingKeys: String, CodingKey {
@@ -69,4 +68,20 @@ public struct XCSDevice: Codable {
         osVersion = try container.decode(String.self, forKey: .osVersion)
         platformIdentifier = try container.decode(String.self, forKey: .platformIdentifier)
     }
+}
+
+// MARK: - Identifiable
+extension XCSDevice: Identifiable {
+    public var id: String {
+        get { identifier}
+        set { identifier = newValue }
+    }
+}
+
+// MARK: - Equatable
+extension XCSDevice: Equatable {
+}
+
+// MARK: - Hashable
+extension XCSDevice: Hashable {
 }

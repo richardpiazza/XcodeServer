@@ -1,5 +1,4 @@
-import Foundation
-
+/// A collection of issues grouped by their type.
 public struct XCSIssues: Codable {
     public var buildServiceErrors: [XCSIssue]?
     public var buildServiceWarnings: [XCSIssue]?
@@ -8,4 +7,12 @@ public struct XCSIssues: Codable {
     public var warnings: XCSIssueGroup?
     public var testFailures: XCSIssueGroup?
     public var analyzerWarnings: XCSIssueGroup?
+}
+
+// MARK: - Equatable
+extension XCSIssues: Equatable {
+}
+
+// MARK: - Hashable
+extension XCSIssues: Hashable {
 }

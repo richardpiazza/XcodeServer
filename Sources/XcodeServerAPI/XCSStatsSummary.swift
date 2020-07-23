@@ -1,5 +1,4 @@
-import Foundation
-
+/// Values pertaining to a single piece of statistical data.
 public struct XCSStatsSummary: Codable {
     public var sum: Double
     public var count: Int
@@ -8,4 +7,12 @@ public struct XCSStatsSummary: Codable {
     public var avg: Double
     public var stdDev: Double
     public var sumsqr: Double?
+}
+
+// MARK: - Equatable
+extension XCSStatsSummary: Equatable {
+}
+
+// MARK: - Hashable
+extension XCSStatsSummary: Hashable {
 }

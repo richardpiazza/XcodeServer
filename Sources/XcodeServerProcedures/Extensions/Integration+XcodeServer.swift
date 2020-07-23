@@ -13,16 +13,19 @@ public extension Integration {
             return events
         }
         
-        if (currentStep != integration.currentStep) || (result != integration.result) {
-            events.append(.integration(action: .update, identifier: integration.identifier, number: integration.number))
+        let _currentStep = IntegrationStep(rawValue: integration.currentStep.rawValue) ?? .pending
+        let _result = IntegrationResult(rawValue: integration.result.rawValue) ?? .unknown
+        
+        if (currentStep != _currentStep) || (result != _result) {
+            events.append(.integration(action: .update, identifier: integration.id, number: integration.number))
         }
         
-        self.currentStep = integration.currentStep
+        self.currentStep = _currentStep
         self.duration = integration.duration ?? 0.0
         self.endedTime = integration.endedTime
         self.number = integration.number
         self.queuedDate = integration.queuedDate
-        self.result = integration.result
+        self.result = _result
         self.shouldClean = integration.shouldClean ?? false
         self.startedTime = integration.startedTime
         self.successStreak = integration.successStreak ?? 0
