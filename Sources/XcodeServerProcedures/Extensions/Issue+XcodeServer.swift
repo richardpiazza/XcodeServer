@@ -1,4 +1,5 @@
 import Foundation
+import XcodeServerCommon
 import XcodeServerAPI
 #if canImport(CoreData)
 import XcodeServerCoreData
@@ -12,9 +13,9 @@ extension Issue {
         self.issueType = issue.issueType
         self.lineNumber = Int32(issue.lineNumber ?? 0)
         self.message = issue.message
-        self.status = issue.status ?? .new
+        self.status = IssueStatus(rawValue: Int16(issue.status?.rawValue ?? 0)) ?? .new
         self.testCase = issue.testCase
-        self.type = issue.type ?? .unknown
+        self.type = IssueType(rawValue: issue.type?.rawValue ?? "") ?? .unknown
     }
 }
 

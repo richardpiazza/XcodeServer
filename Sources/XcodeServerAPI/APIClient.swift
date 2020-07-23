@@ -1,7 +1,6 @@
 import Foundation
 import SessionPlus
 import SWCompression
-import XcodeServerCommon
 
 public protocol APIClientAuthorizationDelegate: class {
     func authorization(for fqdn: String?) -> HTTP.Authorization?
@@ -31,11 +30,29 @@ public struct APIClientHeaders {
 
 public class APIClient: HTTPClient, HTTPCodable {
     
+    public static var dateFormatter: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        return formatter
+    }
+    
+    public static var jsonEncoder: JSONEncoder {
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .formatted(dateFormatter)
+        return encoder
+    }
+    
+    public static var jsonDecoder: JSONDecoder {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        return decoder
+    }
+    
     public var baseURL: URL
     public var session: URLSession
     public var authorization: HTTP.Authorization?
-    public var jsonEncoder: JSONEncoder = JSON.jsonEncoder
-    public var jsonDecoder: JSONDecoder = JSON.jsonDecoder
+    public var jsonEncoder: JSONEncoder = APIClient.jsonEncoder
+    public var jsonDecoder: JSONDecoder = APIClient.jsonDecoder
     
     /// Delegate responsible for handling all authentication for
     /// `XCServerClient` instances.

@@ -8,4 +8,3 @@ public enum PeriodicScheduleInterval: Int16, Codable {
     case weekly = 3
     case integration = 4
 }
-

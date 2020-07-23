@@ -1,6 +1,24 @@
-import XcodeServerCommon
-
+///
 public struct XCSIssue: Codable {
+    
+    /// The status of an integration issue.
+    public enum IssueStatus: Int, Codable {
+        case new = 0
+        case unresolved = 1
+        case resolved = 2
+    }
+    
+    /// Identifies the type of an `Integration` issue.
+    public enum IssueType: String, Codable {
+        case unknown
+        case buildServiceError
+        case buildServiceWarning
+        case triggerError
+        case error
+        case warning
+        case testFailure
+        case analyzerWarning
+    }
     
     enum CodingKeys: String, CodingKey {
         case _id

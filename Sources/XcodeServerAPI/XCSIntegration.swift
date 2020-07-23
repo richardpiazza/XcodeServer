@@ -1,11 +1,68 @@
 import Foundation
-import XcodeServerCommon
 
 /// A single run of a bot.
 ///
 /// Integrations consist of building, analyzing, testing, and archiving the apps (or other software products) defined in
 /// your Xcode projects.
 public struct XCSIntegration: Codable {
+    
+    /// Current state of the `Integration` as it moves through the lifecycle.
+    ///
+    /// /Applications/Xcode.app/Contents/Developer/usr/share/xcs/xcsd/constants.js
+    ///
+    /// ```js
+    /// // Integration step types
+    /// XCSIntegrationStepTypePending: 'pending',
+    /// XCSIntegrationStepTypePreparing: 'preparing',
+    /// XCSIntegrationStepTypeCheckout: 'checkout',
+    /// XCSIntegrationStepTypeTriggers: 'triggers',
+    /// XCSIntegrationStepTypeBuilding: 'building',
+    /// XCSIntegrationStepTypeProcessing: 'processing',
+    /// XCSIntegrationStepTypeUploading: 'uploading',
+    /// XCSIntegrationStepTypeCompleted: 'completed',
+    /// ```
+    public enum IntegrationStep: String, Codable {
+        case pending
+        case preparing
+        case checkout
+        case beforeTriggers = "before-triggers"
+        case triggers
+        case building
+        case testing
+        case archiving
+        case processing
+        case uploading
+        case completed
+    }
+    
+    /// The outcome of the `Integration`.
+    ///
+    /// /Applications/Xcode.app/Contents/Developer/usr/share/xcs/xcsd/constants.js
+    ///
+    /// ```js
+    /// // Integration results
+    /// XCSIntegrationResultSucceeded: 'succeeded',
+    /// XCSIntegrationResultBuildErrors: 'build-errors',
+    /// XCSIntegrationResultTestFailures: 'test-failures',
+    /// XCSIntegrationResultWarnings: 'warnings',
+    /// XCSIntegrationResultAnalyzerWarnings: 'analyzer-warnings',
+    /// XCSIntegrationResultCanceled: 'canceled',
+    /// XCSIntegrationResultInternalError: 'internal-error',
+    /// ```
+    public enum IntegrationResult: String, Codable {
+        case analyzerWarnings = "analyzer-warnings"
+        case buildErrors = "build-errors"
+        case buildFailed = "build-failed"
+        case canceled
+        case checkoutError = "checkout-error"
+        case internalError = "internal-error"
+        case internalBuildError = "internal-build-error"
+        case succeeded
+        case testFailures = "test-failures"
+        case triggerError = "trigger-error"
+        case warnings
+        case unknown
+    }
     
     enum CodingKeys: String, CodingKey {
         case _id
@@ -86,7 +143,7 @@ public struct XCSIntegration: Codable {
     /// Devices used to perform unit/ui testing
     public var testedDevices: [XCSDevice]?
     /// Unit/UI Test results
-    public var testHierarchy: TestHierarchy?
+    public var testHierarchy: XCSTests?
 }
 
 // MARK: - Identifiable

@@ -5,7 +5,7 @@ import Foundation
 public enum IssueType: String, Codable {
     case unknown = "unknown"
     case buildServiceError = "buildServiceError"
-    case BuildServiceWarning = "buildServiceWarning"
+    case buildServiceWarning = "buildServiceWarning"
     case triggerError = "triggerError"
     case error = "error"
     case warning = "warning"
@@ -14,7 +14,7 @@ public enum IssueType: String, Codable {
     
     public var isWarning: Bool {
         switch self {
-        case .warning, .BuildServiceWarning: return true
+        case .warning, .buildServiceWarning: return true
         default: return false
         }
     }
@@ -31,5 +31,13 @@ public enum IssueType: String, Codable {
         case .analyzerWarning: return true
         default: return false
         }
+    }
+}
+
+// MARK: - Deprecations
+public extension IssueType {
+    @available(*, deprecated, renamed: "buildServiceWarning")
+    static var BuildServiceWarning: IssueType {
+        return .buildServiceWarning
     }
 }

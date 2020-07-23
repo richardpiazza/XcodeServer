@@ -1,9 +1,35 @@
-import XcodeServerCommon
-
 public typealias XCSBuildArgument = String
 
-////
+///
 public struct XCSConfiguration: Codable {
+    public enum CleanSchedule: Int, Codable {
+        case never = 0
+        case always = 1
+        case daily = 2
+        case weekly = 3
+    }
+    
+    public enum CodeCoveragePreference: Int, Codable {
+        case disabled = 0
+        case enabled = 1
+        case useSchemeSetting = 2
+    }
+    
+    public enum BotSchedule: Int, Codable {
+        case periodic = 1
+        case onCommit = 2
+        case manual = 3
+    }
+    
+    /// Intervals available for a `periodic` `BotSchedule`.
+    public enum PeriodicScheduleInterval: Int, Codable {
+        case none = 0
+        case hourly = 1
+        case daily = 2
+        case weekly = 3
+        case integration = 4
+    }
+    
     // MARK: - Options
     
     ///

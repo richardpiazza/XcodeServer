@@ -1,3 +1,4 @@
+///
 public struct XCSIssueAuthor: Codable {
     enum CodingKeys: String, CodingKey {
         case suspectStrategy = "XCSIssueSuspectstrategy"

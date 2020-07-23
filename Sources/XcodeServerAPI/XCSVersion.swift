@@ -1,5 +1,3 @@
-import XcodeServerCommon
-
 /// Versioning information for the Xcode Server and associated components.
 public struct XCSVersion: Codable {
     
@@ -61,13 +59,6 @@ extension XCSVersion: Equatable {
 
 // MARK: - Hashable
 extension XCSVersion: Hashable {
-}
-
-// MARK: -
-public extension XCSVersion {
-    var version: XcodeServerVersion {
-        return XcodeServerVersion(rawValue: xcodeServerVersion ?? "") ?? .v2_0
-    }
 }
 
 // MARK: - Deprecations

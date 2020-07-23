@@ -1,4 +1,5 @@
 import Foundation
+import XcodeServerCommon
 import XcodeServerAPI
 #if canImport(CoreData)
 import XcodeServerCoreData
@@ -10,8 +11,8 @@ extension Trigger {
         }
         
         self.name = trigger.name
-        self.type = trigger.type ?? .script
-        self.phase = trigger.phase ?? .beforeIntegration
+        self.type = TriggerType(rawValue: Int16(trigger.type?.rawValue ?? 0)) ?? .script
+        self.phase = TriggerPhase(rawValue: Int16(trigger.phase?.rawValue ?? 0)) ?? .beforeIntegration
         self.scriptBody = trigger.scriptBody
         
         if let triggerConditions = trigger.conditions {

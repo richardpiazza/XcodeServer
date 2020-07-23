@@ -1,5 +1,6 @@
 import Foundation
 
+///
 public struct XCSCommit: Codable {
     
     enum CodingKeys: String, CodingKey {
