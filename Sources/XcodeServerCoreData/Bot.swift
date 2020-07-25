@@ -58,35 +58,4 @@ extension Bot {
     
 }
 
-public extension NSManagedObjectContext {
-    /// Retrieves all `Bot` entities from the Core Data `NSManagedObjectContext`
-    func bots() -> [Bot] {
-        let fetchRequest = NSFetchRequest<Bot>(entityName: Bot.entityName)
-        do {
-            return try self.fetch(fetchRequest)
-        } catch {
-            print(error)
-        }
-        
-        return []
-    }
-    
-    /// Retrieves the first `Bot` entity from the Core Data `NSManagedObjectContext`
-    /// that matches the specified identifier.
-    func bot(withIdentifier identifier: String) -> Bot? {
-        let fetchRequest = NSFetchRequest<Bot>(entityName: Bot.entityName)
-        fetchRequest.predicate = NSPredicate(format: "identifier = %@", argumentArray: [identifier])
-        do {
-            let results = try self.fetch(fetchRequest)
-            if let result = results.first {
-                return result
-            }
-        } catch {
-            print(error)
-        }
-        
-        return nil
-    }
-}
-
 #endif

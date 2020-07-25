@@ -28,35 +28,4 @@ public extension Repository {
     
 }
 
-public extension NSManagedObjectContext {
-    /// Retrieves all `Repository` entities from the Core Data `NSManagedObjectContext`
-    func repositories() -> [Repository] {
-        let fetchRequest = NSFetchRequest<Repository>(entityName: Repository.entityName)
-        do {
-            return try self.fetch(fetchRequest)
-        } catch {
-            print(error)
-        }
-        
-        return []
-    }
-    
-    /// Retrieves the first `Repository` entity from the Core Data `NSManagedObjectContext`
-    /// that matches the specified identifier.
-    func repository(withIdentifier identifier: String) -> Repository? {
-        let fetchRequest = NSFetchRequest<Repository>(entityName: Repository.entityName)
-        fetchRequest.predicate = NSPredicate(format: "identifier = %@", argumentArray: [identifier])
-        do {
-            let results = try self.fetch(fetchRequest)
-            if let result = results.first {
-                return result
-            }
-        } catch {
-            print(error)
-        }
-        
-        return nil
-    }
-}
-
 #endif
