@@ -17,12 +17,14 @@ final class XcodeServerTests: XCTestCase {
         ("testFullStore_Model_1_0_0_Metadata", testFullStore_Model_1_0_0_Metadata),
     ]
     
+    #if canImport(CoreData)
     lazy var model: NSManagedObjectModel = {
         return Model_1_0_0.instance
     }()
+    #endif
     
     func testXCModelHashes() throws {
-        #if canImport(CoreData)
+        #if canImport(CoreData) && swift(>=5.3)
         let model = try XCTUnwrap(Model_1_0_0.bundle)
         let entityHashes = model.entityVersionHashesByName
         XCTAssertEqual(entityHashes[Asset.entityName]!.hexString, "b31a95b5bd19f89ddfe7e0fcedd7d7cb8be8b49b83a0a4b0d7ed2b533c99cce7")
@@ -82,7 +84,7 @@ final class XcodeServerTests: XCTestCase {
     }
     
     func testModel_1_0_0_Initialization() {
-        #if canImport(CoreData)
+        #if canImport(CoreData) && swift(>=5.3)
         let exp = expectation(description: "\(#function)")
         
         let description = NSPersistentStoreDescription()
@@ -107,7 +109,7 @@ final class XcodeServerTests: XCTestCase {
     }
     
     func testEmptyStore_Model_1_0_0_Metadata() throws {
-        #if canImport(CoreData)
+        #if canImport(CoreData) && swift(>=5.3)
         let url = try XCTUnwrap(Bundle.module.url(forResource: "XcodeServer_1.0.0_empty", withExtension: "sqlite"))
         let metadata = try NSPersistentStoreCoordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: url, options: nil)
         XCTAssertTrue(model.isConfiguration(withName: nil, compatibleWithStoreMetadata: metadata))
@@ -115,7 +117,7 @@ final class XcodeServerTests: XCTestCase {
     }
     
     func testFullStore_Model_1_0_0_Metadata() throws {
-        #if canImport(CoreData)
+        #if canImport(CoreData) && swift(>=5.3)
         let url = try XCTUnwrap(Bundle.module.url(forResource: "XcodeServer_1.0.0_full", withExtension: "sqlite"))
         let metadata = try NSPersistentStoreCoordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: url, options: nil)
         XCTAssertTrue(model.isConfiguration(withName: nil, compatibleWithStoreMetadata: metadata))
