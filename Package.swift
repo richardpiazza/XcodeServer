@@ -48,8 +48,7 @@ let package = Package(
             dependencies: ["SWCompression", "SessionPlus"]),
         .target(
             name: "XcodeServerCoreData",
-            dependencies: ["XcodeServerCommon"],
-            resources: [.process("Resources")]),
+            dependencies: ["XcodeServerCommon"]),
         .target(
             name: "XcodeServerProcedures",
             dependencies: ["XcodeServerCommon", "XcodeServerAPI", "XcodeServerCoreData", "ProcedureKit"]),
