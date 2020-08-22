@@ -25,7 +25,7 @@ let package = Package(
         // .package(url: /* package url */, from: "1.0.0"),
         .package(url: "https://github.com/richardpiazza/SessionPlus.git", from: "1.0.0-rc.2"),
         .package(url: "https://github.com/tsolomko/SWCompression", .upToNextMinor(from: "4.5.5")),
-        .package(url: "https://github.com/ProcedureKit/ProcedureKit.git", .upToNextMinor(from: "5.2.0")),
+        .package(url: "https://github.com/richardpiazza/ProcedureKit.git", .branch("feature/cross-platform")),
         .package(url: "https://github.com/apple/swift-argument-parser.git", .upToNextMinor(from: "0.1.0")),
     ],
     targets: [
