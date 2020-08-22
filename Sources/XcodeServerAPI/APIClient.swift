@@ -1,6 +1,9 @@
 import Foundation
 import SessionPlus
 import SWCompression
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 public protocol APIClientAuthorizationDelegate: class {
     func authorization(for fqdn: String?) -> HTTP.Authorization?
@@ -64,7 +67,11 @@ public class APIClient: HTTPClient, HTTPCodable {
         }
         
         baseURL = url
+        #if canImport(FoundationNetworking)
+        session = URLSession(configuration: URLSessionConfiguration.default, delegate: nil, delegateQueue: nil)
+        #else
         session = URLSession(configuration: URLSessionConfiguration.default, delegate: SelfSignedSessionDelegate(), delegateQueue: nil)
+        #endif
         self.authorizationDelegate = authorizationDelegate
     }
     
