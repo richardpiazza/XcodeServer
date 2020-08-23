@@ -3,7 +3,7 @@
 A swift framework for interacting with, and persisting data from an "Xcode Server".
 
 <p>
-    <img src="https://github.com/richardpiazza/XcodeServer/workflows/Swift/badge.svg?branch=master" />
+    <img src="https://github.com/richardpiazza/XcodeServer/workflows/Swift/badge.svg?branch=main" />
     <img src="https://img.shields.io/badge/Swift-5.2-orange.svg" />
     <a href="https://twitter.com/richardpiazza">
         <img src="https://img.shields.io/badge/twitter-@richardpiazza-blue.svg?style=flat" alt="Twitter: @richardpiazza" />
