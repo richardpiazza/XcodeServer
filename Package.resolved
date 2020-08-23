@@ -12,11 +12,11 @@
       },
       {
         "package": "ProcedureKit",
-        "repositoryURL": "https://github.com/ProcedureKit/ProcedureKit.git",
+        "repositoryURL": "https://github.com/richardpiazza/ProcedureKit.git",
         "state": {
-          "branch": null,
-          "revision": "a7fa565e648d90083c7f10c0c6be9bf249dcdbde",
-          "version": "5.2.0"
+          "branch": "feature/cross-platform",
+          "revision": "60222cad0cc2e1ac4e713fcb0e50ddd261f96999",
+          "version": null
         }
       },
       {
@@ -24,8 +24,8 @@
         "repositoryURL": "https://github.com/richardpiazza/SessionPlus.git",
         "state": {
           "branch": null,
-          "revision": "fe7f5125399e698cd8290de7918173f9d5b06fd7",
-          "version": "1.0.0-rc.1"
+          "revision": "fa2c76ea8a6ee0dfa155ea42916b22204e6e501d",
+          "version": "1.0.0"
         }
       },
       {

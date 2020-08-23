@@ -35,7 +35,7 @@ extension Route {
     }
     
     // MARK: - ManagerAuthorizationDelegate
-    func credentialsForServer(withFQDN fqdn: String?) -> ManagerCredentials? {
+    func credentialsForServer(withFQDN fqdn: String?) -> (username: String, password: String)? {
         guard let username = self.username else {
             return nil
         }
