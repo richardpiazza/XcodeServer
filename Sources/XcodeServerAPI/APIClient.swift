@@ -14,6 +14,18 @@ public typealias APIClientHeaders = APIClient.Headers
 
 public protocol APIClientAuthorizationDelegate: class {
     func credentials(for fqdn: String) -> (username: String, password: String)?
+    @available(*, deprecated, renamed: "credentials(for:)")
+    func authorization(for fqdn: String?) -> HTTP.Authorization?
+}
+
+public extension APIClientAuthorizationDelegate {
+    @available(*, deprecated, renamed: "credentials(for:)")
+    func authorization(for fqdn: String?) -> HTTP.Authorization? {
+        guard let creds = credentials(for: fqdn ?? "") else {
+            return nil
+        }
+        return .basic(username: creds.username, password: creds.password)
+    }
 }
 
 public class APIClient {

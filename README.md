@@ -12,13 +12,14 @@ A swift framework for interacting with, and persisting data from an "Xcode Serve
 
 ## Usage
 
-XcodeServer is distributed using the [Swift Package Manager](https://swift.org/package-manager). To install it into a project, add it as a dependency within your `Package.swift` manifest:
+XcodeServer is distributed using the [Swift Package Manager](https://swift.org/package-manager). To install it into a project, add it as a 
+dependency within your `Package.swift` manifest:
 
 ```swift
 let package = Package(
     ...
     dependencies: [
-        .package(url: "https://github.com/richardpiazza/XcodeServer.git", .upToNextMinor(from: "1.0.3")
+        .package(url: "https://github.com/richardpiazza/XcodeServer.git", .upToNextMinor(from: "1.1.0")
     ],
     ...
 )
@@ -29,6 +30,17 @@ Then import the **XcodeServer** packages wherever you'd like to use it:
 ```swift
 import XcodeServer
 ```
+
+## Prerequisites
+
+### macOS, iOS, tvOS, watchOS
+
+none
+
+### Linux (Ubuntu)
+
+**zlib1g-dev** must be pre-installed.
+`sudo apt-get install -y zlib1g-dev`
 
 ## Packages
 
@@ -44,7 +56,8 @@ Provides shared resources for the other packages, this includes:
 
 ### XcodeServerAPI
 
-All of the DTO definitions for the Xcode Server API. The `APIClient` class provides endpoint definitions and utilities for downloading Integration coverage data & assets.
+All of the DTO definitions for the Xcode Server API. The `APIClient` class provides endpoint definitions and utilities for downloading 
+Integration coverage data & assets.
 
 ### XcodeServerCoreData
 
@@ -60,7 +73,8 @@ A `Manager` class that interacts with the procedures the query and persist data 
 
 ### `xcscli`
 
-The executable `xcscli` provides a command line interface to the Xcode Server API. To execute from the command line (without building a binary version), you can use the `swift run` command from the root directory. For instance:
+The executable `xcscli` provides a command line interface to the Xcode Server API. To execute from the command line (without building a 
+binary version), you can use the `swift run` command from the root directory. For instance:
 
 ```bash
 $ swift run xcscli --help
@@ -78,7 +92,8 @@ $ swift run xcscli ping fully.qualified.domain.name
 
 #### versions
 
-Performs a HTTP GET on the `/versions` endpoint. This contains versioning information about the API, Operating System, and Installed Xcode.
+Performs a HTTP GET on the `/versions` endpoint. This contains versioning information about the API, Operating System, and Installed 
+Xcode.
 
 ```bash
 $ swift run xcscli versions fully.qualified.domain.name
@@ -86,7 +101,8 @@ $ swift run xcscli versions fully.qualified.domain.name
 
 #### bots
 
-Performs a HTTP GET on the `/bots` endpoint. Without any additional options this will return a collection of all the Xcode Bots on the server. A `--path` option can be specified for additional information. A single Bot is targeted by specifying the `--id` argument.
+Performs a HTTP GET on the `/bots` endpoint. Without any additional options this will return a collection of all the Xcode Bots on the 
+server. A `--path` option can be specified for additional information. A single Bot is targeted by specifying the `--id` argument.
 
 *Paths:*
 
@@ -98,7 +114,8 @@ Performs a HTTP GET on the `/bots` endpoint. Without any additional options this
 
 #### integrations
 
-Performs a HTTP GET on the `/integrations` endpoint. A unique identifier must be supplied with `--id/-i`. `--path` is available to additional resources.
+Performs a HTTP GET on the `/integrations` endpoint. A unique identifier must be supplied with `--id/-i`. `--path` is available to 
+additional resources.
 
 *Paths*:
 
