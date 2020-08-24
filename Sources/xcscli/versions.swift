@@ -2,7 +2,6 @@ import Foundation
 import ArgumentParser
 import XcodeServer
 import XcodeServerAPI
-import SessionPlus
 
 final class Versions: ParsableCommand, Route {
     
