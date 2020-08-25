@@ -2,7 +2,6 @@ import Foundation
 import ArgumentParser
 import XcodeServer
 import XcodeServerAPI
-import SessionPlus
 
 protocol Route: APIClientAuthorizationDelegate {
     var server: String { get set }
@@ -22,16 +21,8 @@ extension Route {
     }
     
     // MARK: - APIClientAuthorizationDelegate
-    func authorization(for fqdn: String?) -> HTTP.Authorization? {
-        guard let username = self.username else {
-            return nil
-        }
-        
-        guard let password = self.password else {
-            return .basic(username: username, password: nil)
-        }
-        
-        return .basic(username: username, password: password)
+    func credentials(for fqdn: String) -> (username: String, password: String)? {
+        return credentialsForServer(withFQDN: fqdn)
     }
     
     // MARK: - ManagerAuthorizationDelegate

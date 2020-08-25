@@ -2,7 +2,6 @@ import Foundation
 import ArgumentParser
 import XcodeServer
 import XcodeServerAPI
-import SessionPlus
 #if canImport(CoreData)
 import CoreData
 import XcodeServerCoreData

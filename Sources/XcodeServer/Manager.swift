@@ -1,5 +1,4 @@
 import Foundation
-import SessionPlus
 import ProcedureKit
 import XcodeServerCommon
 import XcodeServerAPI
@@ -36,10 +35,6 @@ public class Manager {
         }
         
         let client = try APIClient(fqdn: fqdn, authorizationDelegate: self)
-        client.session.configuration.timeoutIntervalForRequest = 8
-        client.session.configuration.timeoutIntervalForResource = 16
-        client.session.configuration.httpCookieAcceptPolicy = .never
-        client.session.configuration.httpShouldSetCookies = false
         
         clients[fqdn] = client
         
@@ -537,12 +532,8 @@ public class Manager {
 }
 
 extension Manager: APIClientAuthorizationDelegate {
-    public func authorization(for fqdn: String?) -> HTTP.Authorization? {
-        guard let credentials = authorizationDelegate?.credentialsForServer(withFQDN: fqdn) else {
-            return nil
-        }
-        
-        return .basic(username: credentials.username, password: credentials.password)
+    public func credentials(for fqdn: String) -> (username: String, password: String)? {
+        return authorizationDelegate?.credentialsForServer(withFQDN: fqdn)
     }
 }
 
