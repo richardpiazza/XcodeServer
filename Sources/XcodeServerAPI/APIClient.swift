@@ -51,7 +51,12 @@ public class APIClient {
     }
     
     public struct Headers {
-        public static let xscAPIVersion = "x-xcsapiversion"
+        public static let xcsAPIVersion = "x-xcsapiversion"
+        
+        @available(*, deprecated, renamed: "xcsAPIVersion")
+        public static var xscAPIVersion: String {
+            return xcsAPIVersion
+        }
     }
     
     private static var rfc1123: DateFormatter = {
@@ -86,6 +91,7 @@ public class APIClient {
     public let client: HTTPClient
     public var jsonEncoder: JSONEncoder = APIClient.jsonEncoder
     public var jsonDecoder: JSONDecoder = APIClient.jsonDecoder
+    let dispatchQueue: DispatchQueue = DispatchQueue(label: "XcodeServer.XcodeServerAPI.APIClient")
     
     /// Delegate responsible for handling all authentication for
     /// `XCServerClient` instances.
@@ -229,13 +235,9 @@ public extension APIClient {
             var apiVersion: Int?
             
             if let responseHeaders = headers {
-                if let version = responseHeaders[APIClient.Headers.xscAPIVersion].first {
+                if let version = responseHeaders[APIClient.Headers.xcsAPIVersion].first {
                     apiVersion = Int(version)
                 }
-                
-                print("\(self.baseURL) API Version: \(apiVersion ?? -1)")
-            } else {
-                print("No Response Headers!")
             }
             
             completion(.success((result, apiVersion)))
@@ -245,14 +247,14 @@ public extension APIClient {
 
 // MARK: - Bots
 public extension APIClient {
-    private struct Bots: Codable {
-        public var count: Int
-        public var results: [XCSBot]
-    }
-    
     /// Requests the '`/bots`' endpoint from the Xcode Server API.
     func bots(_ completion: @escaping (Result<[XCSBot], Error>) -> Void) {
-        get("bots") { (statusCode, headers, data: Bots?, error) in
+        struct Response: Codable {
+            public var count: Int
+            public var results: [XCSBot]
+        }
+        
+        get("bots") { (statusCode, headers, data: Response?, error) in
             completion(self.serverResult(statusCode, headers, data: data?.results, error))
         }
     }
@@ -274,14 +276,14 @@ public extension APIClient {
 
 // MARK: - Integrations
 public extension APIClient {
-    private struct Integrations: Codable {
-        public var count: Int
-        public var results: [XCSIntegration]
-    }
-    
     /// Requests the '`/bots/{id}/integrations`' endpoint from the Xcode Server API.
     func integrations(forBotWithIdentifier identifier: String, completion: @escaping (Result<[XCSIntegration], Error>) -> Void) {
-        get("bots/\(identifier)/integrations") { (statusCode, headers, data: Integrations?, error) in
+        struct Response: Codable {
+            public var count: Int
+            public var results: [XCSIntegration]
+        }
+        
+        get("bots/\(identifier)/integrations") { (statusCode, headers, data: Response?, error) in
             completion(self.serverResult(statusCode, headers, data: data?.results, error))
         }
     }
@@ -303,14 +305,14 @@ public extension APIClient {
 
 // MARK: - Commits
 public extension APIClient {
-    private struct IntegrationCommits: Codable {
-        public var count: Int
-        public var results: [XCSCommit]
-    }
-    
     /// Requests the '`/integrations/{id}/commits`' endpoint from the Xcode Server API.
     func commits(forIntegrationWithIdentifier identifier: String, completion: @escaping (Result<[XCSCommit], Error>) -> Void) {
-        get("integrations/\(identifier)/commits") { (statusCode, headers, data: IntegrationCommits?, error) in
+        struct Response: Codable {
+            public var count: Int
+            public var results: [XCSCommit]
+        }
+        
+        get("integrations/\(identifier)/commits") { (statusCode, headers, data: Response?, error) in
             completion(self.serverResult(statusCode, headers, data: data?.results, error))
         }
     }

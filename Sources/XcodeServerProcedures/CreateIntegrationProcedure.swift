@@ -1,19 +1,14 @@
-import Foundation
+import XcodeServer
 import ProcedureKit
-import XcodeServerAPI
-#if canImport(CoreData)
-import CoreData
-import XcodeServerCoreData
 
-public class CreateIntegrationProcedure: NSManagedObjectProcedure<Bot>, InputProcedure {
+@available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+@available(swift, introduced: 5.1)
+public class CreateIntegrationProcedure: IdentifiablePersitableProcedure<Bot>, InputProcedure {
     
-    public typealias Input = XCSIntegration
+    public var input: Pending<Integration> = .pending
     
-    public var input: Pending<Input> = .pending
-    
-    public init(container: NSPersistentContainer, bot: Bot, input: Input? = nil) {
-        super.init(container: container, object: bot)
-        
+    public init(destination: AnyPersistable, identifiable: Bot, input: Integration? = nil) {
+        super.init(destination: destination, identifiable: identifiable)
         if let value = input {
             self.input = .ready(value)
         }
@@ -31,30 +26,18 @@ public class CreateIntegrationProcedure: NSManagedObjectProcedure<Bot>, InputPro
             return
         }
         
-        let id = objectID
+        print("Creating Integration '\(value.id)' for Bot  '\(id)'")
         
-        print("Creating Integration '\(value.id)' for Bot  '\(managedObject.identifier)'")
+        var _bot = identifiable
+        _bot.integrations.insert(value)
         
-        container.performBackgroundTask { [weak self] (context) in
-            let bot = context.object(with: id) as! Bot
-            
-            guard let integration = Integration(managedObjectContext: context, identifier: value.id, bot: bot) else {
-                self?.finish(with: XcodeServerProcedureError.failedToCreateIntegration(id: value.id))
-                return
-            }
-            
-            integration.number = value.number
-            bot.addToIntegrations(integration)
-            bot.lastUpdate = Date()
-            
-            do {
-                try context.save()
+        destination.saveBot(_bot) { [weak self] (result) in
+            switch result {
+            case .success:
                 self?.finish()
-            } catch {
+            case .failure(let error):
                 self?.finish(with: error)
             }
         }
     }
 }
-
-#endif

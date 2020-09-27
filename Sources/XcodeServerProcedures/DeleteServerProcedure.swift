@@ -1,35 +1,24 @@
-import Foundation
+import XcodeServer
 import ProcedureKit
-import XcodeServerAPI
-#if canImport(CoreData)
-import CoreData
-import XcodeServerCoreData
 
-public class DeleteServerProcedure: NSManagedObjectProcedure<Server> {
+@available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+@available(swift, introduced: 5.1)
+public class DeleteServerProcedure: IdentifiablePersitableProcedure<Server> {
     
     public override func execute() {
         guard !isCancelled else {
             return
         }
         
-        let id = objectID
+        print("Deleting Server '\(id)'")
         
-        print("Deleting Server '\(managedObject.fqdn)'")
-        
-        container.performBackgroundTask({ [weak self] (context) in
-            let server = context.object(with: id) as! Server
-            
-            context.delete(server)
-            
-            do {
-                try context.save()
+        destination.deleteServer(identifiable) { [weak self] (result) in
+            switch result {
+            case .success:
                 self?.finish()
-            } catch {
+            case .failure(let error):
                 self?.finish(with: error)
             }
-        })
+        }
     }
-    
 }
-
-#endif

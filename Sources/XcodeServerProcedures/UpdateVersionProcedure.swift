@@ -1,19 +1,15 @@
-import Foundation
+import XcodeServer
 import ProcedureKit
-import XcodeServerAPI
-#if canImport(CoreData)
-import CoreData
-import XcodeServerCoreData
+import Foundation
 
-public class UpdateVersionProcedure: NSManagedObjectProcedure<Server>, InputProcedure {
+@available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+@available(swift, introduced: 5.1)
+public class UpdateVersionProcedure: IdentifiablePersitableProcedure<Server>, InputProcedure {
     
-    public typealias Input = (XCSVersion, Int?)
+    public var input: Pending<Server.Version> = .pending
     
-    public var input: Pending<Input> = .pending
-    
-    public init(container: NSPersistentContainer, server: Server, input: Input? = nil) {
-        super.init(container: container, object: server)
-        
+    public init(destination: AnyPersistable, identifiable: Server, input: Server.Version? = nil) {
+        super.init(destination: destination, identifiable: identifiable)
         if let value = input {
             self.input = .ready(value)
         }
@@ -31,24 +27,19 @@ public class UpdateVersionProcedure: NSManagedObjectProcedure<Server>, InputProc
             return
         }
         
-        let id = objectID
+        print("Updating Versions for Server '\(id)'")
         
-        print("Updating Versions for Server '\(managedObject.fqdn)'")
+        var _server = identifiable
+        _server.modified = Date()
+        _server.version = value
         
-        container.performBackgroundTask { [weak self] (context) in
-            let server = context.object(with: id) as! Server
-            
-            server.lastUpdate = Date()
-            server.update(withVersion: value.0, api: value.1)
-            
-            do {
-                try context.save()
+        destination.saveServer(_server) { [weak self] (result) in
+            switch result {
+            case .success:
                 self?.finish()
-            } catch {
+            case .failure(let error):
                 self?.finish(with: error)
             }
         }
     }
 }
-
-#endif

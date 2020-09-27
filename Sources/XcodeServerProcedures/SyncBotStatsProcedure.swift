@@ -1,24 +1,19 @@
-import Foundation
+import XcodeServer
 import ProcedureKit
-import XcodeServerAPI
-#if canImport(CoreData)
-import CoreData
-import XcodeServerCoreData
 
-public class SyncBotStatsProcedure: NSManagedObjectGroupProcedure<Bot> {
+@available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+@available(swift, introduced: 5.1)
+public class SyncBotStatsProcedure: IdentifiablePersitableGroupProcedure<Bot> {
     
-    public let apiClient: APIClient
+    public let source: AnyQueryable
     
-    public init(container: NSPersistentContainer, bot: Bot, apiClient: APIClient) {
-        self.apiClient = apiClient
+    public init(source: AnyQueryable, destination: AnyPersistable, identifiable: Bot) {
+        self.source = source
         
-        let get = GetBotStatsProcedure(client: apiClient, input: bot.identifier)
-        
-        let update = UpdateBotStatsProcedure(container: container, bot: bot)
+        let get = GetBotStatsProcedure(source: source, input: identifiable.id)
+        let update = UpdateBotStatsProcedure(destination: destination, identifiable: identifiable)
         update.injectResult(from: get)
         
-        super.init(container: container, object: bot, operations: [get, update])
+        super.init(destination: destination, identifiable: identifiable, operations: [get, update])
     }
 }
-
-#endif

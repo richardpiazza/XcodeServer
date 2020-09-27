@@ -1,31 +1,24 @@
-import Foundation
+import XcodeServer
 import ProcedureKit
-import XcodeServerAPI
-#if canImport(CoreData)
-import CoreData
-import XcodeServerCoreData
 
-public class SyncIntegrationProcedure: NSManagedObjectGroupProcedure<Integration>, OutputProcedure {
+@available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+@available(swift, introduced: 5.1)
+public class SyncIntegrationProcedure: IdentifiablePersitableGroupProcedure<Integration>, OutputProcedure {
     
-    public typealias Output = [XcodeServerProcedureEvent]
+    public let source: AnyQueryable
+    public var output: Pending<ProcedureResult<[XcodeServerProcedureEvent]>> = .pending
     
-    public let apiClient: APIClient
-    public var output: Pending<ProcedureResult<Output>> = .pending
-    
-    public init(container: NSPersistentContainer, integration: Integration, apiClient: APIClient) {
-        self.apiClient = apiClient
+    public init(source: AnyQueryable, destination: AnyPersistable, identifiable: Integration) {
+        self.source = source
+        super.init(destination: destination, identifiable: identifiable, operations: [])
         
-        let get = GetIntegrationProcedure(client: apiClient, input: integration.identifier)
-        
-        let update = UpdateIntegrationProcedure(container: container, integration: integration)
+        let get = GetIntegrationProcedure(source: source, input: identifiable.id)
+        let update = UpdateIntegrationProcedure(destination: destination, identifiable: identifiable)
         update.injectResult(from: get)
-        
-        super.init(container: container, object: integration, operations: [get, update])
-        
         update.addDidFinishBlockObserver { (proc, error) in
             self.output = proc.output
         }
+        
+        addChildren(get, update)
     }
 }
-
-#endif

@@ -1,21 +1,18 @@
-import Foundation
+import XcodeServer
 import ProcedureKit
-import XcodeServerAPI
 
-public class GetBotsProcedure: APIClientProcedure, OutputProcedure {
+public class GetBotsProcedure: AnyQueryableProcedure, OutputProcedure {
     
-    public typealias Output = [XCSBot]
-    
-    public var output: Pending<ProcedureResult<Output>> = .pending
+    public var output: Pending<ProcedureResult<[Bot]>> = .pending
     
     public override func execute() {
         guard !isCancelled else {
             return
         }
         
-        print("Getting Bots '\(client.baseURL)'")
+        print("Getting Bots")
         
-        client.bots { [weak self] (result) in
+        source.getBots { [weak self] (result) in
             switch result {
             case .success(let value):
                 self?.output = .ready(.success(value))

@@ -1,19 +1,14 @@
-import Foundation
+import XcodeServer
 import ProcedureKit
-import XcodeServerAPI
-#if canImport(CoreData)
-import CoreData
-import XcodeServerCoreData
 
-public class UpdateBotStatsProcedure: NSManagedObjectProcedure<Bot>, InputProcedure {
+@available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+@available(swift, introduced: 5.1)
+public class UpdateBotStatsProcedure: IdentifiablePersitableProcedure<Bot>, InputProcedure {
     
-    public typealias Input = XCSStats
+    public var input: Pending<Bot.Stats> = .pending
     
-    public var input: Pending<Input> = .pending
-    
-    public init(container: NSPersistentContainer, bot: Bot, input: Input? = nil) {
-        super.init(container: container, object: bot)
-        
+    public init(destination: AnyPersistable, identifiable: Bot, input: Bot.Stats? = nil) {
+        super.init(destination: destination, identifiable: identifiable)
         if let value = input {
             self.input = .ready(value)
         }
@@ -31,23 +26,18 @@ public class UpdateBotStatsProcedure: NSManagedObjectProcedure<Bot>, InputProced
             return
         }
         
-        let id = objectID
+        print("Updating Stats for Bot '\(id)'")
         
-        print("Updating Stats for Bot '\(managedObject.identifier)'")
+        var _bot = identifiable
+        _bot.stats = value
         
-        container.performBackgroundTask { [weak self] (context) in
-            let bot = context.object(with: id) as! Bot
-            
-            bot.stats?.update(withStats: value)
-            
-            do {
-                try context.save()
+        destination.saveBot(_bot) { [weak self] (result) in
+            switch result {
+            case .success:
                 self?.finish()
-            } catch {
+            case .failure(let error):
                 self?.finish(with: error)
             }
         }
     }
 }
-
-#endif

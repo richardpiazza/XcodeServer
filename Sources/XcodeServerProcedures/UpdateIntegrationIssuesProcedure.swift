@@ -1,19 +1,14 @@
-import Foundation
+import XcodeServer
 import ProcedureKit
-import XcodeServerAPI
-#if canImport(CoreData)
-import CoreData
-import XcodeServerCoreData
 
-public class UpdateIntegrationIssuesProcedure: NSManagedObjectProcedure<Integration>, InputProcedure {
+@available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+@available(swift, introduced: 5.1)
+public class UpdateIntegrationIssuesProcedure: IdentifiablePersitableProcedure<Integration>, InputProcedure {
     
-    public typealias Input = XCSIssues
+    public var input: Pending<Integration.IssueCatalog> = .pending
     
-    public var input: Pending<Input> = .pending
-    
-    public init(container: NSPersistentContainer, integration: Integration, input: Input? = nil) {
-        super.init(container: container, object: integration)
-        
+    public init(destination: AnyPersistable, identifiable: Integration, input: Integration.IssueCatalog? = nil) {
+        super.init(destination: destination, identifiable: identifiable)
         if let value = input {
             self.input = .ready(value)
         }
@@ -31,24 +26,15 @@ public class UpdateIntegrationIssuesProcedure: NSManagedObjectProcedure<Integrat
             return
         }
         
-        let id = objectID
+        print("Updating Issues for Integration '\(id)'")
         
-        print("Updating Issues for Integration '\(managedObject.identifier)'")
-        
-        container.performBackgroundTask { [weak self] (context) in
-            let integration = context.object(with: id) as! Integration
-            
-            integration.issues?.update(withIntegrationIssues: value)
-            integration.hasRetrievedIssues = true
-            
-            do {
-                try context.save()
+        destination.saveIssues(value, forIntegration: id) { [weak self] (result) in
+            switch result {
+            case .success:
                 self?.finish()
-            } catch {
+            case .failure(let error):
                 self?.finish(with: error)
             }
         }
     }
 }
-
-#endif

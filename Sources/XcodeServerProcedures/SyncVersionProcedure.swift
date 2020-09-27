@@ -1,24 +1,19 @@
-import Foundation
+import XcodeServer
 import ProcedureKit
-import XcodeServerAPI
-#if canImport(CoreData)
-import CoreData
-import XcodeServerCoreData
 
-public class SyncVersionProcedure: NSManagedObjectGroupProcedure<Server> {
+@available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+@available(swift, introduced: 5.1)
+public class SyncVersionProcedure: IdentifiablePersitableGroupProcedure<Server> {
     
-    public let apiClient: APIClient
+    public let source: AnyQueryable
     
-    public init(container: NSPersistentContainer, server: Server, apiClient: APIClient) {
-        self.apiClient = apiClient
+    public init(source: AnyQueryable, destination: AnyPersistable, identifiable: Server) {
+        self.source = source
         
-        let get = GetVersionProcedure(client: apiClient)
-        
-        let update = UpdateVersionProcedure(container: container, server: server)
+        let get = GetVersionProcedure(source: source, input: identifiable.id)
+        let update = UpdateVersionProcedure(destination: destination, identifiable: identifiable)
         update.injectResult(from: get)
         
-        super.init(container: container, object: server, operations: [get, update])
+        super.init(destination: destination, identifiable: identifiable, operations: [get, update])
     }
 }
-
-#endif

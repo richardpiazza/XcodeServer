@@ -1,21 +1,16 @@
-import Foundation
+import XcodeServer
 import ProcedureKit
-import XcodeServerAPI
-#if canImport(CoreData)
-import CoreData
-import XcodeServerCoreData
+import Foundation
 
-public class UpdateBotIntegrationsProcedure: NSManagedObjectProcedure<Bot>, InputProcedure, OutputProcedure {
+@available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+@available(swift, introduced: 5.1)
+public class UpdateBotIntegrationsProcedure: IdentifiablePersitableProcedure<Bot>, InputProcedure, OutputProcedure {
     
-    public typealias Input = [XCSIntegration]
-    public typealias Output = [XcodeServerProcedureEvent]
+    public var input: Pending<[Integration]> = .pending
+    public var output: Pending<ProcedureResult<[XcodeServerProcedureEvent]>> = .pending
     
-    public var input: Pending<Input> = .pending
-    public var output: Pending<ProcedureResult<Output>> = .pending
-    
-    public init(container: NSPersistentContainer, bot: Bot, input: Input? = nil) {
-        super.init(container: container, object: bot)
-        
+    public init(destination: AnyPersistable, identifiable: Bot, input: [Integration]? = nil) {
+        super.init(destination: destination, identifiable: identifiable)
         if let value = input {
             self.input = .ready(value)
         }
@@ -34,26 +29,19 @@ public class UpdateBotIntegrationsProcedure: NSManagedObjectProcedure<Bot>, Inpu
             return
         }
         
-        let id = objectID
+        print("Updating Integrations for Bot '\(id)'")
         
-        print("Updating Integrations for Bot '\(managedObject.identifier)'")
+        var _bot = identifiable
+        _bot.modified = Date()
+        value.forEach({ _bot.integrations.insert($0) })
         
-        container.performBackgroundTask { [weak self] (context) in
-            let bot = context.object(with: id) as! Bot
-            
-            let events = bot.update(withIntegrations: value)
-            bot.lastUpdate = Date()
-            
-            do {
-                try context.save()
-                self?.output = .ready(.success(events))
+        destination.saveBot(_bot) { [weak self] (result) in
+            switch result {
+            case .success:
                 self?.finish()
-            } catch {
-                self?.output = .ready(.failure(error))
+            case .failure(let error):
                 self?.finish(with: error)
             }
         }
     }
 }
-
-#endif

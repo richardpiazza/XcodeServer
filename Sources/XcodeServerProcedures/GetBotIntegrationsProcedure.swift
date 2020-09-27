@@ -1,18 +1,13 @@
-import Foundation
+import XcodeServer
 import ProcedureKit
-import XcodeServerAPI
 
-public class GetBotIntegrationsProcedure: APIClientProcedure, InputProcedure, OutputProcedure {
+public class GetBotIntegrationsProcedure: AnyQueryableProcedure, InputProcedure, OutputProcedure {
     
-    public typealias Input = String
-    public typealias Output = [XCSIntegration]
+    public var input: Pending<Bot.ID> = .pending
+    public var output: Pending<ProcedureResult<[Integration]>> = .pending
     
-    public var input: Pending<Input> = .pending
-    public var output: Pending<ProcedureResult<Output>> = .pending
-    
-    public init(client: APIClient, input: Input? = nil) {
-        super.init(client: client)
-        
+    public init(source: AnyQueryable, input: Bot.ID? = nil) {
+        super.init(source: source)
         if let value = input {
             self.input = .ready(value)
         }
@@ -33,7 +28,7 @@ public class GetBotIntegrationsProcedure: APIClientProcedure, InputProcedure, Ou
         
         print("Getting Integrations for Bot '\(id)'")
         
-        client.integrations(forBotWithIdentifier: id) { [weak self] (result) in
+        source.getIntegrations(forBot: id) { [weak self] (result) in
             switch result {
             case .success(let value):
                 self?.output = .ready(.success(value))

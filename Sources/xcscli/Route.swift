@@ -1,6 +1,5 @@
 import Foundation
 import ArgumentParser
-import XcodeServer
 import XcodeServerAPI
 
 protocol Route: APIClientAuthorizationDelegate {

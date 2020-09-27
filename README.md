@@ -44,7 +44,7 @@ none
 
 ## Packages
 
-### XcodeServerCommon
+### XcodeServer
 
 Provides shared resources for the other packages, this includes:
 
@@ -67,7 +67,7 @@ A CoreData (on Apple platforms) driven implementation of primary Xcode Server en
 
 A operation-driven level that combines the api and persisted storage.
 
-### XcodeServer
+### XcodeServerUtility
 
 A `Manager` class that interacts with the procedures the query and persist data from the server API.
 

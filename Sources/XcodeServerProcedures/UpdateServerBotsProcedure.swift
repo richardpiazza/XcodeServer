@@ -1,21 +1,15 @@
-import Foundation
+import XcodeServer
 import ProcedureKit
-import XcodeServerAPI
-#if canImport(CoreData)
-import CoreData
-import XcodeServerCoreData
 
-public class UpdateServerBotsProcedure: NSManagedObjectProcedure<Server>, InputProcedure, OutputProcedure {
+@available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+@available(swift, introduced: 5.1)
+public class UpdateServerBotsProcedure: IdentifiablePersitableProcedure<Server>, InputProcedure, OutputProcedure {
     
-    public typealias Input = [XCSBot]
-    public typealias Output = [XcodeServerProcedureEvent]
+    public var input: Pending<[Bot]> = .pending
+    public var output: Pending<ProcedureResult<[XcodeServerProcedureEvent]>> = .pending
     
-    public var input: Pending<Input> = .pending
-    public var output: Pending<ProcedureResult<Output>> = .pending
-    
-    public init(container: NSPersistentContainer, server: Server, input: Input? = nil) {
-        super.init(container: container, object: server)
-        
+    public init(destination: AnyPersistable, identifiable: Server, input: [Bot]? = nil) {
+        super.init(destination: destination, identifiable: identifiable)
         if let value = input {
             self.input = .ready(value)
         }
@@ -34,26 +28,20 @@ public class UpdateServerBotsProcedure: NSManagedObjectProcedure<Server>, InputP
             return
         }
         
-        let id = objectID
+        print("Updating Bots for '\(id)'")
         
-        print("Updating Bots for '\(managedObject.fqdn)'")
+        var _server = identifiable
+        value.forEach({ _server.bots.insert($0) })
         
-        container.performBackgroundTask { [weak self] (context) in
-            let server = context.object(with: id) as! Server
-            
-            let events = server.update(withBots: value)
-            server.lastUpdate = Date()
-            
-            do {
-                try context.save()
-                self?.output = .ready(.success(events))
+        destination.saveServer(_server) { [weak self] (result) in
+            switch result {
+            case .success(_):
+                self?.output = .ready(.success([]))
                 self?.finish()
-            } catch {
+            case .failure(let error):
                 self?.output = .ready(.failure(error))
                 self?.finish(with: error)
             }
         }
     }
 }
-
-#endif

@@ -1,31 +1,30 @@
-import Foundation
+import XcodeServer
 import ProcedureKit
-import XcodeServerAPI
-#if canImport(CoreData)
-import CoreData
-import XcodeServerCoreData
 
-public class SyncServerBotsProcedure: NSManagedObjectGroupProcedure<Server>, OutputProcedure {
+@available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+@available(swift, introduced: 5.1)
+public class SyncServerBotsProcedure: IdentifiablePersitableGroupProcedure<Server>, OutputProcedure {
     
-    public typealias Output = [XcodeServerProcedureEvent]
+    public let source: AnyQueryable
+    public var output: Pending<ProcedureResult<[XcodeServerProcedureEvent]>> = .pending
+    /// Bots retrieved from the queryable source.
+    public var bots: [Bot]?
     
-    public let apiClient: APIClient
-    public var output: Pending<ProcedureResult<Output>> = .pending
-    
-    public init(container: NSPersistentContainer, server: Server, apiClient: APIClient) {
-        self.apiClient = apiClient
+    public init(source: AnyQueryable, destination: AnyPersistable, identifiable: Server) {
+        self.source = source
         
-        let get = GetBotsProcedure(client: apiClient)
+        super.init(destination: destination, identifiable: identifiable, operations: [])
         
-        let update = UpdateServerBotsProcedure(container: container, server: server)
+        let get = GetBotsProcedure(source: source)
+        get.addDidFinishBlockObserver { (proc, error) in
+            self.bots = proc.output.success
+        }
+        let update = UpdateServerBotsProcedure(destination: destination, identifiable: identifiable)
         update.injectResult(from: get)
-        
-        super.init(container: container, object: server, operations: [get, update])
-        
         update.addDidFinishBlockObserver { (proc, error) in
             self.output = proc.output
         }
+        
+        addChildren(get, update)
     }
 }
-
-#endif

@@ -1,18 +1,13 @@
-import Foundation
+import XcodeServer
 import ProcedureKit
-import XcodeServerAPI
 
-public class GetIntegrationCommitsProcedure: APIClientProcedure, InputProcedure, OutputProcedure {
+public class GetIntegrationCommitsProcedure: AnyQueryableProcedure, InputProcedure, OutputProcedure {
     
-    public typealias Input = String
-    public typealias Output = [XCSCommit]
+    public var input: Pending<Integration.ID> = .pending
+    public var output: Pending<ProcedureResult<[SourceControl.Commit]>> = .pending
     
-    public var input: Pending<Input> = .pending
-    public var output: Pending<ProcedureResult<Output>> = .pending
-    
-    public init(client: APIClient, input: Input? = nil) {
-        super.init(client: client)
-        
+    public init(source: AnyQueryable, input: Integration.ID? = nil) {
+        super.init(source: source)
         if let value = input {
             self.input = .ready(value)
         }
@@ -33,7 +28,7 @@ public class GetIntegrationCommitsProcedure: APIClientProcedure, InputProcedure,
         
         print("Getting Commits for Integration '\(id)'")
         
-        client.commits(forIntegrationWithIdentifier: id) { [weak self] (result) in
+        source.getCommitsForIntegration(id) { [weak self] (result) in
             switch result {
             case .success(let value):
                 self?.output = .ready(.success(value))

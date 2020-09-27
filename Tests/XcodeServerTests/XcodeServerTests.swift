@@ -1,7 +1,5 @@
 import XCTest
 @testable import XcodeServer
-@testable import XcodeServerCommon
-@testable import XcodeServerAPI
 @testable import XcodeServerCoreData
 #if canImport(CoreData)
 import CoreData

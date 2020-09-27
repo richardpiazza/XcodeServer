@@ -1,5 +1,5 @@
 import Foundation
-import XcodeServerCommon
+import XcodeServer
 #if canImport(CoreData)
 import CoreData
 #endif
@@ -16,7 +16,7 @@ public enum Model {
     #endif
     
     /// API Version number reported by the Xcode Server API
-    public var compatibleAPIVersions: [APIVersion] {
+    public var compatibleAPIVersions: [XcodeServer.Server.API] {
         switch self {
         case .v1_0_0:
             return [.v19]
@@ -24,7 +24,7 @@ public enum Model {
     }
     
     /// Xcode Server version information reported by the Xcode Server API
-    public var compatibleXcodeServerVersions: [XcodeServerVersion] {
+    public var compatibleXcodeServerVersions: [XcodeServer.Server.App] {
         switch self {
         case .v1_0_0:
             return [.v2_0]

@@ -1,14 +1,22 @@
 import XCTest
-@testable import XcodeServerCommon
+@testable import XcodeServer
 @testable import XcodeServerAPI
 
 final class APIResponseTests: XCTestCase {
     
     static var allTests = [
         ("testVersions", testVersions),
+        ("testBots", testBots),
+        ("testBot", testBot),
+        ("testStats", testStats),
+        ("testIntegrations", testIntegrations),
+        ("testIntegration", testIntegration),
+        ("testRunIntegration", testRunIntegration),
+        ("testIssues", testIssues),
+        ("testCommits", testCommits),
     ]
     
-    private let decoder = JSON.jsonDecoder
+    private let decoder = APIClient.jsonDecoder
     
     func testVersions() throws {
         #if swift(>=5.3)

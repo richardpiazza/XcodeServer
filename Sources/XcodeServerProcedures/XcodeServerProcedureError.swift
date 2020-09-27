@@ -1,7 +1,5 @@
+import XcodeServer
 import Foundation
-#if canImport(CoreData)
-import CoreData
-#endif
 
 public enum XcodeServerProcedureError: Swift.Error, LocalizedError {
     public enum UnassignedObjectType: String {
@@ -11,12 +9,13 @@ public enum XcodeServerProcedureError: Swift.Error, LocalizedError {
     }
     
     case invalidInput
+    @available(*, deprecated, renamed: "existingXcodeServer(id:)")
     case existingXcodeServer(fqdn: String)
+    case existingXcodeServer(id: Server.ID)
+    @available(*, deprecated, renamed: "failedToCreateXcodeServer(id:)")
     case failedToCreateXcodeServer(fqdn: String)
-    case failedToCreateIntegration(id: String)
-    #if canImport(CoreData)
-    case invalidManagedObjectID(id: NSManagedObjectID)
-    #endif
+    case failedToCreateXcodeServer(id: Server.ID)
+    case failedToCreateIntegration(id: Integration.ID)
     case unassignedObject(type: UnassignedObjectType)
     case invalidAPIResponse
     case managedObjectContext
@@ -28,16 +27,12 @@ public enum XcodeServerProcedureError: Swift.Error, LocalizedError {
         switch self {
         case .invalidInput:
             return "The procedure input was nil or invalid."
-        case .existingXcodeServer(let fqdn):
-            return "An Xcode Server with FQDN '\(fqdn)' already exists."
-        case .failedToCreateXcodeServer(let fqdn):
-            return "Failed to create an Xcode Server with FQDN '\(fqdn)'."
+        case .existingXcodeServer(let value):
+            return "An Xcode Server with FQDN '\(value)' already exists."
+        case .failedToCreateXcodeServer(let value):
+            return "Failed to create an Xcode Server with FQDN '\(value)'."
         case .failedToCreateIntegration(let id):
             return "Failed to create an Integration with ID '\(id)'."
-        #if canImport(CoreData)
-        case .invalidManagedObjectID(let id):
-            return "Object with id '\(id)' not found in NSManagedObjectContext."
-        #endif
         case .unassignedObject(let type):
             return "Expected object of type '\(type.rawValue)' is not assigned."
         case .invalidAPIResponse:

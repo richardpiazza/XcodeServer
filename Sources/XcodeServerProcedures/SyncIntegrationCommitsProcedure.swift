@@ -1,24 +1,19 @@
-import Foundation
+import XcodeServer
 import ProcedureKit
-import XcodeServerAPI
-#if canImport(CoreData)
-import CoreData
-import XcodeServerCoreData
 
-public class SyncIntegrationCommitsProcedure: NSManagedObjectGroupProcedure<Integration> {
+@available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+@available(swift, introduced: 5.1)
+public class SyncIntegrationCommitsProcedure: IdentifiablePersitableGroupProcedure<Integration> {
     
-    public let apiClient: APIClient
+    public let source: AnyQueryable
     
-    public init(container: NSPersistentContainer, integration: Integration, apiClient: APIClient) {
-        self.apiClient = apiClient
+    public init(source: AnyQueryable, destination: AnyPersistable, identifiable: Integration) {
+        self.source = source
         
-        let get = GetIntegrationCommitsProcedure(client: apiClient, input: integration.identifier)
-        
-        let update = UpdateIntegrationCommitsProcedure(container: container, integration: integration)
+        let get = GetIntegrationCommitsProcedure(source: source, input: identifiable.id)
+        let update = UpdateIntegrationCommitsProcedure(destination: destination, identifiable: identifiable)
         update.injectResult(from: get)
         
-        super.init(container: container, object: integration, operations: [get, update])
+        super.init(destination: destination, identifiable: identifiable, operations: [get, update])
     }
 }
-
-#endif

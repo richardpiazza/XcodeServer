@@ -99,15 +99,30 @@ final class Integrations: ParsableCommand, Route {
                 Self.exit()
             }
         case .none:
-            client.integration(withIdentifier: id) { (result) in
-                switch result {
-                case .success(let integration):
-                    print(integration.asPrettyJSON() ?? "OK")
-                case .failure(let error):
-                    print(error.localizedDescription)
+            if id.isEmpty {
+                struct Integrations: Codable {
+                    public var count: Int
+                    public var results: [XCSIntegration]
                 }
                 
-                Self.exit()
+                client.get("integrations") { (status, headers, data: Integrations?, error) in
+                    if let value = data?.results {
+                        print(value.asPrettyJSON() ?? "")
+                    }
+                    
+                    Self.exit()
+                }
+            } else {
+                client.integration(withIdentifier: id) { (result) in
+                    switch result {
+                    case .success(let integration):
+                        print(integration.asPrettyJSON() ?? "OK")
+                    case .failure(let error):
+                        print(error.localizedDescription)
+                    }
+                    
+                    Self.exit()
+                }
             }
         }
         

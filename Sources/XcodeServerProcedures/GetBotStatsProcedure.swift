@@ -1,18 +1,13 @@
-import Foundation
+import XcodeServer
 import ProcedureKit
-import XcodeServerAPI
 
-public class GetBotStatsProcedure: APIClientProcedure, InputProcedure, OutputProcedure {
+public class GetBotStatsProcedure: AnyQueryableProcedure, InputProcedure, OutputProcedure {
     
-    public typealias Input = String
-    public typealias Output = XCSStats
+    public var input: Pending<Bot.ID> = .pending
+    public var output: Pending<ProcedureResult<Bot.Stats>> = .pending
     
-    public var input: Pending<Input> = .pending
-    public var output: Pending<ProcedureResult<Output>> = .pending
-    
-    public init(client: APIClient, input: Input? = nil) {
-        super.init(client: client)
-        
+    public init(source: AnyQueryable, input: Bot.ID? = nil) {
+        super.init(source: source)
         if let value = input {
             self.input = .ready(value)
         }
@@ -33,7 +28,7 @@ public class GetBotStatsProcedure: APIClientProcedure, InputProcedure, OutputPro
         
         print("Getting Stats for Bot '\(id)'")
         
-        client.stats(forBotWithIdentifier: id) { [weak self] (result) in
+        source.getStatsForBot(id) { [weak self] (result) in
             switch result {
             case .success(let value):
                 self?.output = .ready(.success(value))

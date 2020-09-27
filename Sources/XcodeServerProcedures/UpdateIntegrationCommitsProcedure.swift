@@ -1,19 +1,14 @@
-import Foundation
+import XcodeServer
 import ProcedureKit
-import XcodeServerAPI
-#if canImport(CoreData)
-import CoreData
-import XcodeServerCoreData
 
-public class UpdateIntegrationCommitsProcedure: NSManagedObjectProcedure<Integration>, InputProcedure {
+@available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+@available(swift, introduced: 5.1)
+public class UpdateIntegrationCommitsProcedure: IdentifiablePersitableProcedure<Integration>, InputProcedure {
     
-    public typealias Input = [XCSCommit]
+    public var input: Pending<[SourceControl.Commit]> = .pending
     
-    public var input: Pending<Input> = .pending
-    
-    public init(container: NSPersistentContainer, integration: Integration, input: Input? = nil) {
-        super.init(container: container, object: integration)
-        
+    public init(destination: AnyPersistable, identifiable: Integration, input: [SourceControl.Commit]? = nil) {
+        super.init(destination: destination, identifiable: identifiable)
         if let value = input {
             self.input = .ready(value)
         }
@@ -31,28 +26,15 @@ public class UpdateIntegrationCommitsProcedure: NSManagedObjectProcedure<Integra
             return
         }
         
-        let id = objectID
+        print("Updating Commits for Integration '\(id)'")
         
-        print("Updating Commits for Integration '\(managedObject.identifier)'")
-        
-        container.performBackgroundTask { [weak self] (context) in
-            let integration = context.object(with: id) as! Integration
-            let repositories = context.repositories()
-            
-            repositories.forEach({ (repository) in
-                repository.update(withIntegrationCommits: value, integration: integration)
-            })
-            
-            integration.hasRetrievedCommits = true
-            
-            do {
-                try context.save()
+        destination.saveCommits(value, forIntegration: id) { [weak self] (result) in
+            switch result {
+            case .success:
                 self?.finish()
-            } catch {
+            case .failure(let error):
                 self?.finish(with: error)
             }
         }
     }
 }
-
-#endif
