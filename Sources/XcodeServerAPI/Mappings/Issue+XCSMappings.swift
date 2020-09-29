@@ -1,7 +1,7 @@
 import XcodeServer
 
 public extension Issue {
-    init(_ issue: XCSIssue) {
+    init(_ issue: XCSIssue, integration: Integration.ID?) {
         self.init(id: issue.id)
         age = issue.age ?? 0
         documentFilePath = issue.documentFilePath ?? ""
@@ -12,7 +12,8 @@ public extension Issue {
         message = issue.message ?? ""
         testCase = issue.testCase ?? ""
         if let commits = issue.commits {
-            self.commits = Set(commits.map { SourceControl.Commit($0) })
+            self.commits = Set(commits.map { SourceControl.Commit($0, integration: integration) })
         }
+        integrationId = integration
     }
 }

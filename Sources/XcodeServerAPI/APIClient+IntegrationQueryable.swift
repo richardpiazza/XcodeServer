@@ -11,7 +11,7 @@ extension APIClient: IntegrationQueryable {
                         completion(.failure(.error(error)))
                     }
                 case .success(let integrations):
-                    let value = integrations.map { Integration($0) }
+                    let value = integrations.map { Integration($0, bot: id, server: self.fqdn) }
                     queue.async {
                         completion(.success(value))
                     }
@@ -29,7 +29,7 @@ extension APIClient: IntegrationQueryable {
                         completion(.failure(.error(error)))
                     }
                 case .success(let integration):
-                    let value = Integration(integration)
+                    let value = Integration(integration, bot: id, server: self.fqdn)
                     queue.async {
                         completion(.success(value))
                     }
@@ -53,7 +53,7 @@ extension APIClient: IntegrationQueryable {
                             repositoryCommits.append(contentsOf: dictionary.value)
                         })
                     })
-                    let value = repositoryCommits.map({ SourceControl.Commit($0) })
+                    let value = repositoryCommits.map({ SourceControl.Commit($0, integration: id) })
                     queue.async {
                         completion(.success(value))
                     }
@@ -71,7 +71,7 @@ extension APIClient: IntegrationQueryable {
                         completion(.failure(.error(error)))
                     }
                 case .success(let issues):
-                    let value = Integration.IssueCatalog(issues)
+                    let value = Integration.IssueCatalog(issues, integration: id)
                     queue.async {
                         completion(.success(value))
                     }

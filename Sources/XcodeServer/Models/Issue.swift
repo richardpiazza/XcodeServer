@@ -18,6 +18,7 @@ public struct Issue: Hashable, Identifiable {
     public var type: Category = .unknown
     
     // MARK: - Relationships
+    public var integrationId: Integration.ID?
     public var commits: Set<SourceControl.Commit> = []
     
     public init(id: Issue.ID = "") {

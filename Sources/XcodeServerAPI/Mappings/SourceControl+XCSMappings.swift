@@ -2,7 +2,7 @@ import XcodeServer
 import Foundation
 
 public extension SourceControl.Commit {
-    init(_ commit: XCSRepositoryCommit) {
+    init(_ commit: XCSRepositoryCommit, integration: Integration.ID?) {
         self.init(id: commit.hash ?? "")
         message = commit.message ?? ""
         date = commit.timestamp ?? Date()
@@ -13,6 +13,7 @@ public extension SourceControl.Commit {
         if let changes = commit.commitChangeFilePaths {
             self.changes = changes.map { SourceControl.Change($0) }
         }
+        integrationId = integration
     }
 }
 

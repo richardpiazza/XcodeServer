@@ -2,7 +2,7 @@ import XcodeServer
 import Foundation
 
 public extension Bot {
-    init(_ bot: XCSBot) {
+    init(_ bot: XCSBot, server: Server.ID?) {
         self.init(id: bot.id)
         name = bot.name
         nextIntegrationNumber = bot.nextIntegrationNumber

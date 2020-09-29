@@ -11,7 +11,7 @@ extension APIClient: BotQueryable {
                         completion(.failure(.error(error)))
                     }
                 case .success(let bots):
-                    let results = bots.map { Bot($0) }
+                    let results = bots.map { Bot($0, server: self.fqdn) }
                     queue.async {
                         completion(.success(results))
                     }
@@ -29,7 +29,7 @@ extension APIClient: BotQueryable {
                         completion(.failure(.error(error)))
                     }
                 case .success(let bot):
-                    let value = Bot(bot)
+                    let value = Bot(bot, server: nil)
                     queue.async {
                         completion(.success(value))
                     }

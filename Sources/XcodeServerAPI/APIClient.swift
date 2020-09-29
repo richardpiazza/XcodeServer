@@ -86,7 +86,7 @@ public class APIClient {
     }()
     
     private static var _eventLoopGroup: EventLoopGroup?
-    
+    public let fqdn: String
     public var baseURL: URL
     public let client: HTTPClient
     public var jsonEncoder: JSONEncoder = APIClient.jsonEncoder
@@ -102,6 +102,7 @@ public class APIClient {
             throw APIClient.Error.fqdn
         }
         
+        self.fqdn = fqdn
         baseURL = url
         
         var config = HTTPClient.Configuration()

@@ -2,7 +2,7 @@ import XcodeServer
 import Foundation
 
 public extension Integration {
-    init(_ integration: XCSIntegration) {
+    init(_ integration: XCSIntegration, bot: Bot.ID?, server: Server.ID?) {
         self.init(id: integration.id)
         number = Int(integration.number)
         step = Integration.Step(rawValue: integration.currentStep.rawValue) ?? .pending
@@ -21,6 +21,8 @@ public extension Integration {
         if let summary = integration.buildResultSummary {
             buildSummary = BuildSummary(summary)
         }
+        botId = bot
+        serverId = server
     }
     
     init(_ snippet: XCSIntegrationSnippet) {
@@ -140,38 +142,38 @@ public extension Integration.Asset {
 }
 
 public extension Integration.IssueCatalog {
-    init(_ issues: XCSIssues) {
+    init(_ issues: XCSIssues, integration: Integration.ID?) {
         self.init()
         if let value = issues.buildServiceErrors {
-            buildServiceErrors = Set(value.map { Issue($0) })
+            buildServiceErrors = Set(value.map { Issue($0, integration: integration) })
         }
         if let value = issues.buildServiceWarnings {
-            buildServiceWarnings = Set(value.map { Issue($0) })
+            buildServiceWarnings = Set(value.map { Issue($0, integration: integration) })
         }
         if let value = issues.triggerErrors {
-            triggerErrors = Set(value.map { Issue($0) })
+            triggerErrors = Set(value.map { Issue($0, integration: integration) })
         }
         if let group = issues.errors {
-            errors = Integration.IssueGroup(group)
+            errors = Integration.IssueGroup(group, integration: integration)
         }
         if let group = issues.warnings {
-            warnings = Integration.IssueGroup(group)
+            warnings = Integration.IssueGroup(group, integration: integration)
         }
         if let group = issues.testFailures {
-            testFailures = Integration.IssueGroup(group)
+            testFailures = Integration.IssueGroup(group, integration: integration)
         }
         if let group = issues.analyzerWarnings {
-            analyzerWarnings = Integration.IssueGroup(group)
+            analyzerWarnings = Integration.IssueGroup(group, integration: integration)
         }
     }
 }
 
 public extension Integration.IssueGroup {
-    init(_ group: XCSIssueGroup) {
+    init(_ group: XCSIssueGroup, integration: Integration.ID?) {
         self.init()
-        freshIssues = Set(group.freshIssues.map { Issue($0) })
-        resolvedIssues = Set(group.resolvedIssues.map { Issue($0) })
-        unresolvedIssues = Set(group.unresolvedIssues.map { Issue($0) })
-        silencedIssues = Set(group.silencedIssues.map { Issue($0) })
+        freshIssues = Set(group.freshIssues.map { Issue($0, integration: integration) })
+        resolvedIssues = Set(group.resolvedIssues.map { Issue($0, integration: integration) })
+        unresolvedIssues = Set(group.unresolvedIssues.map { Issue($0, integration: integration) })
+        silencedIssues = Set(group.silencedIssues.map { Issue($0, integration: integration) })
     }
 }
