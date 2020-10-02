@@ -1,5 +1,6 @@
 import XCTest
 @testable import XcodeServer
+@testable import XcodeServerAPI
 @testable import XcodeServerCoreData
 
 final class BotWriteAndUpdateTests: XCTestCase {
@@ -17,7 +18,7 @@ final class BotWriteAndUpdateTests: XCTestCase {
         return client
     }
     
-    var store: (ServerPersistable & ServerQueryable) {
+    var store: (ServerPersistable & BotPersistable) {
         return persistedStore
     }
     #endif
@@ -141,31 +142,135 @@ final class BotWriteAndUpdateTests: XCTestCase {
         // but, the repository object should have been created.
         XCTAssertEqual(config.sourceControlBlueprint, SourceControl.Blueprint())
         let repository = try XCTUnwrap(persistedStore.persistentContainer.viewContext.repository(withIdentifier: "0430DC0FCD6EB7BC51C585D722CCD37A72BD7D71"))
-        
-        
-        /*
-         public var id: String
-         public var name: String = ""
-         public var version: Int = 0
-         public var relativePathToProject: String = ""
-         public var primaryRemoteIdentifier: String = ""
-         public var remotes: Set<Remote> = []
-         public var locations: [String : Location] = [:]
-         public var authenticationStrategies: [String: AuthenticationStrategy] = [:]
-         public var additionalValidationRemotes: Set<Remote> = []
-         */
-        
-        /*
-         // MARK: - Bot Blueprints
-         public var sourceControlBlueprint: SourceControl.Blueprint?
-         public var lastRevisionBlueprint: SourceControl.Blueprint?
-         */
-        
+        XCTAssertEqual(repository.identifier, "0430DC0FCD6EB7BC51C585D722CCD37A72BD7D71")
+        XCTAssertEqual(repository.system, "com.apple.dt.Xcode.sourcecontrol.Git")
+        XCTAssertEqual(repository.url, "bitbucket.org:richardpiazza/com.richardpiazza.dynumite.git")
+        XCTAssertEqual(repository.branchIdentifier, "master")
+        XCTAssertEqual(repository.branchOptions, 4)
+        XCTAssertEqual(repository.locationType, "DVTSourceControlBranch")
         #endif
     }
     
-    func testUpdateBot() throws {
+    func testUpdateBotStats() throws {
+        #if canImport(CoreData)
+        var server: XcodeServer.Server = .exampleServer
+        server.bots.insert(.dynumite)
         
+        let saveServer = expectation(description: "Save Server")
+        store.saveServer(server) { (result) in
+            switch result {
+            case .success(let value):
+                server = value
+                saveServer.fulfill()
+            case .failure(let error):
+                XCTFail(error.localizedDescription)
+            }
+        }
+        wait(for: [saveServer], timeout: 0.5)
+        
+        var bot = try XCTUnwrap(server.bots.first)
+        var _stats: XcodeServer.Bot.Stats?
+        
+        let getStats = expectation(description: "Get Stats")
+        api.getStatsForBot(bot.id) { (result) in
+            switch result {
+            case .success(let value):
+                _stats = value
+                getStats.fulfill()
+            case .failure(let error):
+                XCTFail(error.localizedDescription)
+            }
+        }
+        wait(for: [getStats], timeout: 0.5)
+        
+        bot.stats = try XCTUnwrap(_stats)
+        
+        let saveBot = expectation(description: "Save Bot")
+        store.saveBot(bot) { (result) in
+            switch result {
+            case .success(let value):
+                bot = value
+                saveBot.fulfill()
+            case .failure(let error):
+                XCTFail(error.localizedDescription)
+            }
+        }
+        wait(for: [saveBot], timeout: 0.5)
+        
+        let stats = bot.stats
+        XCTAssertEqual(stats.successfulIntegrations, 2)
+        XCTAssertEqual(stats.coverageDelta, 0)
+        XCTAssertEqual(stats.testAdditionRate, 55)
+        XCTAssertEqual(stats.commits, 7)
+        XCTAssertEqual(stats.integrations, 4)
+        XCTAssertEqual(stats.analysisWarnings.sum, 4.0)
+        XCTAssertEqual(stats.analysisWarnings.count, 2)
+        XCTAssertEqual(stats.analysisWarnings.min, 2.0)
+        XCTAssertEqual(stats.analysisWarnings.max, 2.0)
+        XCTAssertEqual(stats.analysisWarnings.average, 2.0)
+        XCTAssertEqual(stats.analysisWarnings.standardDeviation, 100.0)
+        XCTAssertEqual(stats.analysisWarnings.sumOfSquares, 0.0)
+        XCTAssertEqual(stats.testFailures.sum, 0.0)
+        XCTAssertEqual(stats.testFailures.count, 4)
+        XCTAssertEqual(stats.testFailures.min, 0.0)
+        XCTAssertEqual(stats.testFailures.max, 0.0)
+        XCTAssertEqual(stats.testFailures.average, 0.0)
+        XCTAssertEqual(stats.testFailures.standardDeviation, 0.0)
+        XCTAssertEqual(stats.testFailures.sumOfSquares, 0.0)
+        XCTAssertEqual(stats.errors.sum, 0.0)
+        XCTAssertEqual(stats.errors.count, 4)
+        XCTAssertEqual(stats.errors.min, 0.0)
+        XCTAssertEqual(stats.errors.max, 0.0)
+        XCTAssertEqual(stats.errors.average, 0.0)
+        XCTAssertEqual(stats.errors.standardDeviation, 0.0)
+        XCTAssertEqual(stats.errors.sumOfSquares, 0.0)
+        XCTAssertEqual(stats.regressedPerformanceTests.sum, 0.0)
+        XCTAssertEqual(stats.regressedPerformanceTests.count, 4)
+        XCTAssertEqual(stats.regressedPerformanceTests.min, 0.0)
+        XCTAssertEqual(stats.regressedPerformanceTests.max, 0.0)
+        XCTAssertEqual(stats.regressedPerformanceTests.average, 0.0)
+        XCTAssertEqual(stats.regressedPerformanceTests.standardDeviation, 0.0)
+        XCTAssertEqual(stats.regressedPerformanceTests.sumOfSquares, 0.0)
+        XCTAssertEqual(stats.warnings.sum, 4.0)
+        XCTAssertEqual(stats.warnings.count, 4)
+        XCTAssertEqual(stats.warnings.min, 0.0)
+        XCTAssertEqual(stats.warnings.max, 2.0)
+        XCTAssertEqual(stats.warnings.average, 1.0)
+        XCTAssertEqual(stats.warnings.standardDeviation, 173.20508075688772)
+        XCTAssertEqual(stats.warnings.sumOfSquares, 0.0)
+        XCTAssertEqual(stats.improvedPerformanceTests.sum, 0.0)
+        XCTAssertEqual(stats.improvedPerformanceTests.count, 4)
+        XCTAssertEqual(stats.improvedPerformanceTests.min, 0.0)
+        XCTAssertEqual(stats.improvedPerformanceTests.max, 0.0)
+        XCTAssertEqual(stats.improvedPerformanceTests.average, 0.0)
+        XCTAssertEqual(stats.improvedPerformanceTests.standardDeviation, 0.0)
+        XCTAssertEqual(stats.improvedPerformanceTests.sumOfSquares, 0.0)
+        XCTAssertEqual(stats.tests.sum, 187.0)
+        XCTAssertEqual(stats.tests.count, 4)
+        XCTAssertEqual(stats.tests.min, 44.0)
+        XCTAssertEqual(stats.tests.max, 55.0)
+        XCTAssertEqual(stats.tests.average, 46.75)
+        XCTAssertEqual(stats.tests.standardDeviation, 173.20508075688775)
+        XCTAssertEqual(stats.tests.sumOfSquares, 0.0)
+        
+        let cal = Calendar(identifier: .gregorian)
+        let components: DateComponents = .init(calendar: nil, timeZone: nil, era: nil, year: 2020, month: 7, day: 1, hour: 14, minute: 3, second: 35, nanosecond: 260, weekday: nil, weekdayOrdinal: nil, quarter: nil, weekOfMonth: nil, weekOfYear: nil, yearForWeekOfYear: nil)
+        let date: Date = cal.date(from: components)!
+        
+        let lastClean = try XCTUnwrap(stats.lastCleanIntegration)
+        XCTAssertEqual(lastClean.id, "ce5f34cace5a2142835263cd2f210744")
+        var compare = Calendar.current.compare(lastClean.ended!, to: date, toGranularity: .second)
+        XCTAssertTrue(compare == .orderedSame)
+        
+        let bestStreak = try XCTUnwrap(stats.bestSuccessStreak)
+        XCTAssertEqual(bestStreak.id, "ce5f34cace5a2142835263cd2f210744")
+        XCTAssertEqual(bestStreak.successStreak, 2)
+        compare = Calendar.current.compare(bestStreak.ended!, to: date, toGranularity: .second)
+        XCTAssertTrue(compare == .orderedSame)
+        /*
+         public var sinceDate: Date = Date()
+         */
+        #endif
     }
 }
 
@@ -177,5 +282,22 @@ private extension XcodeServer.Server {
         server.version.macOSVersion = "11.0"
         server.version.xcodeAppVersion = "12.0"
         return server
+    }()
+}
+
+private extension XcodeServer.Bot {
+    static let dynumite: Self = {
+        let _bot: XCSBot
+        #if swift(>=5.3)
+        do {
+            _bot = try Bundle.module.decodeJson("bot")
+        } catch {
+            print(error)
+            _bot = XCSBot()
+        }
+        #else
+        _bot = XCSBot()
+        #endif
+        return XcodeServer.Bot(_bot, server: .dynumiteMacOS)
     }()
 }

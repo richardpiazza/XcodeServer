@@ -24,6 +24,18 @@ public extension XcodeServerCoreData.Bot {
         stats?.update(bot.stats, context: context)
         typeRawValue = Int16(bot.type)
         update(Array(bot.integrations), context: context)
+        
+        if let blueprint = bot.lastRevisionBlueprint {
+            let remoteId = blueprint.primaryRemoteIdentifier
+            if !remoteId.isEmpty {
+                if let entity = context.repository(withIdentifier: remoteId) {
+                    entity.update(blueprint, context: context)
+                } else {
+                    let _repository = Repository(context: context)
+                    _repository.update(blueprint, context: context)
+                }
+            }
+        }
     }
     
     /// Inserts or updates `Integration`s.

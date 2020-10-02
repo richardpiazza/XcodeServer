@@ -4,8 +4,19 @@ import XCTest
 
 class MockApiClient: AnyQueryable {
     private let dispatchQueue: DispatchQueue = .init(label: "MockApiClient")
-    private let decoder: JSONDecoder = .init()
     public let serverId: Server.ID
+    
+    private lazy var dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        return formatter
+    }()
+    
+    private lazy var decoder: JSONDecoder = {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        return decoder
+    }()
     
     init(serverId: Server.ID) {
         self.serverId = serverId
@@ -117,7 +128,33 @@ class MockApiClient: AnyQueryable {
     }
     
     func getStatsForBot(_ id: Bot.ID, queue: DispatchQueue, completion: @escaping BotStatsResultHandler) {
+        #if swift(>=5.3)
+        guard id == .dynumiteMacOS else {
+            queue.async {
+                completion(.failure(.noBot(id)))
+            }
+            return
+        }
         
+        dispatchQueue.async {
+            let resource: XCSStats? = try? Bundle.module.decodeJson("stats", decoder: self.decoder)
+            guard let value = resource else {
+                queue.async {
+                    completion(.failure(.message("Invalid Resource")))
+                }
+                return
+            }
+            
+            let result = XcodeServer.Bot.Stats(value)
+            queue.async {
+                completion(.success(result))
+            }
+        }
+        #else
+        queue.async {
+            completion(.failure(.message("Not Implemented")))
+        }
+        #endif
     }
     
     // MARK: - IntegrationQueryable
