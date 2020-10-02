@@ -4,18 +4,24 @@ import CoreData
 
 public extension DeviceSpecification {
     func update(_ specification: XcodeServer.Device.Specification, context: NSManagedObjectContext) {
-//        let removedFilters = (filters ?? []).filter({ (existing) -> Bool in
-//            return !specification.filters.contains(where: { (filter) -> Bool in
-//                existing == filter
-//            })
-//        })
-//        
-//        let addedFilters = specification.filters.filter { (filter) -> Bool in
-//            return !(filters ?? []).contains(where: { (existing) -> Bool in
-//                existing == filter
-//            })
-//        }
+        filters?.removeAll()
+        specification.filters.forEach { (filter) in
+            let _filter = Filter(context: context)
+            _filter.update(filter, context: context)
+            filters?.insert(_filter)
+        }
         
+        devices?.removeAll()
+        specification.devices.forEach { (device) in
+            // We only have access to the device id here.
+            if let entity = context.device(withIdentifier: device.id) {
+                devices?.insert(entity)
+            } else {
+                let _device = Device(context: context)
+                _device.update(device, context: context)
+                devices?.insert(_device)
+            }
+        }
     }
 }
 

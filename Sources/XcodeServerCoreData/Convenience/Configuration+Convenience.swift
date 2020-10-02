@@ -102,6 +102,10 @@ public extension Configuration {
 
 public extension XcodeServerCoreData.Configuration {
     func update(_ configuration: XcodeServer.Bot.Configuration, context: NSManagedObjectContext) {
+        if deviceSpecification == nil {
+            deviceSpecification = DeviceSpecification(context: context)
+        }
+        
         additionalBuildArguments = configuration.buildArguments
         buildEnvironmentVariables = configuration.environmentVariables
         cleanSchedule = configuration.cleaning
@@ -121,12 +125,24 @@ public extension XcodeServerCoreData.Configuration {
         useParallelDeviceTesting = configuration.useParallelDevices
         weeklyScheduleDay = Int16(configuration.weeklyScheduleDay)
         schemeName = configuration.schemeName
-        if let existing = deviceSpecification {
-            existing.update(configuration.deviceSpecification, context: context)
-        } else {
-            let new = DeviceSpecification(context: context)
-            new.update(configuration.deviceSpecification, context: context)
-            deviceSpecification = new
+        deviceSpecification?.update(configuration.deviceSpecification, context: context)
+        
+        triggers?.removeAll()
+        configuration.triggers.forEach { (trigger) in
+            let _trigger = XcodeServerCoreData.Trigger(context: context)
+            _trigger.update(trigger, context: context)
+            addToTriggers(_trigger)
+        }
+        
+        let remoteId = configuration.sourceControlBlueprint.primaryRemoteIdentifier
+        if !remoteId.isEmpty {
+            if let entity = repositories?.first(where: { $0.identifier == remoteId }) {
+                entity.update(configuration.sourceControlBlueprint, context: context)
+            } else {
+                let _repository = Repository(context: context)
+                _repository.update(configuration.sourceControlBlueprint, context: context)
+                addToRepositories(_repository)
+            }
         }
     }
 }

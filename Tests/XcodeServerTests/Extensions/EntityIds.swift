@@ -1,29 +1,8 @@
 import XcodeServer
 import Foundation
 
-extension Data {
-    var hexString: String {
-        return self.map { String(format: "%02hhx", $0) }.joined()
-    }
-}
-
-extension Bundle {
-    func decodeJson<T: Decodable>(_ resource: String, decoder: JSONDecoder = .init()) -> T? {
-        guard let url = self.url(forResource: resource, withExtension: "json") else {
-            return nil
-        }
-        
-        do {
-            let data = try Data(contentsOf: url)
-            return try decoder.decode(T.self, from: data)
-        } catch {
-            return nil
-        }
-    }
-}
-
 extension Server.ID {
-    static let apple = "xcode.apple.com"
+    static let example = "xcodeserver.apple.com"
 }
 
 extension Bot.ID {

@@ -41,10 +41,7 @@ final class APIResponseTests: XCTestCase {
             let results: [XCSBot]
         }
         
-        let url = try XCTUnwrap(Bundle.module.url(forResource: "bots", withExtension: "json"))
-        let data = try Data(contentsOf: url)
-        let bots = try decoder.decode(Bots.self, from: data)
-        
+        let bots: Bots = try Bundle.module.decodeJson("bots", decoder: decoder)
         XCTAssertEqual(bots.count, 7)
         XCTAssertEqual(bots.results.count, 7)
         #endif
@@ -52,20 +49,14 @@ final class APIResponseTests: XCTestCase {
     
     func testBot() throws {
         #if swift(>=5.3)
-        let url = try XCTUnwrap(Bundle.module.url(forResource: "bot", withExtension: "json"))
-        let data = try Data(contentsOf: url)
-        let bot = try decoder.decode(XCSBot.self, from: data)
-        
+        let bot: XCSBot = try Bundle.module.decodeJson("bot", decoder: decoder)
         XCTAssertEqual(bot.id, "705d82e27dbb120dddc09af79100116b")
         #endif
     }
     
     func testStats() throws {
         #if swift(>=5.3)
-        let url = try XCTUnwrap(Bundle.module.url(forResource: "stats", withExtension: "json"))
-        let data = try Data(contentsOf: url)
-        let stats = try decoder.decode(XCSStats.self, from: data)
-        
+        let stats: XCSStats = try Bundle.module.decodeJson("stats", decoder: decoder)
         XCTAssertNotNil(stats.lastCleanIntegration)
         #endif
     }
@@ -77,10 +68,7 @@ final class APIResponseTests: XCTestCase {
             let results: [XCSIntegration]
         }
         
-        let url = try XCTUnwrap(Bundle.module.url(forResource: "integrations", withExtension: "json"))
-        let data = try Data(contentsOf: url)
-        let integrations = try decoder.decode(Integrations.self, from: data)
-        
+        let integrations: Integrations = try Bundle.module.decodeJson("integrations", decoder: decoder)
         XCTAssertEqual(integrations.count, 4)
         XCTAssertEqual(integrations.results.count, 4)
         #endif
@@ -88,30 +76,21 @@ final class APIResponseTests: XCTestCase {
     
     func testIntegration() throws {
         #if swift(>=5.3)
-        let url = try XCTUnwrap(Bundle.module.url(forResource: "integration", withExtension: "json"))
-        let data = try Data(contentsOf: url)
-        let integration = try decoder.decode(XCSIntegration.self, from: data)
-        
+        let integration: XCSIntegration = try Bundle.module.decodeJson("integration", decoder: decoder)
         XCTAssertEqual(integration.id, "2ce4a2fd2f57d53039edddc51e0009cf")
         #endif
     }
     
     func testRunIntegration() throws {
         #if swift(>=5.3)
-        let url = try XCTUnwrap(Bundle.module.url(forResource: "run-integration", withExtension: "json"))
-        let data = try Data(contentsOf: url)
-        let integration = try decoder.decode(XCSIntegration.self, from: data)
-        
+        let integration: XCSIntegration = try Bundle.module.decodeJson("run-integration", decoder: decoder)
         XCTAssertEqual(integration.id, "2ce4a2fd2f57d53039edddc51e0009cf")
         #endif
     }
     
     func testIssues() throws {
         #if swift(>=5.3)
-        let url = try XCTUnwrap(Bundle.module.url(forResource: "issues", withExtension: "json"))
-        let data = try Data(contentsOf: url)
-        let issues = try decoder.decode(XCSIssues.self, from: data)
-        
+        let issues: XCSIssues = try Bundle.module.decodeJson("issues", decoder: decoder)
         XCTAssertEqual(issues.triggerErrors?.count, 1)
         #endif
     }
@@ -123,10 +102,7 @@ final class APIResponseTests: XCTestCase {
             let results: [XCSCommit]
         }
         
-        let url = try XCTUnwrap(Bundle.module.url(forResource: "commits", withExtension: "json"))
-        let data = try Data(contentsOf: url)
-        let commits = try decoder.decode(Commits.self, from: data)
-        
+        let commits: Commits = try Bundle.module.decodeJson("commits", decoder: decoder)
         XCTAssertEqual(commits.count, 1)
         XCTAssertEqual(commits.results.count, 1)
         #endif

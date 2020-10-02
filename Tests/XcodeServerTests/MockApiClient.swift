@@ -27,7 +27,7 @@ class MockApiClient: AnyQueryable {
     }
     
     func getServer(_ id: Server.ID, queue: DispatchQueue, completion: @escaping ServerResultHandler) {
-        guard id == .apple else {
+        guard id == .example else {
             queue.async {
                 completion(.failure(.noServer(id)))
             }
@@ -36,7 +36,7 @@ class MockApiClient: AnyQueryable {
         
         #if swift(>=5.3)
         dispatchQueue.async {
-            let resource: XCSVersion? = Bundle.module.decodeJson("versions", decoder: self.decoder)
+            let resource: XCSVersion? = try? Bundle.module.decodeJson("versions", decoder: self.decoder)
             guard let versions = resource else {
                 queue.async {
                     completion(.failure(.noServer(id)))
@@ -66,15 +66,15 @@ class MockApiClient: AnyQueryable {
         }
         
         dispatchQueue.async {
-            let resource: Bots? = Bundle.module.decodeJson("bots", decoder: self.decoder)
-            guard let bots = resource else {
+            let resource: Bots? = try? Bundle.module.decodeJson("bots", decoder: self.decoder)
+            guard let value = resource else {
                 queue.async {
                     completion(.failure(.message("Invalid Resource")))
                 }
                 return
             }
             
-            let result = bots.results.map({ Bot($0, server: self.serverId) })
+            let result = value.results.map({ Bot($0, server: self.serverId) })
             queue.async {
                 completion(.success(result))
             }
@@ -87,14 +87,33 @@ class MockApiClient: AnyQueryable {
     }
     
     func getBot(_ id: Bot.ID, queue: DispatchQueue, completion: @escaping BotResultHandler) {
-        guard id == .dynumiteUnknown else {
+        #if swift(>=5.3)
+        guard id == .dynumiteMacOS else {
             queue.async {
                 completion(.failure(.noBot(id)))
             }
             return
         }
         
-        
+        dispatchQueue.async {
+            let resource: XCSBot? = try? Bundle.module.decodeJson("bot", decoder: self.decoder)
+            guard let value = resource else {
+                queue.async {
+                    completion(.failure(.message("Invalid Resource")))
+                }
+                return
+            }
+            
+            let result = XcodeServer.Bot(value, server: self.serverId)
+            queue.async {
+                completion(.success(result))
+            }
+        }
+        #else
+        queue.async {
+            completion(.failure(.message("Not Implemented")))
+        }
+        #endif
     }
     
     func getStatsForBot(_ id: Bot.ID, queue: DispatchQueue, completion: @escaping BotStatsResultHandler) {

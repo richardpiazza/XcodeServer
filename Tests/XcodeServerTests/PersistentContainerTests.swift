@@ -5,7 +5,7 @@ import XCTest
 import CoreData
 #endif
 
-final class XcodeServerTests: XCTestCase {
+final class PersistentContainerTests: XCTestCase {
     
     static var allTests = [
         ("testXCModelHashes", testXCModelHashes),

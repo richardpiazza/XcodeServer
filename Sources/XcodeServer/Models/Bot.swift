@@ -19,14 +19,12 @@ public struct Bot: Hashable, Identifiable {
     public var requiresUpgrade: Bool = false
     
     // MARK: - Relationships
-    
+    public var serverId: Server.ID?
     public var configuration: Configuration = Configuration()
     public var stats: Stats = Stats()
     public var integrations: Set<Integration> = []
     public var sourceControlBlueprint: SourceControl.Blueprint?
     public var lastRevisionBlueprint: SourceControl.Blueprint?
-    
-    public var serverId: Server.ID?
     
     public init(id: Bot.ID = "") {
         self.id = id

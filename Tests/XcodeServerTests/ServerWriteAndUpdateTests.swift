@@ -2,7 +2,12 @@ import XCTest
 @testable import XcodeServer
 @testable import XcodeServerCoreData
 
-final class CoreDataTests: XCTestCase {
+final class ServerWriteAndUpdateTests: XCTestCase {
+    
+    static var allTests = [
+        ("testWriteServer", testWriteServer),
+        ("testUpdateServer", testUpdateServer),
+    ]
     
     #if canImport(CoreData)
     lazy var persistedStore: CoreDataStore = {
@@ -31,17 +36,17 @@ final class CoreDataTests: XCTestCase {
                 XCTAssertEqual(mappedValue.version.xcodeAppVersion, "11.6")
                 XCTAssertEqual(mappedValue.url, URL(string: "https://xcodeserver.apple.com:20343/api"))
                 
-                guard let managedServer = self.persistedStore.managedServer else {
+                guard let exampleServer = self.persistedStore.exampleServer else {
                     XCTFail("No persisted 'Server' with FQDN '\(server.id)'.")
                     return
                 }
                 
-                XCTAssertEqual(managedServer.fqdn, server.id)
-                XCTAssertEqual(managedServer.apiVersion, 19)
-                XCTAssertEqual(managedServer.xcodeServer, "2.0")
-                XCTAssertEqual(managedServer.os, "10.15")
-                XCTAssertEqual(managedServer.xcode, "11.6")
-                XCTAssertEqual(managedServer.apiURL, URL(string: "https://xcodeserver.apple.com:20343/api"))
+                XCTAssertEqual(exampleServer.fqdn, server.id)
+                XCTAssertEqual(exampleServer.apiVersion, 19)
+                XCTAssertEqual(exampleServer.xcodeServer, "2.0")
+                XCTAssertEqual(exampleServer.os, "10.15")
+                XCTAssertEqual(exampleServer.xcode, "11.6")
+                XCTAssertEqual(exampleServer.apiURL, URL(string: "https://xcodeserver.apple.com:20343/api"))
                 
                 complete.fulfill()
             }
@@ -61,7 +66,7 @@ final class CoreDataTests: XCTestCase {
             case .failure(let error):
                 XCTFail(error.localizedDescription)
             case .success:
-                guard let initialState = self.persistedStore.managedServer else {
+                guard let initialState = self.persistedStore.exampleServer else {
                     XCTFail()
                     return
                 }
@@ -77,7 +82,7 @@ final class CoreDataTests: XCTestCase {
                         XCTAssertEqual(mappedValue.version.macOSVersion, "11.0")
                         XCTAssertEqual(mappedValue.version.xcodeAppVersion, "12.0")
                         
-                        guard let updatedState = self.persistedStore.managedServer else {
+                        guard let updatedState = self.persistedStore.exampleServer else {
                             XCTFail()
                             return
                         }
@@ -96,21 +101,7 @@ final class CoreDataTests: XCTestCase {
     }
 }
 
-#if canImport(CoreData)
-extension CoreDataStore {
-    var managedServer: XcodeServerCoreData.Server? {
-        let request = XcodeServerCoreData.Server.fetchRequest() as! NSFetchRequest<XcodeServerCoreData.Server>
-        request.predicate = NSPredicate(format: "%K == %@", #keyPath(XcodeServerCoreData.Server.fqdn), XcodeServer.Server.ID.example)
-        return try? persistentContainer.viewContext.fetch(request).first
-    }
-}
-#endif
-
-extension XcodeServer.Server.ID {
-    static let example = "xcodeserver.apple.com"
-}
-
-extension XcodeServer.Server {
+private extension XcodeServer.Server {
     static let testServer: Self = {
         var server = XcodeServer.Server(id: .example)
         server.version.api = .v19

@@ -15,19 +15,18 @@ public extension Repository {
     }
     
     func update(_ blueprint: SourceControl.Blueprint, context: NSManagedObjectContext) {
+        identifier = blueprint.primaryRemoteIdentifier
         if let remote = blueprint.remotes.first(where: { $0.id == identifier }) {
             system = remote.system
             url = remote.url
         }
-        
         if let location = blueprint.locations[identifier] {
             branchIdentifier = location.id
             branchOptions = Int16(location.branchOptions)
+            locationType = location.locationType
         }
-        
-//        if let authStrategy = blueprint.authenticationStrategies[identifier] {
-//            
-//        }
+        if let _ = blueprint.authenticationStrategies[identifier] {
+        }
     }
 }
 
