@@ -18,7 +18,7 @@ final class IntegrationWriteAndUpdateTests: XCTestCase {
         return client
     }
     
-    var store: (ServerPersistable & BotPersistable) {
+    var store: (ServerPersistable & BotPersistable & IntegrationPersistable) {
         return persistedStore
     }
     
@@ -82,6 +82,40 @@ final class IntegrationWriteAndUpdateTests: XCTestCase {
         let _bot = try XCTUnwrap(updatedBot)
         let _integration = try XCTUnwrap(_bot.integrations.first(where: { $0.id == .dynumite24 }))
         try verifyDynumite24(_integration)
+        try verifyDynumiteAssets(_integration)
+    }
+    
+    func testIntegrationCommitsAndIssues() throws {
+        var bot = try XCTUnwrap(server.bots.first(where: { $0.id == .dynumiteMacOS }))
+        bot.integrations.insert(.dynumite24)
+        
+        let saveBot = expectation(description: "Save Bot")
+        store.saveBot(bot) { (result) in
+            switch result {
+            case .success:
+                saveBot.fulfill()
+            case .failure(let error):
+                XCTFail(error.localizedDescription)
+            }
+        }
+        wait(for: [saveBot], timeout: 0.5)
+        
+        var _integration: XcodeServer.Integration?
+        let saveIntegration = expectation(description: "Save Integration")
+        store.saveIntegration(.dynumite24) { (result) in
+            switch result {
+            case .success(let value):
+                _integration = value
+                saveIntegration.fulfill()
+            case .failure(let error):
+                XCTFail(error.localizedDescription)
+            }
+        }
+        wait(for: [saveIntegration], timeout: 0.5)
+        
+        let integration = try XCTUnwrap(_integration)
+        try verifyDynumiteIssues(integration)
+        try verifyDynumiteCommits(integration)
     }
 }
 
@@ -112,7 +146,9 @@ extension IntegrationWriteAndUpdateTests {
         XCTAssertEqual(integration.successStreak, 0)
         XCTAssertEqual(integration.codeCoverage, 0)
         XCTAssertEqual(integration.coverageDelta, 0)
-        
+    }
+    
+    private func verifyDynumiteAssets(_ integration: XcodeServer.Integration) throws {
         let assets = try XCTUnwrap(integration.assets)
         
         XCTAssertEqual(assets.sourceControlLog.size, 2752)
@@ -139,15 +175,16 @@ extension IntegrationWriteAndUpdateTests {
         XCTAssertEqual(log1.allowAnonymousAccess, false)
         XCTAssertEqual(log1.triggerName, "Tag Repository")
         XCTAssertEqual(log1.relativePath, "705d82e27dbb120dddc09af79100116b-Dynumite macOS/24/trigger-before-1.log")
-        
-        /*
-         // MARK: - Relationships
-         public var testHierarchy: Tests.Hierarchy?
-         public var buildSummary: BuildSummary?
-         public var controlledChanges: ControlledChanges?
-         public var issues: IssueCatalog?
-         public var commits: Set<SourceControl.Commit>?
-         */
+    }
+    
+    private func verifyDynumiteIssues(_ integration: XcodeServer.Integration) throws {
+        let catalog = try XCTUnwrap(integration.issues)
+        XCTAssertEqual(catalog.triggerErrors.count, 1)
+    }
+    
+    private func verifyDynumiteCommits(_ integration: XcodeServer.Integration) throws {
+        let commits = try XCTUnwrap(integration.commits)
+        XCTAssertEqual(commits.count, 7)
     }
 }
 
@@ -173,6 +210,36 @@ private extension XcodeServer.Bot {
         }
         #else
         return XcodeServer.Bot(id: .dynumiteMacOS)
+        #endif
+    }()
+}
+
+private extension XcodeServer.Integration {
+    static let dynumite24: Self = {
+        struct Commits: Decodable {
+            let count: Int
+            let results: [XCSCommit]
+        }
+        #if swift(>=5.3)
+        do {
+            let _integration: XCSIntegration = try Bundle.module.decodeJson("integration", decoder: XcodeServerAPI.APIClient.jsonDecoder)
+            let issues: XCSIssues = try Bundle.module.decodeJson("issues")
+            let commits: Commits = try Bundle.module.decodeJson("commits", decoder: XcodeServerAPI.APIClient.jsonDecoder)
+            var integration = XcodeServer.Integration(_integration, bot: XcodeServer.Bot.dynumite.id, server: nil)
+            integration.issues = IssueCatalog(issues, integration: integration.id)
+            var _commits: [SourceControl.Commit] = []
+            commits.results.forEach { (commit) in
+                commit.commits?.forEach({ (key, value) in
+                    _commits.append(contentsOf: value.map({ SourceControl.Commit($0, integration: integration.id) }))
+                })
+            }
+            integration.commits = Set(_commits)
+            return integration
+        } catch {
+            preconditionFailure(error.localizedDescription)
+        }
+        #else
+        return XcodeServer.Integration(id: .dynumite24)
         #endif
     }()
 }

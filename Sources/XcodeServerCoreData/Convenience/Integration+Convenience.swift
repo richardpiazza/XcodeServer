@@ -142,7 +142,15 @@ public extension XcodeServerCoreData.Integration {
         }
         
         _ = integration.controlledChanges
-        _ = integration.commits
+        if let commits = integration.commits {
+            update(commits, context: context)
+        }
+    }
+    
+    func update(_ commits: Set<SourceControl.Commit>, context: NSManagedObjectContext) {
+        commits.forEach { (commit) in
+            
+        }
     }
 }
 
