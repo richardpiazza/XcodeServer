@@ -30,6 +30,7 @@ public struct Integration: Hashable, Identifiable {
     public var assets: AssetCatalog?
     public var issues: IssueCatalog?
     public var commits: Set<SourceControl.Commit>?
+    public var revisionBlueprint: SourceControl.Blueprint?
     
     public var botId: Bot.ID?
     public var serverId: Server.ID?

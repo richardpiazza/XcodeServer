@@ -29,15 +29,8 @@ public extension XcodeServerCoreData.Server {
     /// Inserts or updates `Bot`s.
     ///
     /// - parameter entities: The entities to process
-    /// - parameter dropReferences: Removes entities not referenced in the update.
     /// - parameter context: The managed context in which to perform operations.
-    func update(_ entities: [XcodeServer.Bot], dropReferences: Bool = false, context: NSManagedObjectContext) {
-        if dropReferences {
-            let ids = entities.map { $0.id }
-            let droppedEntities = bots?.filter({ !ids.contains($0.identifier) }) ?? []
-            removeFromBots(Set(droppedEntities))
-        }
-        
+    func update(_ entities: [XcodeServer.Bot], context: NSManagedObjectContext) {
         entities.forEach({ entity in
             if let existing = bots?.first(where: { $0.identifier == entity.id }) {
                 existing.update(entity, context: context)

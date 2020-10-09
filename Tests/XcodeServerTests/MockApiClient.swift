@@ -164,7 +164,33 @@ class MockApiClient: AnyQueryable {
     }
     
     func getIntegration(_ id: Integration.ID, queue: DispatchQueue, completion: @escaping IntegrationResultHandler) {
+        #if swift(>=5.3)
+        guard id == .dynumite24 else {
+            queue.async {
+                completion(.failure(.noIntegration(id)))
+            }
+            return
+        }
         
+        dispatchQueue.async {
+            let resource: XCSIntegration? = try? Bundle.module.decodeJson("integration", decoder: self.decoder)
+            guard let value = resource else {
+                queue.async {
+                    completion(.failure(.message("Invalid Resource")))
+                }
+                return
+            }
+            
+            let result = XcodeServer.Integration(value, bot: nil, server: nil)
+            queue.async {
+                completion(.success(result))
+            }
+        }
+        #else
+        queue.async {
+            completion(.failure(.message("Not Implemented")))
+        }
+        #endif
     }
     
     func getCommitsForIntegration(_ id: Integration.ID, queue: DispatchQueue, completion: @escaping CommitsResultHandler) {

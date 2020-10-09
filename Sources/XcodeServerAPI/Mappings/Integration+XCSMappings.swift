@@ -21,6 +21,12 @@ public extension Integration {
         if let summary = integration.buildResultSummary {
             buildSummary = BuildSummary(summary)
         }
+        if let blueprint = integration.revisionBlueprint {
+            revisionBlueprint = SourceControl.Blueprint(blueprint)
+        }
+        if let catalog = integration.assets {
+            assets = AssetCatalog(catalog)
+        }
         botId = bot
         serverId = server
     }

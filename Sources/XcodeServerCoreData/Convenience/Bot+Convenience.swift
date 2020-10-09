@@ -43,15 +43,8 @@ public extension XcodeServerCoreData.Bot {
     /// `Integration`s will not be removed if not present.
     ///
     /// - parameter entities: The integrations to process.
-    /// - parameter dropReferences: Removes entities not referenced in the update.
     /// - parameter context: The current managed object context for performing operations.
-    func update(_ entities: [XcodeServer.Integration], dropReferences: Bool = false, context: NSManagedObjectContext) {
-        if dropReferences {
-            let ids = entities.map { $0.id }
-            let droppedEntities = integrations?.filter({ !ids.contains($0.identifier) }) ?? []
-            removeFromIntegrations(Set(droppedEntities))
-        }
-        
+    func update(_ entities: [XcodeServer.Integration], context: NSManagedObjectContext) {
         entities.forEach({ integration in
             if let existing = integrations?.first(where: { $0.identifier == integration.id }) {
                 existing.update(integration, context: context)
