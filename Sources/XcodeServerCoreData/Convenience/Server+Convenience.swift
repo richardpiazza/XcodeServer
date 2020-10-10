@@ -20,9 +20,15 @@ public extension XcodeServerCoreData.Server {
         lastUpdate = Date()
         apiVersion = Int32(server.version.api.rawValue)
         xcodeServer = server.version.app.rawValue
-        os = server.version.macOSVersion
-        xcode = server.version.xcodeAppVersion
-        self.server = server.version.serverAppVersion
+        if !server.version.macOSVersion.isEmpty {
+            os = server.version.macOSVersion
+        }
+        if !server.version.xcodeAppVersion.isEmpty {
+            xcode = server.version.xcodeAppVersion
+        }
+        if !server.version.serverAppVersion.isEmpty {
+            self.server = server.version.serverAppVersion
+        }
         update(Array(server.bots), context: context)
     }
     
