@@ -24,7 +24,7 @@ let package = Package(
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
         .package(url: "https://github.com/tsolomko/SWCompression", .upToNextMinor(from: "4.5.5")),
-        .package(url: "https://github.com/richardpiazza/ProcedureKit.git", .branch("feature/cross-platform")),
+        .package(url: "https://github.com/richardpiazza/ProcedureKit.git", from: "6.0.0-beta.1"),
         .package(url: "https://github.com/swift-server/async-http-client", from: "1.2.1"),
         .package(url: "https://github.com/apple/swift-argument-parser.git", .upToNextMinor(from: "0.3.1")),
         .package(url: "https://github.com/apple/swift-tools-support-core.git", .upToNextMinor(from: "0.1.10")),
