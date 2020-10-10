@@ -69,15 +69,21 @@ extension CoreDataStore: IntegrationPersistable {
                     return
                 }
                 
-                for sourceControlCommit in commits {
-                    let managedCommit = context.commit(withHash: sourceControlCommit.id) ?? XcodeServerCoreData.Commit(context: context)
-                    managedCommit.update(sourceControlCommit, context: context)
-                    
-                    if context.revisionBlueprint(withCommit: managedCommit, andIntegration: managedIntegration) == nil {
-                        let link = RevisionBlueprint(context: context)
-                        link.commit = managedCommit
-                        link.integration = managedIntegration
+                commits.forEach { (commit) in
+                    guard let remoteId = commit.remoteId else {
+                        print("No Remote ID for commit:\n\(commit)")
+                        return
                     }
+                    
+                    let repository: Repository
+                    if let entity = context.repository(withIdentifier: remoteId) {
+                        repository = entity
+                    } else {
+                        repository = Repository(context: context)
+                        repository.identifier = remoteId
+                    }
+                    
+                    repository.update(Set(arrayLiteral: commit), integration: managedIntegration, context: context)
                 }
                 
                 do {
