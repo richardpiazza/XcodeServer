@@ -29,8 +29,6 @@ public class UpdateBotIntegrationsProcedure: IdentifiablePersitableProcedure<Bot
             return
         }
         
-        print("Updating Integrations for Bot '\(id)'")
-        
         var _bot = identifiable
         _bot.modified = Date()
         value.forEach({ _bot.integrations.insert($0) })

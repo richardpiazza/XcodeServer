@@ -13,7 +13,7 @@ public class CreateServerProcedure: IdentifiablePersitableProcedure<Server>, Inp
             return
         }
         
-        print("Creating Server '\(id)'")
+        XcodeServerProcedureEvent.log(.server(action: .create, id: identifiable.id))
         
         destination.saveServer(identifiable) { [weak self] (result) in
             switch result {

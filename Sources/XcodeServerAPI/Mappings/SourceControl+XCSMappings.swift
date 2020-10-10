@@ -2,18 +2,19 @@ import XcodeServer
 import Foundation
 
 public extension SourceControl.Commit {
-    init(_ commit: XCSRepositoryCommit, integration: Integration.ID?) {
+    init(_ commit: XCSRepositoryCommit, remote: SourceControl.Remote.ID?, integration: Integration.ID?) {
         self.init(id: commit.hash ?? "")
         message = commit.message ?? ""
         date = commit.timestamp ?? Date()
         isMerge = commit.isMerge ?? ""
+        remoteId = remote
+        integrationId = integration
         if let contributor = commit.contributor {
             self.contributor = SourceControl.Contributor(contributor)
         }
         if let changes = commit.commitChangeFilePaths {
             self.changes = changes.map { SourceControl.Change($0) }
         }
-        integrationId = integration
     }
 }
 

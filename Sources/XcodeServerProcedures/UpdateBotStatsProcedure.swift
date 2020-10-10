@@ -26,8 +26,6 @@ public class UpdateBotStatsProcedure: IdentifiablePersitableProcedure<Bot>, Inpu
             return
         }
         
-        print("Updating Stats for Bot '\(id)'")
-        
         var _bot = identifiable
         _bot.stats = value
         

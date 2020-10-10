@@ -26,7 +26,7 @@ public class UpdateIntegrationCommitsProcedure: IdentifiablePersitableProcedure<
             return
         }
         
-        print("Updating Commits for Integration '\(id)'")
+        XcodeServerProcedureEvent.log(.commits(action: .update, id: id))
         
         destination.saveCommits(value, forIntegration: id) { [weak self] (result) in
             switch result {

@@ -96,6 +96,11 @@ public extension Integration {
 
 public extension XcodeServerCoreData.Integration {
     func update(_ integration: XcodeServer.Integration, context: NSManagedObjectContext) {
+        if issues == nil {
+            issues = IntegrationIssues(context: context)
+            issues?.integration = self
+        }
+        
         currentStep = integration.step
         duration = integration.duration ?? 0.0
         endedTime = integration.ended
@@ -131,14 +136,8 @@ public extension XcodeServerCoreData.Integration {
             break
         }
         
-        switch (issues, integration.issues) {
-        case (.some(let managedIssues), .some(let update)):
-            managedIssues.update(update, context: context)
-        case (.none, .some(let update)):
-            issues = IntegrationIssues(context: context)
-            issues?.update(update, context: context)
-        default:
-            break
+        if let issues = integration.issues {
+            self.issues?.update(issues, context: context)
         }
         
         _ = integration.controlledChanges
@@ -149,7 +148,20 @@ public extension XcodeServerCoreData.Integration {
     
     func update(_ commits: Set<SourceControl.Commit>, context: NSManagedObjectContext) {
         commits.forEach { (commit) in
+            guard let remoteId = commit.remoteId else {
+                print("No Remote ID for commit:\n\(commit)")
+                return
+            }
             
+            let repository: Repository
+            if let entity = context.repository(withIdentifier: remoteId) {
+                repository = entity
+            } else {
+                repository = Repository(context: context)
+                repository.identifier = remoteId
+            }
+            
+            repository.update(commits, integration: self, context: context)
         }
     }
 }
@@ -234,5 +246,30 @@ public extension XcodeServerCoreData.Integration {
      }
  }
  */
+
+private extension XcodeServer.Integration.IssueCatalog {
+    var count: Int {
+        var total: Int = 0
+        total += buildServiceErrors.count
+        total += buildServiceWarnings.count
+        total += triggerErrors.count
+        total += errors.count
+        total += warnings.count
+        total += testFailures.count
+        total += analyzerWarnings.count
+        return total
+    }
+}
+
+private extension XcodeServer.Integration.IssueGroup {
+    var count: Int {
+        var total: Int = 0
+        total += unresolvedIssues.count
+        total += freshIssues.count
+        total += resolvedIssues.count
+        total += silencedIssues.count
+        return total
+    }
+}
 
 #endif

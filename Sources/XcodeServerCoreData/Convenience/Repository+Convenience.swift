@@ -7,11 +7,7 @@ public extension Repository {
         identifier = remote.id
         system = remote.system
         url = remote.url
-        remote.commits.forEach({
-            let commit = Commit(context: context)
-            commit.repository = self
-            commit.update($0, context: context)
-        })
+        update(remote.commits, context: context)
     }
     
     func update(_ blueprint: SourceControl.Blueprint, context: NSManagedObjectContext) {
@@ -26,6 +22,29 @@ public extension Repository {
             locationType = location.locationType
         }
         if let _ = blueprint.authenticationStrategies[identifier] {
+        }
+    }
+    
+    func update(_ commits: Set<SourceControl.Commit>, integration: XcodeServerCoreData.Integration? = nil, context: NSManagedObjectContext) {
+        for commit in commits {
+            let _commit: Commit
+            if let entity = context.commit(withHash: commit.id) {
+                _commit = entity
+            } else {
+                _commit = Commit(context: context)
+                _commit.repository = self
+                _commit.update(commit, context: context)
+            }
+            
+            guard let integration = integration else {
+                return
+            }
+            
+            if context.revisionBlueprint(withCommit: _commit, andIntegration: integration) == nil {
+                let link = RevisionBlueprint(context: context)
+                link.commit = _commit
+                link.integration = integration
+            }
         }
     }
 }

@@ -28,8 +28,6 @@ public class UpdateServerBotsProcedure: IdentifiablePersitableProcedure<Server>,
             return
         }
         
-        print("Updating Bots for '\(id)'")
-        
         var _server = identifiable
         value.forEach({ _server.bots.insert($0) })
         

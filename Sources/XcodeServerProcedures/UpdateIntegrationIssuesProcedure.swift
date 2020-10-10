@@ -26,7 +26,7 @@ public class UpdateIntegrationIssuesProcedure: IdentifiablePersitableProcedure<I
             return
         }
         
-        print("Updating Issues for Integration '\(id)'")
+        XcodeServerProcedureEvent.log(.issues(action: .update, id: id))
         
         destination.saveIssues(value, forIntegration: id) { [weak self] (result) in
             switch result {

@@ -26,7 +26,7 @@ public class GetIntegrationCommitsProcedure: AnyQueryableProcedure, InputProcedu
             return
         }
         
-        print("Getting Commits for Integration '\(id)'")
+        XcodeServerProcedureEvent.log(.commits(action: .retrieve, id: id))
         
         source.getCommitsForIntegration(id) { [weak self] (result) in
             switch result {

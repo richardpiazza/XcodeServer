@@ -12,7 +12,7 @@ public extension Issue {
         message = issue.message ?? ""
         testCase = issue.testCase ?? ""
         if let commits = issue.commits {
-            self.commits = Set(commits.map { SourceControl.Commit($0, integration: integration) })
+            self.commits = Set(commits.map { SourceControl.Commit($0, remote: $0.repositoryID, integration: integration) })
         }
         integrationId = integration
     }

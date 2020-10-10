@@ -10,8 +10,6 @@ public class GetBotsProcedure: AnyQueryableProcedure, OutputProcedure {
             return
         }
         
-        print("Getting Bots")
-        
         source.getBots { [weak self] (result) in
             switch result {
             case .success(let value):

@@ -26,7 +26,7 @@ public class GetIntegrationProcedure: AnyQueryableProcedure, InputProcedure, Out
             return
         }
         
-        print("Getting Integration '\(id)'")
+        XcodeServerProcedureEvent.log(.integration(action: .retrieve, id: id, number: nil, bot: nil))
         
         source.getIntegration(id) { [weak self] (result) in
             switch result {

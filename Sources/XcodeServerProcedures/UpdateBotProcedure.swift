@@ -28,7 +28,7 @@ public class UpdateBotProcedure: IdentifiablePersitableProcedure<Bot>, InputProc
             return
         }
         
-        print("Updating Bot '\(id)'")
+        XcodeServerProcedureEvent.log(.bot(action: .update, id: id, name: input.value?.name, server: nil))
         
         destination.saveBot(value) { [weak self] (result) in
             switch result {

@@ -53,7 +53,7 @@ extension APIClient: IntegrationQueryable {
                             repositoryCommits.append(contentsOf: dictionary.value)
                         })
                     })
-                    let value = repositoryCommits.map({ SourceControl.Commit($0, integration: id) })
+                    let value = repositoryCommits.map({ SourceControl.Commit($0, remote: $0.repositoryID, integration: id) })
                     queue.async {
                         completion(.success(value))
                     }

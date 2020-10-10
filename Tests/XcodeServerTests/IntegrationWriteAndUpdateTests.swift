@@ -179,12 +179,12 @@ extension IntegrationWriteAndUpdateTests {
     
     private func verifyDynumiteIssues(_ integration: XcodeServer.Integration) throws {
         let catalog = try XCTUnwrap(integration.issues)
-        XCTAssertEqual(catalog.triggerErrors.count, 1)
+        XCTAssertEqual(catalog.buildServiceErrors.count, 1)
     }
     
     private func verifyDynumiteCommits(_ integration: XcodeServer.Integration) throws {
         let commits = try XCTUnwrap(integration.commits)
-        XCTAssertEqual(commits.count, 7)
+        XCTAssertEqual(commits.count, 8)
     }
 }
 
@@ -230,7 +230,7 @@ private extension XcodeServer.Integration {
             var _commits: [SourceControl.Commit] = []
             commits.results.forEach { (commit) in
                 commit.commits?.forEach({ (key, value) in
-                    _commits.append(contentsOf: value.map({ SourceControl.Commit($0, integration: integration.id) }))
+                    _commits.append(contentsOf: value.map({ SourceControl.Commit($0, remote: $0.repositoryID, integration: integration.id) }))
                 })
             }
             integration.commits = Set(_commits)

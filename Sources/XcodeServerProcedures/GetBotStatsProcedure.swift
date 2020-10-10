@@ -26,8 +26,6 @@ public class GetBotStatsProcedure: AnyQueryableProcedure, InputProcedure, Output
             return
         }
         
-        print("Getting Stats for Bot '\(id)'")
-        
         source.getStatsForBot(id) { [weak self] (result) in
             switch result {
             case .success(let value):

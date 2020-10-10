@@ -26,8 +26,6 @@ public class GetVersionProcedure: AnyQueryableProcedure, InputProcedure, OutputP
             return
         }
         
-        print("Getting Version '\(id)'")
-        
         source.getServer(id) { [weak self] (result) in
             switch result {
             case .success(let value):

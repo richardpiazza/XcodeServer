@@ -26,7 +26,7 @@ public class CreateIntegrationProcedure: IdentifiablePersitableProcedure<Bot>, I
             return
         }
         
-        print("Creating Integration '\(value.id)' for Bot  '\(id)'")
+        XcodeServerProcedureEvent.log(.integration(action: .create, id: value.id, number: value.number, bot: id))
         
         var _bot = identifiable
         _bot.integrations.insert(value)

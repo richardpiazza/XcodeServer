@@ -26,7 +26,7 @@ public class GetIntegrationIssuesProcedure: AnyQueryableProcedure, InputProcedur
             return
         }
         
-        print("Getting Issues for Integration '\(id)'")
+        XcodeServerProcedureEvent.log(.issues(action: .retrieve, id: id))
         
         source.getIssuesForIntegration(id) { [weak self] (result) in
             switch result {

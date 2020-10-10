@@ -28,7 +28,7 @@ public class UpdateIntegrationProcedure: IdentifiablePersitableProcedure<Integra
             return
         }
         
-        print("Updating Integration '\(id)'")
+        XcodeServerProcedureEvent.log(.integration(action: .update, id: value.id, number: value.number, bot: id))
         
         destination.saveIntegration(value) { [weak self] (result) in
             switch result {

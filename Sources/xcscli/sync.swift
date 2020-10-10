@@ -78,7 +78,7 @@ final class Sync: ParsableCommand, Route {
                 
                 print("Sync Complete")
                 if let url = store.persistentContainer.persistentStoreCoordinator.persistentStores.first?.url {
-                    print("URL: \(url)")
+                    print("\(url)")
                 }
                 
                 store.persistentContainer.unload()

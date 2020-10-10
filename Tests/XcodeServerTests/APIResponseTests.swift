@@ -91,7 +91,7 @@ final class APIResponseTests: XCTestCase {
     func testIssues() throws {
         #if swift(>=5.3)
         let issues: XCSIssues = try Bundle.module.decodeJson("issues", decoder: decoder)
-        XCTAssertEqual(issues.triggerErrors?.count, 1)
+        XCTAssertEqual(issues.buildServiceErrors?.count, 1)
         #endif
     }
     

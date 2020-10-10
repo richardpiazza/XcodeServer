@@ -10,7 +10,7 @@ public class DeleteServerProcedure: IdentifiablePersitableProcedure<Server> {
             return
         }
         
-        print("Deleting Server '\(id)'")
+        XcodeServerProcedureEvent.log(.server(action: .delete, id: id))
         
         destination.deleteServer(identifiable) { [weak self] (result) in
             switch result {

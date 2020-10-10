@@ -26,8 +26,6 @@ public class GetBotIntegrationsProcedure: AnyQueryableProcedure, InputProcedure,
             return
         }
         
-        print("Getting Integrations for Bot '\(id)'")
-        
         source.getIntegrations(forBot: id) { [weak self] (result) in
             switch result {
             case .success(let value):

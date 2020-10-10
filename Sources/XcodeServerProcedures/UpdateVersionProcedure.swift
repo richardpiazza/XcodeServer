@@ -27,8 +27,6 @@ public class UpdateVersionProcedure: IdentifiablePersitableProcedure<Server>, In
             return
         }
         
-        print("Updating Versions for Server '\(id)'")
-        
         var _server = identifiable
         _server.modified = Date()
         _server.version = value

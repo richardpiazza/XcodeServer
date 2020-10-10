@@ -26,7 +26,7 @@ public class GetBotProcedure: AnyQueryableProcedure, InputProcedure, OutputProce
             return
         }
         
-        print("Getting Bot '\(id)'")
+        XcodeServerProcedureEvent.log(.bot(action: .retrieve, id: id, name: nil, server: nil))
         
         source.getBot(id) { [weak self] (result) in
             switch result {
