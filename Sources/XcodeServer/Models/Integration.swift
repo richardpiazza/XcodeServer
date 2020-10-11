@@ -33,6 +33,7 @@ public struct Integration: Hashable, Identifiable {
     public var revisionBlueprint: SourceControl.Blueprint?
     
     public var botId: Bot.ID?
+    public var botName: String?
     public var serverId: Server.ID?
     
     public init(id: Integration.ID = "") {

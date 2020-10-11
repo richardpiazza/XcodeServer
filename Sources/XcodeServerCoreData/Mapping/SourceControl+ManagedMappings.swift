@@ -11,7 +11,13 @@ public extension SourceControl.Commit {
             self.contributor = SourceControl.Contributor(contributor)
         }
         if let changes = commit.commitChanges {
-            self.changes = changes.map { SourceControl.Change($0) }
+            #warning("🦠 Constant Bugs Here?!")
+            let _changes: [SourceControl.Change] = []
+            for change in changes {
+                let _change = SourceControl.Change(change)
+                _changes.append(_change)
+            }
+            self.changes = _changes
         }
         
         integrationId = commit.revisionBlueprints?.compactMap({ $0.integration?.identifier }).first

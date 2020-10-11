@@ -2,7 +2,7 @@ import XcodeServer
 import Foundation
 
 public extension Integration {
-    init(_ integration: XCSIntegration, bot: Bot.ID?, server: Server.ID?) {
+    init(_ integration: XCSIntegration, bot: Bot.ID?, botName: String? = nil, server: Server.ID?) {
         self.init(id: integration.id)
         number = Int(integration.number)
         step = Integration.Step(rawValue: integration.currentStep.rawValue) ?? .pending
@@ -28,6 +28,7 @@ public extension Integration {
             assets = AssetCatalog(catalog)
         }
         botId = bot
+        self.botName = botName
         serverId = server
     }
     

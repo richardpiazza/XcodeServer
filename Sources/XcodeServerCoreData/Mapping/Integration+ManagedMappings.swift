@@ -25,6 +25,7 @@ public extension XcodeServer.Integration {
         }
         commits = Set(integration.commits.map { SourceControl.Commit($0) })
         botId = integration.bot?.identifier
+        botName = integration.bot?.name
         serverId = integration.bot?.server?.fqdn
     }
 }
