@@ -92,33 +92,4 @@ public extension XcodeServerCoreData.EmailConfiguration {
         weeklyScheduleDay = Int16(email.weeklyScheduleDay)
     }
 }
-
-/*
- extension XcodeServerCoreData.EmailConfiguration {
-     public func update(withEmailConfiguration configuration: XCSEmailConfiguration) {
-         if let ccas = configuration.ccAddresses {
-             self.ccAddresses = ccas
-         }
-         
-         if let adn = configuration.allowedDomainNames {
-             self.allowedDomainNames = adn
-         }
-         
-         self.recipients = configuration.additionalRecipients ?? []
-         self.emailCommitters = configuration.emailCommitters ?? false
-         self.emailType = XcodeServer.Trigger.Email.Category(rawValue: Int(configuration.type?.rawValue ?? 0)) ?? .integrationReport
-         self.fromAddress = configuration.fromAddress
-         self.hour = Int16(configuration.hour ?? 0)
-         self.includeBotConfiguration = configuration.includeBotConfiguration ?? false
-         self.includeCommitMessages = configuration.includeCommitMessages ?? false
-         self.includeIssueDetails = configuration.includeIssueDetails ?? false
-         self.includeLogs = configuration.includeLogs ?? false
-         self.includeResolvedIssues = configuration.includeResolvedIssues ?? false
-         self.minutesAfterHour = Int16(configuration.minutesAfterHour ?? 0)
-         self.replyToAddress = configuration.replyToAddress
-         self.weeklyScheduleDay = Int16(configuration.weeklyScheduleDay ?? 0)
-     }
- }
- */
-
 #endif

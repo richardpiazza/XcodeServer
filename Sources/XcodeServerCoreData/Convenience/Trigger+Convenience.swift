@@ -39,38 +39,4 @@ public extension Trigger {
         type = trigger.type
     }
 }
-
-/*
- extension XcodeServerCoreData.Trigger {
-     public func update(withTrigger trigger: XCSTrigger) {
-         guard let moc = self.managedObjectContext else {
-             return
-         }
-         
-         self.name = trigger.name
-         self.type = XcodeServer.Trigger.Category(rawValue: Int(trigger.type?.rawValue ?? 0)) ?? .script
-         self.phase = XcodeServer.Trigger.Phase(rawValue: Int(trigger.phase?.rawValue ?? 0)) ?? .beforeIntegration
-         self.scriptBody = trigger.scriptBody
-         
-         if let triggerConditions = trigger.conditions {
-             if conditions == nil {
-                 conditions = Conditions(context: moc)
-                 conditions?.trigger = self
-             }
-             
-             conditions?.update(withConditions: triggerConditions)
-         }
-         
-         if let triggerEmail = trigger.emailConfiguration {
-             if emailConfiguration == nil {
-                 emailConfiguration = EmailConfiguration(context: moc)
-                 emailConfiguration?.trigger = self
-             }
-             
-             emailConfiguration?.update(withEmailConfiguration: triggerEmail)
-         }
-     }
- }
- */
-
 #endif

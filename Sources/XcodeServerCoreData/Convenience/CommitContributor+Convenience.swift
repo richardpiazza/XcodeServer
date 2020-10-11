@@ -43,7 +43,11 @@ public extension CommitContributor {
             do {
                 return try Self.jsonDecoder.decode([String].self, from: data)
             } catch {
-                print(error)
+                print("""
+                Failed to get 'emailsData':
+                    \(String(data: data, encoding: .utf8) ?? "")
+                    \(error)
+                """)
                 return []
             }
         }
@@ -51,7 +55,11 @@ public extension CommitContributor {
             do {
                 emailsData = try Self.jsonEncoder.encode(newValue)
             } catch {
-                print(error)
+                print("""
+                Failed to set 'emailsData':
+                    \(newValue)
+                    \(error)
+                """)
             }
         }
     }
@@ -64,17 +72,4 @@ public extension CommitContributor {
         name = contributor.name
     }
 }
-
-/*
- extension XcodeServerCoreData.CommitContributor {
-     public func update(withCommitContributor contributor: XCSCommitContributor) {
-         self.name = contributor.name
-         self.displayName = contributor.displayName
-         if let emails = contributor.emails {
-             self.emailAddresses = emails
-         }
-     }
- }
- */
-
 #endif

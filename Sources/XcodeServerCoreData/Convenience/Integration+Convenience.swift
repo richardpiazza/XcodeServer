@@ -96,9 +96,14 @@ public extension Integration {
 
 public extension XcodeServerCoreData.Integration {
     func update(_ integration: XcodeServer.Integration, context: NSManagedObjectContext) {
+        if assets == nil {
+            assets = IntegrationAssets(context: context)
+        }
+        if buildResultSummary == nil {
+            buildResultSummary = BuildResultSummary(context: context)
+        }
         if issues == nil {
             issues = IntegrationIssues(context: context)
-            issues?.integration = self
         }
         
         currentStep = integration.step
@@ -112,37 +117,35 @@ public extension XcodeServerCoreData.Integration {
         shouldClean = integration.shouldClean
         startedTime = integration.started
         successStreak = Int32(integration.successStreak)
+        
         if let tests = integration.testHierarchy {
             testHierarchy = tests
         }
         
-        switch (buildResultSummary, integration.buildSummary) {
-        case (.some(let managedSummary), .some(let summary)):
-            managedSummary.update(summary)
-        case (.none, .some(let summary)):
-            buildResultSummary = BuildResultSummary(context: context)
-            buildResultSummary?.update(summary)
-        default:
-            break
+        if let catalog = integration.assets {
+            assets?.update(catalog, context: context)
         }
         
-        switch (assets, integration.assets) {
-        case (.some(let managedAssets), .some(let update)):
-            managedAssets.update(update, context: context)
-        case (.none, .some(let update)):
-            assets = IntegrationAssets(context: context)
-            assets?.update(update, context: context)
-        default:
-            break
+        if let summary = integration.buildSummary {
+            buildResultSummary?.update(summary)
         }
         
         if let issues = integration.issues {
             self.issues?.update(issues, context: context)
         }
         
-        _ = integration.controlledChanges
         if let commits = integration.commits {
             update(commits, context: context)
+        }
+        
+        // TODO: When core data model supports it.
+        _ = integration.controlledChanges
+        
+        if let blueprint = integration.revisionBlueprint {
+            if !blueprint.primaryRemoteIdentifier.isEmpty {
+                let repository = context.repository(withIdentifier: blueprint.primaryRemoteIdentifier) ?? Repository(context: context)
+                repository.update(blueprint, context: context)
+            }
         }
     }
     
@@ -165,111 +168,4 @@ public extension XcodeServerCoreData.Integration {
         }
     }
 }
-
-/*
- public extension XcodeServerCoreData.Integration {
-     @discardableResult
-     func update(withIntegration integration: XCSIntegration) -> [XcodeServerProcedureEvent] {
-         var events: [XcodeServerProcedureEvent] = []
-         
-         guard let moc = self.managedObjectContext else {
-             return events
-         }
-         
-         let _currentStep = XcodeServer.Integration.Step(rawValue: integration.currentStep.rawValue) ?? .pending
-         let _result = XcodeServer.Integration.Result(rawValue: integration.result.rawValue) ?? .unknown
-         
-         if (currentStep != _currentStep) || (result != _result) {
-             events.append(.integration(action: .update, identifier: integration.id, number: integration.number))
-         }
-         
-         self.currentStep = _currentStep
-         self.duration = integration.duration ?? 0.0
-         self.endedTime = integration.endedTime
-         self.number = integration.number
-         self.queuedDate = integration.queuedDate
-         self.result = _result
-         self.shouldClean = integration.shouldClean ?? false
-         self.startedTime = integration.startedTime
-         self.successStreak = integration.successStreak ?? 0
-         
-         if let value = integration.testHierarchy {
-             self.testHierarchy = Tests.Hierarchy(value)
-         }
-         
-         // Build Results Summary
-         if let summary = integration.buildResultSummary {
-             if self.buildResultSummary == nil {
-                 self.buildResultSummary = BuildResultSummary(context: moc)
-             }
-             self.buildResultSummary?.update(withBuildResultSummary: summary)
-         }
-         
-         // Assets
-         if let assets = integration.assets {
-             if self.assets == nil {
-                 self.assets = IntegrationAssets(context: moc)
-             }
-             self.assets?.update(withIntegrationAssets: assets)
-         }
-         
-         // Tested Devices
-         if let devices = integration.testedDevices {
-             for testedDevice in devices {
-                 if let device = moc.device(withIdentifier: testedDevice.identifier) {
-                     self.testedDevices?.insert(device)
-                     continue
-                 }
-                 
-                 let device = Device(context: moc)
-                 device.identifier = testedDevice.identifier
-                 device.update(withDevice: testedDevice)
-                 self.testedDevices?.insert(device)
-             }
-         }
-         
-         // Revision Blueprint
-         if let blueprint = integration.revisionBlueprint {
-             for id in blueprint.repositoryIds {
-                 if let repository = moc.repository(withIdentifier: id) {
-                     repository.update(withRevisionBlueprint: blueprint, integration: self)
-                     continue
-                 }
-                 
-                 let repository = Repository(context: moc)
-                 repository.identifier = id
-                 repository.update(withRevisionBlueprint: blueprint, integration: self)
-             }
-         }
-         
-         return events
-     }
- }
- */
-
-private extension XcodeServer.Integration.IssueCatalog {
-    var count: Int {
-        var total: Int = 0
-        total += buildServiceErrors.count
-        total += buildServiceWarnings.count
-        total += triggerErrors.count
-        total += errors.count
-        total += warnings.count
-        total += testFailures.count
-        total += analyzerWarnings.count
-        return total
-    }
-}
-
-private extension XcodeServer.Integration.IssueGroup {
-    var count: Int {
-        var total: Int = 0
-        total += unresolvedIssues.count
-        total += freshIssues.count
-        total += resolvedIssues.count
-        total += silencedIssues.count
-        return total
-    }
-}
-
 #endif

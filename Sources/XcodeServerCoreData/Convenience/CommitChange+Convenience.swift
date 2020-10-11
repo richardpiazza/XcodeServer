@@ -8,14 +8,4 @@ public extension CommitChange {
         filePath = change.filePath
     }
 }
-
-/*
- extension XcodeServerCoreData.CommitChange {
-     public func update(withCommitChange change: XCSCommitChangeFilePath) {
-         self.statusRawValue = Int16(change.status)
-         self.filePath = change.filePath
-     }
- }
- */
-
 #endif
