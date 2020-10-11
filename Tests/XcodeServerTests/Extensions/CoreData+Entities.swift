@@ -1,8 +1,8 @@
-import XCTest
 @testable import XcodeServer
 @testable import XcodeServerCoreData
-
 #if canImport(CoreData)
+import CoreData
+
 extension CoreDataStore {
     var exampleServer: XcodeServerCoreData.Server? {
         let request = XcodeServerCoreData.Server.fetchRequest() as! NSFetchRequest<XcodeServerCoreData.Server>

@@ -1,6 +1,6 @@
-import XCTest
 @testable import XcodeServer
 @testable import XcodeServerAPI
+import Foundation
 
 class MockApiClient: AnyQueryable {
     private let dispatchQueue: DispatchQueue = .init(label: "MockApiClient")

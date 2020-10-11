@@ -6,6 +6,11 @@ import XCTest
 #if canImport(CoreData)
 final class IntegrationWriteAndUpdateTests: XCTestCase {
     
+    static var allTests = [
+        ("testWriteIntegration", testWriteIntegration),
+        ("testIntegrationCommitsAndIssues", testIntegrationCommitsAndIssues),
+    ]
+    
     private lazy var persistedStore: CoreDataStore = {
         return CoreDataStore(model: .v1_0_0, persisted: false)
     }()

@@ -1,6 +1,7 @@
 import XCTest
 @testable import XcodeServer
 @testable import XcodeServerCoreData
+#if canImport(CoreData)
 
 final class ServerWriteAndUpdateTests: XCTestCase {
     
@@ -9,7 +10,6 @@ final class ServerWriteAndUpdateTests: XCTestCase {
         ("testUpdateServer", testUpdateServer),
     ]
     
-    #if canImport(CoreData)
     lazy var persistedStore: CoreDataStore = {
         return CoreDataStore(model: .v1_0_0, persisted: false)
     }()
@@ -17,10 +17,8 @@ final class ServerWriteAndUpdateTests: XCTestCase {
     var store: (ServerPersistable & ServerQueryable) {
         return persistedStore
     }
-    #endif
     
     func testWriteServer() throws {
-        #if canImport(CoreData)
         let server: XcodeServer.Server = .testServer
         let complete = expectation(description: "complete")
         
@@ -53,11 +51,9 @@ final class ServerWriteAndUpdateTests: XCTestCase {
         }
         
         wait(for: [complete], timeout: 0.5)
-        #endif
     }
     
     func testUpdateServer() {
-        #if canImport(CoreData)
         let server: XcodeServer.Server = .testServer
         let complete = expectation(description: "complete")
         
@@ -97,7 +93,6 @@ final class ServerWriteAndUpdateTests: XCTestCase {
         }
         
         wait(for: [complete], timeout: 1.0)
-        #endif
     }
 }
 
@@ -120,3 +115,4 @@ private extension XcodeServer.Server {
         return server
     }()
 }
+#endif

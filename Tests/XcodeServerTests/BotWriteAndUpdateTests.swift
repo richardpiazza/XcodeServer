@@ -3,9 +3,14 @@ import XCTest
 @testable import XcodeServerAPI
 @testable import XcodeServerCoreData
 
+#if canImport(CoreData)
 final class BotWriteAndUpdateTests: XCTestCase {
     
-    #if canImport(CoreData)
+    static var allTests = [
+        ("testWriteBot", testWriteBot),
+        ("testUpdateBotStats", testUpdateBotStats),
+    ]
+    
     private lazy var persistedStore: CoreDataStore = {
         return CoreDataStore(model: .v1_0_0, persisted: false)
     }()
@@ -21,10 +26,8 @@ final class BotWriteAndUpdateTests: XCTestCase {
     var store: (ServerPersistable & BotPersistable) {
         return persistedStore
     }
-    #endif
     
     func testWriteBot() throws {
-        #if canImport(CoreData)
         let saveServer = expectation(description: "Save Server")
         store.saveServer(.exampleServer) { (result) in
             switch result {
@@ -148,11 +151,9 @@ final class BotWriteAndUpdateTests: XCTestCase {
         XCTAssertEqual(repository.branchIdentifier, "master")
         XCTAssertEqual(repository.branchOptions, 4)
         XCTAssertEqual(repository.locationType, "DVTSourceControlBranch")
-        #endif
     }
     
     func testUpdateBotStats() throws {
-        #if canImport(CoreData)
         var server: XcodeServer.Server = .exampleServer
         server.bots.insert(.dynumite)
         
@@ -270,7 +271,6 @@ final class BotWriteAndUpdateTests: XCTestCase {
         /*
          public var sinceDate: Date = Date()
          */
-        #endif
     }
 }
 
@@ -301,3 +301,4 @@ private extension XcodeServer.Bot {
         return XcodeServer.Bot(_bot, server: .dynumiteMacOS)
     }()
 }
+#endif

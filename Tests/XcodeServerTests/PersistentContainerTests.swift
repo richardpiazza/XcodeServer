@@ -3,7 +3,7 @@ import XCTest
 @testable import XcodeServerCoreData
 #if canImport(CoreData)
 import CoreData
-#endif
+
 
 final class PersistentContainerTests: XCTestCase {
     
@@ -15,14 +15,12 @@ final class PersistentContainerTests: XCTestCase {
         ("testFullStore_Model_1_0_0_Metadata", testFullStore_Model_1_0_0_Metadata),
     ]
     
-    #if canImport(CoreData)
     lazy var model: NSManagedObjectModel = {
         return Model_1_0_0.instance
     }()
-    #endif
     
     func testXCModelHashes() throws {
-        #if canImport(CoreData) && swift(>=5.3)
+        #if swift(>=5.3)
         let model = try XCTUnwrap(Model_1_0_0.bundle)
         let entityHashes = model.entityVersionHashesByName
         XCTAssertEqual(entityHashes[Asset.entityName]!.hexString, "b31a95b5bd19f89ddfe7e0fcedd7d7cb8be8b49b83a0a4b0d7ed2b533c99cce7")
@@ -52,7 +50,6 @@ final class PersistentContainerTests: XCTestCase {
     }
     
     func testModel_1_0_0_Hashes() {
-        #if canImport(CoreData)
         let entityHashes = model.entityVersionHashesByName
         
         XCTAssertEqual(entityHashes[Asset.entityName]!.hexString, "b31a95b5bd19f89ddfe7e0fcedd7d7cb8be8b49b83a0a4b0d7ed2b533c99cce7")
@@ -78,11 +75,10 @@ final class PersistentContainerTests: XCTestCase {
         XCTAssertEqual(entityHashes[Stats.entityName]!.hexString, "79bcb629782295d52edf512f759bb21574093fca766c5805b447b67a135a9641")
         XCTAssertEqual(entityHashes[StatsBreakdown.entityName]!.hexString, "9c2242bd3bf357e3d205c82a649fd8069add177cad53a0c43d31a8d24454f98e")
         XCTAssertEqual(entityHashes[Trigger.entityName]!.hexString, "588238886b3c6f153e95108032277a25bd43f2efd0b8e01ea7c7abb9c8dd8298")
-        #endif
     }
     
     func testModel_1_0_0_Initialization() {
-        #if canImport(CoreData) && swift(>=5.3)
+        #if swift(>=5.3)
         let exp = expectation(description: "\(#function)")
         
         let description = NSPersistentStoreDescription()
@@ -107,7 +103,7 @@ final class PersistentContainerTests: XCTestCase {
     }
     
     func testEmptyStore_Model_1_0_0_Metadata() throws {
-        #if canImport(CoreData) && swift(>=5.3)
+        #if swift(>=5.3)
         let url = try XCTUnwrap(Bundle.module.url(forResource: "XcodeServer_1.0.0_empty", withExtension: "sqlite"))
         let metadata = try NSPersistentStoreCoordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: url, options: nil)
         XCTAssertTrue(model.isConfiguration(withName: nil, compatibleWithStoreMetadata: metadata))
@@ -115,10 +111,11 @@ final class PersistentContainerTests: XCTestCase {
     }
     
     func testFullStore_Model_1_0_0_Metadata() throws {
-        #if canImport(CoreData) && swift(>=5.3)
+        #if swift(>=5.3)
         let url = try XCTUnwrap(Bundle.module.url(forResource: "XcodeServer_1.0.0_full", withExtension: "sqlite"))
         let metadata = try NSPersistentStoreCoordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: url, options: nil)
         XCTAssertTrue(model.isConfiguration(withName: nil, compatibleWithStoreMetadata: metadata))
         #endif
     }
 }
+#endif
