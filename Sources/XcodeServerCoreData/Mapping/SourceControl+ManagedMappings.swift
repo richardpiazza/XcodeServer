@@ -12,7 +12,7 @@ public extension SourceControl.Commit {
         }
         if let changes = commit.commitChanges {
             #warning("🦠 Constant Bugs Here?!")
-            let _changes: [SourceControl.Change] = []
+            var _changes: [SourceControl.Change] = []
             for change in changes {
                 let _change = SourceControl.Change(change)
                 _changes.append(_change)
