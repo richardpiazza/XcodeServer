@@ -8,16 +8,16 @@ public extension XcodeServerCoreData.Commit {
             commitContributor = CommitContributor(context: context)
         }
         
-        commitChanges?.removeAll()
-        
         commitHash = commit.id
         message = commit.message
         date = commit.date
         commitContributor?.update(commit.contributor)
+        
+        commitChanges?.forEach({ context.delete($0) })
         commit.changes.forEach { (change) in
             let _change = CommitChange(context: context)
             _change.update(change)
-            commitChanges?.insert(_change)
+            _change.commit = self
         }
         
         if let integration = integration {

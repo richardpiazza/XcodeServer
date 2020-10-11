@@ -127,11 +127,11 @@ public extension XcodeServerCoreData.Configuration {
         schemeName = configuration.schemeName
         deviceSpecification?.update(configuration.deviceSpecification, context: context)
         
-        triggers?.removeAll()
+        triggers?.forEach({ context.delete($0) })
         configuration.triggers.forEach { (trigger) in
             let _trigger = XcodeServerCoreData.Trigger(context: context)
             _trigger.update(trigger, context: context)
-            addToTriggers(_trigger)
+            _trigger.configuration = self
         }
         
         let remoteId = configuration.sourceControlBlueprint.primaryRemoteIdentifier

@@ -47,7 +47,7 @@ public extension XcodeServerCoreData.Bot {
             } else {
                 let new = Integration(context: context)
                 new.update(integration, context: context)
-                addToIntegrations(new)
+                new.bot = self
             }
         })
     }
