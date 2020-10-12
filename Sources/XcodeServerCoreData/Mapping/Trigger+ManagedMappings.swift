@@ -3,7 +3,6 @@ import XcodeServer
 
 public extension XcodeServer.Trigger {
     init(_ trigger: XcodeServerCoreData.Trigger) {
-        InternalLog.coreData.debug("Mapping XcodeServerCoreData.Trigger to XcodeServer.Trigger")
         self.init()
         name = trigger.name ?? ""
         type = trigger.type
@@ -20,7 +19,6 @@ public extension XcodeServer.Trigger {
 
 public extension XcodeServer.Trigger.Email {
     init(_ email: EmailConfiguration) {
-        InternalLog.coreData.debug("Mapping XcodeServerCoreData.EmailConfiguration to XcodeServer.Trigger.Email")
         self.init()
         type = email.emailType
         fromAddress = email.fromAddress ?? ""
@@ -42,7 +40,6 @@ public extension XcodeServer.Trigger.Email {
 
 public extension XcodeServer.Trigger.Conditions {
     init(_ conditions: Conditions) {
-        InternalLog.coreData.debug("Mapping XcodeServerCoreData.Conditions to XcodeServer.Trigger.Conditions")
         self.init()
         status = Int(conditions.statusRawValue)
         onAllIssuesResolved = conditions.onAllIssuesResolved

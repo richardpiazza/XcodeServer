@@ -22,7 +22,6 @@ public extension SourceControl.Commit {
 
 public extension SourceControl.Contributor {
     init(_ contributor: CommitContributor) {
-        InternalLog.coreData.debug("Mapping XcodeServerCoreData.CommitContributor to XcodeServer.SourceControl.Contributor")
         self.init()
         name = contributor.name ?? ""
         displayName = contributor.displayName ?? ""
@@ -32,7 +31,6 @@ public extension SourceControl.Contributor {
 
 public extension SourceControl.Change {
     init(_ change: CommitChange) {
-        InternalLog.coreData.debug("Mapping XcodeServerCoreData.CommitChange to XcodeServer.SourceControl.Change")
         self.init()
         filePath = change.filePath ?? ""
         status = Int(change.statusRawValue)

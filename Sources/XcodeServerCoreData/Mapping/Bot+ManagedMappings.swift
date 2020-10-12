@@ -26,7 +26,6 @@ public extension XcodeServer.Bot {
 
 public extension XcodeServer.Bot.Configuration {
     init(_ configuration: XcodeServerCoreData.Configuration) {
-        InternalLog.coreData.debug("Mapping XcodeServerCoreData.Configuration to XcodeServer.Bot.Configuration")
         self.init()
         schedule = configuration.scheduleType
         periodicInterval = configuration.periodicScheduleInterval
@@ -58,7 +57,6 @@ public extension XcodeServer.Bot.Configuration {
 
 public extension XcodeServer.Bot.Stats {
     init(_ stats: XcodeServerCoreData.Stats) {
-        InternalLog.coreData.debug("Mapping XcodeServerCoreData.Stats to XcodeServer.Bot.Stats")
         self.init()
         commits = Int(stats.numberOfCommits)
         integrations = Int(stats.numberOfIntegrations)
@@ -101,7 +99,6 @@ public extension XcodeServer.Bot.Stats {
 
 public extension XcodeServer.Bot.Stats.Analysis {
     init(_ breakdown: StatsBreakdown) {
-        InternalLog.coreData.debug("Mapping XcodeServerCoreData.StatsBreakdown to XcodeServer.Bot.Stats.Analysis")
         self.init()
         count = Int(breakdown.count)
         sum = breakdown.sum
