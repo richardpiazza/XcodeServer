@@ -23,7 +23,13 @@ public extension XcodeServer.Integration {
         if let issues = integration.issues {
             self.issues = IssueCatalog(issues)
         }
-        commits = Set(integration.commits.map { SourceControl.Commit($0) })
+        var _commits: Set<SourceControl.Commit> = []
+        for commit in integration.commits {
+            #warning("🦠 Mapping Issue - Random String")
+            let _commit = SourceControl.Commit(commit)
+            _commits.insert(_commit)
+        }
+        commits = _commits
         botId = integration.bot?.identifier
         botName = integration.bot?.name
         serverId = integration.bot?.server?.fqdn
