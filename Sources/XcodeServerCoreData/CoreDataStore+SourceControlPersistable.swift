@@ -12,9 +12,10 @@ extension CoreDataStore: SourceControlPersistable {
                 let _remote = context.repository(withIdentifier: remote.id) ?? XcodeServerCoreData.Repository(context: context)
                 _remote.update(remote, context: context)
                 
+                let result = SourceControl.Remote(_remote, depth: 1)
+                
                 do {
                     try context.save()
-                    let result = SourceControl.Remote(_remote, depth: 1)
                     queue.async {
                         completion(.success(result))
                     }

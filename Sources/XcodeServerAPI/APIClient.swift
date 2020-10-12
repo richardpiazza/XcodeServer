@@ -285,6 +285,18 @@ public extension APIClient {
 
 // MARK: - Integrations
 public extension APIClient {
+    /// Requests the '`/integrations`' endpoint from the Xcode Server API.
+    func integrations(completion: @escaping (Result<[XCSIntegration], Error>) -> Void) {
+        struct Response: Codable {
+            public var count: Int
+            public var results: [XCSIntegration]
+        }
+        
+        get("integrations") { (statusCode, headers, data: Response?, error) in
+            completion(self.serverResult(statusCode, headers, data: data?.results, error))
+        }
+    }
+    
     /// Requests the '`/bots/{id}/integrations`' endpoint from the Xcode Server API.
     func integrations(forBotWithIdentifier identifier: String, completion: @escaping (Result<[XCSIntegration], Error>) -> Void) {
         struct Response: Codable {

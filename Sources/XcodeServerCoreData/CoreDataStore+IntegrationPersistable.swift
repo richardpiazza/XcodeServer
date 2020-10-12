@@ -12,9 +12,10 @@ extension CoreDataStore: IntegrationPersistable {
                 let _integration = context.integration(withIdentifier: integration.id) ?? XcodeServerCoreData.Integration(context: context)
                 _integration.update(integration, context: context)
                 
+                let result = XcodeServer.Integration(_integration, depth: 1)
+                
                 do {
                     try context.save()
-                    let result = XcodeServer.Integration(_integration, depth: 1)
                     queue.async {
                         completion(.success(result))
                     }
@@ -40,17 +41,17 @@ extension CoreDataStore: IntegrationPersistable {
                 }
                 
                 _integration.assets?.update(assets, context: context)
+                guard let _assets = _integration.assets else {
+                    queue.async {
+                        completion(.failure(.message("No 'Assets' for integration '\(id)'.")))
+                    }
+                    return
+                }
+                
+                let result = XcodeServer.Integration.AssetCatalog(_assets)
                 
                 do {
                     try context.save()
-                    guard let _assets = _integration.assets else {
-                        queue.async {
-                            completion(.failure(.message("No 'Assets' for integration '\(id)'.")))
-                        }
-                        return
-                    }
-                    
-                    let result = XcodeServer.Integration.AssetCatalog(_assets)
                     queue.async {
                         completion(.success(result))
                     }
@@ -119,17 +120,17 @@ extension CoreDataStore: IntegrationPersistable {
                 }
                 
                 _integration.issues?.update(issues, context: context)
+                guard let _issues = _integration.issues else {
+                    queue.async {
+                        completion(.failure(.message("No 'Issues' for integration '\(id)'.")))
+                    }
+                    return
+                }
+                
+                let result = XcodeServer.Integration.IssueCatalog(_issues)
                 
                 do {
                     try context.save()
-                    guard let _issues = _integration.issues else {
-                        queue.async {
-                            completion(.failure(.message("No 'Issues' for integration '\(id)'.")))
-                        }
-                        return
-                    }
-                    
-                    let result = XcodeServer.Integration.IssueCatalog(_issues)
                     queue.async {
                         completion(.success(result))
                     }

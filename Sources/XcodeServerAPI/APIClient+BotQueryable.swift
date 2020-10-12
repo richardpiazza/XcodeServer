@@ -22,6 +22,33 @@ extension APIClient: BotQueryable {
         }
     }
     
+    public func getBots(forServer id: Server.ID, queue: DispatchQueue?, completion: @escaping BotsResultHandler) {
+        InternalLog.apiClient.info("Retrieving BOTS for Server [\(id)]")
+        let queue = queue ?? returnQueue
+        guard self.fqdn == id else {
+            queue.async {
+                completion(.failure(.message("Invalid Server")))
+            }
+            return
+        }
+        
+        internalQueue.async {
+            self.bots { (result) in
+                switch result {
+                case .failure(let error):
+                    queue.async {
+                        completion(.failure(.error(error)))
+                    }
+                case .success(let bots):
+                    let results = bots.map { Bot($0, server: self.fqdn) }
+                    queue.async {
+                        completion(.success(results))
+                    }
+                }
+            }
+        }
+    }
+    
     public func getBot(_ id: Bot.ID, queue: DispatchQueue?, completion: @escaping BotResultHandler) {
         InternalLog.apiClient.info("Retrieving Bot [\(id)]")
         let queue = queue ?? returnQueue

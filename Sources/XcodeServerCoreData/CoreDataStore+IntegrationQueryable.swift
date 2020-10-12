@@ -4,6 +4,18 @@ import XcodeServer
 import CoreData
 
 extension CoreDataStore: IntegrationQueryable {
+    public func getIntegrations(queue: DispatchQueue?, completion: @escaping IntegrationsResultHandler) {
+        InternalLog.coreData.info("Retrieving ALL Integrations")
+        let queue = queue ?? returnQueue
+        internalQueue.async {
+            let integrations = self.persistentContainer.viewContext.integrations()
+            let result = integrations.map({ XcodeServer.Integration($0) })
+            queue.async {
+                completion(.success(result))
+            }
+        }
+    }
+    
     public func getIntegrations(forBot id: XcodeServer.Bot.ID, queue: DispatchQueue?, completion: @escaping IntegrationsResultHandler) {
         InternalLog.coreData.info("Retrieving INTEGRATIONS for Bot [\(id)]")
         let queue = queue ?? returnQueue

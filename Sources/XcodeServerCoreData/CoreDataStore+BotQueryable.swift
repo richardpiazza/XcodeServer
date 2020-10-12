@@ -17,6 +17,19 @@ extension CoreDataStore: BotQueryable {
         }
     }
     
+    public func getBots(forServer id: XcodeServer.Server.ID, queue: DispatchQueue?, completion: @escaping BotsResultHandler) {
+        InternalLog.coreData.info("Retrieving ALL Bots")
+        let queue = queue ?? returnQueue
+        internalQueue.async {
+            let bots = self.persistentContainer.viewContext.bots()
+            let filtered = bots.filter({ $0.server?.fqdn == id })
+            let result = filtered.map { XcodeServer.Bot($0) }
+            queue.async {
+                completion(.success(result))
+            }
+        }
+    }
+    
     public func getBot(_ id: XcodeServer.Bot.ID, queue: DispatchQueue?, completion: @escaping BotResultHandler) {
         InternalLog.coreData.info("Retrieving Bot [\(id)]")
         let queue = queue ?? returnQueue

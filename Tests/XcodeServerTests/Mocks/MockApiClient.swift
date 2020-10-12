@@ -102,6 +102,10 @@ class MockApiClient: AnyQueryable {
         #endif
     }
     
+    func getBots(forServer id: Server.ID, queue: DispatchQueue?, completion: @escaping BotsResultHandler) {
+        let _ = queue ?? returnQueue
+    }
+    
     func getBot(_ id: Bot.ID, queue: DispatchQueue?, completion: @escaping BotResultHandler) {
         let queue = queue ?? returnQueue
         #if swift(>=5.3)
@@ -165,6 +169,10 @@ class MockApiClient: AnyQueryable {
     }
     
     // MARK: - IntegrationQueryable
+    
+    func getIntegrations(queue: DispatchQueue?, completion: @escaping IntegrationsResultHandler) {
+        let _ = queue ?? returnQueue
+    }
     
     func getIntegrations(forBot id: Bot.ID, queue: DispatchQueue?, completion: @escaping IntegrationsResultHandler) {
         let _ = queue ?? returnQueue

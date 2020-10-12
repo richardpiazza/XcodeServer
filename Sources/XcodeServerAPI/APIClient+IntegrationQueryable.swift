@@ -2,6 +2,26 @@ import Dispatch
 import XcodeServer
 
 extension APIClient: IntegrationQueryable {
+    public func getIntegrations(queue: DispatchQueue?, completion: @escaping IntegrationsResultHandler) {
+        InternalLog.apiClient.info("Retrieving ALL Integrations")
+        let queue = queue ?? returnQueue
+        internalQueue.async {
+            self.integrations { (result) in
+                switch result {
+                case .failure(let error):
+                    queue.async {
+                        completion(.failure(.error(error)))
+                    }
+                case .success(let integrations):
+                    let value = integrations.map { Integration($0, bot: nil, server: self.fqdn) }
+                    queue.async {
+                        completion(.success(value))
+                    }
+                }
+            }
+        }
+    }
+    
     public func getIntegrations(forBot id: Bot.ID, queue: DispatchQueue?, completion: @escaping IntegrationsResultHandler) {
         InternalLog.apiClient.info("Retrieving INTEGRATIONS for Bot [\(id)]")
         let queue = queue ?? returnQueue
