@@ -4,6 +4,7 @@ import Foundation
 
 public extension XcodeServer.Server {
     init(_ server: XcodeServerCoreData.Server) {
+        InternalLog.debug("Mapping XcodeServerCoreData.Server [\(server.fqdn)] to XcodeServer.Server")
         self.init(id: server.fqdn)
         modified = server.lastUpdate ?? Date()
         version = Version(server)
@@ -15,6 +16,7 @@ public extension XcodeServer.Server {
 
 public extension XcodeServer.Server.Version {
     init(_ server: XcodeServerCoreData.Server) {
+        InternalLog.debug("Mapping XcodeServerCoreData.Server [\(server.fqdn)] to XcodeServer.Server.Version")
         self.init()
         api = XcodeServer.Server.API(rawValue: Int(server.apiVersion)) ?? .v19
         app = XcodeServer.Server.App(rawValue: server.xcodeServer ?? "") ?? .v2_0

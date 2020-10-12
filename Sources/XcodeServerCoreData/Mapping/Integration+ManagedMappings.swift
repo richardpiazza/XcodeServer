@@ -3,6 +3,7 @@ import XcodeServer
 
 public extension XcodeServer.Integration {
     init(_ integration: XcodeServerCoreData.Integration) {
+        InternalLog.debug("Mapping XcodeServerCoreData.Integration [\(integration.identifier)] to XcodeServer.Integration")
         self.init(id: integration.identifier)
         number = Int(integration.number)
         step = integration.currentStep
@@ -37,6 +38,7 @@ public extension XcodeServer.Integration {
 
 public extension XcodeServer.Integration.BuildSummary {
     init(_ summary: BuildResultSummary) {
+        InternalLog.debug("Mapping XcodeServerCoreData.BuildResultSummary to XcodeServer.Integration.BuildResultSummary")
         self.init()
         errorCount = Int(summary.errorCount)
         errorChange = Int(summary.errorChange)
@@ -57,6 +59,7 @@ public extension XcodeServer.Integration.BuildSummary {
 
 public extension XcodeServer.Integration.AssetCatalog {
     init(_ assets: IntegrationAssets) {
+        InternalLog.debug("Mapping XcodeServerCoreData.IntegrationAssets to XcodeServer.Integration.AssetCatalog")
         self.init()
         if let asset = assets.triggerAssets {
             triggerAssets = asset.map { XcodeServer.Integration.Asset($0) }
@@ -84,6 +87,7 @@ public extension XcodeServer.Integration.AssetCatalog {
 
 public extension XcodeServer.Integration.Asset {
     init(_ asset: Asset) {
+        InternalLog.debug("Mapping XcodeServerCoreData.Asset to XcodeServer.Integration.Asset")
         self.init()
         size = Int(asset.size)
         fileName = asset.fileName ?? ""
@@ -96,6 +100,7 @@ public extension XcodeServer.Integration.Asset {
 
 public extension XcodeServer.Integration.IssueCatalog {
     init(_ issues: XcodeServerCoreData.IntegrationIssues) {
+        InternalLog.debug("Mapping XcodeServerCoreData.IntegrationIssues to XcodeServer.Integration.IssueCatalog")
         self.init()
         if let value = issues.buildServiceErrors {
             buildServiceErrors = Set(value.map { XcodeServer.Issue($0) })

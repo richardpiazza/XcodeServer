@@ -5,7 +5,7 @@ import CoreData
 
 extension CoreDataStore: IntegrationQueryable {
     public func getIntegrations(forBot id: XcodeServer.Bot.ID, queue: DispatchQueue?, completion: @escaping IntegrationsResultHandler) {
-        InternalLog.debug("Retrieving INTEGRATIONS for Bot [\(id)]")
+        InternalLog.info("Retrieving INTEGRATIONS for Bot [\(id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             guard let bot = self.persistentContainer.viewContext.bot(withIdentifier: id) else {
@@ -29,7 +29,7 @@ extension CoreDataStore: IntegrationQueryable {
     }
     
     public func getIntegration(_ id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping IntegrationResultHandler) {
-        InternalLog.debug("Retrieving Integration [\(id)]")
+        InternalLog.info("Retrieving Integration [\(id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             guard let integration = self.persistentContainer.viewContext.integration(withIdentifier: id) else {
@@ -48,7 +48,7 @@ extension CoreDataStore: IntegrationQueryable {
     }
     
     public func getCommitsForIntegration(_ id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping CommitsResultHandler) {
-        InternalLog.debug("Retrieving COMMITS for Integration [\(id)]")
+        InternalLog.info("Retrieving COMMITS for Integration [\(id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             guard let integration = self.persistentContainer.viewContext.integration(withIdentifier: id) else {
@@ -74,7 +74,7 @@ extension CoreDataStore: IntegrationQueryable {
     }
     
     public func getIssuesForIntegration(_ id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping IssueCatalogResultHandler) {
-        InternalLog.debug("Retrieving ISSUES for Integration [\(id)]")
+        InternalLog.info("Retrieving ISSUES for Integration [\(id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             guard let integration = self.persistentContainer.viewContext.integration(withIdentifier: id) else {

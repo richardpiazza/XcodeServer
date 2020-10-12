@@ -5,7 +5,7 @@ import CoreData
 
 extension CoreDataStore: ServerPersistable {
     public func saveServer(_ server: XcodeServer.Server, queue: DispatchQueue?, completion: @escaping ServerResultHandler) {
-        InternalLog.debug("Saving Server [\(server.id)]")
+        InternalLog.info("Saving Server [\(server.id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in
@@ -28,7 +28,7 @@ extension CoreDataStore: ServerPersistable {
     }
     
     public func deleteServer(_ server: XcodeServer.Server, queue: DispatchQueue?, completion: @escaping VoidResultHandler) {
-        InternalLog.debug("Removing Server [\(server.id)]")
+        InternalLog.info("Removing Server [\(server.id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in

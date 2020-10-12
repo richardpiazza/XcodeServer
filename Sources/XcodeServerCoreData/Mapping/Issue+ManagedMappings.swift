@@ -3,6 +3,7 @@ import XcodeServer
 
 public extension XcodeServer.Issue {
     init(_ issue: XcodeServerCoreData.Issue) {
+        InternalLog.debug("Mapping XcodeServerCoreData.Issue [\(issue.identifier)] to XcodeServer.Issue")
         self.init(id: issue.identifier)
         age = Int(issue.age)
         documentFilePath = issue.documentFilePath ?? ""
