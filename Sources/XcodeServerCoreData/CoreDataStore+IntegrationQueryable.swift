@@ -4,8 +4,9 @@ import XcodeServer
 import CoreData
 
 extension CoreDataStore: IntegrationQueryable {
-    public func getIntegrations(forBot id: XcodeServer.Bot.ID, queue: DispatchQueue, completion: @escaping IntegrationsResultHandler) {
-        dispatchQueue.async {
+    public func getIntegrations(forBot id: XcodeServer.Bot.ID, queue: DispatchQueue?, completion: @escaping IntegrationsResultHandler) {
+        let queue = queue ?? returnQueue
+        internalQueue.async {
             guard let bot = self.persistentContainer.viewContext.bot(withIdentifier: id) else {
                 queue.async {
                     completion(.failure(.noBot(id)))
@@ -26,8 +27,9 @@ extension CoreDataStore: IntegrationQueryable {
         }
     }
     
-    public func getIntegration(_ id: XcodeServer.Integration.ID, queue: DispatchQueue, completion: @escaping IntegrationResultHandler) {
-        dispatchQueue.async {
+    public func getIntegration(_ id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping IntegrationResultHandler) {
+        let queue = queue ?? returnQueue
+        internalQueue.async {
             guard let integration = self.persistentContainer.viewContext.integration(withIdentifier: id) else {
                 queue.async {
                     completion(.failure(.noIntegration(id)))
@@ -43,8 +45,9 @@ extension CoreDataStore: IntegrationQueryable {
         }
     }
     
-    public func getCommitsForIntegration(_ id: XcodeServer.Integration.ID, queue: DispatchQueue, completion: @escaping CommitsResultHandler) {
-        dispatchQueue.async {
+    public func getCommitsForIntegration(_ id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping CommitsResultHandler) {
+        let queue = queue ?? returnQueue
+        internalQueue.async {
             guard let integration = self.persistentContainer.viewContext.integration(withIdentifier: id) else {
                 queue.async {
                     completion(.failure(.noIntegration(id)))
@@ -67,8 +70,9 @@ extension CoreDataStore: IntegrationQueryable {
         }
     }
     
-    public func getIssuesForIntegration(_ id: XcodeServer.Integration.ID, queue: DispatchQueue, completion: @escaping IssueCatalogResultHandler) {
-        dispatchQueue.async {
+    public func getIssuesForIntegration(_ id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping IssueCatalogResultHandler) {
+        let queue = queue ?? returnQueue
+        internalQueue.async {
             guard let integration = self.persistentContainer.viewContext.integration(withIdentifier: id) else {
                 queue.async {
                     completion(.failure(.noIntegration(id)))

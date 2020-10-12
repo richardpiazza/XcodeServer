@@ -2,8 +2,9 @@ import Dispatch
 import XcodeServer
 
 extension APIClient: BotQueryable {
-    public func getBots(queue: DispatchQueue, completion: @escaping BotsResultHandler) {
-        dispatchQueue.async {
+    public func getBots(queue: DispatchQueue?, completion: @escaping BotsResultHandler) {
+        let queue = queue ?? returnQueue
+        internalQueue.async {
             self.bots { (result) in
                 switch result {
                 case .failure(let error):
@@ -20,8 +21,9 @@ extension APIClient: BotQueryable {
         }
     }
     
-    public func getBot(_ id: Bot.ID, queue: DispatchQueue, completion: @escaping BotResultHandler) {
-        dispatchQueue.async {
+    public func getBot(_ id: Bot.ID, queue: DispatchQueue?, completion: @escaping BotResultHandler) {
+        let queue = queue ?? returnQueue
+        internalQueue.async {
             self.bot(withIdentifier: id) { (result) in
                 switch result {
                 case .failure(let error):
@@ -38,8 +40,9 @@ extension APIClient: BotQueryable {
         }
     }
     
-    public func getStatsForBot(_ id: Bot.ID, queue: DispatchQueue, completion: @escaping BotStatsResultHandler) {
-        dispatchQueue.async {
+    public func getStatsForBot(_ id: Bot.ID, queue: DispatchQueue?, completion: @escaping BotStatsResultHandler) {
+        let queue = queue ?? returnQueue
+        internalQueue.async {
             self.stats(forBotWithIdentifier: id) { (result) in
                 switch result {
                 case .failure(let error):

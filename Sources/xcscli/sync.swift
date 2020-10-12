@@ -91,12 +91,6 @@ final class Sync: ParsableCommand, Route {
     }
 }
 
-extension CoreDataStore: AnyPersistable {
-}
-
-extension CoreDataStore: AnyQueryable {
-}
-
 @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 extension Sync: ManagerAuthorizationDelegate {
 }

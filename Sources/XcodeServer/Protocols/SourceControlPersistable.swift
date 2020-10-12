@@ -1,17 +1,17 @@
 import Dispatch
 
 public protocol SourceControlPersistable {
-    func saveRemote(_ remote: SourceControl.Remote, queue: DispatchQueue, completion: @escaping RemoteResultHandler)
-    func deleteRemote(_ remote: SourceControl.Remote, queue: DispatchQueue, completion: @escaping VoidResultHandler)
+    func saveRemote(_ remote: SourceControl.Remote, queue: DispatchQueue?, completion: @escaping RemoteResultHandler)
+    func deleteRemote(_ remote: SourceControl.Remote, queue: DispatchQueue?, completion: @escaping VoidResultHandler)
 }
 
 // MARK: - Default Parameters
 public extension SourceControlPersistable {
     func saveRemote(_ remote: SourceControl.Remote, completion: @escaping RemoteResultHandler) {
-        saveRemote(remote, queue: .main, completion: completion)
+        saveRemote(remote, queue: nil, completion: completion)
     }
     
     func deleteRemote(_ remote: SourceControl.Remote, completion: @escaping VoidResultHandler) {
-        deleteRemote(remote, queue: .main, completion: completion)
+        deleteRemote(remote, queue: nil, completion: completion)
     }
 }

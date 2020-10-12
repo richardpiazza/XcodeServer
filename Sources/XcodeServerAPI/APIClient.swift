@@ -91,13 +91,19 @@ public class APIClient {
     public let client: HTTPClient
     public var jsonEncoder: JSONEncoder = APIClient.jsonEncoder
     public var jsonDecoder: JSONDecoder = APIClient.jsonDecoder
-    let dispatchQueue: DispatchQueue = DispatchQueue(label: "XcodeServer.XcodeServerAPI.APIClient")
+    internal let internalQueue: DispatchQueue = DispatchQueue(label: "XcodeServer.XcodeServerAPI.APIClient")
+    internal let returnQueue: DispatchQueue
     
     /// Delegate responsible for handling all authentication for
     /// `XCServerClient` instances.
     public var authorizationDelegate: APIClientAuthorizationDelegate?
     
-    public init(fqdn: String, authorizationDelegate: APIClientAuthorizationDelegate? = nil) throws {
+    /// Initialize an Xcode Server API client
+    ///
+    /// - parameter fqdn: The Fully-Qualified-Domain-Name (or IP) of the Xcode Server (HOST ONLY)
+    /// - parameter dispatchQueue: DispatchQueue on which all results will be returned (when not specified).
+    /// - parameter authorizationDelegate: 
+    public init(fqdn: String, dispatchQueue: DispatchQueue = .main, authorizationDelegate: APIClientAuthorizationDelegate? = nil) throws {
         guard let url = URL(string: "https://\(fqdn):20343/api") else {
             throw APIClient.Error.fqdn
         }
@@ -121,6 +127,7 @@ public class APIClient {
             Self._eventLoopGroup = client.eventLoopGroup
         }
         
+        returnQueue = dispatchQueue
         self.authorizationDelegate = authorizationDelegate
     }
     

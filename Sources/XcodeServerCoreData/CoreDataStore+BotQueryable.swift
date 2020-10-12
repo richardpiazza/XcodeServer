@@ -5,8 +5,9 @@ import Dispatch
 import CoreData
 
 extension CoreDataStore: BotQueryable {
-    public func getBots(queue: DispatchQueue, completion: @escaping BotsResultHandler) {
-        dispatchQueue.async {
+    public func getBots(queue: DispatchQueue?, completion: @escaping BotsResultHandler) {
+        let queue = queue ?? returnQueue
+        internalQueue.async {
             let bots = self.persistentContainer.viewContext.bots()
             let result = bots.map { XcodeServer.Bot($0) }
             queue.async {
@@ -15,8 +16,9 @@ extension CoreDataStore: BotQueryable {
         }
     }
     
-    public func getBot(_ id: XcodeServer.Bot.ID, queue: DispatchQueue, completion: @escaping BotResultHandler) {
-        dispatchQueue.async {
+    public func getBot(_ id: XcodeServer.Bot.ID, queue: DispatchQueue?, completion: @escaping BotResultHandler) {
+        let queue = queue ?? returnQueue
+        internalQueue.async {
             if let bot = self.persistentContainer.viewContext.bot(withIdentifier: id) {
                 let result = XcodeServer.Bot(bot)
                 queue.async {
@@ -30,8 +32,9 @@ extension CoreDataStore: BotQueryable {
         }
     }
     
-    public func getStatsForBot(_ id: XcodeServer.Bot.ID, queue: DispatchQueue, completion: @escaping BotStatsResultHandler) {
-        dispatchQueue.async {
+    public func getStatsForBot(_ id: XcodeServer.Bot.ID, queue: DispatchQueue?, completion: @escaping BotStatsResultHandler) {
+        let queue = queue ?? returnQueue
+        internalQueue.async {
             guard let bot = self.persistentContainer.viewContext.bot(withIdentifier: id) else {
                 queue.async {
                     completion(.failure(.noBot(id)))

@@ -2,8 +2,9 @@ import Dispatch
 import XcodeServer
 
 extension APIClient: ServerQueryable {
-    public func getServers(queue: DispatchQueue, completion: @escaping ServersResultHandler) {
-        dispatchQueue.async {
+    public func getServers(queue: DispatchQueue?, completion: @escaping ServersResultHandler) {
+        let queue = queue ?? returnQueue
+        internalQueue.async {
             self.versions { (result) in
                 switch result {
                 case .failure(let error):
@@ -20,8 +21,9 @@ extension APIClient: ServerQueryable {
         }
     }
     
-    public func getServer(_ id: Server.ID, queue: DispatchQueue, completion: @escaping ServerResultHandler) {
-        dispatchQueue.async {
+    public func getServer(_ id: Server.ID, queue: DispatchQueue?, completion: @escaping ServerResultHandler) {
+        let queue = queue ?? returnQueue
+        internalQueue.async {
             self.versions { (result) in
                 switch result {
                 case .failure(let error):

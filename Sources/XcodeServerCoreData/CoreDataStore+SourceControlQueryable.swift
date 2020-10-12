@@ -4,8 +4,9 @@ import Dispatch
 import CoreData
 
 extension CoreDataStore: SourceControlQueryable {
-    public func getRemotes(queue: DispatchQueue, completion: @escaping RemotesResultHandler) {
-        dispatchQueue.async {
+    public func getRemotes(queue: DispatchQueue?, completion: @escaping RemotesResultHandler) {
+        let queue = queue ?? returnQueue
+        internalQueue.async {
             let repositories = self.persistentContainer.viewContext.repositories()
             let result = repositories.map { SourceControl.Remote($0) }
             queue.async {
@@ -14,8 +15,9 @@ extension CoreDataStore: SourceControlQueryable {
         }
     }
     
-    public func getRemote(_ id: SourceControl.Remote.ID, queue: DispatchQueue, completion: @escaping RemoteResultHandler) {
-        dispatchQueue.async {
+    public func getRemote(_ id: SourceControl.Remote.ID, queue: DispatchQueue?, completion: @escaping RemoteResultHandler) {
+        let queue = queue ?? returnQueue
+        internalQueue.async {
             if let repository = self.persistentContainer.viewContext.repository(withIdentifier: id) {
                 let result = SourceControl.Remote(repository)
                 queue.async {

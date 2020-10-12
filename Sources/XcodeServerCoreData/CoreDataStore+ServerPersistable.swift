@@ -4,8 +4,9 @@ import Dispatch
 import CoreData
 
 extension CoreDataStore: ServerPersistable {
-    public func saveServer(_ server: XcodeServer.Server, queue: DispatchQueue, completion: @escaping ServerResultHandler) {
-        dispatchQueue.async {
+    public func saveServer(_ server: XcodeServer.Server, queue: DispatchQueue?, completion: @escaping ServerResultHandler) {
+        let queue = queue ?? returnQueue
+        internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in
                 let _server = context.server(withFQDN: server.id) ?? XcodeServerCoreData.Server(context: context)
                 _server.update(server, context: context)
@@ -25,8 +26,9 @@ extension CoreDataStore: ServerPersistable {
         }
     }
     
-    public func deleteServer(_ server: XcodeServer.Server, queue: DispatchQueue, completion: @escaping VoidResultHandler) {
-        dispatchQueue.async {
+    public func deleteServer(_ server: XcodeServer.Server, queue: DispatchQueue?, completion: @escaping VoidResultHandler) {
+        let queue = queue ?? returnQueue
+        internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in
                 guard let _server = context.server(withFQDN: server.id) else {
                     queue.async {

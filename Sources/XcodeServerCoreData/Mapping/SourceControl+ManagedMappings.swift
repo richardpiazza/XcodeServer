@@ -24,7 +24,9 @@ public extension SourceControl.Commit {
 //            self.changes = _changes
         }
         
-        integrationId = commit.revisionBlueprints?.compactMap({ $0.integration?.identifier }).first
+        if let blueprints = commit.revisionBlueprints, !blueprints.isEmpty {
+            integrationId = blueprints.first?.integration?.identifier
+        }
     }
 }
 

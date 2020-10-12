@@ -4,8 +4,9 @@ import Dispatch
 import CoreData
 
 extension CoreDataStore: ServerQueryable {
-    public func getServers(queue: DispatchQueue, completion: @escaping ServersResultHandler) {
-        dispatchQueue.async {
+    public func getServers(queue: DispatchQueue?, completion: @escaping ServersResultHandler) {
+        let queue = queue ?? returnQueue
+        internalQueue.async {
             let servers = self.persistentContainer.viewContext.servers()
             let result = servers.map { XcodeServer.Server($0) }
             queue.async {
@@ -14,8 +15,9 @@ extension CoreDataStore: ServerQueryable {
         }
     }
     
-    public func getServer(_ id: XcodeServer.Server.ID, queue: DispatchQueue, completion: @escaping ServerResultHandler) {
-        dispatchQueue.async {
+    public func getServer(_ id: XcodeServer.Server.ID, queue: DispatchQueue?, completion: @escaping ServerResultHandler) {
+        let queue = queue ?? returnQueue
+        internalQueue.async {
             if let server = self.persistentContainer.viewContext.server(withFQDN: id) {
                 let result = XcodeServer.Server(server)
                 queue.async {

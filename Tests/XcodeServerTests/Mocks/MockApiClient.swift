@@ -4,6 +4,7 @@ import Foundation
 
 class MockApiClient: AnyQueryable {
     private let dispatchQueue: DispatchQueue = .init(label: "MockApiClient")
+    private let returnQueue: DispatchQueue
     public let serverId: Server.ID
     
     private lazy var dateFormatter: DateFormatter = {
@@ -18,13 +19,15 @@ class MockApiClient: AnyQueryable {
         return decoder
     }()
     
-    init(serverId: Server.ID) {
+    init(serverId: Server.ID, dispatchQueue: DispatchQueue = .main) {
         self.serverId = serverId
+        returnQueue = dispatchQueue
     }
     
     // MARK: - ServerQueryable
     
-    func getServers(queue: DispatchQueue, completion: @escaping ServersResultHandler) {
+    func getServers(queue: DispatchQueue?, completion: @escaping ServersResultHandler) {
+        let queue = queue ?? returnQueue
         getServer(serverId, queue: dispatchQueue) { (result) in
             queue.async {
                 switch result {
@@ -37,7 +40,8 @@ class MockApiClient: AnyQueryable {
         }
     }
     
-    func getServer(_ id: Server.ID, queue: DispatchQueue, completion: @escaping ServerResultHandler) {
+    func getServer(_ id: Server.ID, queue: DispatchQueue?, completion: @escaping ServerResultHandler) {
+        let queue = queue ?? returnQueue
         guard id == .example else {
             queue.async {
                 completion(.failure(.noServer(id)))
@@ -69,7 +73,8 @@ class MockApiClient: AnyQueryable {
     
     // MARK: - BotQueryable
     
-    func getBots(queue: DispatchQueue, completion: @escaping BotsResultHandler) {
+    func getBots(queue: DispatchQueue?, completion: @escaping BotsResultHandler) {
+        let queue = queue ?? returnQueue
         #if swift(>=5.3)
         struct Bots: Decodable {
             let count: Int
@@ -97,7 +102,8 @@ class MockApiClient: AnyQueryable {
         #endif
     }
     
-    func getBot(_ id: Bot.ID, queue: DispatchQueue, completion: @escaping BotResultHandler) {
+    func getBot(_ id: Bot.ID, queue: DispatchQueue?, completion: @escaping BotResultHandler) {
+        let queue = queue ?? returnQueue
         #if swift(>=5.3)
         guard id == .dynumiteMacOS else {
             queue.async {
@@ -127,7 +133,8 @@ class MockApiClient: AnyQueryable {
         #endif
     }
     
-    func getStatsForBot(_ id: Bot.ID, queue: DispatchQueue, completion: @escaping BotStatsResultHandler) {
+    func getStatsForBot(_ id: Bot.ID, queue: DispatchQueue?, completion: @escaping BotStatsResultHandler) {
+        let queue = queue ?? returnQueue
         #if swift(>=5.3)
         guard id == .dynumiteMacOS else {
             queue.async {
@@ -159,11 +166,12 @@ class MockApiClient: AnyQueryable {
     
     // MARK: - IntegrationQueryable
     
-    func getIntegrations(forBot id: Bot.ID, queue: DispatchQueue, completion: @escaping IntegrationsResultHandler) {
-        
+    func getIntegrations(forBot id: Bot.ID, queue: DispatchQueue?, completion: @escaping IntegrationsResultHandler) {
+        let _ = queue ?? returnQueue
     }
     
-    func getIntegration(_ id: Integration.ID, queue: DispatchQueue, completion: @escaping IntegrationResultHandler) {
+    func getIntegration(_ id: Integration.ID, queue: DispatchQueue?, completion: @escaping IntegrationResultHandler) {
+        let queue = queue ?? returnQueue
         #if swift(>=5.3)
         guard id == .dynumite24 else {
             queue.async {
@@ -193,23 +201,25 @@ class MockApiClient: AnyQueryable {
         #endif
     }
     
-    func getCommitsForIntegration(_ id: Integration.ID, queue: DispatchQueue, completion: @escaping CommitsResultHandler) {
-        
+    func getCommitsForIntegration(_ id: Integration.ID, queue: DispatchQueue?, completion: @escaping CommitsResultHandler) {
+        let _ = queue ?? returnQueue
     }
     
-    func getIssuesForIntegration(_ id: Integration.ID, queue: DispatchQueue, completion: @escaping IssueCatalogResultHandler) {
-        
+    func getIssuesForIntegration(_ id: Integration.ID, queue: DispatchQueue?, completion: @escaping IssueCatalogResultHandler) {
+        let _ = queue ?? returnQueue
     }
     
     // MARK: - SourceControlQueryable
     
-    func getRemote(_ id: SourceControl.Remote.ID, queue: DispatchQueue, completion: @escaping RemoteResultHandler) {
+    func getRemote(_ id: SourceControl.Remote.ID, queue: DispatchQueue?, completion: @escaping RemoteResultHandler) {
+        let queue = queue ?? returnQueue
         queue.async {
             completion(.failure(.message("Not Implemented")))
         }
     }
     
-    func getRemotes(queue: DispatchQueue, completion: @escaping RemotesResultHandler) {
+    func getRemotes(queue: DispatchQueue?, completion: @escaping RemotesResultHandler) {
+        let queue = queue ?? returnQueue
         queue.async {
             completion(.failure(.message("Not Implemented")))
         }

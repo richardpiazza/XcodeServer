@@ -4,8 +4,9 @@ import Dispatch
 import CoreData
 
 extension CoreDataStore: BotPersistable {
-    public func saveBot(_ bot: XcodeServer.Bot, queue: DispatchQueue, completion: @escaping BotResultHandler) {
-        dispatchQueue.async {
+    public func saveBot(_ bot: XcodeServer.Bot, queue: DispatchQueue?, completion: @escaping BotResultHandler) {
+        let queue = queue ?? returnQueue
+        internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in
                 let _bot = context.bot(withIdentifier: bot.id) ?? XcodeServerCoreData.Bot(context: context)
                 _bot.update(bot, context: context)
@@ -25,8 +26,9 @@ extension CoreDataStore: BotPersistable {
         }
     }
     
-    public func deleteBot(_ bot: XcodeServer.Bot, queue: DispatchQueue, completion: @escaping VoidResultHandler) {
-        dispatchQueue.async {
+    public func deleteBot(_ bot: XcodeServer.Bot, queue: DispatchQueue?, completion: @escaping VoidResultHandler) {
+        let queue = queue ?? returnQueue
+        internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in
                 guard let _bot = context.bot(withIdentifier: bot.id) else {
                     queue.async {

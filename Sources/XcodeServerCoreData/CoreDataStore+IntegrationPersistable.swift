@@ -4,8 +4,9 @@ import Dispatch
 import CoreData
 
 extension CoreDataStore: IntegrationPersistable {
-    public func saveIntegration(_ integration: XcodeServer.Integration, queue: DispatchQueue, completion: @escaping IntegrationResultHandler) {
-        dispatchQueue.async {
+    public func saveIntegration(_ integration: XcodeServer.Integration, queue: DispatchQueue?, completion: @escaping IntegrationResultHandler) {
+        let queue = queue ?? returnQueue
+        internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in
                 let _integration = context.integration(withIdentifier: integration.id) ?? XcodeServerCoreData.Integration(context: context)
                 _integration.update(integration, context: context)
@@ -25,8 +26,9 @@ extension CoreDataStore: IntegrationPersistable {
         }
     }
     
-    public func saveAssets(_ assets: XcodeServer.Integration.AssetCatalog, forIntegration id: XcodeServer.Integration.ID, queue: DispatchQueue, completion: @escaping AssetCatalogResultHandler) {
-        dispatchQueue.async {
+    public func saveAssets(_ assets: XcodeServer.Integration.AssetCatalog, forIntegration id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping AssetCatalogResultHandler) {
+        let queue = queue ?? returnQueue
+        internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in
                 guard let _integration = context.integration(withIdentifier: id) else {
                     queue.async {
@@ -59,8 +61,9 @@ extension CoreDataStore: IntegrationPersistable {
         }
     }
     
-    public func saveCommits(_ commits: [SourceControl.Commit], forIntegration id: XcodeServer.Integration.ID, queue: DispatchQueue, completion: @escaping CommitsResultHandler) {
-        dispatchQueue.async {
+    public func saveCommits(_ commits: [SourceControl.Commit], forIntegration id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping CommitsResultHandler) {
+        let queue = queue ?? returnQueue
+        internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in
                 guard let managedIntegration = context.integration(withIdentifier: id) else {
                     queue.async {
@@ -100,8 +103,9 @@ extension CoreDataStore: IntegrationPersistable {
         }
     }
     
-    public func saveIssues(_ issues: XcodeServer.Integration.IssueCatalog, forIntegration id: XcodeServer.Integration.ID, queue: DispatchQueue, completion: @escaping IssueCatalogResultHandler) {
-        dispatchQueue.async {
+    public func saveIssues(_ issues: XcodeServer.Integration.IssueCatalog, forIntegration id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping IssueCatalogResultHandler) {
+        let queue = queue ?? returnQueue
+        internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in
                 guard let _integration = context.integration(withIdentifier: id) else {
                     queue.async {
@@ -134,8 +138,9 @@ extension CoreDataStore: IntegrationPersistable {
         }
     }
     
-    public func deleteIntegration(_ integration: XcodeServer.Integration, queue: DispatchQueue, completion: @escaping VoidResultHandler) {
-        dispatchQueue.async {
+    public func deleteIntegration(_ integration: XcodeServer.Integration, queue: DispatchQueue?, completion: @escaping VoidResultHandler) {
+        let queue = queue ?? returnQueue
+        internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in
                 guard let _integration = context.integration(withIdentifier: integration.id) else {
                     queue.async {

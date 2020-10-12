@@ -2,8 +2,9 @@ import Dispatch
 import XcodeServer
 
 extension APIClient: IntegrationQueryable {
-    public func getIntegrations(forBot id: Bot.ID, queue: DispatchQueue, completion: @escaping IntegrationsResultHandler) {
-        dispatchQueue.async {
+    public func getIntegrations(forBot id: Bot.ID, queue: DispatchQueue?, completion: @escaping IntegrationsResultHandler) {
+        let queue = queue ?? returnQueue
+        internalQueue.async {
             self.integrations(forBotWithIdentifier: id) { (result) in
                 switch result {
                 case .failure(let error):
@@ -20,8 +21,9 @@ extension APIClient: IntegrationQueryable {
         }
     }
     
-    public func getIntegration(_ id: Integration.ID, queue: DispatchQueue, completion: @escaping IntegrationResultHandler) {
-        dispatchQueue.async {
+    public func getIntegration(_ id: Integration.ID, queue: DispatchQueue?, completion: @escaping IntegrationResultHandler) {
+        let queue = queue ?? returnQueue
+        internalQueue.async {
             self.integration(withIdentifier: id) { (result) in
                 switch result {
                 case .failure(let error):
@@ -38,8 +40,9 @@ extension APIClient: IntegrationQueryable {
         }
     }
     
-    public func getCommitsForIntegration(_ id: Integration.ID, queue: DispatchQueue, completion: @escaping CommitsResultHandler) {
-        dispatchQueue.async {
+    public func getCommitsForIntegration(_ id: Integration.ID, queue: DispatchQueue?, completion: @escaping CommitsResultHandler) {
+        let queue = queue ?? returnQueue
+        internalQueue.async {
             self.commits(forIntegrationWithIdentifier: id) { (result) in
                 switch result {
                 case .failure(let error):
@@ -62,8 +65,9 @@ extension APIClient: IntegrationQueryable {
         }
     }
     
-    public func getIssuesForIntegration(_ id: Integration.ID, queue: DispatchQueue, completion: @escaping IssueCatalogResultHandler) {
-        dispatchQueue.async {
+    public func getIssuesForIntegration(_ id: Integration.ID, queue: DispatchQueue?, completion: @escaping IssueCatalogResultHandler) {
+        let queue = queue ?? returnQueue
+        internalQueue.async {
             self.issues(forIntegrationWithIdentifier: id) { (result) in
                 switch result {
                 case .failure(let error):
