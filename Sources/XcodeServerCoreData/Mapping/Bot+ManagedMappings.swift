@@ -3,30 +3,35 @@ import Foundation
 #if canImport(CoreData)
 
 public extension XcodeServer.Bot {
-    init(_ bot: XcodeServerCoreData.Bot) {
-        InternalLog.debug("Mapping XcodeServerCoreData.Bot [\(bot.identifier)] to XcodeServer.Bot")
+    init(_ bot: XcodeServerCoreData.Bot, depth: Int = 0) {
+        InternalLog.coreData.debug("Mapping XcodeServerCoreData.Bot [\(bot.identifier)] to XcodeServer.Bot")
         self.init(id: bot.identifier)
         modified = bot.lastUpdate ?? Date()
         name = bot.name ?? ""
         nextIntegrationNumber = Int(bot.integrationCounter)
         type = Int(bot.typeRawValue)
         requiresUpgrade = bot.requiresUpgrade
+        serverId = bot.server?.fqdn
         if let config = bot.configuration {
             configuration = Configuration(config)
         }
         if let stats = bot.stats {
             self.stats = Stats(stats)
         }
-        if let integrations = bot.integrations {
-            self.integrations = Set(integrations.map { XcodeServer.Integration($0) })
+        
+        guard depth > 0 else {
+            return
         }
-        serverId = bot.server?.fqdn
+        
+        if let integrations = bot.integrations {
+            self.integrations = Set(integrations.map { XcodeServer.Integration($0, depth: depth - 1) })
+        }
     }
 }
 
 public extension XcodeServer.Bot.Configuration {
     init(_ configuration: XcodeServerCoreData.Configuration) {
-        InternalLog.debug("Mapping XcodeServerCoreData.Configuration to XcodeServer.Bot.Configuration")
+        InternalLog.coreData.debug("Mapping XcodeServerCoreData.Configuration to XcodeServer.Bot.Configuration")
         self.init()
         schedule = configuration.scheduleType
         periodicInterval = configuration.periodicScheduleInterval
@@ -58,7 +63,7 @@ public extension XcodeServer.Bot.Configuration {
 
 public extension XcodeServer.Bot.Stats {
     init(_ stats: XcodeServerCoreData.Stats) {
-        InternalLog.debug("Mapping XcodeServerCoreData.Stats to XcodeServer.Bot.Stats")
+        InternalLog.coreData.debug("Mapping XcodeServerCoreData.Stats to XcodeServer.Bot.Stats")
         self.init()
         commits = Int(stats.numberOfCommits)
         integrations = Int(stats.numberOfIntegrations)
@@ -101,7 +106,7 @@ public extension XcodeServer.Bot.Stats {
 
 public extension XcodeServer.Bot.Stats.Analysis {
     init(_ breakdown: StatsBreakdown) {
-        InternalLog.debug("Mapping XcodeServerCoreData.StatsBreakdown to XcodeServer.Bot.Stats.Analysis")
+        InternalLog.coreData.debug("Mapping XcodeServerCoreData.StatsBreakdown to XcodeServer.Bot.Stats.Analysis")
         self.init()
         count = Int(breakdown.count)
         sum = breakdown.sum

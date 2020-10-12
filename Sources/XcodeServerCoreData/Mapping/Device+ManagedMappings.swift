@@ -3,7 +3,7 @@ import XcodeServer
 
 public extension XcodeServer.Device {
     init(_ device: XcodeServerCoreData.Device) {
-        InternalLog.debug("Mapping XcodeServerCoreData.Device [\(device.identifier)] to XcodeServer.Device")
+        InternalLog.coreData.debug("Mapping XcodeServerCoreData.Device [\(device.identifier)] to XcodeServer.Device")
         self.init(id: device.identifier)
         name = device.name ?? ""
         deviceType = device.deviceType ?? ""
@@ -28,7 +28,7 @@ public extension XcodeServer.Device {
 
 public extension XcodeServer.Device.Platform {
     init(_ platform: Platform) {
-        InternalLog.debug("Mapping XcodeServerCoreData.Platform [\(platform.identifier)] to XcodeServer.Device.Platform")
+        InternalLog.coreData.debug("Mapping XcodeServerCoreData.Platform [\(platform.identifier)] to XcodeServer.Device.Platform")
         self.init(id: platform.identifier)
         buildNumber = platform.buildNumber ?? ""
         displayName = platform.displayName ?? ""
@@ -40,7 +40,7 @@ public extension XcodeServer.Device.Platform {
 
 public extension XcodeServer.Device.Filter {
     init(_ filter: Filter) {
-        InternalLog.debug("Mapping XcodeServerCoreData.Filter to XcodeServer.Device.Filter")
+        InternalLog.coreData.debug("Mapping XcodeServerCoreData.Filter to XcodeServer.Device.Filter")
         self.init()
         if let platform = filter.platform {
             self.platform = XcodeServer.Device.Platform(platform)
@@ -52,7 +52,7 @@ public extension XcodeServer.Device.Filter {
 
 public extension XcodeServer.Device.Specification {
     init(_ specification: DeviceSpecification) {
-        InternalLog.debug("Mapping XcodeServerCoreData.DeviceSpecification to XcodeServer.Device.Specification")
+        InternalLog.coreData.debug("Mapping XcodeServerCoreData.DeviceSpecification to XcodeServer.Device.Specification")
         self.init()
         if let filters = specification.filters {
             self.filters = filters.map { XcodeServer.Device.Filter($0) }
@@ -65,7 +65,7 @@ public extension XcodeServer.Device.Specification {
 
 public extension XcodeServer.Device.ProxiedDevice {
     init(_ device: XcodeServerCoreData.Device) {
-        InternalLog.debug("Mapping XcodeServerCoreData.Device [\(device.identifier)] to XcodeServer.Device.ProxiedDevice")
+        InternalLog.coreData.debug("Mapping XcodeServerCoreData.Device [\(device.identifier)] to XcodeServer.Device.ProxiedDevice")
         self.init(id: device.identifier)
         name = device.name ?? ""
         deviceType = device.deviceType ?? ""

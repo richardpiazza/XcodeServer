@@ -5,7 +5,7 @@ import CoreData
 
 extension CoreDataStore: IntegrationQueryable {
     public func getIntegrations(forBot id: XcodeServer.Bot.ID, queue: DispatchQueue?, completion: @escaping IntegrationsResultHandler) {
-        InternalLog.info("Retrieving INTEGRATIONS for Bot [\(id)]")
+        InternalLog.coreData.info("Retrieving INTEGRATIONS for Bot [\(id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             guard let bot = self.persistentContainer.viewContext.bot(withIdentifier: id) else {
@@ -29,7 +29,7 @@ extension CoreDataStore: IntegrationQueryable {
     }
     
     public func getIntegration(_ id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping IntegrationResultHandler) {
-        InternalLog.info("Retrieving Integration [\(id)]")
+        InternalLog.coreData.info("Retrieving Integration [\(id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             guard let integration = self.persistentContainer.viewContext.integration(withIdentifier: id) else {
@@ -39,7 +39,7 @@ extension CoreDataStore: IntegrationQueryable {
                 return
             }
             
-            let result = XcodeServer.Integration(integration)
+            let result = XcodeServer.Integration(integration, depth: 1)
             
             queue.async {
                 completion(.success(result))
@@ -48,7 +48,7 @@ extension CoreDataStore: IntegrationQueryable {
     }
     
     public func getCommitsForIntegration(_ id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping CommitsResultHandler) {
-        InternalLog.info("Retrieving COMMITS for Integration [\(id)]")
+        InternalLog.coreData.info("Retrieving COMMITS for Integration [\(id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             guard let integration = self.persistentContainer.viewContext.integration(withIdentifier: id) else {
@@ -66,7 +66,7 @@ extension CoreDataStore: IntegrationQueryable {
             }
             
             let commits = blueprints.compactMap { $0.commit }
-            let result = commits.map { SourceControl.Commit($0) }
+            let result = commits.map { SourceControl.Commit($0, depth: 1) }
             queue.async {
                 completion(.success(result))
             }
@@ -74,7 +74,7 @@ extension CoreDataStore: IntegrationQueryable {
     }
     
     public func getIssuesForIntegration(_ id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping IssueCatalogResultHandler) {
-        InternalLog.info("Retrieving ISSUES for Integration [\(id)]")
+        InternalLog.coreData.info("Retrieving ISSUES for Integration [\(id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             guard let integration = self.persistentContainer.viewContext.integration(withIdentifier: id) else {

@@ -5,7 +5,7 @@ import CoreData
 
 extension CoreDataStore: IntegrationPersistable {
     public func saveIntegration(_ integration: XcodeServer.Integration, queue: DispatchQueue?, completion: @escaping IntegrationResultHandler) {
-        InternalLog.info("Saving Integration '\(integration.number)' [\(integration.id)]")
+        InternalLog.coreData.info("Saving Integration '\(integration.number)' [\(integration.id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in
@@ -28,7 +28,7 @@ extension CoreDataStore: IntegrationPersistable {
     }
     
     public func saveAssets(_ assets: XcodeServer.Integration.AssetCatalog, forIntegration id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping AssetCatalogResultHandler) {
-        InternalLog.info("Saving ASSETS for Integration [\(id)]")
+        InternalLog.coreData.info("Saving ASSETS for Integration [\(id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in
@@ -64,7 +64,7 @@ extension CoreDataStore: IntegrationPersistable {
     }
     
     public func saveCommits(_ commits: [SourceControl.Commit], forIntegration id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping CommitsResultHandler) {
-        InternalLog.info("Saving COMMITS for Integration [\(id)]")
+        InternalLog.coreData.info("Saving COMMITS for Integration [\(id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in
@@ -77,7 +77,7 @@ extension CoreDataStore: IntegrationPersistable {
                 
                 commits.forEach { (commit) in
                     guard let remoteId = commit.remoteId else {
-                        InternalLog.warn("No Remote ID for commit: \(commit)")
+                        InternalLog.coreData.warn("No Remote ID for commit: \(commit)")
                         return
                     }
                     
@@ -107,7 +107,7 @@ extension CoreDataStore: IntegrationPersistable {
     }
     
     public func saveIssues(_ issues: XcodeServer.Integration.IssueCatalog, forIntegration id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping IssueCatalogResultHandler) {
-        InternalLog.info("Saving ISSUES for Integration [\(id)]")
+        InternalLog.coreData.info("Saving ISSUES for Integration [\(id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in
@@ -143,7 +143,7 @@ extension CoreDataStore: IntegrationPersistable {
     }
     
     public func deleteIntegration(_ integration: XcodeServer.Integration, queue: DispatchQueue?, completion: @escaping VoidResultHandler) {
-        InternalLog.info("Removing Integration '\(integration.number)' [\(integration.id)]")
+        InternalLog.coreData.info("Removing Integration '\(integration.number)' [\(integration.id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in

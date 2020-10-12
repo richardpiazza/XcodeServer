@@ -1,3 +1,4 @@
+import XcodeServer
 import Foundation
 #if canImport(CoreData)
 import CoreData
@@ -5,7 +6,7 @@ import CoreData
 public extension NSPersistentContainer {
     
     convenience init(model: Model, persisted: Bool = true) {
-        let directoryURL = FileManager.default.directoryURL
+        let directoryURL = FileManager.default.xcodeServerDirectory
         let storeURL = FileManager.default.storeURL
         
         let description = NSPersistentStoreDescription()
@@ -26,7 +27,7 @@ public extension NSPersistentContainer {
                     try FileManager.default.removeItem(at: storeURL)
                 }
             } catch {
-                InternalLog.error("", error: error)
+                InternalLog.coreData.error("", error: error)
             }
         }
         
@@ -55,32 +56,16 @@ public extension NSPersistentContainer {
             do {
                 try persistentStoreCoordinator.remove(store)
             } catch {
-                InternalLog.error("", error: error)
+                InternalLog.coreData.error("", error: error)
             }
         }
     }
 }
 
 public extension FileManager {
-    var directoryURL: URL {
-        let folder = "XcodeServer"
-        let root: URL
-        do {
-            #if os(tvOS)
-            root = try url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-            #else
-            root = try url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-            #endif
-            
-            return root.appendingPathComponent(folder, isDirectory: true)
-        } catch {
-            fatalError(error.localizedDescription)
-        }
-    }
-    
     var storeURL: URL {
         let name = "XcodeServer.sqlite"
-        return directoryURL.appendingPathComponent(name)
+        return xcodeServerDirectory.appendingPathComponent(name)
     }
 }
 

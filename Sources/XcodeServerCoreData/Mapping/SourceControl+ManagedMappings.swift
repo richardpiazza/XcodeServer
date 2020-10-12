@@ -3,8 +3,8 @@ import Foundation
 #if canImport(CoreData)
 
 public extension SourceControl.Commit {
-    init(_ commit: XcodeServerCoreData.Commit) {
-        InternalLog.debug("Mapping XcodeServerCoreData.Commit [\(commit.commitHash)] to XcodeServer.SourceControl.Commit")
+    init(_ commit: XcodeServerCoreData.Commit, depth: Int = 0) {
+        InternalLog.coreData.debug("Mapping XcodeServerCoreData.Commit [\(commit.commitHash)] to XcodeServer.SourceControl.Commit")
         self.init(id: commit.commitHash)
         message = commit.message ?? ""
         date = commit.date ?? Date()
@@ -12,8 +12,11 @@ public extension SourceControl.Commit {
             self.contributor = SourceControl.Contributor(contributor)
         }
         
+        guard depth > 0 else {
+            return
+        }
+        
         if let changes = commit.commitChanges {
-//            _ = changes.map({ $0.statusRawValue })
             self.changes = changes.map({ SourceControl.Change($0) })
         }
         
@@ -25,7 +28,7 @@ public extension SourceControl.Commit {
 
 public extension SourceControl.Contributor {
     init(_ contributor: CommitContributor) {
-        InternalLog.debug("Mapping XcodeServerCoreData.CommitContributor to XcodeServer.SourceControl.Contributor")
+        InternalLog.coreData.debug("Mapping XcodeServerCoreData.CommitContributor to XcodeServer.SourceControl.Contributor")
         self.init()
         name = contributor.name ?? ""
         displayName = contributor.displayName ?? ""
@@ -35,7 +38,7 @@ public extension SourceControl.Contributor {
 
 public extension SourceControl.Change {
     init(_ change: CommitChange) {
-        InternalLog.debug("Mapping XcodeServerCoreData.CommitChange to XcodeServer.SourceControl.Change")
+        InternalLog.coreData.debug("Mapping XcodeServerCoreData.CommitChange to XcodeServer.SourceControl.Change")
         self.init()
         filePath = change.filePath ?? ""
         status = Int(change.statusRawValue)
@@ -43,21 +46,26 @@ public extension SourceControl.Change {
 }
 
 public extension SourceControl.Remote {
-    init(_ repository: XcodeServerCoreData.Repository) {
-        InternalLog.debug("Mapping XcodeServerCoreData.Repository [\(repository.identifier)] to XcodeServer.SourceControl.Remote")
+    init(_ repository: XcodeServerCoreData.Repository, depth: Int = 0) {
+        InternalLog.coreData.debug("Mapping XcodeServerCoreData.Repository [\(repository.identifier)] to XcodeServer.SourceControl.Remote")
         self.init(id: repository.identifier)
         system = repository.system ?? ""
         url = repository.url ?? ""
         locations = Set([SourceControl.Location(repository)])
+        
+        guard depth > 0 else {
+            return
+        }
+        
         if let commits = repository.commits {
-            self.commits = Set(commits.map { SourceControl.Commit($0) })
+            self.commits = Set(commits.map { SourceControl.Commit($0, depth: depth - 1) })
         }
     }
 }
 
 public extension SourceControl.Location {
     init(_ repository: XcodeServerCoreData.Repository) {
-        InternalLog.debug("Mapping XcodeServerCoreData.Repository [\(repository.identifier)] to XcodeServer.SourceControl.Location")
+        InternalLog.coreData.debug("Mapping XcodeServerCoreData.Repository [\(repository.identifier)] to XcodeServer.SourceControl.Location")
         self.init(id: repository.branchIdentifier ?? "")
         branchOptions = Int(repository.branchOptions)
         locationType = repository.locationType ?? ""

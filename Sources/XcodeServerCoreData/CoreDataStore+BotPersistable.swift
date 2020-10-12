@@ -5,7 +5,7 @@ import CoreData
 
 extension CoreDataStore: BotPersistable {
     public func saveBot(_ bot: XcodeServer.Bot, queue: DispatchQueue?, completion: @escaping BotResultHandler) {
-        InternalLog.info("Saving Bot '\(bot.name)' [\(bot.id)]")
+        InternalLog.coreData.info("Saving Bot '\(bot.name)' [\(bot.id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in
@@ -28,7 +28,7 @@ extension CoreDataStore: BotPersistable {
     }
     
     public func deleteBot(_ bot: XcodeServer.Bot, queue: DispatchQueue?, completion: @escaping VoidResultHandler) {
-        InternalLog.info("Removing Bot '\(bot.name)' [\(bot.id)]")
+        InternalLog.coreData.info("Removing Bot '\(bot.name)' [\(bot.id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in

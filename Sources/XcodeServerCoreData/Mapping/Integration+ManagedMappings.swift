@@ -2,8 +2,8 @@ import XcodeServer
 #if canImport(CoreData)
 
 public extension XcodeServer.Integration {
-    init(_ integration: XcodeServerCoreData.Integration) {
-        InternalLog.debug("Mapping XcodeServerCoreData.Integration [\(integration.identifier)] to XcodeServer.Integration")
+    init(_ integration: XcodeServerCoreData.Integration, depth: Int = 0) {
+        InternalLog.coreData.debug("Mapping XcodeServerCoreData.Integration [\(integration.identifier)] to XcodeServer.Integration")
         self.init(id: integration.identifier)
         number = Int(integration.number)
         step = integration.currentStep
@@ -15,30 +15,32 @@ public extension XcodeServer.Integration {
         result = integration.result
         successStreak = Int(integration.successStreak)
         testHierarchy = integration.testHierarchy
+        botId = integration.bot?.identifier
+        botName = integration.bot?.name
+        serverId = integration.bot?.server?.fqdn
+        
         if let summary = integration.buildResultSummary {
             buildSummary = XcodeServer.Integration.BuildSummary(summary)
         }
+        
+        guard depth > 0 else {
+            return
+        }
+        
         if let assets = integration.assets {
             self.assets = AssetCatalog(assets)
         }
         if let issues = integration.issues {
             self.issues = IssueCatalog(issues)
         }
-        var _commits: Set<SourceControl.Commit> = []
-        for commit in integration.commits {
-            let _commit = SourceControl.Commit(commit)
-            _commits.insert(_commit)
-        }
-        commits = _commits
-        botId = integration.bot?.identifier
-        botName = integration.bot?.name
-        serverId = integration.bot?.server?.fqdn
+        
+        commits = Set(integration.commits.map({ SourceControl.Commit($0, depth: depth - 1) }))
     }
 }
 
 public extension XcodeServer.Integration.BuildSummary {
     init(_ summary: BuildResultSummary) {
-        InternalLog.debug("Mapping XcodeServerCoreData.BuildResultSummary to XcodeServer.Integration.BuildResultSummary")
+        InternalLog.coreData.debug("Mapping XcodeServerCoreData.BuildResultSummary to XcodeServer.Integration.BuildResultSummary")
         self.init()
         errorCount = Int(summary.errorCount)
         errorChange = Int(summary.errorChange)
@@ -59,7 +61,7 @@ public extension XcodeServer.Integration.BuildSummary {
 
 public extension XcodeServer.Integration.AssetCatalog {
     init(_ assets: IntegrationAssets) {
-        InternalLog.debug("Mapping XcodeServerCoreData.IntegrationAssets to XcodeServer.Integration.AssetCatalog")
+        InternalLog.coreData.debug("Mapping XcodeServerCoreData.IntegrationAssets to XcodeServer.Integration.AssetCatalog")
         self.init()
         if let asset = assets.triggerAssets {
             triggerAssets = asset.map { XcodeServer.Integration.Asset($0) }
@@ -87,7 +89,7 @@ public extension XcodeServer.Integration.AssetCatalog {
 
 public extension XcodeServer.Integration.Asset {
     init(_ asset: Asset) {
-        InternalLog.debug("Mapping XcodeServerCoreData.Asset to XcodeServer.Integration.Asset")
+        InternalLog.coreData.debug("Mapping XcodeServerCoreData.Asset to XcodeServer.Integration.Asset")
         self.init()
         size = Int(asset.size)
         fileName = asset.fileName ?? ""
@@ -100,7 +102,7 @@ public extension XcodeServer.Integration.Asset {
 
 public extension XcodeServer.Integration.IssueCatalog {
     init(_ issues: XcodeServerCoreData.IntegrationIssues) {
-        InternalLog.debug("Mapping XcodeServerCoreData.IntegrationIssues to XcodeServer.Integration.IssueCatalog")
+        InternalLog.coreData.debug("Mapping XcodeServerCoreData.IntegrationIssues to XcodeServer.Integration.IssueCatalog")
         self.init()
         if let value = issues.buildServiceErrors {
             buildServiceErrors = Set(value.map { XcodeServer.Issue($0) })

@@ -1,7 +1,7 @@
 import Foundation
 
 /// A General Purpose Log
-class InternalLog {
+public class InternalLog {
     
     /// The distinguishing severity of a Log Entry.
     public enum Level: String, Codable, CaseIterable {
@@ -188,7 +188,7 @@ class InternalLog {
     }
     
     /// The default shared log implementation
-    public static let `default`: InternalLog = InternalLog(name: "CoreData.log", maxBytes: InternalLog.oneMB * 5)
+    public static let `default`: InternalLog = InternalLog(name: "XcodeServer.log", maxBytes: InternalLog.oneMB * 5)
     
     /// The default max log size
     public static let oneMB: UInt = 1024 * 1024 * 1
@@ -227,7 +227,7 @@ class InternalLog {
     
     public convenience init(name: String, maxBytes: UInt? = InternalLog.oneMB) {
         self.init()
-        self.fileUrl = FileManager.default.directoryURL.appendingPathComponent(name)
+        self.fileUrl = FileManager.default.xcodeServerDirectory.appendingPathComponent(name)
         self.maxBytes = maxBytes
     }
     

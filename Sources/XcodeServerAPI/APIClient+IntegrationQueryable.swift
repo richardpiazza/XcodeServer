@@ -3,6 +3,7 @@ import XcodeServer
 
 extension APIClient: IntegrationQueryable {
     public func getIntegrations(forBot id: Bot.ID, queue: DispatchQueue?, completion: @escaping IntegrationsResultHandler) {
+        InternalLog.apiClient.info("Retrieving INTEGRATIONS for Bot [\(id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.integrations(forBotWithIdentifier: id) { (result) in
@@ -22,6 +23,7 @@ extension APIClient: IntegrationQueryable {
     }
     
     public func getIntegration(_ id: Integration.ID, queue: DispatchQueue?, completion: @escaping IntegrationResultHandler) {
+        InternalLog.apiClient.info("Retrieving Integration [\(id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.integration(withIdentifier: id) { (result) in
@@ -41,6 +43,7 @@ extension APIClient: IntegrationQueryable {
     }
     
     public func getCommitsForIntegration(_ id: Integration.ID, queue: DispatchQueue?, completion: @escaping CommitsResultHandler) {
+        InternalLog.apiClient.info("Retrieving COMMITS for Integration [\(id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.commits(forIntegrationWithIdentifier: id) { (result) in
@@ -66,6 +69,7 @@ extension APIClient: IntegrationQueryable {
     }
     
     public func getIssuesForIntegration(_ id: Integration.ID, queue: DispatchQueue?, completion: @escaping IssueCatalogResultHandler) {
+        InternalLog.apiClient.info("Retrieving ISSUES for Integration [\(id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.issues(forIntegrationWithIdentifier: id) { (result) in

@@ -43,7 +43,7 @@ public extension CommitContributor {
             do {
                 return try Self.jsonDecoder.decode([String].self, from: data)
             } catch {
-                InternalLog.error("Failed to get 'emailsData': \(String(data: data, encoding: .utf8) ?? "")", error: error)
+                InternalLog.coreData.error("Failed to get 'emailsData': \(String(data: data, encoding: .utf8) ?? "")", error: error)
                 return []
             }
         }
@@ -51,7 +51,7 @@ public extension CommitContributor {
             do {
                 emailsData = try Self.jsonEncoder.encode(newValue)
             } catch {
-                InternalLog.error("Failed to set 'emailsData': \(newValue)", error: error)
+                InternalLog.coreData.error("Failed to set 'emailsData': \(newValue)", error: error)
             }
         }
     }

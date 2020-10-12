@@ -3,6 +3,7 @@ import XcodeServer
 
 extension APIClient: BotQueryable {
     public func getBots(queue: DispatchQueue?, completion: @escaping BotsResultHandler) {
+        InternalLog.apiClient.info("Retrieving ALL Bots")
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.bots { (result) in
@@ -22,6 +23,7 @@ extension APIClient: BotQueryable {
     }
     
     public func getBot(_ id: Bot.ID, queue: DispatchQueue?, completion: @escaping BotResultHandler) {
+        InternalLog.apiClient.info("Retrieving Bot [\(id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.bot(withIdentifier: id) { (result) in
@@ -41,6 +43,7 @@ extension APIClient: BotQueryable {
     }
     
     public func getStatsForBot(_ id: Bot.ID, queue: DispatchQueue?, completion: @escaping BotStatsResultHandler) {
+        InternalLog.apiClient.info("Retrieving STATS for Bot [\(id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.stats(forBotWithIdentifier: id) { (result) in
