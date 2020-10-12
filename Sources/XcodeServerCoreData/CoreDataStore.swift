@@ -14,9 +14,9 @@ public class CoreDataStore {
     /// - parameter model: `Model` version the store should be initialized with. (Migration if needed/able)
     /// - parameter dispatchQueue: DispatchQueue on which all results will be returned (when not specified).
     /// - parameter persisted: When false, this store will only be maintained in memory.
-    public init(model: Model, internalQueue: DispatchQueue = .main, persisted: Bool = true) {
+    public init(model: Model, dispatchQueue: DispatchQueue = .main, persisted: Bool = true) {
         persistentContainer = NSPersistentContainer(model: model, persisted: persisted)
-        returnQueue = internalQueue
+        returnQueue = dispatchQueue
     }
 }
 

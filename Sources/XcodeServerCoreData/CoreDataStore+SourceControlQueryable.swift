@@ -5,6 +5,7 @@ import CoreData
 
 extension CoreDataStore: SourceControlQueryable {
     public func getRemotes(queue: DispatchQueue?, completion: @escaping RemotesResultHandler) {
+        InternalLog.debug("Retrieving ALL Remotes")
         let queue = queue ?? returnQueue
         internalQueue.async {
             let repositories = self.persistentContainer.viewContext.repositories()
@@ -16,6 +17,7 @@ extension CoreDataStore: SourceControlQueryable {
     }
     
     public func getRemote(_ id: SourceControl.Remote.ID, queue: DispatchQueue?, completion: @escaping RemoteResultHandler) {
+        InternalLog.debug("Retrieving Remote [\(id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             if let repository = self.persistentContainer.viewContext.repository(withIdentifier: id) {

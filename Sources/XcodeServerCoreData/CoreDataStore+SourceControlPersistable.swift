@@ -5,6 +5,7 @@ import CoreData
 
 extension CoreDataStore: SourceControlPersistable {
     public func saveRemote(_ remote: SourceControl.Remote, queue: DispatchQueue?, completion: @escaping RemoteResultHandler) {
+        InternalLog.debug("Saving Remote [\(remote.id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in
@@ -27,6 +28,7 @@ extension CoreDataStore: SourceControlPersistable {
     }
     
     public func deleteRemote(_ remote: SourceControl.Remote, queue: DispatchQueue?, completion: @escaping VoidResultHandler) {
+        InternalLog.debug("Removing Remote [\(remote.id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in

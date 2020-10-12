@@ -5,6 +5,7 @@ import CoreData
 
 extension CoreDataStore: IntegrationPersistable {
     public func saveIntegration(_ integration: XcodeServer.Integration, queue: DispatchQueue?, completion: @escaping IntegrationResultHandler) {
+        InternalLog.debug("Saving Integration '\(integration.number)' [\(integration.id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in
@@ -27,6 +28,7 @@ extension CoreDataStore: IntegrationPersistable {
     }
     
     public func saveAssets(_ assets: XcodeServer.Integration.AssetCatalog, forIntegration id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping AssetCatalogResultHandler) {
+        InternalLog.debug("Saving ASSETS for Integration [\(id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in
@@ -62,6 +64,7 @@ extension CoreDataStore: IntegrationPersistable {
     }
     
     public func saveCommits(_ commits: [SourceControl.Commit], forIntegration id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping CommitsResultHandler) {
+        InternalLog.debug("Saving COMMITS for Integration [\(id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in
@@ -104,6 +107,7 @@ extension CoreDataStore: IntegrationPersistable {
     }
     
     public func saveIssues(_ issues: XcodeServer.Integration.IssueCatalog, forIntegration id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping IssueCatalogResultHandler) {
+        InternalLog.debug("Saving ISSUES for Integration [\(id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in
@@ -139,6 +143,7 @@ extension CoreDataStore: IntegrationPersistable {
     }
     
     public func deleteIntegration(_ integration: XcodeServer.Integration, queue: DispatchQueue?, completion: @escaping VoidResultHandler) {
+        InternalLog.debug("Removing Integration '\(integration.number)' [\(integration.id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in

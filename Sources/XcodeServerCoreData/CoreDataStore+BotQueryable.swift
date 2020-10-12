@@ -6,6 +6,7 @@ import CoreData
 
 extension CoreDataStore: BotQueryable {
     public func getBots(queue: DispatchQueue?, completion: @escaping BotsResultHandler) {
+        InternalLog.debug("Retrieving ALL Bots")
         let queue = queue ?? returnQueue
         internalQueue.async {
             let bots = self.persistentContainer.viewContext.bots()
@@ -17,6 +18,7 @@ extension CoreDataStore: BotQueryable {
     }
     
     public func getBot(_ id: XcodeServer.Bot.ID, queue: DispatchQueue?, completion: @escaping BotResultHandler) {
+        InternalLog.debug("Retrieving Bot [\(id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             if let bot = self.persistentContainer.viewContext.bot(withIdentifier: id) {
@@ -33,6 +35,7 @@ extension CoreDataStore: BotQueryable {
     }
     
     public func getStatsForBot(_ id: XcodeServer.Bot.ID, queue: DispatchQueue?, completion: @escaping BotStatsResultHandler) {
+        InternalLog.debug("Retrieving STATS for Bot [\(id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             guard let bot = self.persistentContainer.viewContext.bot(withIdentifier: id) else {
