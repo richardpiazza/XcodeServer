@@ -26,7 +26,7 @@ public extension NSPersistentContainer {
                     try FileManager.default.removeItem(at: storeURL)
                 }
             } catch {
-                print(error)
+                InternalLog.error("", error: error)
             }
         }
         
@@ -40,10 +40,11 @@ public extension NSPersistentContainer {
             if let e = error {
                 fatalError(e.localizedDescription)
             }
-            
-            self.viewContext.automaticallyMergesChangesFromParent = true
-            self.viewContext.mergePolicy = NSMergePolicy(merge: .mergeByPropertyObjectTrumpMergePolicyType)
         }
+        
+        viewContext.automaticallyMergesChangesFromParent = true
+        viewContext.mergePolicy = NSMergePolicy(merge: .mergeByPropertyObjectTrumpMergePolicyType)
+        viewContext.undoManager = nil
     }
     
     /// Removed all stores from the `persistentStoreCoordinator`/
@@ -54,7 +55,7 @@ public extension NSPersistentContainer {
             do {
                 try persistentStoreCoordinator.remove(store)
             } catch {
-                print(error)
+                InternalLog.error("", error: error)
             }
         }
     }

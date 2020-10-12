@@ -51,7 +51,7 @@ public extension Configuration {
             do {
                 return try Self.jsonDecoder.decode([String].self, from: data)
             } catch {
-                print(error)
+                InternalLog.error("", error: error)
                 return []
             }
         }
@@ -59,7 +59,7 @@ public extension Configuration {
             do {
                 additionalBuildArgumentsData = try Self.jsonEncoder.encode(newValue)
             } catch {
-                print(error)
+                InternalLog.error("", error: error)
             }
         }
     }
@@ -73,7 +73,7 @@ public extension Configuration {
             do {
                 return try Self.jsonDecoder.decode([String: String].self, from: data)
             } catch {
-                print(error)
+                InternalLog.error("", error: error)
                 return [:]
             }
         }
@@ -81,7 +81,7 @@ public extension Configuration {
             do {
                 buildEnvironmentVariablesData = try Self.jsonEncoder.encode(newValue)
             } catch {
-                print(error)
+                InternalLog.error("", error: error)
             }
         }
     }

@@ -37,7 +37,7 @@ public extension Integration {
             do {
                 return try Self.jsonDecoder.decode(Tests.Hierarchy.self, from: data)
             } catch {
-                print(error)
+                InternalLog.error("", error: error)
             }
             
             return nil
@@ -51,7 +51,7 @@ public extension Integration {
             do {
                 testHierarchyData = try Self.jsonEncoder.encode(value)
             } catch {
-                print(error)
+                InternalLog.error("", error: error)
             }
         }
     }
@@ -152,7 +152,7 @@ public extension XcodeServerCoreData.Integration {
     func update(_ commits: Set<SourceControl.Commit>, context: NSManagedObjectContext) {
         commits.forEach { (commit) in
             guard let remoteId = commit.remoteId else {
-                print("No Remote ID for commit:\n\(commit)")
+                InternalLog.warn("No Remote ID for commit: \(commit)")
                 return
             }
             

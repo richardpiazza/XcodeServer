@@ -188,7 +188,7 @@ class InternalLog {
     }
     
     /// The default shared log implementation
-    public static let `default`: InternalLog = InternalLog(name: "CoreData.log")
+    public static let `default`: InternalLog = InternalLog(name: "CoreData.log", maxBytes: InternalLog.oneMB * 5)
     
     /// The default max log size
     public static let oneMB: UInt = 1024 * 1024 * 1
@@ -302,7 +302,7 @@ class InternalLog {
             do {
                 try data.write(to: url, options: .atomic)
             } catch {
-                print(error)
+                InternalLog.error("", error: error)
             }
             return
         }
@@ -311,7 +311,7 @@ class InternalLog {
         do {
             handle = try FileHandle(forWritingTo: url)
         } catch {
-            print(error)
+            InternalLog.error("", error: error)
             return
         }
         
@@ -333,7 +333,7 @@ class InternalLog {
         do {
             attributes = try FileManager.default.attributesOfItem(atPath: url.path)
         } catch {
-            print(error)
+            InternalLog.error("", error: error)
             return nil
         }
         
@@ -357,7 +357,7 @@ class InternalLog {
         do {
             data = try Data(contentsOf: url)
         } catch {
-            print(error)
+            InternalLog.error("", error: error)
         }
         
         return data
@@ -375,7 +375,7 @@ class InternalLog {
         do {
             try FileManager.default.removeItem(at: url)
         } catch {
-            print(error)
+            InternalLog.error("", error: error)
         }
     }
 }

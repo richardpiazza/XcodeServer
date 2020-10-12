@@ -77,7 +77,7 @@ extension CoreDataStore: IntegrationPersistable {
                 
                 commits.forEach { (commit) in
                     guard let remoteId = commit.remoteId else {
-                        print("No Remote ID for commit:\n\(commit)")
+                        InternalLog.warn("No Remote ID for commit: \(commit)")
                         return
                     }
                     

@@ -11,7 +11,7 @@ public extension NSManagedObjectContext {
         do {
             return try self.fetch(fetchRequest)
         } catch {
-            print(error)
+            InternalLog.error("", error: error)
         }
         
         return []
@@ -28,7 +28,7 @@ public extension NSManagedObjectContext {
                 return result
             }
         } catch {
-            print(error)
+            InternalLog.error("", error: error)
         }
         
         return nil
@@ -44,7 +44,7 @@ public extension NSManagedObjectContext {
         do {
             return try fetch(request)
         } catch {
-            print(error)
+            InternalLog.error("", error: error)
         }
         
         return []
@@ -62,7 +62,7 @@ public extension NSManagedObjectContext {
                 return result
             }
         } catch {
-            print(error)
+            InternalLog.error("", error: error)
         }
         
         return nil
@@ -75,7 +75,7 @@ public extension NSManagedObjectContext {
         do {
             return try fetch(request)
         } catch {
-            print(error)
+            InternalLog.error("", error: error)
         }
         
         return []
@@ -90,7 +90,7 @@ public extension NSManagedObjectContext {
         do {
             return try self.fetch(fetchRequest)
         } catch {
-            print(error)
+            InternalLog.error("", error: error)
         }
         
         return []
@@ -107,7 +107,7 @@ public extension NSManagedObjectContext {
                 return result
             }
         } catch {
-            print(error)
+            InternalLog.error("", error: error)
         }
         
         return nil
@@ -123,7 +123,7 @@ public extension NSManagedObjectContext {
         do {
             return try fetch(request)
         } catch {
-            print(error)
+            InternalLog.error("", error: error)
         }
         
         return []
@@ -141,7 +141,7 @@ public extension NSManagedObjectContext {
                 return result
             }
         } catch {
-            print(error)
+            InternalLog.error("", error: error)
         }
         
         return nil
@@ -155,7 +155,7 @@ public extension NSManagedObjectContext {
         do {
             return try fetch(request)
         } catch {
-            print(error)
+            InternalLog.error("", error: error)
         }
         
         return []
@@ -170,7 +170,7 @@ public extension NSManagedObjectContext {
         do {
             return try self.fetch(fetchRequest)
         } catch {
-            print(error)
+            InternalLog.error("", error: error)
         }
         
         return []
@@ -187,7 +187,7 @@ public extension NSManagedObjectContext {
                 return result
             }
         } catch {
-            print(error)
+            InternalLog.error("", error: error)
         }
         
         return nil
@@ -202,7 +202,7 @@ public extension NSManagedObjectContext {
         do {
             return try self.fetch(fetchRequest)
         } catch {
-            print(error)
+            InternalLog.error("", error: error)
         }
         
         return []
@@ -219,7 +219,7 @@ public extension NSManagedObjectContext {
                 return result
             }
         } catch {
-            print(error)
+            InternalLog.error("", error: error)
         }
         
         return nil
@@ -234,7 +234,7 @@ public extension NSManagedObjectContext {
         do {
             return try self.fetch(fetchRequest)
         } catch {
-            print(error)
+            InternalLog.error("", error: error)
         }
         
         return []
@@ -251,7 +251,7 @@ public extension NSManagedObjectContext {
                 return result
             }
         } catch {
-            print(error)
+            InternalLog.error("", error: error)
         }
         
         return nil
@@ -264,7 +264,7 @@ public extension NSManagedObjectContext {
         do {
             return try self.fetch(fetchRequest)
         } catch {
-            print(error)
+            InternalLog.error("", error: error)
         }
         
         return []

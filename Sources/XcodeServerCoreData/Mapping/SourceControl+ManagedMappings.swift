@@ -12,24 +12,14 @@ public extension SourceControl.Commit {
             self.contributor = SourceControl.Contributor(contributor)
         }
         
-        #warning("🦠 Constant Bugs Here?!")
+        if let changes = commit.commitChanges {
+//            _ = changes.map({ $0.statusRawValue })
+            self.changes = changes.map({ SourceControl.Change($0) })
+        }
         
-//        if let changes = commit.commitChanges {
-//            var _changes: [SourceControl.Change] = []
-//            for change in changes {
-//                if change is NSString {
-//                    print(change)
-//                } else {
-//                    let _change = SourceControl.Change(change)
-//                    _changes.append(_change)
-//                }
-//            }
-//            self.changes = _changes
-//        }
-        
-//        if let blueprints = commit.revisionBlueprints, !blueprints.isEmpty {
-//            integrationId = blueprints.first?.integration?.identifier
-//        }
+        if let blueprints = commit.revisionBlueprints, !blueprints.isEmpty {
+            integrationId = blueprints.first?.integration?.identifier
+        }
     }
 }
 

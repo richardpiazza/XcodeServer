@@ -24,7 +24,7 @@ public extension EmailConfiguration {
             do {
                 return try Self.jsonDecoder.decode([String].self, from: data)
             } catch {
-                print(error)
+                InternalLog.error("", error: error)
                 return []
             }
         }
@@ -32,7 +32,7 @@ public extension EmailConfiguration {
             do {
                 ccAddressesData = try Self.jsonEncoder.encode(newValue)
             } catch {
-                print(error)
+                InternalLog.error("", error: error)
             }
         }
     }
@@ -46,7 +46,7 @@ public extension EmailConfiguration {
             do {
                 return try Self.jsonDecoder.decode([String].self, from: data)
             } catch {
-                print(error)
+                InternalLog.error("", error: error)
                 return []
             }
         }
@@ -54,7 +54,7 @@ public extension EmailConfiguration {
             do {
                 allowedDomainNamesData = try Self.jsonEncoder.encode(newValue)
             } catch {
-                print(error)
+                InternalLog.error("", error: error)
             }
         }
     }
