@@ -12,12 +12,16 @@ public extension SourceControl.Commit {
         }
         if let changes = commit.commitChanges {
             #warning("🦠 Constant Bugs Here?!")
-            var _changes: [SourceControl.Change] = []
-            for change in changes {
-                let _change = SourceControl.Change(change)
-                _changes.append(_change)
-            }
-            self.changes = _changes
+//            var _changes: [SourceControl.Change] = []
+//            for change in changes {
+//                if change is NSString {
+//                    print(change)
+//                } else {
+//                    let _change = SourceControl.Change(change)
+//                    _changes.append(_change)
+//                }
+//            }
+//            self.changes = _changes
         }
         
         integrationId = commit.revisionBlueprints?.compactMap({ $0.integration?.identifier }).first
