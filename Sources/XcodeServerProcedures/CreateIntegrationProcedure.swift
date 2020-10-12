@@ -21,12 +21,11 @@ public class CreateIntegrationProcedure: IdentifiablePersitableProcedure<Bot>, I
         
         guard let value = input.value else {
             let error = XcodeServerProcedureError.invalidInput
+            InternalLog.procedures.error("", error: error)
             cancel(with: error)
             finish(with: error)
             return
         }
-        
-        XcodeServerProcedureEvent.log(.integration(action: .create, id: value.id, number: value.number, bot: id))
         
         var _bot = identifiable
         _bot.integrations.insert(value)
@@ -36,6 +35,7 @@ public class CreateIntegrationProcedure: IdentifiablePersitableProcedure<Bot>, I
             case .success:
                 self?.finish()
             case .failure(let error):
+                InternalLog.procedures.error("", error: error)
                 self?.finish(with: error)
             }
         }

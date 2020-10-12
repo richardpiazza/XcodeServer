@@ -20,6 +20,7 @@ public class GetBotIntegrationsProcedure: AnyQueryableProcedure, InputProcedure,
         
         guard let id = input.value else {
             let error = XcodeServerProcedureError.invalidInput
+            InternalLog.procedures.error("", error: error)
             cancel(with: error)
             output = .ready(.failure(error))
             finish(with: error)
@@ -32,6 +33,7 @@ public class GetBotIntegrationsProcedure: AnyQueryableProcedure, InputProcedure,
                 self?.output = .ready(.success(value))
                 self?.finish()
             case .failure(let error):
+                InternalLog.procedures.error("", error: error)
                 self?.output = .ready(.failure(error))
                 self?.finish(with: error)
             }

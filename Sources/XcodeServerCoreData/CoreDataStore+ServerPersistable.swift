@@ -14,7 +14,7 @@ extension CoreDataStore: ServerPersistable {
 
                 do {
                     try context.save()
-                    let result = XcodeServer.Server(_server)
+                    let result = XcodeServer.Server(_server, depth: 1)
                     queue.async {
                         completion(.success(result))
                     }

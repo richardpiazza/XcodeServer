@@ -14,7 +14,7 @@ extension CoreDataStore: IntegrationPersistable {
                 
                 do {
                     try context.save()
-                    let result = XcodeServer.Integration(_integration)
+                    let result = XcodeServer.Integration(_integration, depth: 1)
                     queue.async {
                         completion(.success(result))
                     }

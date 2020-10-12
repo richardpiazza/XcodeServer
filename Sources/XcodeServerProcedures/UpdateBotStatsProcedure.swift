@@ -21,6 +21,7 @@ public class UpdateBotStatsProcedure: IdentifiablePersitableProcedure<Bot>, Inpu
         
         guard let value = input.value else {
             let error = XcodeServerProcedureError.invalidInput
+            InternalLog.procedures.error("", error: error)
             cancel(with: error)
             finish(with: error)
             return
@@ -34,6 +35,7 @@ public class UpdateBotStatsProcedure: IdentifiablePersitableProcedure<Bot>, Inpu
             case .success:
                 self?.finish()
             case .failure(let error):
+                InternalLog.procedures.error("", error: error)
                 self?.finish(with: error)
             }
         }

@@ -10,13 +10,12 @@ public class DeleteServerProcedure: IdentifiablePersitableProcedure<Server> {
             return
         }
         
-        XcodeServerProcedureEvent.log(.server(action: .delete, id: id))
-        
         destination.deleteServer(identifiable) { [weak self] (result) in
             switch result {
             case .success:
                 self?.finish()
             case .failure(let error):
+                InternalLog.procedures.error("", error: error)
                 self?.finish(with: error)
             }
         }

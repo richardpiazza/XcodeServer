@@ -3,11 +3,9 @@ import ProcedureKit
 
 @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 @available(swift, introduced: 5.1)
-public class SyncServerProcedure: IdentifiablePersitableProcedure<Server>, OutputProcedure {
+public class SyncServerProcedure: IdentifiablePersitableProcedure<Server> {
     
     public var source: AnyQueryable
-    public var output: Pending<ProcedureResult<[XcodeServerProcedureEvent]>> = .pending
-    private var events: [XcodeServerProcedureEvent] = []
     private let procedureQueue: ProcedureQueue = ProcedureQueue()
     
     public init(source: AnyQueryable, destination: AnyPersistable, identifiable: Server) {
@@ -44,9 +42,6 @@ extension SyncServerProcedure: ProcedureQueueDelegate {
             }
             
             let sync = procedure as! SyncServerBotsProcedure
-            if let events = sync.output.success {
-                self.events.append(contentsOf: events)
-            }
             sync.bots?.forEach({ (bot) in
                 let stats = SyncBotStatsProcedure(source: source, destination: destination, identifiable: bot)
                 let next = SyncBotIntegrationsProcedure(source: source, destination: destination, identifiable: bot)
@@ -60,9 +55,6 @@ extension SyncServerProcedure: ProcedureQueueDelegate {
             }
             
             let sync = procedure as! SyncBotIntegrationsProcedure
-            if let events = sync.output.success {
-                self.events.append(contentsOf: events)
-            }
             sync.integrations?.forEach({ (integration) in
                 let next = SyncIntegrationProcedure(source: source, destination: destination, identifiable: integration)
                 queue.addOperation(next)
@@ -74,10 +66,6 @@ extension SyncServerProcedure: ProcedureQueueDelegate {
             }
             
             let sync = procedure as! SyncIntegrationProcedure
-            if let events = sync.output.success {
-                self.events.append(contentsOf: events)
-            }
-            
             let issues = SyncIntegrationIssuesProcedure(source: source, destination: destination, identifiable: sync.identifiable)
             let commits = SyncIntegrationCommitsProcedure(source: source, destination: destination, identifiable: sync.identifiable)
 
@@ -87,7 +75,6 @@ extension SyncServerProcedure: ProcedureQueueDelegate {
         }
         
         if queue.operationCount == 0 {
-            output = .ready(.success(events))
             finish()
         }
     }

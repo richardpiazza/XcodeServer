@@ -16,6 +16,7 @@ public class GetBotsProcedure: AnyQueryableProcedure, OutputProcedure {
                 self?.output = .ready(.success(value))
                 self?.finish()
             case .failure(let error):
+                InternalLog.procedures.error("", error: error)
                 self?.output = .ready(.failure(error))
                 self?.finish(with: error)
             }

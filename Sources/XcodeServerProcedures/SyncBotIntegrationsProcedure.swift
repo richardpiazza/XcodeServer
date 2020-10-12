@@ -3,10 +3,9 @@ import ProcedureKit
 
 @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 @available(swift, introduced: 5.1)
-public class SyncBotIntegrationsProcedure: IdentifiablePersitableGroupProcedure<Bot>, OutputProcedure {
+public class SyncBotIntegrationsProcedure: IdentifiablePersitableGroupProcedure<Bot> {
     
     public let source: AnyQueryable
-    public var output: Pending<ProcedureResult<[XcodeServerProcedureEvent]>> = .pending
     public var integrations: [Integration]?
     
     public init(source: AnyQueryable, destination: AnyPersistable, identifiable: Bot) {
@@ -19,9 +18,6 @@ public class SyncBotIntegrationsProcedure: IdentifiablePersitableGroupProcedure<
         }
         let update = UpdateBotIntegrationsProcedure(destination: destination, identifiable: identifiable)
         update.injectResult(from: get)
-        update.addDidFinishBlockObserver { (proc, error) in
-            self.output = proc.output
-        }
         
         addChildren(get, update)
     }

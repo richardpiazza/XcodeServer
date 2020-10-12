@@ -20,13 +20,12 @@ public class GetIntegrationIssuesProcedure: AnyQueryableProcedure, InputProcedur
         
         guard let id = input.value else {
             let error = XcodeServerProcedureError.invalidInput
+            InternalLog.procedures.error("", error: error)
             cancel(with: error)
             output = .ready(.failure(error))
             finish(with: error)
             return
         }
-        
-        XcodeServerProcedureEvent.log(.issues(action: .retrieve, id: id))
         
         source.getIssuesForIntegration(id) { [weak self] (result) in
             switch result {
@@ -34,6 +33,7 @@ public class GetIntegrationIssuesProcedure: AnyQueryableProcedure, InputProcedur
                 self?.output = .ready(.success(value))
                 self?.finish()
             case .failure(let error):
+                InternalLog.procedures.error("", error: error)
                 self?.output = .ready(.failure(error))
                 self?.finish(with: error)
             }

@@ -21,18 +21,18 @@ public class UpdateIntegrationIssuesProcedure: IdentifiablePersitableProcedure<I
         
         guard let value = input.value else {
             let error = XcodeServerProcedureError.invalidInput
+            InternalLog.procedures.error("", error: error)
             cancel(with: error)
             finish(with: error)
             return
         }
-        
-        XcodeServerProcedureEvent.log(.issues(action: .update, id: id))
         
         destination.saveIssues(value, forIntegration: id) { [weak self] (result) in
             switch result {
             case .success:
                 self?.finish()
             case .failure(let error):
+                InternalLog.procedures.error("", error: error)
                 self?.finish(with: error)
             }
         }

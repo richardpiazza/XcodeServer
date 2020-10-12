@@ -14,7 +14,7 @@ extension CoreDataStore: BotPersistable {
                 
                 do {
                     try context.save()
-                    let result = XcodeServer.Bot(_bot)
+                    let result = XcodeServer.Bot(_bot, depth: 1)
                     queue.async {
                         completion(.success(result))
                     }

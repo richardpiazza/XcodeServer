@@ -4,10 +4,9 @@ import Foundation
 
 @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 @available(swift, introduced: 5.1)
-public class UpdateBotIntegrationsProcedure: IdentifiablePersitableProcedure<Bot>, InputProcedure, OutputProcedure {
+public class UpdateBotIntegrationsProcedure: IdentifiablePersitableProcedure<Bot>, InputProcedure {
     
     public var input: Pending<[Integration]> = .pending
-    public var output: Pending<ProcedureResult<[XcodeServerProcedureEvent]>> = .pending
     
     public init(destination: AnyPersistable, identifiable: Bot, input: [Integration]? = nil) {
         super.init(destination: destination, identifiable: identifiable)
@@ -23,8 +22,8 @@ public class UpdateBotIntegrationsProcedure: IdentifiablePersitableProcedure<Bot
         
         guard let value = input.value else {
             let error = XcodeServerProcedureError.invalidInput
+            InternalLog.procedures.error("", error: error)
             cancel(with: error)
-            output = .ready(.failure(error))
             finish(with: error)
             return
         }
@@ -38,6 +37,7 @@ public class UpdateBotIntegrationsProcedure: IdentifiablePersitableProcedure<Bot
             case .success:
                 self?.finish()
             case .failure(let error):
+                InternalLog.procedures.error("", error: error)
                 self?.finish(with: error)
             }
         }

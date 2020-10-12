@@ -5,7 +5,6 @@ import XcodeServerAPI
 import XcodeServerProcedures
 
 public typealias ManagerErrorCompletion = (_ error: Swift.Error?) -> Void
-public typealias ManagerEventsCompletion = (_ events: [XcodeServerProcedureEvent]) -> Void
 public typealias ManagerCredentials = (username: String, password: String)
 
 public protocol ManagerAuthorizationDelegate {
@@ -475,21 +474,19 @@ public class Manager {
         procedureQueue.addOperation(group)
     }
     
-    public func syncOutOfDateServers(since date: Date, queue: DispatchQueue = .main, completion: @escaping ManagerEventsCompletion) {
-        var events: [XcodeServerProcedureEvent] = []
-        
+    public func syncOutOfDateServers(since date: Date, queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
         store.getServers { (result) in
             switch result {
             case .failure(let error):
                 print(error)
                 queue.async {
-                    completion(events)
+                    completion(error)
                 }
             case .success(let servers):
                 let outOfDate = servers.filter({ $0.modified < date })
                 guard outOfDate.isEmpty == false else {
                     queue.async {
-                        completion(events)
+                        completion(nil)
                     }
                     return
                 }
@@ -507,14 +504,9 @@ public class Manager {
                     let sync = SyncServerProcedure(source: client, destination: self.store, identifiable: server)
                     sync.addDidFinishBlockObserver() { (proc, error) in
                         completeCount += 1
-                        
-                        if let output = proc.output.success {
-                            events.append(contentsOf: output)
-                        }
-                        
                         if syncCount == completeCount {
                             queue.async {
-                                completion(events)
+                                completion(nil)
                             }
                         }
                     }

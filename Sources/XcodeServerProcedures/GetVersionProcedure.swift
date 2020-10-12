@@ -20,6 +20,7 @@ public class GetVersionProcedure: AnyQueryableProcedure, InputProcedure, OutputP
         
         guard let id = input.value else {
             let error = XcodeServerProcedureError.invalidInput
+            InternalLog.procedures.error("", error: error)
             cancel(with: error)
             output = .ready(.failure(error))
             finish(with: error)
@@ -32,6 +33,7 @@ public class GetVersionProcedure: AnyQueryableProcedure, InputProcedure, OutputP
                 self?.output = .ready(.success(value.version))
                 self?.finish()
             case .failure(let error):
+                InternalLog.procedures.error("", error: error)
                 self?.output = .ready(.failure(error))
                 self?.finish(with: error)
             }
