@@ -21,7 +21,7 @@ extension CoreDataStore: SourceControlQueryable {
         let queue = queue ?? returnQueue
         internalQueue.async {
             if let repository = self.persistentContainer.viewContext.repository(withIdentifier: id) {
-                let result = SourceControl.Remote(repository, depth: 1)
+                let result = SourceControl.Remote(repository)
                 queue.async {
                     completion(.success(result))
                 }

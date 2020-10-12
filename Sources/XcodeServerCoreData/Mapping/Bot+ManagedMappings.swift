@@ -3,7 +3,7 @@ import Foundation
 #if canImport(CoreData)
 
 public extension XcodeServer.Bot {
-    init(_ bot: XcodeServerCoreData.Bot, depth: Int = 0) {
+    init(_ bot: XcodeServerCoreData.Bot) {
         InternalLog.coreData.debug("Mapping XcodeServerCoreData.Bot [\(bot.identifier)] to XcodeServer.Bot")
         self.init(id: bot.identifier)
         modified = bot.lastUpdate ?? Date()
@@ -18,13 +18,8 @@ public extension XcodeServer.Bot {
         if let stats = bot.stats {
             self.stats = Stats(stats)
         }
-        
-        guard depth > 0 else {
-            return
-        }
-        
         if let integrations = bot.integrations {
-            self.integrations = Set(integrations.map { XcodeServer.Integration($0, depth: depth - 1) })
+            self.integrations = Set(integrations.map { XcodeServer.Integration($0) })
         }
     }
 }

@@ -3,7 +3,7 @@ import Foundation
 #if canImport(CoreData)
 
 public extension SourceControl.Commit {
-    init(_ commit: XcodeServerCoreData.Commit, depth: Int = 0) {
+    init(_ commit: XcodeServerCoreData.Commit) {
         InternalLog.coreData.debug("Mapping XcodeServerCoreData.Commit [\(commit.commitHash)] to XcodeServer.SourceControl.Commit")
         self.init(id: commit.commitHash)
         message = commit.message ?? ""
@@ -11,15 +11,9 @@ public extension SourceControl.Commit {
         if let contributor = commit.commitContributor {
             self.contributor = SourceControl.Contributor(contributor)
         }
-        
-        guard depth > 0 else {
-            return
-        }
-        
         if let changes = commit.commitChanges {
             self.changes = changes.map({ SourceControl.Change($0) })
         }
-        
         if let blueprints = commit.revisionBlueprints, !blueprints.isEmpty {
             integrationId = blueprints.first?.integration?.identifier
         }
@@ -46,19 +40,14 @@ public extension SourceControl.Change {
 }
 
 public extension SourceControl.Remote {
-    init(_ repository: XcodeServerCoreData.Repository, depth: Int = 0) {
+    init(_ repository: XcodeServerCoreData.Repository) {
         InternalLog.coreData.debug("Mapping XcodeServerCoreData.Repository [\(repository.identifier)] to XcodeServer.SourceControl.Remote")
         self.init(id: repository.identifier)
         system = repository.system ?? ""
         url = repository.url ?? ""
         locations = Set([SourceControl.Location(repository)])
-        
-        guard depth > 0 else {
-            return
-        }
-        
         if let commits = repository.commits {
-            self.commits = Set(commits.map { SourceControl.Commit($0, depth: depth - 1) })
+            self.commits = Set(commits.map { SourceControl.Commit($0) })
         }
     }
 }

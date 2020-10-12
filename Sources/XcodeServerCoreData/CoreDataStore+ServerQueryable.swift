@@ -21,7 +21,7 @@ extension CoreDataStore: ServerQueryable {
         let queue = queue ?? returnQueue
         internalQueue.async {
             if let server = self.persistentContainer.viewContext.server(withFQDN: id) {
-                let result = XcodeServer.Server(server, depth: 1)
+                let result = XcodeServer.Server(server)
                 queue.async {
                     completion(.success(result))
                 }

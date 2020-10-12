@@ -35,7 +35,7 @@ extension CoreDataStore: BotQueryable {
         let queue = queue ?? returnQueue
         internalQueue.async {
             if let bot = self.persistentContainer.viewContext.bot(withIdentifier: id) {
-                let result = XcodeServer.Bot(bot, depth: 1)
+                let result = XcodeServer.Bot(bot)
                 queue.async {
                     completion(.success(result))
                 }

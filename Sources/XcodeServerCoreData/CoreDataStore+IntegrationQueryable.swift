@@ -51,7 +51,7 @@ extension CoreDataStore: IntegrationQueryable {
                 return
             }
             
-            let result = XcodeServer.Integration(integration, depth: 1)
+            let result = XcodeServer.Integration(integration)
             
             queue.async {
                 completion(.success(result))
@@ -78,7 +78,7 @@ extension CoreDataStore: IntegrationQueryable {
             }
             
             let commits = blueprints.compactMap { $0.commit }
-            let result = commits.map { SourceControl.Commit($0, depth: 1) }
+            let result = commits.map { SourceControl.Commit($0) }
             queue.async {
                 completion(.success(result))
             }

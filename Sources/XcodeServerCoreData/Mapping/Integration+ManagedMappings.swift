@@ -2,7 +2,7 @@ import XcodeServer
 #if canImport(CoreData)
 
 public extension XcodeServer.Integration {
-    init(_ integration: XcodeServerCoreData.Integration, depth: Int = 0) {
+    init(_ integration: XcodeServerCoreData.Integration) {
         InternalLog.coreData.debug("Mapping XcodeServerCoreData.Integration [\(integration.identifier)] to XcodeServer.Integration")
         self.init(id: integration.identifier)
         number = Int(integration.number)
@@ -22,11 +22,6 @@ public extension XcodeServer.Integration {
         if let summary = integration.buildResultSummary {
             buildSummary = XcodeServer.Integration.BuildSummary(summary)
         }
-        
-        guard depth > 0 else {
-            return
-        }
-        
         if let assets = integration.assets {
             self.assets = AssetCatalog(assets)
         }
@@ -34,7 +29,7 @@ public extension XcodeServer.Integration {
             self.issues = IssueCatalog(issues)
         }
         
-        commits = Set(integration.commits.map({ SourceControl.Commit($0, depth: depth - 1) }))
+        commits = Set(integration.commits.map({ SourceControl.Commit($0) }))
     }
 }
 

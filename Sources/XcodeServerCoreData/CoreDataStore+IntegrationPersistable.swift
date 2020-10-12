@@ -12,7 +12,7 @@ extension CoreDataStore: IntegrationPersistable {
                 let _integration = context.integration(withIdentifier: integration.id) ?? XcodeServerCoreData.Integration(context: context)
                 _integration.update(integration, context: context)
                 
-                let result = XcodeServer.Integration(_integration, depth: 1)
+                let result = XcodeServer.Integration(_integration)
                 
                 do {
                     try context.save()

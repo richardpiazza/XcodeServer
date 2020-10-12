@@ -87,7 +87,7 @@ final class IntegrationWriteAndUpdateTests: XCTestCase {
         let _bot = try XCTUnwrap(updatedBot)
         let _integration = try XCTUnwrap(_bot.integrations.first(where: { $0.id == .dynumite24 }))
         try verifyDynumite24(_integration)
-//        try verifyDynumiteAssets(_integration)
+        try verifyDynumiteAssets(_integration)
     }
     
     func testIntegrationCommitsAndIssues() throws {
