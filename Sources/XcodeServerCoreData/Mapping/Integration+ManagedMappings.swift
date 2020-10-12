@@ -25,7 +25,6 @@ public extension XcodeServer.Integration {
         }
         var _commits: Set<SourceControl.Commit> = []
         for commit in integration.commits {
-            #warning("🦠 Mapping Issue - Random String")
             let _commit = SourceControl.Commit(commit)
             _commits.insert(_commit)
         }

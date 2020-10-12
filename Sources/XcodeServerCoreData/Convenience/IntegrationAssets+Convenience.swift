@@ -68,7 +68,8 @@ public extension IntegrationAssets {
             break
         }
         
-        triggerAssets?.removeAll()
+        triggerAssets?.forEach({ context.delete($0) })
+        
         catalog.triggerAssets.forEach({
             let asset = Asset(context: context)
             asset.update($0)

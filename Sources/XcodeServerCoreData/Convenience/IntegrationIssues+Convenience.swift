@@ -4,20 +4,20 @@ import CoreData
 
 public extension XcodeServerCoreData.IntegrationIssues {
     func update(_ catalog: XcodeServer.Integration.IssueCatalog, context: NSManagedObjectContext) {
-        buildServiceErrors?.removeAll()
-        buildServiceWarnings?.removeAll()
-        freshAnalyzerWarnings?.removeAll()
-        freshErrors?.removeAll()
-        freshTestFailures?.removeAll()
-        freshWarnings?.removeAll()
-        resolvedAnalyzerWarnings?.removeAll()
-        resolvedErrors?.removeAll()
-        resolvedTestFailures?.removeAll()
-        resolvedWarnings?.removeAll()
-        unresolvedAnalyzerWarnings?.removeAll()
-        unresolvedErrors?.removeAll()
-        unresolvedTestFailures?.removeAll()
-        unresolvedWarnings?.removeAll()
+        buildServiceErrors?.forEach({ context.delete($0) })
+        buildServiceWarnings?.forEach({ context.delete($0) })
+        freshAnalyzerWarnings?.forEach({ context.delete($0) })
+        freshErrors?.forEach({ context.delete($0) })
+        freshTestFailures?.forEach({ context.delete($0) })
+        freshWarnings?.forEach({ context.delete($0) })
+        resolvedAnalyzerWarnings?.forEach({ context.delete($0) })
+        resolvedErrors?.forEach({ context.delete($0) })
+        resolvedTestFailures?.forEach({ context.delete($0) })
+        resolvedWarnings?.forEach({ context.delete($0) })
+        unresolvedAnalyzerWarnings?.forEach({ context.delete($0) })
+        unresolvedErrors?.forEach({ context.delete($0) })
+        unresolvedTestFailures?.forEach({ context.delete($0) })
+        unresolvedWarnings?.forEach({ context.delete($0) })
         
         catalog.buildServiceErrors.forEach({
             let issue = Issue(context: context)
@@ -103,77 +103,5 @@ public extension XcodeServerCoreData.IntegrationIssues {
             issue.inverseUnresolvedTestFailures = self
         })
     }
-    
-//    func deleteAllIssues(context: NSManagedObjectContext) {
-//        buildServiceErrors?.forEach({
-//            $0.inverseBuildServiceErrors = nil
-//            context.delete($0)
-//        })
-//
-//        buildServiceWarnings?.forEach({
-//            $0.inverseBuildServiceWarnings = nil
-//            context.delete($0)
-//        })
-//
-//        freshAnalyzerWarnings?.forEach({
-//            $0.inverseFreshAnalyzerWarnings = nil
-//            context.delete($0)
-//        })
-//
-//        freshErrors?.forEach({
-//            $0.inverseFreshErrors = nil
-//            context.delete($0)
-//        })
-//
-//        freshTestFailures?.forEach({
-//            $0.inverseFreshTestFailures = nil
-//            context.delete($0)
-//        })
-//
-//        freshWarnings?.forEach({
-//            $0.inverseFreshWarnings = nil
-//            context.delete($0)
-//        })
-//
-//        resolvedAnalyzerWarnings?.forEach({
-//            $0.inverseResolvedAnalyzerWarnings = nil
-//            context.delete($0)
-//        })
-//
-//        resolvedErrors?.forEach({
-//            $0.inverseResolvedErrors = nil
-//            context.delete($0)
-//        })
-//
-//        resolvedTestFailures?.forEach({
-//            $0.inverseResolvedTestFailures = nil
-//            context.delete($0)
-//        })
-//
-//        resolvedWarnings?.forEach({
-//            $0.inverseResolvedWarnings = nil
-//            context.delete($0)
-//        })
-//
-//        unresolvedAnalyzerWarnings?.forEach({
-//            $0.inverseUnresolvedAnalyzerWarnings = nil
-//            context.delete($0)
-//        })
-//
-//        unresolvedErrors?.forEach({
-//            $0.inverseUnresolvedErrors = nil
-//            context.delete($0)
-//        })
-//
-//        unresolvedTestFailures?.forEach({
-//            $0.inverseUnresolvedTestFailures = nil
-//            context.delete($0)
-//        })
-//
-//        unresolvedWarnings?.forEach({
-//            $0.inverseUnresolvedWarnings = nil
-//            context.delete($0)
-//        })
-//    }
 }
 #endif

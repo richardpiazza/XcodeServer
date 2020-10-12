@@ -10,8 +10,10 @@ public extension SourceControl.Commit {
         if let contributor = commit.commitContributor {
             self.contributor = SourceControl.Contributor(contributor)
         }
-        if let changes = commit.commitChanges {
-            #warning("🦠 Constant Bugs Here?!")
+        
+        #warning("🦠 Constant Bugs Here?!")
+        
+//        if let changes = commit.commitChanges {
 //            var _changes: [SourceControl.Change] = []
 //            for change in changes {
 //                if change is NSString {
@@ -22,11 +24,11 @@ public extension SourceControl.Commit {
 //                }
 //            }
 //            self.changes = _changes
-        }
+//        }
         
-        if let blueprints = commit.revisionBlueprints, !blueprints.isEmpty {
-            integrationId = blueprints.first?.integration?.identifier
-        }
+//        if let blueprints = commit.revisionBlueprints, !blueprints.isEmpty {
+//            integrationId = blueprints.first?.integration?.identifier
+//        }
     }
 }
 
