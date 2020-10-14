@@ -147,6 +147,16 @@ public extension XcodeServerCoreData.Integration {
                 repository.update(blueprint, context: context)
             }
         }
+        
+        if !integration.shouldRetrieveAssets {
+            hasRetrievedAssets = true
+        }
+        if !integration.shouldRetrieveIssues {
+            hasRetrievedIssues = true
+        }
+        if !integration.shouldRetrieveCommits {
+            hasRetrievedCommits = true
+        }
     }
     
     func update(_ commits: Set<SourceControl.Commit>, context: NSManagedObjectContext) {

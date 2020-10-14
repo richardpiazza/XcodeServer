@@ -30,6 +30,10 @@ public extension XcodeServer.Integration {
         }
         
         commits = Set(integration.commits.map({ SourceControl.Commit($0) }))
+        
+        shouldRetrieveAssets = !integration.hasRetrievedAssets
+        shouldRetrieveIssues = !integration.hasRetrievedIssues
+        shouldRetrieveCommits = !integration.hasRetrievedCommits
     }
 }
 
