@@ -54,6 +54,25 @@ public class Integration: NSManagedObject {
     @objc(removeTestedDevices:)
     @NSManaged public func removeFromTestedDevices(_ values: Set<Device>)
     
+    public override func awakeFromInsert() {
+        super.awakeFromInsert()
+        setPrimitiveValue(false, forKey: #keyPath(hasRetrievedAssets))
+        setPrimitiveValue(false, forKey: #keyPath(hasRetrievedCommits))
+        setPrimitiveValue(false, forKey: #keyPath(hasRetrievedIssues))
+    }
+    
+    public override func awakeFromFetch() {
+        super.awakeFromFetch()
+        if primitiveValue(forKey: #keyPath(hasRetrievedAssets)) == nil {
+            setPrimitiveValue(false, forKey: #keyPath(hasRetrievedAssets))
+        }
+        if primitiveValue(forKey: #keyPath(hasRetrievedIssues)) == nil {
+            setPrimitiveValue(false, forKey: #keyPath(hasRetrievedCommits))
+        }
+        if primitiveValue(forKey: #keyPath(hasRetrievedIssues)) == nil {
+            setPrimitiveValue(false, forKey: #keyPath(hasRetrievedIssues))
+        }
+    }
 }
 
 #endif
