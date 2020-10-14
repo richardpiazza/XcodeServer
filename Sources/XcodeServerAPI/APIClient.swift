@@ -398,9 +398,11 @@ public extension APIClient {
 
 // MARK: - Assets
 public extension APIClient {
-    
+    /// Retrieve the _post-integration_ asset archive.
+    ///
     /// Requests the '`/integrations/{id}/assets`' endpoint from the Xcode Server API.
-    func assets(forIntegrationWithIdentifier identifier: String, completion: @escaping (Result<(String, Data), Error>) -> Void) {
+    /// This `.tar` file will contain all of the integration logs, test summaries, and IPA.
+    func archive(forIntegrationWithIdentifier identifier: String, completion: @escaping (Result<(String, Data), Error>) -> Void) {
         get("integrations/\(identifier)/assets") { (statusCode, headers, data: Data?, error) in
             guard statusCode != .unauthorized else {
                 completion(.failure(APIClient.Error.authorization))
@@ -424,6 +426,12 @@ public extension APIClient {
             
             completion(.success((filename, result)))
         }
+    }
+    
+    /// Requests the '`/integrations/{id}/assets`' endpoint from the Xcode Server API.
+    @available(*, deprecated, renamed: "archive(forIntegrationWithIdentifier:completion:)")
+    func assets(forIntegrationWithIdentifier identifier: String, completion: @escaping (Result<(String, Data), Error>) -> Void) {
+        archive(forIntegrationWithIdentifier: identifier, completion: completion)
     }
 }
 

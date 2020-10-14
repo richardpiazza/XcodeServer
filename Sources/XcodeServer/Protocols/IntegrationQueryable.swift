@@ -4,6 +4,7 @@ public protocol IntegrationQueryable {
     func getIntegrations(queue: DispatchQueue?, completion: @escaping IntegrationsResultHandler)
     func getIntegrations(forBot id: Bot.ID, queue: DispatchQueue?, completion: @escaping IntegrationsResultHandler)
     func getIntegration(_ id: Integration.ID, queue: DispatchQueue?, completion: @escaping IntegrationResultHandler)
+    func getArchiveForIntegration(_ id: Integration.ID, queue: DispatchQueue?, completion: @escaping DataResultHandler)
     func getCommitsForIntegration(_ id: Integration.ID, queue: DispatchQueue?, completion: @escaping CommitsResultHandler)
     func getIssuesForIntegration(_ id: Integration.ID, queue: DispatchQueue?, completion: @escaping IssueCatalogResultHandler)
 }
@@ -20,6 +21,10 @@ public extension IntegrationQueryable {
     
     func getIntegration(_ id: Integration.ID, completion: @escaping IntegrationResultHandler) {
         getIntegration(id, queue: nil, completion: completion)
+    }
+    
+    func getArchiveForIntegration(_ id: Integration.ID, completion: @escaping DataResultHandler) {
+        getArchiveForIntegration(id, queue: nil, completion: completion)
     }
     
     func getCommitsForIntegration(_ id: Integration.ID, completion: @escaping CommitsResultHandler) {

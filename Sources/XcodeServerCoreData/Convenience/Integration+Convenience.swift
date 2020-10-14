@@ -148,7 +148,7 @@ public extension XcodeServerCoreData.Integration {
             }
         }
         
-        if !integration.shouldRetrieveAssets {
+        if !integration.shouldRetrieveArchive {
             hasRetrievedAssets = true
         }
         if !integration.shouldRetrieveIssues {

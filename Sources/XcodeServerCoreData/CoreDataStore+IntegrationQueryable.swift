@@ -59,6 +59,14 @@ extension CoreDataStore: IntegrationQueryable {
         }
     }
     
+    public func getArchiveForIntegration(_ id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping DataResultHandler) {
+        InternalLog.coreData.info("Retrieving ARCHIVE for Integration [\(id)]")
+        let queue = queue ?? returnQueue
+        queue.async {
+            completion(.failure(.message("Not Implemented")))
+        }
+    }
+    
     public func getCommitsForIntegration(_ id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping CommitsResultHandler) {
         InternalLog.coreData.info("Retrieving COMMITS for Integration [\(id)]")
         let queue = queue ?? returnQueue

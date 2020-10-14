@@ -62,6 +62,25 @@ extension APIClient: IntegrationQueryable {
         }
     }
     
+    public func getArchiveForIntegration(_ id: Integration.ID, queue: DispatchQueue?, completion: @escaping DataResultHandler) {
+        InternalLog.apiClient.info("Retrieving ARCHIVE for Integration [\(id)]")
+        let queue = queue ?? returnQueue
+        internalQueue.async {
+            self.archive(forIntegrationWithIdentifier: id) { (result) in
+                switch result {
+                case .failure(let error):
+                    queue.async {
+                        completion(.failure(.error(error)))
+                    }
+                case .success(let value):
+                    queue.async {
+                        completion(.success(value.1))
+                    }
+                }
+            }
+        }
+    }
+    
     public func getCommitsForIntegration(_ id: Integration.ID, queue: DispatchQueue?, completion: @escaping CommitsResultHandler) {
         InternalLog.apiClient.info("Retrieving COMMITS for Integration [\(id)]")
         let queue = queue ?? returnQueue

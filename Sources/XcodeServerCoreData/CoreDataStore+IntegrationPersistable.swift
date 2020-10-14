@@ -28,39 +28,11 @@ extension CoreDataStore: IntegrationPersistable {
         }
     }
     
-    public func saveAssets(_ assets: XcodeServer.Integration.AssetCatalog, forIntegration id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping AssetCatalogResultHandler) {
-        InternalLog.coreData.info("Saving ASSETS for Integration [\(id)]")
+    public func saveArchive(_ archive: Data, forIntegration id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping DataResultHandler) {
+        InternalLog.coreData.info("Saving ARCHIVE for Integration [\(id)]")
         let queue = queue ?? returnQueue
-        internalQueue.async {
-            self.persistentContainer.performBackgroundTask { (context) in
-                guard let _integration = context.integration(withIdentifier: id) else {
-                    queue.async {
-                        completion(.failure(.noIntegration(id)))
-                    }
-                    return
-                }
-                
-                _integration.assets?.update(assets, context: context)
-                guard let _assets = _integration.assets else {
-                    queue.async {
-                        completion(.failure(.message("No 'Assets' for integration '\(id)'.")))
-                    }
-                    return
-                }
-                
-                let result = XcodeServer.Integration.AssetCatalog(_assets)
-                
-                do {
-                    try context.save()
-                    queue.async {
-                        completion(.success(result))
-                    }
-                } catch {
-                    queue.async {
-                        completion(.failure(.error(error)))
-                    }
-                }
-            }
+        queue.async {
+            completion(.failure(.message("Not Implemented")))
         }
     }
     
@@ -75,6 +47,8 @@ extension CoreDataStore: IntegrationPersistable {
                     }
                     return
                 }
+                
+                managedIntegration.hasRetrievedCommits = true
                 
                 commits.forEach { (commit) in
                     guard let remoteId = commit.remoteId else {
@@ -112,15 +86,17 @@ extension CoreDataStore: IntegrationPersistable {
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in
-                guard let _integration = context.integration(withIdentifier: id) else {
+                guard let managedIntegration = context.integration(withIdentifier: id) else {
                     queue.async {
                         completion(.failure(.noIntegration(id)))
                     }
                     return
                 }
                 
-                _integration.issues?.update(issues, context: context)
-                guard let _issues = _integration.issues else {
+                managedIntegration.hasRetrievedIssues = true
+                managedIntegration.issues?.update(issues, context: context)
+                
+                guard let _issues = managedIntegration.issues else {
                     queue.async {
                         completion(.failure(.message("No 'Issues' for integration '\(id)'.")))
                     }

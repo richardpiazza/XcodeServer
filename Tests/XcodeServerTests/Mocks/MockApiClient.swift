@@ -103,7 +103,10 @@ class MockApiClient: AnyQueryable {
     }
     
     func getBots(forServer id: Server.ID, queue: DispatchQueue?, completion: @escaping BotsResultHandler) {
-        let _ = queue ?? returnQueue
+        let queue = queue ?? returnQueue
+        queue.async {
+            completion(.failure(.message("Not Implemented")))
+        }
     }
     
     func getBot(_ id: Bot.ID, queue: DispatchQueue?, completion: @escaping BotResultHandler) {
@@ -171,11 +174,17 @@ class MockApiClient: AnyQueryable {
     // MARK: - IntegrationQueryable
     
     func getIntegrations(queue: DispatchQueue?, completion: @escaping IntegrationsResultHandler) {
-        let _ = queue ?? returnQueue
+        let queue = queue ?? returnQueue
+        queue.async {
+            completion(.failure(.message("Not Implemented")))
+        }
     }
     
     func getIntegrations(forBot id: Bot.ID, queue: DispatchQueue?, completion: @escaping IntegrationsResultHandler) {
-        let _ = queue ?? returnQueue
+        let queue = queue ?? returnQueue
+        queue.async {
+            completion(.failure(.message("Not Implemented")))
+        }
     }
     
     func getIntegration(_ id: Integration.ID, queue: DispatchQueue?, completion: @escaping IntegrationResultHandler) {
@@ -209,12 +218,25 @@ class MockApiClient: AnyQueryable {
         #endif
     }
     
+    func getArchiveForIntegration(_ id: Integration.ID, queue: DispatchQueue?, completion: @escaping DataResultHandler) {
+        let queue = queue ?? returnQueue
+        queue.async {
+            completion(.failure(.message("Not Implemented")))
+        }
+    }
+    
     func getCommitsForIntegration(_ id: Integration.ID, queue: DispatchQueue?, completion: @escaping CommitsResultHandler) {
-        let _ = queue ?? returnQueue
+        let queue = queue ?? returnQueue
+        queue.async {
+            completion(.failure(.message("Not Implemented")))
+        }
     }
     
     func getIssuesForIntegration(_ id: Integration.ID, queue: DispatchQueue?, completion: @escaping IssueCatalogResultHandler) {
-        let _ = queue ?? returnQueue
+        let queue = queue ?? returnQueue
+        queue.async {
+            completion(.failure(.message("Not Implemented")))
+        }
     }
     
     // MARK: - SourceControlQueryable

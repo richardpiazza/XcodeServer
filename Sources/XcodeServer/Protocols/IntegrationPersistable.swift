@@ -1,10 +1,11 @@
 import Dispatch
+import Foundation
 
 public protocol IntegrationPersistable {
     func saveIntegration(_ integration: Integration, queue: DispatchQueue?, completion: @escaping IntegrationResultHandler)
     func deleteIntegration(_ integration: Integration, queue: DispatchQueue?, completion: @escaping VoidResultHandler)
     
-    func saveAssets(_ assets: Integration.AssetCatalog, forIntegration id: Integration.ID, queue: DispatchQueue?, completion: @escaping AssetCatalogResultHandler)
+    func saveArchive(_ archive: Data, forIntegration id: Integration.ID, queue: DispatchQueue?, completion: @escaping DataResultHandler)
     func saveCommits(_ commits: [SourceControl.Commit], forIntegration id: Integration.ID, queue: DispatchQueue?, completion: @escaping CommitsResultHandler)
     func saveIssues(_ issues: Integration.IssueCatalog, forIntegration id: Integration.ID, queue: DispatchQueue?, completion: @escaping IssueCatalogResultHandler)
 }
@@ -19,8 +20,8 @@ public extension IntegrationPersistable {
         deleteIntegration(integration, queue: nil, completion: completion)
     }
     
-    func saveAssets(_ assets: Integration.AssetCatalog, forIntegration id: Integration.ID, completion: @escaping AssetCatalogResultHandler) {
-        saveAssets(assets, forIntegration: id, queue: nil, completion: completion)
+    func saveArchive(_ archive: Data, forIntegration id: Integration.ID, completion: @escaping DataResultHandler) {
+        saveArchive(archive, forIntegration: id, queue: nil, completion: completion)
     }
     
     func saveCommits(_ commits: [SourceControl.Commit], forIntegration id: Integration.ID, completion: @escaping CommitsResultHandler) {

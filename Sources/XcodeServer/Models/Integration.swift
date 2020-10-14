@@ -38,10 +38,10 @@ public struct Integration: Hashable, Identifiable {
     
     // MARK: - Framework Management
     
-    /// Indicates wether _Assets_ have been previously retrieved for this `Integration`.
+    /// Indicates wether the _.xcarchive_ has been previously retrieved for this `Integration`.
     ///
-    /// Assets only become available after the integration completes.
-    public var shouldRetrieveAssets: Bool = true
+    /// The archive only become available after the integration completes.
+    public var shouldRetrieveArchive: Bool = true
     /// Indicates wether _Commits_ have been previously retrieved for this `Integration`.
     ///
     /// Commits could _not_ be available for the integration, and if detected, this flag should indicate false.

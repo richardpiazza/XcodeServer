@@ -22,6 +22,8 @@ final class Integrations: ParsableCommand, Route {
         case commits
         case issues
         case coverage
+        case archive
+        @available(*, deprecated, renamed: "archive")
         case assets
     }
     
@@ -80,8 +82,8 @@ final class Integrations: ParsableCommand, Route {
                 
                 Self.exit()
             }
-        case .some(.assets):
-            client.assets(forIntegrationWithIdentifier: id) { (result) in
+        case .some(.assets), .some(.archive):
+            client.archive(forIntegrationWithIdentifier: id) { (result) in
                 switch result {
                 case .success(let asset):
                     print("Filename: \(asset.0)")
