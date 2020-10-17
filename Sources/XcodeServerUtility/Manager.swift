@@ -63,8 +63,10 @@ public class Manager {
     /// - parameter completion: Block result handler to execute upon completion of operations.
     public func ping(server: Server.ID, queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
         guard let client = try? self.client(forServer: server) else {
+            let error = Error.invalidClient(server)
+            InternalLog.utility.error("Ping Failed", error: error)
             queue.async {
-                completion(Error.invalidClient(server))
+                completion(error)
             }
             return
         }
@@ -76,6 +78,7 @@ public class Manager {
                     completion(nil)
                 }
             case .failure(let error):
+                InternalLog.utility.error("Ping Failed", error: error)
                 queue.async {
                     completion(error)
                 }
@@ -108,8 +111,10 @@ public class Manager {
     
     public func syncServer(withId id: Server.ID, queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
         guard let client = try? self.client(forServer: id) else {
+            let error = Error.invalidClient(id)
+            InternalLog.utility.error("Sync Server Failed", error: error)
             queue.async {
-                completion(Error.invalidClient(id))
+                completion(error)
             }
             return
         }
@@ -117,6 +122,7 @@ public class Manager {
         let _server = Server(id: id)
         let sync = SyncServerProcedure(source: client, destination: store, identifiable: _server)
         sync.addDidFinishBlockObserver { (proc, error) in
+            InternalLog.utility.error("", error: error)
             queue.async {
                 completion(error)
             }
@@ -129,8 +135,10 @@ public class Manager {
     /// Updates the supplied `Server` entity with the response.
     public func syncVersionsForServer(withId id: Server.ID, queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
         guard let client = try? self.client(forServer: id) else {
+            let error = Error.invalidClient(id)
+            InternalLog.utility.error("Sync Server Versions Failed", error: error)
             queue.async {
-                completion(Error.invalidClient(id))
+                completion(error)
             }
             return
         }
@@ -152,8 +160,10 @@ public class Manager {
     /// Updates the supplied `Server` entity with the response.
     public func syncBots(forServer server: Server, queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
         guard let client = try? self.client(forServer: server.id) else {
+            let error = Error.invalidClient(server.id)
+            InternalLog.utility.error("Sync Bots Failed", error: error)
             queue.async {
-                completion(Error.invalidClient(server.id))
+                completion(error)
             }
             return
         }
@@ -174,15 +184,19 @@ public class Manager {
     /// Updates the supplied `Bot` entity with the response.
     public func syncBot(bot: Bot, queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
         guard let id = bot.serverId else {
+            let error = Error.noProvidedServerId
+            InternalLog.utility.error("Sync Bot Failed", error: error)
             queue.async {
-                completion(Error.noProvidedServerId)
+                completion(error)
             }
             return
         }
         
         guard let client = try? self.client(forServer: id) else {
+            let error = Error.invalidClient(id)
+            InternalLog.utility.error("Sync Bot Failed", error: error)
             queue.async {
-                completion(Error.invalidClient(id))
+                completion(error)
             }
             return
         }
@@ -203,15 +217,19 @@ public class Manager {
     /// Updates the supplied `Bot` entity with the response.
     public func syncStats(forBot bot: Bot, queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
         guard let id = bot.serverId else {
+            let error = Error.noProvidedServerId
+            InternalLog.utility.error("Sync Bot Stats Failed", error: error)
             queue.async {
-                completion(Error.noProvidedServerId)
+                completion(error)
             }
             return
         }
         
         guard let client = try? self.client(forServer: id) else {
+            let error = Error.invalidClient(id)
+            InternalLog.utility.error("Sync Bot Stats Failed", error: error)
             queue.async {
-                completion(Error.invalidClient(id))
+                completion(error)
             }
             return
         }
@@ -232,15 +250,19 @@ public class Manager {
     /// Updates the supplied `Bot` entity with the response.
     public func triggerIntegration(forBot bot: Bot, queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
         guard let id = bot.serverId else {
+            let error = Error.noProvidedServerId
+            InternalLog.utility.error("Trigger Integration Failed", error: error)
             queue.async {
-                completion(Error.noProvidedServerId)
+                completion(error)
             }
             return
         }
         
         guard let client = try? self.client(forServer: id) else {
+            let error = Error.invalidClient(id)
+            InternalLog.utility.error("Trigger Integration Failed", error: error)
             queue.async {
-                completion(Error.invalidClient(id))
+                completion(error)
             }
             return
         }
@@ -259,15 +281,19 @@ public class Manager {
     /// Updates the supplied `Bot` entity with the response.
     public func syncIntegrations(forBot bot: Bot, queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
         guard let id = bot.serverId else {
+            let error = Error.noProvidedServerId
+            InternalLog.utility.error("Sync Integrations Failed", error: error)
             queue.async {
-                completion(Error.noProvidedServerId)
+                completion(error)
             }
             return
         }
         
         guard let client = try? self.client(forServer: id) else {
+            let error = Error.invalidClient(id)
+            InternalLog.utility.error("Sync Integrations Failed", error: error)
             queue.async {
-                completion(Error.invalidClient(id))
+                completion(error)
             }
             return
         }
@@ -288,15 +314,19 @@ public class Manager {
     /// Updates the supplied `Integration` entity with the response.
     public func syncIntegration(integration: Integration, queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
         guard let serverId = integration.serverId else {
+            let error = Error.noProvidedServerId
+            InternalLog.utility.error("Sync Integration Failed", error: error)
             queue.async {
-                completion(Error.noProvidedServerId)
+                completion(error)
             }
             return
         }
         
         guard let client = try? self.client(forServer: serverId) else {
+            let error = Error.invalidClient(serverId)
+            InternalLog.utility.error("Sync Integration Failed", error: error)
             queue.async {
-                completion(Error.invalidClient(serverId))
+                completion(error)
             }
             return
         }
@@ -317,15 +347,19 @@ public class Manager {
     /// Updates the supplied `Integration` entity with the response.
     public func syncCommits(forIntegration integration: Integration, queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
         guard let serverId = integration.serverId else {
+            let error = Error.noProvidedServerId
+            InternalLog.utility.error("Sync Integration Commits Failed", error: error)
             queue.async {
-                completion(Error.noProvidedServerId)
+                completion(error)
             }
             return
         }
         
         guard let client = try? self.client(forServer: serverId) else {
+            let error = Error.invalidClient(serverId)
+            InternalLog.utility.error("Sync Integration Commits Failed", error: error)
             queue.async {
-                completion(Error.invalidClient(serverId))
+                completion(error)
             }
             return
         }
@@ -346,15 +380,19 @@ public class Manager {
     /// Updates the supplied `Integration` entity with the response.
     public func syncIssues(forIntegration integration: Integration, queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
         guard let serverId = integration.serverId else {
+            let error = Error.noProvidedServerId
+            InternalLog.utility.error("Sync Integration Issues Failed", error: error)
             queue.async {
-                completion(Error.noProvidedServerId)
+                completion(error)
             }
             return
         }
         
         guard let client = try? self.client(forServer: serverId) else {
+            let error = Error.invalidClient(serverId)
+            InternalLog.utility.error("Sync Integration Issues Failed", error: error)
             queue.async {
-                completion(Error.invalidClient(serverId))
+                completion(error)
             }
             return
         }
@@ -406,6 +444,8 @@ public class Manager {
             let op = SyncIntegrationProcedure(source: client, destination: store, identifiable: integration)
             operations.append(op)
         }
+        
+        InternalLog.utility.info("Syncing '\(operations.count)' Incomplete Integrations")
         
         let group = GroupProcedure(operations: operations)
         group.addDidFinishBlockObserver() { (proc, error) in
@@ -464,6 +504,8 @@ public class Manager {
             operations.append(get)
         }
         
+        InternalLog.utility.info("Syncing '\(operations.count)' Incomplete Commits")
+        
         let group = GroupProcedure(operations: operations)
         group.addDidFinishBlockObserver() { (proc, error) in
             queue.async {
@@ -484,37 +526,40 @@ public class Manager {
                 }
             case .success(let servers):
                 let outOfDate = servers.filter({ $0.modified < date })
-                guard outOfDate.isEmpty == false else {
-                    queue.async {
-                        completion(nil)
-                    }
-                    return
-                }
-                
-                var syncCount: Int = 0
-                var completeCount: Int = 0
-                
-                for server in outOfDate {
-                    guard let client = try? self.client(forServer: server.id) else {
-                        continue
-                    }
-                    
-                    syncCount += 1
-                    
-                    let sync = SyncServerProcedure(source: client, destination: self.store, identifiable: server)
-                    sync.addDidFinishBlockObserver() { (proc, error) in
-                        completeCount += 1
-                        if syncCount == completeCount {
-                            queue.async {
-                                completion(nil)
-                            }
-                        }
-                    }
-                    
-                    self.procedureQueue.addOperation(sync)
-                }
+                self.syncOutOfDateServers(outOfDate, queue: queue, completion: completion)
             }
         }
+    }
+    
+    private func syncOutOfDateServers(_ servers: [XcodeServer.Server], queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
+        guard servers.isEmpty == false else {
+            queue.async {
+                completion(nil)
+            }
+            return
+        }
+        
+        var operations: [Procedure] = []
+        
+        servers.forEach { (server) in
+            guard let client = try? self.client(forServer: server.id) else {
+                return
+            }
+            
+            let sync = SyncServerProcedure(source: client, destination: self.store, identifiable: server)
+            operations.append(sync)
+        }
+        
+        InternalLog.utility.info("Syncing '\(operations.count)' Out-of-Date Servers")
+        
+        let group = GroupProcedure(operations: operations)
+        group.addDidFinishBlockObserver() { (proc, error) in
+            queue.async {
+                completion(error)
+            }
+        }
+        
+        procedureQueue.addOperation(group)
     }
 }
 
@@ -532,9 +577,6 @@ extension Manager: ProcedureQueueDelegate {
     public func procedureQueue(_ queue: ProcedureQueue, didFinishProcedure procedure: Procedure, with error: Swift.Error?) {
         
     }
-}
-
-extension APIClient: AnyQueryable {
 }
 
 extension Server {

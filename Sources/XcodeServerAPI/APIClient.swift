@@ -665,10 +665,9 @@ public extension APIClient {
     }
 }
 
-private extension HTTPResponseStatus {
-    static let unhandled: HTTPResponseStatus = .custom(code: 0, reasonPhrase: "Unknown Error / Unhandled Failure")
+extension APIClient: AnyQueryable {
 }
 
-extension InternalLog {
-    static let apiClient: InternalLog = InternalLog(name: "XcodeServerAPI.log", maxBytes: InternalLog.oneMB * 5)
+private extension HTTPResponseStatus {
+    static let unhandled: HTTPResponseStatus = .custom(code: 0, reasonPhrase: "Unknown Error / Unhandled Failure")
 }

@@ -4,7 +4,7 @@ import XcodeServer
 import CoreData
 
 // MARK: - Bots
-public extension NSManagedObjectContext {
+extension NSManagedObjectContext {
     /// Retrieves all `Bot` entities from the Core Data `NSManagedObjectContext`
     func bots() -> [Bot] {
         let fetchRequest = NSFetchRequest<Bot>(entityName: Bot.entityName)
@@ -36,7 +36,7 @@ public extension NSManagedObjectContext {
 }
 
 // MARK: - Commits
-public extension NSManagedObjectContext {
+extension NSManagedObjectContext {
     /// Retrieves all `Commit` entities from the Core Data `NSManagedObjectContext`
     func commits() -> [Commit] {
         let request = NSFetchRequest<Commit>(entityName: Commit.entityName)
@@ -83,7 +83,7 @@ public extension NSManagedObjectContext {
 }
 
 // MARK: - Devices
-public extension NSManagedObjectContext {
+extension NSManagedObjectContext {
     /// Retrieves all `Device` entities from the Core Data `NSManagedObjectContext`
     func devices() -> [Device] {
         let fetchRequest = NSFetchRequest<Device>(entityName: Device.entityName)
@@ -115,7 +115,7 @@ public extension NSManagedObjectContext {
 }
 
 // MARK: - Integrations
-public extension NSManagedObjectContext {
+extension NSManagedObjectContext {
     /// Retrieves all `Integration` entities from the Core Data `NSManagedObjectContext`
     func integrations() -> [Integration] {
         let request = Integration.fetchRequest() as! NSFetchRequest<Integration>
@@ -163,7 +163,7 @@ public extension NSManagedObjectContext {
 }
 
 // MARK: - Repositories
-public extension NSManagedObjectContext {
+extension NSManagedObjectContext {
     /// Retrieves all `Repository` entities from the Core Data `NSManagedObjectContext`
     func repositories() -> [Repository] {
         let fetchRequest = NSFetchRequest<Repository>(entityName: Repository.entityName)
@@ -195,7 +195,7 @@ public extension NSManagedObjectContext {
 }
 
 // MARK: - Revision Blueprints
-public extension NSManagedObjectContext {
+extension NSManagedObjectContext {
     /// Retrieves all `RevisionBlueprint` entities from the Core Data `NSManagedObjectContext`
     func revisionBlueprints() -> [RevisionBlueprint] {
         let fetchRequest = NSFetchRequest<RevisionBlueprint>(entityName: RevisionBlueprint.entityName)
@@ -227,7 +227,7 @@ public extension NSManagedObjectContext {
 }
 
 // MARK: - Servers
-public extension NSManagedObjectContext {
+extension NSManagedObjectContext {
     /// Retrieves all `Server` entities from the Core Data `NSManagedObjectContext`
     func servers() -> [Server] {
         let fetchRequest = NSFetchRequest<Server>(entityName: Server.entityName)

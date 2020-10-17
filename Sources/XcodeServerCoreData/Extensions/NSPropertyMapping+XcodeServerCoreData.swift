@@ -2,7 +2,7 @@ import Foundation
 #if canImport(CoreData)
 import CoreData
 
-public extension NSPropertyMapping {
+extension NSPropertyMapping {
     convenience init(name: String, sourceName: String? = nil, entityMapping: String? = nil) {
         self.init()
         self.name = name

@@ -2,7 +2,7 @@ import Foundation
 #if canImport(CoreData)
 import CoreData
 
-public extension NSRelationshipDescription {
+extension NSRelationshipDescription {
     convenience init(name: String, minCount: Int = 0, maxCount: Int, deleteRule: NSDeleteRule, isOptional: Bool = true) {
         self.init()
         self.name = name

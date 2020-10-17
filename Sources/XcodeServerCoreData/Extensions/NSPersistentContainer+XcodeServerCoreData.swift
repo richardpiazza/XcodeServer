@@ -3,8 +3,7 @@ import Foundation
 #if canImport(CoreData)
 import CoreData
 
-public extension NSPersistentContainer {
-    
+extension NSPersistentContainer {
     convenience init(model: Model, persisted: Bool = true) {
         let directoryURL = FileManager.default.xcodeServerDirectory
         let storeURL = FileManager.default.storeURL
@@ -51,7 +50,7 @@ public extension NSPersistentContainer {
     /// Removed all stores from the `persistentStoreCoordinator`/
     ///
     /// *WARNING*: The container & related context will be un-usable until a store has been reloaded.
-    func unload() {
+    public func unload() {
         for store in persistentStoreCoordinator.persistentStores {
             do {
                 try persistentStoreCoordinator.remove(store)
@@ -61,12 +60,4 @@ public extension NSPersistentContainer {
         }
     }
 }
-
-public extension FileManager {
-    var storeURL: URL {
-        let name = "XcodeServer.sqlite"
-        return xcodeServerDirectory.appendingPathComponent(name)
-    }
-}
-
 #endif

@@ -2,7 +2,7 @@ import Foundation
 #if canImport(CoreData)
 import CoreData
 
-public extension NSManagedObject {
+extension NSManagedObject {
     static var entityName: String {
         var entityName = NSStringFromClass(self)
         if let lastPeriodRange = entityName.range(of: ".", options: NSString.CompareOptions.backwards, range: nil, locale: nil) {
@@ -13,6 +13,7 @@ public extension NSManagedObject {
         return entityName
     }
     
+    @available(*, deprecated)
     convenience init?(managedObjectContext context: NSManagedObjectContext) {
         guard let entityDescription = NSEntityDescription.entity(forEntityName: type(of: self).entityName, in: context) else {
             return nil
