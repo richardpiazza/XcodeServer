@@ -258,17 +258,7 @@ class MockApiClient: AnyQueryable {
                 return
             }
             
-            var commits: [SourceControl.Commit] = []
-            resource.results.forEach { (xcsCommit) in
-                xcsCommit.commits?.forEach({ (key, value) in
-                    let remote = key
-                    value.forEach { (repoCommit) in
-                        let commit = SourceControl.Commit(repoCommit, remote: remote, integration: id)
-                        commits.append(commit)
-                    }
-                })
-            }
-            
+            let commits = resource.results.commits(forIntegration: id)
             queue.async {
                 completion(.success(commits))
             }

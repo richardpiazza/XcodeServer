@@ -232,13 +232,7 @@ private extension XcodeServer.Integration {
             let commits: Commits = try Bundle.module.decodeJson("commits", decoder: XcodeServerAPI.APIClient.jsonDecoder)
             var integration = XcodeServer.Integration(_integration, bot: XcodeServer.Bot.dynumite.id, server: nil)
             integration.issues = IssueCatalog(issues, integration: integration.id)
-            var _commits: [SourceControl.Commit] = []
-            commits.results.forEach { (commit) in
-                commit.commits?.forEach({ (key, value) in
-                    _commits.append(contentsOf: value.map({ SourceControl.Commit($0, remote: key, integration: integration.id) }))
-                })
-            }
-            integration.commits = Set(_commits)
+            integration.commits = Set(commits.results.commits(forIntegration: integration.id))
             return integration
         } catch {
             preconditionFailure(error.localizedDescription)

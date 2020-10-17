@@ -17,6 +17,7 @@ public extension SourceControl.Commit {
         if let blueprints = commit.revisionBlueprints, !blueprints.isEmpty {
             integrationId = blueprints.first?.integration?.identifier
         }
+        remoteId = commit.repository?.identifier
     }
 }
 

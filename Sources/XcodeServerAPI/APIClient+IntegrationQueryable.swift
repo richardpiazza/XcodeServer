@@ -92,13 +92,7 @@ extension APIClient: IntegrationQueryable {
                         completion(.failure(.error(error)))
                     }
                 case .success(let commits):
-                    var repositoryCommits: [XCSRepositoryCommit] = []
-                    commits.forEach({ commit in
-                        commit.commits?.forEach({ (dictionary) in
-                            repositoryCommits.append(contentsOf: dictionary.value)
-                        })
-                    })
-                    let value = repositoryCommits.map({ SourceControl.Commit($0, remote: $0.repositoryID, integration: id) })
+                    let value = commits.commits(forIntegration: id)
                     queue.async {
                         completion(.success(value))
                     }
