@@ -8,6 +8,7 @@ public func allTests() -> [XCTestCaseEntry] {
     #endif
     #if canImport(CoreData)
     allTests.append(testCase(BotWriteAndUpdateTests.allTests))
+    allTests.append(testCase(EdgeCaseTests.allTests))
     allTests.append(testCase(IntegrationWriteAndUpdateTests.allTests))
     allTests.append(testCase(PersistentContainerTests.allTests))
     allTests.append(testCase(ServerWriteAndUpdateTests.allTests))

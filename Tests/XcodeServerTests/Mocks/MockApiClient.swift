@@ -190,7 +190,13 @@ class MockApiClient: AnyQueryable {
     func getIntegration(_ id: Integration.ID, queue: DispatchQueue?, completion: @escaping IntegrationResultHandler) {
         let queue = queue ?? returnQueue
         #if swift(>=5.3)
-        guard id == .dynumite24 else {
+        let json: String
+        switch id {
+        case .dynumite24:
+            json = "integration"
+        case .structured18:
+            json = "structured18"
+        default:
             queue.async {
                 completion(.failure(.noIntegration(id)))
             }
@@ -198,7 +204,7 @@ class MockApiClient: AnyQueryable {
         }
         
         dispatchQueue.async {
-            let resource: XCSIntegration? = try? Bundle.module.decodeJson("integration", decoder: self.decoder)
+            let resource: XCSIntegration? = try? Bundle.module.decodeJson(json, decoder: self.decoder)
             guard let value = resource else {
                 queue.async {
                     completion(.failure(.message("Invalid Resource")))
@@ -226,10 +232,53 @@ class MockApiClient: AnyQueryable {
     }
     
     func getCommitsForIntegration(_ id: Integration.ID, queue: DispatchQueue?, completion: @escaping CommitsResultHandler) {
+        struct Commits: Decodable {
+            let count: Int
+            let results: [XCSCommit]
+        }
+        
         let queue = queue ?? returnQueue
+        #if swift(>=5.3)
+        let json: String
+        switch id {
+        case .structured18:
+            json = "structured18_commits"
+        default:
+            queue.async {
+                completion(.failure(.noIntegration(id)))
+            }
+            return
+        }
+        
+        dispatchQueue.async {
+            guard let resource = try? Bundle.module.decodeJson(json, decoder: self.decoder) as Commits else {
+                queue.async {
+                    completion(.failure(.message("Invalid Resource")))
+                }
+                return
+            }
+            
+            var commits: [SourceControl.Commit] = []
+            resource.results.forEach { (xcsCommit) in
+                xcsCommit.commits?.forEach({ (key, value) in
+                    let remote = key
+                    value.forEach { (repoCommit) in
+                        let commit = SourceControl.Commit(repoCommit, remote: remote, integration: id)
+                        commits.append(commit)
+                    }
+                })
+            }
+            
+            queue.async {
+                completion(.success(commits))
+            }
+        }
+        
+        #else
         queue.async {
             completion(.failure(.message("Not Implemented")))
         }
+        #endif
     }
     
     func getIssuesForIntegration(_ id: Integration.ID, queue: DispatchQueue?, completion: @escaping IssueCatalogResultHandler) {

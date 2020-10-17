@@ -235,7 +235,7 @@ private extension XcodeServer.Integration {
             var _commits: [SourceControl.Commit] = []
             commits.results.forEach { (commit) in
                 commit.commits?.forEach({ (key, value) in
-                    _commits.append(contentsOf: value.map({ SourceControl.Commit($0, remote: $0.repositoryID, integration: integration.id) }))
+                    _commits.append(contentsOf: value.map({ SourceControl.Commit($0, remote: key, integration: integration.id) }))
                 })
             }
             integration.commits = Set(_commits)

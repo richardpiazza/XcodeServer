@@ -22,6 +22,7 @@ extension Integration.ID {
     static let bakeshop1 = "ce5f34cace5a2142835263cd2f00f906"
     static let dynumite24 = "2ce4a2fd2f57d53039edddc51e0009cf"
     static let dynumiteUnknown = "e70b54ebfe6bf1a17572855fa6000df2"
+    static let structured18 = "4dce4862459fab67e33ff9cae7004b04"
 }
 
 extension Issue.ID {
