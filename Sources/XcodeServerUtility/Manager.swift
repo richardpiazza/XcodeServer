@@ -124,7 +124,6 @@ public class Manager {
         let _server = Server(id: id)
         let sync = SyncServerProcedure(source: client, destination: store, identifiable: _server)
         sync.addDidFinishBlockObserver { (proc, error) in
-            InternalLog.utility.error("", error: error)
             queue.async {
                 completion(error)
             }
