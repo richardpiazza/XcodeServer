@@ -6,6 +6,8 @@ import XcodeServerProcedures
 
 public typealias ManagerErrorCompletion = (_ error: Swift.Error?) -> Void
 public typealias ManagerCredentials = (username: String, password: String)
+public typealias ManagerServerIdsCompletion = (_ serverIds: [Server.ID], _ error: Swift.Error?) -> Void
+public typealias ManagerIntegrationIdsCompletion = (_ serverIds: [Integration.ID], _ error: Swift.Error?) -> Void
 
 public protocol ManagerAuthorizationDelegate {
     func credentialsForServer(withFQDN fqdn: String?) -> ManagerCredentials?
@@ -409,12 +411,12 @@ public class Manager {
         procedureQueue.addOperations([get, update])
     }
     
-    public func syncIncompleteIntegrations(queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
+    public func syncIncompleteIntegrations(queue: DispatchQueue = .main, completion: @escaping ManagerIntegrationIdsCompletion) {
         store.getServers { (result) in
             switch result {
             case .failure(let error):
                 queue.async {
-                    completion(error)
+                    completion([], error)
                 }
             case .success(let servers):
                 let integrations = servers.flatMap({ $0.incompleteIntegrations })
@@ -423,10 +425,10 @@ public class Manager {
         }
     }
     
-    private func syncIncompleteIntegrations(_ integrations: [Integration], queue: DispatchQueue, completion: @escaping ManagerErrorCompletion) {
+    private func syncIncompleteIntegrations(_ integrations: [Integration], queue: DispatchQueue, completion: @escaping ManagerIntegrationIdsCompletion) {
         guard integrations.count > 0 else {
             queue.async {
-                completion(nil)
+                completion([], nil)
             }
             return
         }
@@ -450,19 +452,19 @@ public class Manager {
         let group = GroupProcedure(operations: operations)
         group.addDidFinishBlockObserver() { (proc, error) in
             queue.async {
-                completion(error)
+                completion(integrations.map({ $0.id }), error)
             }
         }
         
         procedureQueue.addOperation(group)
     }
     
-    public func syncIncompleteCommits(queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
+    public func syncIncompleteCommits(queue: DispatchQueue = .main, completion: @escaping ManagerIntegrationIdsCompletion) {
         store.getServers { (result) in
             switch result {
             case .failure(let error):
                 queue.async {
-                    completion(error)
+                    completion([], error)
                 }
             case .success(let servers):
                 let commits = servers.flatMap({ $0.incompleteCommits })
@@ -472,10 +474,10 @@ public class Manager {
         }
     }
     
-    private func syncIncompleteCommits(_ integrations: [Integration.ID], queue: DispatchQueue, completion: @escaping ManagerErrorCompletion) {
+    private func syncIncompleteCommits(_ integrations: [Integration.ID], queue: DispatchQueue, completion: @escaping ManagerIntegrationIdsCompletion) {
         guard integrations.count > 0 else {
             queue.async {
-                completion(nil)
+                completion([], nil)
             }
             return
         }
@@ -509,20 +511,20 @@ public class Manager {
         let group = GroupProcedure(operations: operations)
         group.addDidFinishBlockObserver() { (proc, error) in
             queue.async {
-                completion(error)
+                completion(integrations, error)
             }
         }
 
         procedureQueue.addOperation(group)
     }
     
-    public func syncOutOfDateServers(since date: Date, queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
+    public func syncOutOfDateServers(since date: Date, queue: DispatchQueue = .main, completion: @escaping ManagerServerIdsCompletion) {
         store.getServers { (result) in
             switch result {
             case .failure(let error):
                 print(error)
                 queue.async {
-                    completion(error)
+                    completion([], error)
                 }
             case .success(let servers):
                 let outOfDate = servers.filter({ $0.modified < date })
@@ -531,10 +533,10 @@ public class Manager {
         }
     }
     
-    private func syncOutOfDateServers(_ servers: [XcodeServer.Server], queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
+    private func syncOutOfDateServers(_ servers: [XcodeServer.Server], queue: DispatchQueue = .main, completion: @escaping ManagerServerIdsCompletion) {
         guard servers.isEmpty == false else {
             queue.async {
-                completion(nil)
+                completion([], nil)
             }
             return
         }
@@ -555,7 +557,7 @@ public class Manager {
         let group = GroupProcedure(operations: operations)
         group.addDidFinishBlockObserver() { (proc, error) in
             queue.async {
-                completion(error)
+                completion(servers.map({ $0.id }), error)
             }
         }
         
