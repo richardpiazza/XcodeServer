@@ -17,6 +17,18 @@ extension NSManagedObjectContext {
         return []
     }
     
+    /// Retrieves all `Bot` entities for a specific `Server`.
+    func bots(forServer id: XcodeServer.Server.ID) -> [Bot] {
+        let fetchRequest = NSFetchRequest<Bot>(entityName: Bot.entityName)
+        fetchRequest.predicate = NSPredicate(format: "server.fqdn = %@", argumentArray: [id])
+        do {
+            return try self.fetch(fetchRequest)
+        } catch {
+            InternalLog.coreData.error("", error: error)
+            return []
+        }
+    }
+    
     /// Retrieves the first `Bot` entity from the Core Data `NSManagedObjectContext`
     /// that matches the specified identifier.
     func bot(withIdentifier identifier: String) -> Bot? {
@@ -127,6 +139,18 @@ extension NSManagedObjectContext {
         }
         
         return []
+    }
+    
+    /// Retrieves all `Integration` entities for the specified `Bot`.
+    func integrations(forBot id: XcodeServer.Bot.ID) -> [Integration] {
+        let request = Integration.fetchRequest() as! NSFetchRequest<Integration>
+        request.predicate = NSPredicate(format: "bot.identifier = %@", argumentArray: [id])
+        do {
+            return try fetch(request)
+        } catch {
+            InternalLog.coreData.error("", error: error)
+            return []
+        }
     }
     
     /// Retrieves the first `Integration` entity from the Core Data `NSManagedObjectContext`

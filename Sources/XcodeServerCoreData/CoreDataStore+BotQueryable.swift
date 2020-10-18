@@ -9,23 +9,26 @@ extension CoreDataStore: BotQueryable {
         InternalLog.coreData.info("Retrieving ALL Bots")
         let queue = queue ?? returnQueue
         internalQueue.async {
-            let bots = self.persistentContainer.viewContext.bots()
-            let result = bots.map { XcodeServer.Bot($0) }
-            queue.async {
-                completion(.success(result))
+            self.persistentContainer.performBackgroundTask { (context) in
+                let bots = context.bots()
+                let result = bots.map { XcodeServer.Bot($0) }
+                queue.async {
+                    completion(.success(result))
+                }
             }
         }
     }
     
     public func getBots(forServer id: XcodeServer.Server.ID, queue: DispatchQueue?, completion: @escaping BotsResultHandler) {
-        InternalLog.coreData.info("Retrieving ALL Bots")
+        InternalLog.coreData.info("Retrieving ALL Bots for Server [\(id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
-            let bots = self.persistentContainer.viewContext.bots()
-            let filtered = bots.filter({ $0.server?.fqdn == id })
-            let result = filtered.map { XcodeServer.Bot($0) }
-            queue.async {
-                completion(.success(result))
+            self.persistentContainer.performBackgroundTask { (context) in
+                let bots = context.bots(forServer: id)
+                let result = bots.map { XcodeServer.Bot($0) }
+                queue.async {
+                    completion(.success(result))
+                }
             }
         }
     }
@@ -34,14 +37,16 @@ extension CoreDataStore: BotQueryable {
         InternalLog.coreData.info("Retrieving Bot [\(id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
-            if let bot = self.persistentContainer.viewContext.bot(withIdentifier: id) {
-                let result = XcodeServer.Bot(bot)
-                queue.async {
-                    completion(.success(result))
-                }
-            } else {
-                queue.async {
-                    completion(.failure(.noBot(id)))
+            self.persistentContainer.performBackgroundTask { (context) in
+                if let bot = context.bot(withIdentifier: id) {
+                    let result = XcodeServer.Bot(bot)
+                    queue.async {
+                        completion(.success(result))
+                    }
+                } else {
+                    queue.async {
+                        completion(.failure(.noBot(id)))
+                    }
                 }
             }
         }
@@ -51,23 +56,25 @@ extension CoreDataStore: BotQueryable {
         InternalLog.coreData.info("Retrieving STATS for Bot [\(id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
-            guard let bot = self.persistentContainer.viewContext.bot(withIdentifier: id) else {
-                queue.async {
-                    completion(.failure(.noBot(id)))
+            self.persistentContainer.performBackgroundTask { (context) in
+                guard let bot = context.bot(withIdentifier: id) else {
+                    queue.async {
+                        completion(.failure(.noBot(id)))
+                    }
+                    return
                 }
-                return
-            }
-            
-            guard let stats = bot.stats else {
-                queue.async {
-                    completion(.failure(.noStatsForBot(id)))
+                
+                guard let stats = bot.stats else {
+                    queue.async {
+                        completion(.failure(.noStatsForBot(id)))
+                    }
+                    return
                 }
-                return
-            }
-            
-            let result = XcodeServer.Bot.Stats(stats)
-            queue.async {
-                completion(.success(result))
+                
+                let result = XcodeServer.Bot.Stats(stats)
+                queue.async {
+                    completion(.success(result))
+                }
             }
         }
     }

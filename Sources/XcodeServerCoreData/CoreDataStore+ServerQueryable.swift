@@ -8,10 +8,12 @@ extension CoreDataStore: ServerQueryable {
         InternalLog.coreData.info("Retrieving ALL Servers")
         let queue = queue ?? returnQueue
         internalQueue.async {
-            let servers = self.persistentContainer.viewContext.servers()
-            let result = servers.map { XcodeServer.Server($0) }
-            queue.async {
-                completion(.success(result))
+            self.persistentContainer.performBackgroundTask { (context) in
+                let servers = context.servers()
+                let result = servers.map { XcodeServer.Server($0) }
+                queue.async {
+                    completion(.success(result))
+                }
             }
         }
     }
@@ -20,14 +22,16 @@ extension CoreDataStore: ServerQueryable {
         InternalLog.coreData.info("Retrieving Server [\(id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
-            if let server = self.persistentContainer.viewContext.server(withFQDN: id) {
-                let result = XcodeServer.Server(server)
-                queue.async {
-                    completion(.success(result))
-                }
-            } else {
-                queue.async {
-                    completion(.failure(.noServer(id)))
+            self.persistentContainer.performBackgroundTask { (context) in
+                if let server = context.server(withFQDN: id) {
+                    let result = XcodeServer.Server(server)
+                    queue.async {
+                        completion(.success(result))
+                    }
+                } else {
+                    queue.async {
+                        completion(.failure(.noServer(id)))
+                    }
                 }
             }
         }

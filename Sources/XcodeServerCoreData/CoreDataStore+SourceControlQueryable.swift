@@ -8,10 +8,12 @@ extension CoreDataStore: SourceControlQueryable {
         InternalLog.coreData.info("Retrieving ALL Remotes")
         let queue = queue ?? returnQueue
         internalQueue.async {
-            let repositories = self.persistentContainer.viewContext.repositories()
-            let result = repositories.map { SourceControl.Remote($0) }
-            queue.async {
-                completion(.success(result))
+            self.persistentContainer.performBackgroundTask { (context) in
+                let repositories = context.repositories()
+                let result = repositories.map { SourceControl.Remote($0) }
+                queue.async {
+                    completion(.success(result))
+                }
             }
         }
     }
@@ -20,14 +22,16 @@ extension CoreDataStore: SourceControlQueryable {
         InternalLog.coreData.info("Retrieving Remote [\(id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
-            if let repository = self.persistentContainer.viewContext.repository(withIdentifier: id) {
-                let result = SourceControl.Remote(repository)
-                queue.async {
-                    completion(.success(result))
-                }
-            } else {
-                queue.async {
-                    completion(.failure(.noRemote(id)))
+            self.persistentContainer.performBackgroundTask { (context) in
+                if let repository = context.repository(withIdentifier: id) {
+                    let result = SourceControl.Remote(repository)
+                    queue.async {
+                        completion(.success(result))
+                    }
+                } else {
+                    queue.async {
+                        completion(.failure(.noRemote(id)))
+                    }
                 }
             }
         }
