@@ -62,6 +62,7 @@ extension CoreDataStore: IntegrationPersistable {
                     } else {
                         repository = Repository(context: context)
                         repository.identifier = remoteId
+                        InternalLog.coreData.debug("Creating REPOSITORY '??' [\(remoteId)]")
                     }
                     
                     repository.update(Set(arrayLiteral: commit), integration: managedIntegration, context: context)

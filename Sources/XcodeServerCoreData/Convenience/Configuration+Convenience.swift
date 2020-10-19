@@ -136,15 +136,19 @@ public extension XcodeServerCoreData.Configuration {
         
         let remoteId = configuration.sourceControlBlueprint.primaryRemoteIdentifier
         if !remoteId.isEmpty {
-            let _repository: Repository
-            if let entity = repositories?.first(where: { $0.identifier == remoteId }) {
-                _repository = entity
+            let repository: Repository
+            if let entity = context.repository(withIdentifier: remoteId) {
+                repository = entity
             } else {
-                _repository = Repository(context: context)
-                addToRepositories(_repository)
+                repository = Repository(context: context)
+                InternalLog.coreData.debug("Creating REPOSITORY '\(configuration.sourceControlBlueprint.name)' [\(remoteId)]")
             }
             
-            _repository.update(configuration.sourceControlBlueprint, context: context)
+            if repositories == nil || repositories?.contains(repository) == false {
+                addToRepositories(repository)
+            }
+            
+            repository.update(configuration.sourceControlBlueprint, context: context)
         }
     }
 }

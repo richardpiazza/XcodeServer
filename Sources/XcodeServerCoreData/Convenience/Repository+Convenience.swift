@@ -11,7 +11,9 @@ public extension Repository {
     }
     
     func update(_ blueprint: SourceControl.Blueprint, context: NSManagedObjectContext) {
-        identifier = blueprint.primaryRemoteIdentifier
+        if !blueprint.primaryRemoteIdentifier.isEmpty {
+            identifier = blueprint.primaryRemoteIdentifier
+        }
         
         if let remote = blueprint.remotes.first(where: { $0.id == identifier }) {
             system = remote.system

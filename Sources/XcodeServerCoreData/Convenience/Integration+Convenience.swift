@@ -143,7 +143,13 @@ public extension XcodeServerCoreData.Integration {
         
         if let blueprint = integration.revisionBlueprint {
             if !blueprint.primaryRemoteIdentifier.isEmpty {
-                let repository = context.repository(withIdentifier: blueprint.primaryRemoteIdentifier) ?? Repository(context: context)
+                let repository: Repository
+                if let entity = context.repository(withIdentifier: blueprint.primaryRemoteIdentifier) {
+                    repository = entity
+                } else {
+                    repository = Repository(context: context)
+                    InternalLog.coreData.debug("Creating REPOSITORY '\(blueprint.name)' [\(blueprint.primaryRemoteIdentifier)]")
+                }
                 repository.update(blueprint, context: context)
             }
         }
@@ -161,7 +167,7 @@ public extension XcodeServerCoreData.Integration {
     
     func update(_ commits: Set<SourceControl.Commit>, context: NSManagedObjectContext) {
         commits.forEach { (commit) in
-            guard let remoteId = commit.remoteId else {
+            guard let remoteId = commit.remoteId, !remoteId.isEmpty else {
                 InternalLog.coreData.warn("No Remote ID for commit: \(commit)")
                 return
             }
@@ -172,6 +178,7 @@ public extension XcodeServerCoreData.Integration {
             } else {
                 repository = Repository(context: context)
                 repository.identifier = remoteId
+                InternalLog.coreData.debug("Creating REPOSITORY '??' [\(remoteId)]")
             }
             
             repository.update(commits, integration: self, context: context)

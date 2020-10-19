@@ -9,10 +9,17 @@ extension CoreDataStore: SourceControlPersistable {
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in
-                let _remote = context.repository(withIdentifier: remote.id) ?? XcodeServerCoreData.Repository(context: context)
-                _remote.update(remote, context: context)
+                let repository: Repository
+                if let entity = context.repository(withIdentifier: remote.id) {
+                    repository = entity
+                } else {
+                    repository = Repository(context: context)
+                    InternalLog.coreData.debug("Creating REPOSITORY '\(remote.name)' [\(remote.id)]")
+                }
                 
-                let result = SourceControl.Remote(_remote)
+                repository.update(remote, context: context)
+                
+                let result = SourceControl.Remote(repository)
                 
                 do {
                     try context.save()

@@ -28,7 +28,13 @@ public extension XcodeServerCoreData.Bot {
         if let blueprint = bot.lastRevisionBlueprint {
             let remoteId = blueprint.primaryRemoteIdentifier
             if !remoteId.isEmpty {
-                let repository = context.repository(withIdentifier: remoteId) ?? Repository(context: context)
+                let repository: Repository
+                if let entity = context.repository(withIdentifier: remoteId) {
+                    repository = entity
+                } else {
+                    repository = Repository(context: context)
+                    InternalLog.coreData.debug("Creating REPOSITORY '\(blueprint.name)' [\(remoteId)]")
+                }
                 repository.update(blueprint, context: context)
             }
         }
