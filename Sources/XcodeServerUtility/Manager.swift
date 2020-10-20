@@ -95,9 +95,6 @@ public class Manager {
             queue.async {
                 completion(error)
             }
-            if error == nil {
-                NotificationCenter.default.postServersDidChange()
-            }
         }
         
         procedureQueue.addOperation(procedure)
@@ -108,9 +105,6 @@ public class Manager {
         procedure.addDidFinishBlockObserver { (proc, error) in
             queue.async {
                 completion(error)
-            }
-            if error == nil {
-                NotificationCenter.default.postServersDidChange()
             }
         }
         
@@ -132,9 +126,6 @@ public class Manager {
         sync.addDidFinishBlockObserver { (proc, error) in
             queue.async {
                 completion(error)
-            }
-            if error == nil {
-                NotificationCenter.default.postServerDidChange(id)
             }
         }
         
@@ -161,9 +152,6 @@ public class Manager {
             queue.async {
                 completion(error)
             }
-            if error == nil {
-                NotificationCenter.default.postServerDidChange(id)
-            }
         }
         
         procedureQueue.addOperations([get, update])
@@ -187,9 +175,6 @@ public class Manager {
         update.addDidFinishBlockObserver() { (proc, error) in
             queue.async {
                 completion(error)
-            }
-            if error == nil {
-                NotificationCenter.default.postServerDidChange(server.id)
             }
         }
         
@@ -224,9 +209,6 @@ public class Manager {
             queue.async {
                 completion(error)
             }
-            if error == nil {
-                NotificationCenter.default.postBotDidChange(bot.id)
-            }
         }
         
         procedureQueue.addOperations([get, update])
@@ -259,9 +241,6 @@ public class Manager {
         update.addDidFinishBlockObserver() { (proc, error) in
             queue.async {
                 completion(error)
-            }
-            if error == nil {
-                NotificationCenter.default.postBotDidChange(bot.id)
             }
         }
         
@@ -328,9 +307,6 @@ public class Manager {
             queue.async {
                 completion(error)
             }
-            if error == nil {
-                NotificationCenter.default.postBotDidChange(bot.id)
-            }
         }
         
         procedureQueue.addOperations([get, update])
@@ -363,9 +339,6 @@ public class Manager {
         update.addDidFinishBlockObserver() { (proc, error) in
             queue.async {
                 completion(error)
-            }
-            if error == nil {
-                NotificationCenter.default.postIntegrationDidChange(integration.id)
             }
         }
         
@@ -400,9 +373,6 @@ public class Manager {
             queue.async {
                 completion(error)
             }
-            if error == nil {
-                NotificationCenter.default.postIntegrationDidChange(integration.id)
-            }
         }
         
         procedureQueue.addOperations([retrieve, update])
@@ -435,9 +405,6 @@ public class Manager {
         update.addDidFinishBlockObserver() { (proc, error) in
             queue.async {
                 completion(error)
-            }
-            if error == nil {
-                NotificationCenter.default.postIntegrationDidChange(integration.id)
             }
         }
         
@@ -486,11 +453,6 @@ public class Manager {
         group.addDidFinishBlockObserver() { (proc, error) in
             queue.async {
                 completion(integrations.map({ $0.id }), error)
-            }
-            if error == nil {
-                integrations.forEach {
-                    NotificationCenter.default.postIntegrationDidChange($0.id)
-                }
             }
         }
         
@@ -551,11 +513,6 @@ public class Manager {
             queue.async {
                 completion(integrations, error)
             }
-            if error == nil {
-                integrations.forEach {
-                    NotificationCenter.default.postIntegrationDidChange($0)
-                }
-            }
         }
 
         procedureQueue.addOperation(group)
@@ -601,11 +558,6 @@ public class Manager {
         group.addDidFinishBlockObserver() { (proc, error) in
             queue.async {
                 completion(servers.map({ $0.id }), error)
-            }
-            if error == nil {
-                servers.forEach {
-                    NotificationCenter.default.postServerDidChange($0.id)
-                }
             }
         }
         

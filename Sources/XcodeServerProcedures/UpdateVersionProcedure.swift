@@ -34,11 +34,12 @@ public class UpdateVersionProcedure: IdentifiablePersitableProcedure<Server>, In
         
         destination.saveServer(_server) { [weak self] (result) in
             switch result {
-            case .success:
-                self?.finish()
             case .failure(let error):
                 InternalLog.procedures.error("", error: error)
                 self?.finish(with: error)
+            case .success:
+                NotificationCenter.default.postServerDidChange(_server.id)
+                self?.finish()
             }
         }
     }

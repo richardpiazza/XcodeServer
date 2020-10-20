@@ -1,5 +1,6 @@
 import XcodeServer
 import ProcedureKit
+import Foundation
 
 @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 @available(swift, introduced: 5.1)
@@ -29,11 +30,14 @@ public class UpdateIntegrationCommitsProcedure: IdentifiablePersitableProcedure<
         
         destination.saveCommits(value, forIntegration: id) { [weak self] (result) in
             switch result {
-            case .success:
-                self?.finish()
             case .failure(let error):
                 InternalLog.procedures.error("", error: error)
                 self?.finish(with: error)
+            case .success:
+                if let id = self?.identifiable.id {
+                    NotificationCenter.default.postIntegrationDidChange(id)
+                }
+                self?.finish()
             }
         }
     }

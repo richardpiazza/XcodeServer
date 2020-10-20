@@ -1,5 +1,6 @@
 import XcodeServer
 import ProcedureKit
+import Foundation
 
 @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 @available(swift, introduced: 5.1)
@@ -32,11 +33,12 @@ public class UpdateServerBotsProcedure: IdentifiablePersitableProcedure<Server>,
         
         destination.saveServer(_server) { [weak self] (result) in
             switch result {
-            case .success(_):
-                self?.finish()
             case .failure(let error):
                 InternalLog.procedures.error("", error: error)
                 self?.finish(with: error)
+            case .success(_):
+                NotificationCenter.default.postServerDidChange(_server.id)
+                self?.finish()
             }
         }
     }

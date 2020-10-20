@@ -34,11 +34,12 @@ public class UpdateBotIntegrationsProcedure: IdentifiablePersitableProcedure<Bot
         
         destination.saveBot(_bot) { [weak self] (result) in
             switch result {
-            case .success:
-                self?.finish()
             case .failure(let error):
                 InternalLog.procedures.error("", error: error)
                 self?.finish(with: error)
+            case .success:
+                NotificationCenter.default.postBotDidChange(_bot.id)
+                self?.finish()
             }
         }
     }

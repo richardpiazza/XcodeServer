@@ -4,6 +4,7 @@ import Foundation
 public extension NotificationCenter {
     /// Convenience method for posting a `.serversDidChange` notification.
     func postServersDidChange() {
+        InternalLog.procedures.debug("Posting: ServersDidChange")
         post(name: .serversDidChange, object: nil)
     }
     
@@ -11,6 +12,7 @@ public extension NotificationCenter {
     ///
     /// - parameter id: Entity ID that will be provided in the _userInfo_ dictionary under the key **Server.ID**.
     func postServerDidChange(_ id: Server.ID) {
+        InternalLog.procedures.debug("Posting: ServerDidChange [\(id)]")
         post(name: .serverDidChange, object: nil, userInfo: ["Server.ID": id])
     }
     
@@ -18,6 +20,7 @@ public extension NotificationCenter {
     ///
     /// - parameter id: Entity ID that will be provided in the _userInfo_ dictionary under the key **Bot.ID**.
     func postBotDidChange(_ id: Bot.ID) {
+        InternalLog.procedures.debug("Posting: BotDidChange [\(id)]")
         post(name: .botDidChange, object: nil, userInfo: ["Bot.ID": id])
     }
     
@@ -25,6 +28,7 @@ public extension NotificationCenter {
     ///
     /// - parameter id: Entity ID that will be provided in the _userInfo_ dictionary under the key **Integration.ID**.
     func postIntegrationDidChange(_ id: Integration.ID) {
+        InternalLog.procedures.debug("Posting: IntegrationDidChange [\(id)]")
         post(name: .integrationDidChange, object: nil, userInfo: ["Integration.ID": id])
     }
 }
