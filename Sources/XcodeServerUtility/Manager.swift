@@ -88,16 +88,68 @@ public class Manager {
         }
     }
     
+    /// Tests a connection to the Xcode Server using the `/versions` endpoint.
+    ///
+    /// Unlike `/ping`, the `/versions` endpoint requires authorization to complete successfully.
+    ///
+    /// - parameter server: The `Server` of which to test connectivity
+    /// - parameter queue: `DispatchQueue` on which the `completion` block will be executed.
+    /// - parameter completion: Block result handler to execute upon completion of operations.
+    public func testConnection(server: Server.ID, queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
+        guard let client = try? self.client(forServer: server) else {
+            let error = Error.invalidClient(server)
+            InternalLog.utility.error("Test Connection Failed", error: error)
+            queue.async {
+                completion(error)
+            }
+            return
+        }
+        
+        client.versions { (result) in
+            switch result {
+            case .success:
+                queue.async {
+                    completion(nil)
+                }
+            case .failure(let error):
+                InternalLog.utility.error("Test Connection Failed", error: error)
+                queue.async {
+                    completion(error)
+                }
+            }
+        }
+    }
+    
+    /// Create a `Server` entity in the destination store (`AnyQueryable & AnyPersistable`).
+    ///
+    /// Multiple procedures will be initiated:
+    /// * `CreateServerProcedure`
+    /// * `SyncServerProcedure`
+    ///
+    /// The `completion` block will be executed upon finishing the `CreateServerProcedure`.
+    ///
+    /// - parameter id: The unique identifier (FQDN/IP) of the server.
+    /// - parameter queue: `DispatchQueue` on which the `completion` block will be executed.
+    /// - parameter completion: Block result handler to execute upon completion of the primary operation.
     public func createServer(withId id: Server.ID, queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
         let _server = Server(id: id)
+        var operations: [Procedure] = []
+        
         let procedure = CreateServerProcedure(destination: store, identifiable: _server)
         procedure.addDidFinishBlockObserver { (proc, error) in
             queue.async {
                 completion(error)
             }
         }
+        operations.append(procedure)
         
-        procedureQueue.addOperation(procedure)
+        if let client = try? self.client(forServer: id) {
+            let sync = SyncServerProcedure(source: client, destination: store, identifiable: _server)
+            sync.addDependency(procedure)
+            operations.append(sync)
+        }
+        
+        procedureQueue.addOperations(operations)
     }
     
     public func deleteServer(_ server: Server, queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
