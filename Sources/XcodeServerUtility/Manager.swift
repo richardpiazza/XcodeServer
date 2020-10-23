@@ -499,6 +499,13 @@ public class Manager {
             operations.append(op)
         }
         
+        guard operations.count > 0 else {
+            queue.async {
+                completion([], nil)
+            }
+            return
+        }
+        
         InternalLog.utility.info("Syncing '\(operations.count)' Incomplete Integrations")
         
         let group = GroupProcedure(operations: operations)
@@ -558,6 +565,13 @@ public class Manager {
             operations.append(get)
         }
         
+        guard operations.count > 0 else {
+            queue.async {
+                completion([], nil)
+            }
+            return
+        }
+        
         InternalLog.utility.info("Syncing '\(operations.count)' Incomplete Commits")
         
         let group = GroupProcedure(operations: operations)
@@ -602,6 +616,13 @@ public class Manager {
             
             let sync = SyncServerProcedure(source: client, destination: self.store, server: server)
             operations.append(sync)
+        }
+        
+        guard operations.count > 0 else {
+            queue.async {
+                completion([], nil)
+            }
+            return
         }
         
         InternalLog.utility.info("Syncing '\(operations.count)' Out-of-Date Servers")
