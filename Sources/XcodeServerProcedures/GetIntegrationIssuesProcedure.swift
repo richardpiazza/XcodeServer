@@ -1,13 +1,17 @@
 import XcodeServer
 import ProcedureKit
 
-public class GetIntegrationIssuesProcedure: AnyQueryableProcedure, InputProcedure, OutputProcedure {
+public class GetIntegrationIssuesProcedure: Procedure, InputProcedure, OutputProcedure {
+    
+    private let source: IntegrationQueryable
     
     public var input: Pending<Integration.ID> = .pending
     public var output: Pending<ProcedureResult<Integration.IssueCatalog>> = .pending
     
-    public init(source: AnyQueryable, input: Integration.ID? = nil) {
-        super.init(source: source)
+    public init(source: IntegrationQueryable, input: Integration.ID? = nil) {
+        self.source = source
+        super.init()
+        
         if let value = input {
             self.input = .ready(value)
         }
@@ -20,12 +24,13 @@ public class GetIntegrationIssuesProcedure: AnyQueryableProcedure, InputProcedur
         
         guard let id = input.value else {
             let error = XcodeServerProcedureError.invalidInput
-            InternalLog.procedures.error("", error: error)
-            cancel(with: error)
+            InternalLog.procedures.error("GetIntegrationIssuesProcedure Failed", error: error)
             output = .ready(.failure(error))
             finish(with: error)
             return
         }
+        
+        InternalLog.procedures.debug("Getting ISSUES from Integration [\(id)]")
         
         source.getIssuesForIntegration(id) { [weak self] (result) in
             switch result {
@@ -33,7 +38,7 @@ public class GetIntegrationIssuesProcedure: AnyQueryableProcedure, InputProcedur
                 self?.output = .ready(.success(value))
                 self?.finish()
             case .failure(let error):
-                InternalLog.procedures.error("", error: error)
+                InternalLog.procedures.error("GetIntegrationIssuesProcedure Failed", error: error)
                 self?.output = .ready(.failure(error))
                 self?.finish(with: error)
             }

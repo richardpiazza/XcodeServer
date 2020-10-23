@@ -1,9 +1,16 @@
 import XcodeServer
 import ProcedureKit
 
-public class GetBotsProcedure: AnyQueryableProcedure, OutputProcedure {
+public class GetBotsProcedure: Procedure, OutputProcedure {
+    
+    private let source: BotQueryable
     
     public var output: Pending<ProcedureResult<[Bot]>> = .pending
+    
+    public init(source: BotQueryable) {
+        self.source = source
+        super.init()
+    }
     
     public override func execute() {
         guard !isCancelled else {
@@ -16,7 +23,7 @@ public class GetBotsProcedure: AnyQueryableProcedure, OutputProcedure {
                 self?.output = .ready(.success(value))
                 self?.finish()
             case .failure(let error):
-                InternalLog.procedures.error("", error: error)
+                InternalLog.procedures.error("GetBotsProcedure Failed", error: error)
                 self?.output = .ready(.failure(error))
                 self?.finish(with: error)
             }

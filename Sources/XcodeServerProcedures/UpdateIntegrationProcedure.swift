@@ -4,12 +4,16 @@ import Foundation
 
 @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 @available(swift, introduced: 5.1)
-public class UpdateIntegrationProcedure: IdentifiablePersitableProcedure<Integration>, InputProcedure {
+public class UpdateIntegrationProcedure: Procedure, InputProcedure {
+    
+    private let destination: IntegrationPersistable
     
     public var input: Pending<Integration> = .pending
     
-    public init(destination: AnyPersistable, identifiable: Integration, input: Integration? = nil) {
-        super.init(destination: destination, identifiable: identifiable)
+    public init(destination: IntegrationPersistable, input: Integration? = nil) {
+        self.destination = destination
+        super.init()
+        
         if let value = input {
             self.input = .ready(value)
         }
@@ -22,21 +26,20 @@ public class UpdateIntegrationProcedure: IdentifiablePersitableProcedure<Integra
         
         guard let value = input.value else {
             let error = XcodeServerProcedureError.invalidInput
-            InternalLog.procedures.error("", error: error)
-            cancel(with: error)
+            InternalLog.procedures.error("UpdateIntegrationProcedure Failed", error: error)
             finish(with: error)
             return
         }
         
+        let id = value.id
+        
         destination.saveIntegration(value) { [weak self] (result) in
             switch result {
             case .failure(let error):
-                InternalLog.procedures.error("", error: error)
+                InternalLog.procedures.error("UpdateIntegrationProcedure Failed", error: error)
                 self?.finish(with: error)
             case .success:
-                if let id = self?.identifiable.id {
-                    NotificationCenter.default.postIntegrationDidChange(id)
-                }
+                NotificationCenter.default.postIntegrationDidChange(id)
                 self?.finish()
             }
         }

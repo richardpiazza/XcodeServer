@@ -135,7 +135,7 @@ public class Manager {
         let _server = Server(id: id)
         var operations: [Procedure] = []
         
-        let procedure = CreateServerProcedure(destination: store, identifiable: _server)
+        let procedure = CreateServerProcedure(destination: store, input: id)
         procedure.addDidFinishBlockObserver { (proc, error) in
             queue.async {
                 completion(error)
@@ -144,7 +144,7 @@ public class Manager {
         operations.append(procedure)
         
         if let client = try? self.client(forServer: id) {
-            let sync = SyncServerProcedure(source: client, destination: store, identifiable: _server)
+            let sync = SyncServerProcedure(source: client, destination: store, server: _server)
             sync.addDependency(procedure)
             operations.append(sync)
         }
@@ -153,7 +153,7 @@ public class Manager {
     }
     
     public func deleteServer(_ server: Server, queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
-        let procedure = DeleteServerProcedure(destination: store, identifiable: server)
+        let procedure = DeleteServerProcedure(destination: store, input: server)
         procedure.addDidFinishBlockObserver { (proc, error) in
             queue.async {
                 completion(error)
@@ -174,7 +174,7 @@ public class Manager {
         }
         
         let _server = Server(id: id)
-        let sync = SyncServerProcedure(source: client, destination: store, identifiable: _server)
+        let sync = SyncServerProcedure(source: client, destination: store, server: _server)
         sync.addDidFinishBlockObserver { (proc, error) in
             queue.async {
                 completion(error)
@@ -198,7 +198,7 @@ public class Manager {
         
         let _server = Server(id: id)
         let get = GetVersionProcedure(source: client, input: _server.id)
-        let update = UpdateVersionProcedure(destination: store, identifiable: _server)
+        let update = UpdateVersionProcedure(destination: store, server: _server)
         update.injectResult(from: get)
         update.addDidFinishBlockObserver() { (proc, error) in
             queue.async {
@@ -222,7 +222,7 @@ public class Manager {
         }
         
         let get = GetBotsProcedure(source: client)
-        let update = UpdateServerBotsProcedure(destination: store, identifiable: server)
+        let update = UpdateServerBotsProcedure(destination: store, server: server)
         update.injectResult(from: get)
         update.addDidFinishBlockObserver() { (proc, error) in
             queue.async {
@@ -255,7 +255,7 @@ public class Manager {
         }
         
         let get = GetBotProcedure(source: client, input: bot.id)
-        let update = UpdateBotProcedure(destination: store, identifiable: bot)
+        let update = UpdateBotProcedure(destination: store, bot: bot)
         update.injectResult(from: get)
         update.addDidFinishBlockObserver() { (proc, error) in
             queue.async {
@@ -288,7 +288,7 @@ public class Manager {
         }
         
         let get = GetBotStatsProcedure(source: client, input: bot.id)
-        let update = UpdateBotStatsProcedure(destination: store, identifiable: bot)
+        let update = UpdateBotStatsProcedure(destination: store, bot: bot)
         update.injectResult(from: get)
         update.addDidFinishBlockObserver() { (proc, error) in
             queue.async {
@@ -353,7 +353,7 @@ public class Manager {
         }
         
         let get = GetBotIntegrationsProcedure(source: client, input: bot.id)
-        let update = UpdateBotIntegrationsProcedure(destination: store, identifiable: bot)
+        let update = UpdateBotIntegrationsProcedure(destination: store, bot: bot)
         update.injectResult(from: get)
         update.addDidFinishBlockObserver() { (proc, error) in
             queue.async {
@@ -386,7 +386,7 @@ public class Manager {
         }
         
         let get = GetIntegrationProcedure(source: client, input: integration.id)
-        let update = UpdateIntegrationProcedure(destination: store, identifiable: integration)
+        let update = UpdateIntegrationProcedure(destination: store)
         update.injectResult(from: get)
         update.addDidFinishBlockObserver() { (proc, error) in
             queue.async {
@@ -419,7 +419,7 @@ public class Manager {
         }
         
         let retrieve = GetIntegrationCommitsProcedure(source: client, input: integration.id)
-        let update = UpdateIntegrationCommitsProcedure(destination: store, identifiable: integration)
+        let update = UpdateIntegrationCommitsProcedure(destination: store, integration: integration)
         update.injectResult(from: retrieve)
         update.addDidFinishBlockObserver() { (proc, error) in
             queue.async {
@@ -452,7 +452,7 @@ public class Manager {
         }
         
         let get = GetIntegrationIssuesProcedure(source: client, input: integration.id)
-        let update = UpdateIntegrationIssuesProcedure(destination: store, identifiable: integration)
+        let update = UpdateIntegrationIssuesProcedure(destination: store, integration: integration)
         update.injectResult(from: get)
         update.addDidFinishBlockObserver() { (proc, error) in
             queue.async {
@@ -495,7 +495,7 @@ public class Manager {
                 return
             }
             
-            let op = SyncIntegrationProcedure(source: client, destination: store, identifiable: integration)
+            let op = SyncIntegrationProcedure(source: client, destination: store, integration: integration)
             operations.append(op)
         }
         
@@ -551,7 +551,7 @@ public class Manager {
                     return
                 }
                 
-                let sync = SyncIntegrationCommitsProcedure(source: client, destination: self.store, identifiable: integration)
+                let sync = SyncIntegrationCommitsProcedure(source: client, destination: self.store, integration: integration)
                 self.subQueue.addOperation(sync)
             }
             
@@ -600,7 +600,7 @@ public class Manager {
                 return
             }
             
-            let sync = SyncServerProcedure(source: client, destination: self.store, identifiable: server)
+            let sync = SyncServerProcedure(source: client, destination: self.store, server: server)
             operations.append(sync)
         }
         

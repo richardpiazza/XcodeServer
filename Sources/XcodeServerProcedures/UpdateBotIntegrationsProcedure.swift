@@ -4,12 +4,18 @@ import Foundation
 
 @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 @available(swift, introduced: 5.1)
-public class UpdateBotIntegrationsProcedure: IdentifiablePersitableProcedure<Bot>, InputProcedure {
+public class UpdateBotIntegrationsProcedure: Procedure, InputProcedure {
+    
+    private let destination: BotPersistable
+    private var bot: Bot
     
     public var input: Pending<[Integration]> = .pending
     
-    public init(destination: AnyPersistable, identifiable: Bot, input: [Integration]? = nil) {
-        super.init(destination: destination, identifiable: identifiable)
+    public init(destination: BotPersistable, bot: Bot, input: [Integration]? = nil) {
+        self.destination = destination
+        self.bot = bot
+        super.init()
+        
         if let value = input {
             self.input = .ready(value)
         }
@@ -23,22 +29,22 @@ public class UpdateBotIntegrationsProcedure: IdentifiablePersitableProcedure<Bot
         guard let value = input.value else {
             let error = XcodeServerProcedureError.invalidInput
             InternalLog.procedures.error("", error: error)
-            cancel(with: error)
             finish(with: error)
             return
         }
         
-        var _bot = identifiable
-        _bot.modified = Date()
-        value.forEach({ _bot.integrations.insert($0) })
+        let id = bot.id
         
-        destination.saveBot(_bot) { [weak self] (result) in
+        bot.modified = Date()
+        value.forEach({ bot.integrations.insert($0) })
+        
+        destination.saveBot(bot) { [weak self] (result) in
             switch result {
             case .failure(let error):
                 InternalLog.procedures.error("", error: error)
                 self?.finish(with: error)
             case .success:
-                NotificationCenter.default.postBotDidChange(_bot.id)
+                NotificationCenter.default.postBotDidChange(id)
                 self?.finish()
             }
         }

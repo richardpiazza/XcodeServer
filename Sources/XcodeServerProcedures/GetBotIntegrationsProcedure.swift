@@ -1,13 +1,17 @@
 import XcodeServer
 import ProcedureKit
 
-public class GetBotIntegrationsProcedure: AnyQueryableProcedure, InputProcedure, OutputProcedure {
+public class GetBotIntegrationsProcedure: Procedure, InputProcedure, OutputProcedure {
+    
+    private let source: IntegrationQueryable
     
     public var input: Pending<Bot.ID> = .pending
     public var output: Pending<ProcedureResult<[Integration]>> = .pending
     
-    public init(source: AnyQueryable, input: Bot.ID? = nil) {
-        super.init(source: source)
+    public init(source: IntegrationQueryable, input: Bot.ID? = nil) {
+        self.source = source
+        super.init()
+        
         if let value = input {
             self.input = .ready(value)
         }
@@ -20,12 +24,13 @@ public class GetBotIntegrationsProcedure: AnyQueryableProcedure, InputProcedure,
         
         guard let id = input.value else {
             let error = XcodeServerProcedureError.invalidInput
-            InternalLog.procedures.error("", error: error)
-            cancel(with: error)
+            InternalLog.procedures.error("GetBotIntegrationsProcedure Failed", error: error)
             output = .ready(.failure(error))
             finish(with: error)
             return
         }
+        
+        InternalLog.procedures.debug("Getting INTEGRATIONS for Bot [\(id)]")
         
         source.getIntegrations(forBot: id) { [weak self] (result) in
             switch result {
@@ -33,7 +38,7 @@ public class GetBotIntegrationsProcedure: AnyQueryableProcedure, InputProcedure,
                 self?.output = .ready(.success(value))
                 self?.finish()
             case .failure(let error):
-                InternalLog.procedures.error("", error: error)
+                InternalLog.procedures.error("GetBotIntegrationsProcedure Failed", error: error)
                 self?.output = .ready(.failure(error))
                 self?.finish(with: error)
             }

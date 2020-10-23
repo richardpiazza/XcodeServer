@@ -4,12 +4,17 @@ import Foundation
 
 @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 @available(swift, introduced: 5.1)
-public class UpdateVersionProcedure: IdentifiablePersitableProcedure<Server>, InputProcedure {
+public class UpdateVersionProcedure: Procedure, InputProcedure {
     
+    private let destination: ServerPersistable
+    private var server: Server
     public var input: Pending<Server.Version> = .pending
     
-    public init(destination: AnyPersistable, identifiable: Server, input: Server.Version? = nil) {
-        super.init(destination: destination, identifiable: identifiable)
+    public init(destination: ServerPersistable, server: Server, input: Server.Version? = nil) {
+        self.destination = destination
+        self.server = server
+        super.init()
+        
         if let value = input {
             self.input = .ready(value)
         }
@@ -22,23 +27,23 @@ public class UpdateVersionProcedure: IdentifiablePersitableProcedure<Server>, In
         
         guard let value = input.value else {
             let error = XcodeServerProcedureError.invalidInput
-            InternalLog.procedures.error("", error: error)
-            cancel(with: error)
+            InternalLog.procedures.error("UpdateVersionProcedure Failed", error: error)
             finish(with: error)
             return
         }
         
-        var _server = identifiable
-        _server.modified = Date()
-        _server.version = value
+        let id = server.id
         
-        destination.saveServer(_server) { [weak self] (result) in
+        server.modified = Date()
+        server.version = value
+        
+        destination.saveServer(server) { [weak self] (result) in
             switch result {
             case .failure(let error):
-                InternalLog.procedures.error("", error: error)
+                InternalLog.procedures.error("UpdateVersionProcedure Failed", error: error)
                 self?.finish(with: error)
             case .success:
-                NotificationCenter.default.postServerDidChange(_server.id)
+                NotificationCenter.default.postServerDidChange(id)
                 self?.finish()
             }
         }

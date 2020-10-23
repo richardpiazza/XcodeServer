@@ -1,13 +1,17 @@
 import XcodeServer
 import ProcedureKit
 
-public class GetBotProcedure: AnyQueryableProcedure, InputProcedure, OutputProcedure {
+public class GetBotProcedure: Procedure, InputProcedure, OutputProcedure {
+    
+    private let source: BotQueryable
     
     public var input: Pending<Bot.ID> = .pending
     public var output: Pending<ProcedureResult<Bot>> = .pending
     
-    public init(source: AnyQueryable, input: Bot.ID? = nil) {
-        super.init(source: source)
+    public init(source: BotQueryable, input: Bot.ID? = nil) {
+        self.source = source
+        super.init()
+        
         if let value = input {
             self.input = .ready(value)
         }
@@ -20,8 +24,7 @@ public class GetBotProcedure: AnyQueryableProcedure, InputProcedure, OutputProce
         
         guard let id = input.value else {
             let error = XcodeServerProcedureError.invalidInput
-            InternalLog.procedures.error("", error: error)
-            cancel(with: error)
+            InternalLog.procedures.error("GetBotProcedure Failed", error: error)
             output = .ready(.failure(error))
             finish(with: error)
             return
@@ -33,7 +36,7 @@ public class GetBotProcedure: AnyQueryableProcedure, InputProcedure, OutputProce
                 self?.output = .ready(.success(value))
                 self?.finish()
             case .failure(let error):
-                InternalLog.procedures.error("", error: error)
+                InternalLog.procedures.error("GetBotProcedure Failed", error: error)
                 self?.output = .ready(.failure(error))
                 self?.finish(with: error)
             }

@@ -4,12 +4,18 @@ import Foundation
 
 @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 @available(swift, introduced: 5.1)
-public class UpdateServerBotsProcedure: IdentifiablePersitableProcedure<Server>, InputProcedure {
+public class UpdateServerBotsProcedure: Procedure, InputProcedure {
+    
+    private let destination: ServerPersistable
+    private var server: Server
     
     public var input: Pending<[Bot]> = .pending
     
-    public init(destination: AnyPersistable, identifiable: Server, input: [Bot]? = nil) {
-        super.init(destination: destination, identifiable: identifiable)
+    public init(destination: ServerPersistable, server: Server, input: [Bot]? = nil) {
+        self.destination = destination
+        self.server = server
+        super.init()
+        
         if let value = input {
             self.input = .ready(value)
         }
@@ -22,22 +28,22 @@ public class UpdateServerBotsProcedure: IdentifiablePersitableProcedure<Server>,
         
         guard let value = input.value else {
             let error = XcodeServerProcedureError.invalidInput
-            InternalLog.procedures.error("", error: error)
-            cancel(with: error)
+            InternalLog.procedures.error("UpdateServerBotsProcedure Failed", error: error)
             finish(with: error)
             return
         }
         
-        var _server = identifiable
-        value.forEach({ _server.bots.insert($0) })
+        let id = server.id
         
-        destination.saveServer(_server) { [weak self] (result) in
+        value.forEach({ server.bots.insert($0) })
+        
+        destination.saveServer(server) { [weak self] (result) in
             switch result {
             case .failure(let error):
-                InternalLog.procedures.error("", error: error)
+                InternalLog.procedures.error("UpdateServerBotsProcedure Failed", error: error)
                 self?.finish(with: error)
             case .success(_):
-                NotificationCenter.default.postServerDidChange(_server.id)
+                NotificationCenter.default.postServerDidChange(id)
                 self?.finish()
             }
         }

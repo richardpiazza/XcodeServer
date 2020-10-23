@@ -4,12 +4,18 @@ import Foundation
 
 @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 @available(swift, introduced: 5.1)
-public class UpdateBotProcedure: IdentifiablePersitableProcedure<Bot>, InputProcedure {
+public class UpdateBotProcedure: Procedure, InputProcedure {
+    
+    private let destination: BotPersistable
+    private let bot: Bot
     
     public var input: Pending<Bot> = .pending
     
-    public init(destination: AnyPersistable, identifiable: Bot, input: Bot? = nil) {
-        super.init(destination: destination, identifiable: identifiable)
+    public init(destination: BotPersistable, bot: Bot, input: Bot? = nil) {
+        self.destination = destination
+        self.bot = bot
+        super.init()
+        
         if let value = input {
             self.input = .ready(value)
         }
@@ -22,19 +28,20 @@ public class UpdateBotProcedure: IdentifiablePersitableProcedure<Bot>, InputProc
         
         guard let value = input.value else {
             let error = XcodeServerProcedureError.invalidInput
-            InternalLog.procedures.error("", error: error)
-            cancel(with: error)
+            InternalLog.procedures.error("UpdateBotProcedure Failed", error: error)
             finish(with: error)
             return
         }
         
+        let id = bot.id
+        
         destination.saveBot(value) { [weak self] (result) in
             switch result {
             case .failure(let error):
-                InternalLog.procedures.error("", error: error)
+                InternalLog.procedures.error("UpdateBotProcedure Failed", error: error)
                 self?.finish(with: error)
             case .success:
-                NotificationCenter.default.postBotDidChange(value.id)
+                NotificationCenter.default.postBotDidChange(id)
                 self?.finish()
             }
         }
