@@ -4,7 +4,6 @@ import Foundation
 
 public extension XcodeServer.Bot {
     init(_ bot: XcodeServerCoreData.Bot) {
-        InternalLog.coreData.debug("Mapping XcodeServerCoreData.Bot [\(bot.identifier)] to XcodeServer.Bot")
         self.init(id: bot.identifier)
         modified = bot.lastUpdate ?? Date()
         name = bot.name ?? ""

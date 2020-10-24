@@ -34,7 +34,6 @@ public class UpdateVersionProcedure: Procedure, InputProcedure {
         
         let id = server.id
         
-        server.modified = Date()
         server.version = value
         
         destination.saveServer(server) { [weak self] (result) in

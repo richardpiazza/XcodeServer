@@ -6,11 +6,11 @@ import Foundation
 @available(swift, introduced: 5.1)
 public class CreateIntegrationProcedure: Procedure, InputProcedure {
     
-    private let destination: BotPersistable
+    private let destination: IntegrationPersistable
     private var bot: Bot
     public var input: Pending<Integration> = .pending
     
-    public init(destination: BotPersistable, bot: Bot, input: Integration? = nil) {
+    public init(destination: IntegrationPersistable, bot: Bot, input: Integration? = nil) {
         self.destination = destination
         self.bot = bot
         super.init()
@@ -34,9 +34,7 @@ public class CreateIntegrationProcedure: Procedure, InputProcedure {
         
         let id = bot.id
         
-        bot.integrations.insert(value)
-        
-        destination.saveBot(bot) { [weak self] (result) in
+        destination.saveIntegration(value, forBot: id) { [weak self] (result) in
             switch result {
             case .failure(let error):
                 InternalLog.procedures.error("CreateIntegrationProcedure Failed", error: error)

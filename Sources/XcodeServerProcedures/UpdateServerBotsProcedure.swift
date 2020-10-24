@@ -35,9 +35,7 @@ public class UpdateServerBotsProcedure: Procedure, InputProcedure {
         
         let id = server.id
         
-        value.forEach({ server.bots.insert($0) })
-        
-        destination.saveServer(server) { [weak self] (result) in
+        destination.saveBots(value, forServer: id) { [weak self] (result) in
             switch result {
             case .failure(let error):
                 InternalLog.procedures.error("UpdateServerBotsProcedure Failed", error: error)

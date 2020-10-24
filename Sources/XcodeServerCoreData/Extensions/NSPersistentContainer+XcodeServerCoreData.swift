@@ -25,8 +25,12 @@ extension NSPersistentContainer {
                 if !Model.v1_0_0.model.isConfiguration(withName: "XcodeServer", compatibleWithStoreMetadata: metadata) {
                     try FileManager.default.removeItem(at: storeURL)
                 }
-            } catch {
-                InternalLog.coreData.error("", error: error)
+            } catch let error as NSError {
+                if error.code == 260 {
+                    // Expected (File Not Found)
+                } else {
+                    InternalLog.coreData.error("", error: error)
+                }
             }
         }
         

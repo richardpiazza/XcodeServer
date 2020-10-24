@@ -3,7 +3,6 @@ import XcodeServer
 
 public extension XcodeServer.Device {
     init(_ device: XcodeServerCoreData.Device) {
-        InternalLog.coreData.debug("Mapping XcodeServerCoreData.Device [\(device.identifier)] to XcodeServer.Device")
         self.init(id: device.identifier)
         name = device.name ?? ""
         deviceType = device.deviceType ?? ""
@@ -28,7 +27,6 @@ public extension XcodeServer.Device {
 
 public extension XcodeServer.Device.Platform {
     init(_ platform: Platform) {
-        InternalLog.coreData.debug("Mapping XcodeServerCoreData.Platform [\(platform.identifier)] to XcodeServer.Device.Platform")
         self.init(id: platform.identifier)
         buildNumber = platform.buildNumber ?? ""
         displayName = platform.displayName ?? ""
@@ -63,7 +61,6 @@ public extension XcodeServer.Device.Specification {
 
 public extension XcodeServer.Device.ProxiedDevice {
     init(_ device: XcodeServerCoreData.Device) {
-        InternalLog.coreData.debug("Mapping XcodeServerCoreData.Device [\(device.identifier)] to XcodeServer.Device.ProxiedDevice")
         self.init(id: device.identifier)
         name = device.name ?? ""
         deviceType = device.deviceType ?? ""

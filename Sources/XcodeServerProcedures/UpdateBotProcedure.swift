@@ -33,9 +33,16 @@ public class UpdateBotProcedure: Procedure, InputProcedure {
             return
         }
         
+        guard let serverId = bot.serverId else {
+            let error = XcodeServerProcedureError.invalidInput
+            InternalLog.procedures.error("UpdateBotProcedure Failed - No Server ID", error: error)
+            finish(with: error)
+            return
+        }
+        
         let id = bot.id
         
-        destination.saveBot(value) { [weak self] (result) in
+        destination.saveBot(value, forServer: serverId) { [weak self] (result) in
             switch result {
             case .failure(let error):
                 InternalLog.procedures.error("UpdateBotProcedure Failed", error: error)

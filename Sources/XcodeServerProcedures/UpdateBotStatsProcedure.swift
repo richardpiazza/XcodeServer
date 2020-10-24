@@ -35,9 +35,7 @@ public class UpdateBotStatsProcedure: Procedure, InputProcedure {
         
         let id = bot.id
         
-        bot.stats = value
-        
-        destination.saveBot(bot) { [weak self] (result) in
+        destination.saveStats(value, forBot: id) { [weak self] (result) in
             switch result {
             case .failure(let error):
                 InternalLog.procedures.error("UpdateBotStatsProcedure Failed", error: error)

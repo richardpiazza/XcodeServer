@@ -6,12 +6,12 @@ import Foundation
 @available(swift, introduced: 5.1)
 public class UpdateBotIntegrationsProcedure: Procedure, InputProcedure {
     
-    private let destination: BotPersistable
+    private let destination: IntegrationPersistable
     private var bot: Bot
     
     public var input: Pending<[Integration]> = .pending
     
-    public init(destination: BotPersistable, bot: Bot, input: [Integration]? = nil) {
+    public init(destination: IntegrationPersistable, bot: Bot, input: [Integration]? = nil) {
         self.destination = destination
         self.bot = bot
         super.init()
@@ -35,10 +35,7 @@ public class UpdateBotIntegrationsProcedure: Procedure, InputProcedure {
         
         let id = bot.id
         
-        bot.modified = Date()
-        value.forEach({ bot.integrations.insert($0) })
-        
-        destination.saveBot(bot) { [weak self] (result) in
+        destination.saveIntegrations(value, forBot: id) { [weak self] (result) in
             switch result {
             case .failure(let error):
                 InternalLog.procedures.error("", error: error)

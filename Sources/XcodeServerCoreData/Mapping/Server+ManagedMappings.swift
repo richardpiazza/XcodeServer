@@ -7,7 +7,6 @@ public extension XcodeServer.Server {
     ///
     /// - parameter server: The managed entity to transform.
     init(_ server: XcodeServerCoreData.Server) {
-        InternalLog.coreData.debug("Mapping XcodeServerCoreData.Server [\(server.fqdn)] to XcodeServer.Server")
         self.init(id: server.fqdn)
         modified = server.lastUpdate ?? Date()
         version = Version(server)

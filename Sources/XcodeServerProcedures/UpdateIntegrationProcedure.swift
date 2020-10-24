@@ -31,9 +31,16 @@ public class UpdateIntegrationProcedure: Procedure, InputProcedure {
             return
         }
         
+        guard let botId = value.botId else {
+            let error = XcodeServerProcedureError.invalidInput
+            InternalLog.procedures.error("UpdateIntegrationProcedure Failed - No Bot ID", error: error)
+            finish(with: error)
+            return
+        }
+        
         let id = value.id
         
-        destination.saveIntegration(value) { [weak self] (result) in
+        destination.saveIntegration(value, forBot: botId) { [weak self] (result) in
             switch result {
             case .failure(let error):
                 InternalLog.procedures.error("UpdateIntegrationProcedure Failed", error: error)

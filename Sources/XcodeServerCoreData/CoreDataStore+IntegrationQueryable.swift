@@ -5,7 +5,7 @@ import CoreData
 
 extension CoreDataStore: IntegrationQueryable {
     public func getIntegrations(queue: DispatchQueue?, completion: @escaping IntegrationsResultHandler) {
-        InternalLog.coreData.info("Retrieving ALL Integrations")
+        InternalLog.coreData.debug("Retrieving ALL Integrations")
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in
@@ -19,7 +19,7 @@ extension CoreDataStore: IntegrationQueryable {
     }
     
     public func getIntegrations(forBot id: XcodeServer.Bot.ID, queue: DispatchQueue?, completion: @escaping IntegrationsResultHandler) {
-        InternalLog.coreData.info("Retrieving INTEGRATIONS for Bot [\(id)]")
+        InternalLog.coreData.debug("Retrieving INTEGRATIONS for Bot [\(id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in
@@ -33,7 +33,7 @@ extension CoreDataStore: IntegrationQueryable {
     }
     
     public func getIntegration(_ id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping IntegrationResultHandler) {
-        InternalLog.coreData.info("Retrieving Integration [\(id)]")
+        InternalLog.coreData.debug("Retrieving Integration [\(id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in
@@ -52,7 +52,7 @@ extension CoreDataStore: IntegrationQueryable {
     }
     
     public func getArchiveForIntegration(_ id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping DataResultHandler) {
-        InternalLog.coreData.info("Retrieving ARCHIVE for Integration [\(id)]")
+        InternalLog.coreData.debug("Retrieving ARCHIVE for Integration [\(id)]")
         let queue = queue ?? returnQueue
         queue.async {
             completion(.failure(.message("Not Implemented")))
@@ -60,7 +60,7 @@ extension CoreDataStore: IntegrationQueryable {
     }
     
     public func getCommitsForIntegration(_ id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping CommitsResultHandler) {
-        InternalLog.coreData.info("Retrieving COMMITS for Integration [\(id)]")
+        InternalLog.coreData.debug("Retrieving COMMITS for Integration [\(id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in
@@ -88,7 +88,7 @@ extension CoreDataStore: IntegrationQueryable {
     }
     
     public func getIssuesForIntegration(_ id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping IssueCatalogResultHandler) {
-        InternalLog.coreData.info("Retrieving ISSUES for Integration [\(id)]")
+        InternalLog.coreData.debug("Retrieving ISSUES for Integration [\(id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in

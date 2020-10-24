@@ -33,6 +33,7 @@ public class Manager {
         self.authorizationDelegate = authorizationDelegate
         procedureQueue.delegate = self
         procedureQueue.maxConcurrentOperationCount = 1
+        ProcedureKit.Log.enabled = false
     }
     
     private func client(forServer id: Server.ID) throws -> APIClient {
@@ -173,8 +174,8 @@ public class Manager {
             return
         }
         
-        let _server = Server(id: id)
-        let sync = SyncServerProcedure(source: client, destination: store, server: _server)
+        let server = Server(id: id)
+        let sync = SyncServerProcedure(source: client, destination: store, server: server)
         sync.addDidFinishBlockObserver { (proc, error) in
             queue.async {
                 completion(error)

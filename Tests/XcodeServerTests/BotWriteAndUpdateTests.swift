@@ -187,7 +187,7 @@ final class BotWriteAndUpdateTests: XCTestCase {
         bot.stats = try XCTUnwrap(_stats)
         
         let saveBot = expectation(description: "Save Bot")
-        store.saveBot(bot) { (result) in
+        store.saveBot(bot, forServer: server.id) { (result) in
             switch result {
             case .success(let value):
                 bot = value

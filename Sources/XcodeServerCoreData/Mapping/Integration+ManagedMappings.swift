@@ -3,7 +3,6 @@ import XcodeServer
 
 public extension XcodeServer.Integration {
     init(_ integration: XcodeServerCoreData.Integration) {
-        InternalLog.coreData.debug("Mapping XcodeServerCoreData.Integration [\(integration.identifier)] to XcodeServer.Integration")
         self.init(id: integration.identifier)
         number = Int(integration.number)
         step = integration.currentStep

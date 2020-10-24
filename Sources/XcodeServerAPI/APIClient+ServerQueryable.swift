@@ -3,7 +3,7 @@ import XcodeServer
 
 extension APIClient: ServerQueryable {
     public func getServers(queue: DispatchQueue?, completion: @escaping ServersResultHandler) {
-        InternalLog.apiClient.info("Retrieving ALL Servers")
+        InternalLog.apiClient.debug("Retrieving ALL Servers")
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.versions { (result) in
@@ -23,7 +23,7 @@ extension APIClient: ServerQueryable {
     }
     
     public func getServer(_ id: Server.ID, queue: DispatchQueue?, completion: @escaping ServerResultHandler) {
-        InternalLog.apiClient.info("Retrieving Server [\(id)]")
+        InternalLog.apiClient.debug("Retrieving Server [\(id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.versions { (result) in

@@ -72,7 +72,7 @@ final class IntegrationWriteAndUpdateTests: XCTestCase {
         var updatedBot: XcodeServer.Bot?
         
         let saveBot = expectation(description: "Save Bot")
-        store.saveBot(bot) { (result) in
+        store.saveBot(bot, forServer: .example) { (result) in
             switch result {
             case .success(let value):
                 updatedBot = value
@@ -95,7 +95,7 @@ final class IntegrationWriteAndUpdateTests: XCTestCase {
         bot.integrations.insert(.dynumite24)
         
         let saveBot = expectation(description: "Save Bot")
-        store.saveBot(bot) { (result) in
+        store.saveBot(bot, forServer: .example) { (result) in
             switch result {
             case .success:
                 saveBot.fulfill()
@@ -107,7 +107,7 @@ final class IntegrationWriteAndUpdateTests: XCTestCase {
         
         var _integration: XcodeServer.Integration?
         let saveIntegration = expectation(description: "Save Integration")
-        store.saveIntegration(.dynumite24) { (result) in
+        store.saveIntegration(.dynumite24, forBot: bot.id) { (result) in
             switch result {
             case .success(let value):
                 _integration = value

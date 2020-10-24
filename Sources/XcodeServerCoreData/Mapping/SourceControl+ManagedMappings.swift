@@ -4,7 +4,6 @@ import Foundation
 
 public extension SourceControl.Commit {
     init(_ commit: XcodeServerCoreData.Commit) {
-        InternalLog.coreData.debug("Mapping XcodeServerCoreData.Commit [\(commit.commitHash)] to XcodeServer.SourceControl.Commit")
         self.init(id: commit.commitHash)
         message = commit.message ?? ""
         date = commit.date ?? Date()

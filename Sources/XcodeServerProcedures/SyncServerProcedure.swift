@@ -5,12 +5,15 @@ import ProcedureKit
 @available(swift, introduced: 5.1)
 public class SyncServerProcedure: Procedure {
     
-    private let source: AnyQueryable
-    private let destination: AnyPersistable
+    public typealias Source = AnyQueryable
+    public typealias Destination = (AnyQueryable & AnyPersistable)
+    
+    private let source: Source
+    private let destination: Destination
     private let server: Server
     private let procedureQueue: ProcedureQueue = ProcedureQueue()
     
-    public init(source: AnyQueryable, destination: AnyPersistable, server: Server) {
+    public init(source: Source, destination: Destination, server: Server) {
         self.source = source
         self.destination = destination
         self.server = server
@@ -25,11 +28,9 @@ public class SyncServerProcedure: Procedure {
             return
         }
         
-        let version = SyncVersionProcedure(source: source, destination: destination, server: server)
-        let bots = SyncServerBotsProcedure(source: source, destination: destination, server: server)
-        bots.addDependency(version)
-        
-        procedureQueue.addOperations([version, bots])
+        let syncVersion = SyncVersionProcedure(source: source, destination: destination, server: server)
+        let syncBots = SyncServerBotsGroupProcedure(source: source, destination: destination, server: server)
+        procedureQueue.addOperations([syncVersion, syncBots])
     }
 }
 
@@ -40,41 +41,46 @@ extension SyncServerProcedure: ProcedureQueueDelegate {
         switch procedure {
         case is SyncVersionProcedure:
             break
-        case is SyncServerBotsProcedure:
-            guard error == nil else {
-                print(error!)
-                break
+        case is SyncServerBotsGroupProcedure:
+            let proc = procedure as! SyncServerBotsGroupProcedure
+            if let bots = proc.output.value?.value {
+                for bot in bots {
+                    let syncStats = SyncBotStatsProcedure(source: source, destination: destination, bot: bot)
+                    let syncIntegrations = SyncBotIntegrationsGroupProcedure(source: source, destination: destination, bot: bot)
+                    queue.addOperations([syncStats, syncIntegrations])
+                }
             }
-            
-            let sync = procedure as! SyncServerBotsProcedure
-            sync.bots?.forEach({ (bot) in
-                let stats = SyncBotStatsProcedure(source: source, destination: destination, bot: bot)
-                let next = SyncBotIntegrationsProcedure(source: source, destination: destination, bot: bot)
-                next.addDependency(stats)
-                queue.addOperations([stats, next])
-            })
-        case is SyncBotIntegrationsProcedure:
-            guard error == nil else {
-                print(error!)
-                break
+        case is SyncBotIntegrationsGroupProcedure:
+            let proc = procedure as! SyncBotIntegrationsGroupProcedure
+            if let integrations = proc.output.value?.value {
+                for integration in integrations {
+                    if integration.step != .completed {
+                        let syncIntegration = SyncIntegrationGroupProcedure(source: source, destination: destination, integration: integration)
+                        queue.addOperation(syncIntegration)
+                    } else {
+                        if integration.shouldRetrieveIssues {
+                            let syncIssues = SyncIntegrationIssuesProcedure(source: source, destination: destination, integration: integration)
+                            queue.addOperation(syncIssues)
+                        }
+                        if integration.shouldRetrieveCommits {
+                            let syncCommits = SyncIntegrationCommitsProcedure(source: source, destination: destination, integration: integration)
+                            queue.addOperation(syncCommits)
+                        }
+                    }
+                }
             }
-            
-            let sync = procedure as! SyncBotIntegrationsProcedure
-            sync.integrations?.forEach({ (integration) in
-                let next = SyncIntegrationProcedure(source: source, destination: destination, integration: integration)
-                queue.addOperation(next)
-            })
-        case is SyncIntegrationProcedure:
-            guard error == nil else {
-                print(error!)
-                break
+        case is SyncIntegrationGroupProcedure:
+            let proc = procedure as! SyncIntegrationGroupProcedure
+            if let integration = proc.output.value?.value {
+                if integration.shouldRetrieveIssues {
+                    let syncIssues = SyncIntegrationIssuesProcedure(source: source, destination: destination, integration: integration)
+                    queue.addOperation(syncIssues)
+                }
+                if integration.shouldRetrieveCommits {
+                    let syncCommits = SyncIntegrationCommitsProcedure(source: source, destination: destination, integration: integration)
+                    queue.addOperation(syncCommits)
+                }
             }
-            
-            let sync = procedure as! SyncIntegrationProcedure
-            let issues = SyncIntegrationIssuesProcedure(source: source, destination: destination, integration: sync.integration)
-            let commits = SyncIntegrationCommitsProcedure(source: source, destination: destination, integration: sync.integration)
-
-            queue.addOperations([issues, commits])
         default:
             break
         }

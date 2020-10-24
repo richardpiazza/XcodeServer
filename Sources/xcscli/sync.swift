@@ -70,13 +70,15 @@ final class Sync: ParsableCommand, Route {
                 Self.exit()
             }
             
+            let start = Date()
             manager.syncServer(withId: self.server) { (syncError) in
                 guard syncError == nil else {
                     print(syncError!.localizedDescription)
                     Self.exit()
                 }
                 
-                print("Sync Complete")
+                let end = Date()
+                print("Sync Complete - \(end.timeIntervalSince(start)) Seconds")
                 if let url = store.persistentContainer.persistentStoreCoordinator.persistentStores.first?.url {
                     print("\(url)")
                 }

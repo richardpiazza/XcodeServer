@@ -11,8 +11,39 @@ extension CoreDataStore: ServerPersistable {
             self.persistentContainer.performBackgroundTask { (context) in
                 let _server = context.server(withFQDN: server.id) ?? XcodeServerCoreData.Server(context: context)
                 _server.update(server, context: context)
+                _server.lastUpdate = Date()
 
                 let result = XcodeServer.Server(_server)
+                
+                do {
+                    try context.save()
+                    queue.async {
+                        completion(.success(result))
+                    }
+                } catch {
+                    queue.async {
+                        completion(.failure(.error(error)))
+                    }
+                }
+            }
+        }
+    }
+    
+    public func saveBots(_ bots: [XcodeServer.Bot], forServer server: XcodeServer.Server.ID, queue: DispatchQueue?, completion: @escaping BotsResultHandler) {
+        InternalLog.coreData.info("Saving BOTS for Server [\(server)]")
+        let queue = queue ?? returnQueue
+        internalQueue.async {
+            self.persistentContainer.performBackgroundTask { (context) in
+                guard let _server = context.server(withFQDN: server) else {
+                    queue.async {
+                        completion(.failure(.noServer(server)))
+                    }
+                    return
+                }
+                
+                _server.update(Set(bots), context: context)
+                
+                let result = (_server.bots ?? []).map({ XcodeServer.Bot($0) })
                 
                 do {
                     try context.save()
