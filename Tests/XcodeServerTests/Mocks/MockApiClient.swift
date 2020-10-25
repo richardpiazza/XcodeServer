@@ -24,6 +24,14 @@ class MockApiClient: AnyQueryable {
         returnQueue = dispatchQueue
     }
     
+    private func decodeMultiline<T>(_ string: String, decoder: JSONDecoder) throws -> T where T: Decodable {
+        guard let data = string.data(using: .utf8) else {
+            throw CocoaError(.coderReadCorrupt)
+        }
+        
+        return try decoder.decode(T.self, from: data)
+    }
+    
     // MARK: - ServerQueryable
     
     func getServers(queue: DispatchQueue?, completion: @escaping ServersResultHandler) {
@@ -49,9 +57,13 @@ class MockApiClient: AnyQueryable {
             return
         }
         
-        #if swift(>=5.3)
         dispatchQueue.async {
-            let resource: XCSVersion? = try? Bundle.module.decodeJson("versions", decoder: self.decoder)
+            let resource: XCSVersion?
+            #if swift(>=5.3)
+            resource = try? Bundle.module.decodeJson("versions", decoder: self.decoder)
+            #else
+            resource = try? self.decodeMultiline(versionsJson, decoder: self.decoder)
+            #endif
             guard let versions = resource else {
                 queue.async {
                     completion(.failure(.noServer(id)))
@@ -64,25 +76,25 @@ class MockApiClient: AnyQueryable {
                 completion(.success(result))
             }
         }
-        #else
-        queue.async {
-            completion(.failure(.message("Not Implemented")))
-        }
-        #endif
     }
     
     // MARK: - BotQueryable
     
     func getBots(queue: DispatchQueue?, completion: @escaping BotsResultHandler) {
         let queue = queue ?? returnQueue
-        #if swift(>=5.3)
+        
         struct Bots: Decodable {
             let count: Int
             let results: [XCSBot]
         }
         
         dispatchQueue.async {
-            let resource: Bots? = try? Bundle.module.decodeJson("bots", decoder: self.decoder)
+            let resource: Bots?
+            #if swift(>=5.3)
+            resource = try? Bundle.module.decodeJson("bots", decoder: self.decoder)
+            #else
+            resource = try? self.decodeMultiline(botsJson, decoder: self.decoder)
+            #endif
             guard let value = resource else {
                 queue.async {
                     completion(.failure(.message("Invalid Resource")))
@@ -95,11 +107,6 @@ class MockApiClient: AnyQueryable {
                 completion(.success(result))
             }
         }
-        #else
-        queue.async {
-            completion(.failure(.message("Not Implemented")))
-        }
-        #endif
     }
     
     func getBots(forServer id: Server.ID, queue: DispatchQueue?, completion: @escaping BotsResultHandler) {
@@ -111,7 +118,6 @@ class MockApiClient: AnyQueryable {
     
     func getBot(_ id: Bot.ID, queue: DispatchQueue?, completion: @escaping BotResultHandler) {
         let queue = queue ?? returnQueue
-        #if swift(>=5.3)
         guard id == .dynumiteMacOS else {
             queue.async {
                 completion(.failure(.noBot(id)))
@@ -120,7 +126,12 @@ class MockApiClient: AnyQueryable {
         }
         
         dispatchQueue.async {
-            let resource: XCSBot? = try? Bundle.module.decodeJson("bot", decoder: self.decoder)
+            let resource: XCSBot?
+            #if swift(>=5.3)
+            resource = try? Bundle.module.decodeJson("bot", decoder: self.decoder)
+            #else
+            resource = try? self.decodeMultiline(botJson, decoder: self.decoder)
+            #endif
             guard let value = resource else {
                 queue.async {
                     completion(.failure(.message("Invalid Resource")))
@@ -133,16 +144,10 @@ class MockApiClient: AnyQueryable {
                 completion(.success(result))
             }
         }
-        #else
-        queue.async {
-            completion(.failure(.message("Not Implemented")))
-        }
-        #endif
     }
     
     func getStatsForBot(_ id: Bot.ID, queue: DispatchQueue?, completion: @escaping BotStatsResultHandler) {
         let queue = queue ?? returnQueue
-        #if swift(>=5.3)
         guard id == .dynumiteMacOS else {
             queue.async {
                 completion(.failure(.noBot(id)))
@@ -151,7 +156,12 @@ class MockApiClient: AnyQueryable {
         }
         
         dispatchQueue.async {
-            let resource: XCSStats? = try? Bundle.module.decodeJson("stats", decoder: self.decoder)
+            let resource: XCSStats?
+            #if swift(>=5.3)
+            resource = try? Bundle.module.decodeJson("stats", decoder: self.decoder)
+            #else
+            resource = try? self.decodeMultiline(statsJson, decoder: self.decoder)
+            #endif
             guard let value = resource else {
                 queue.async {
                     completion(.failure(.message("Invalid Resource")))
@@ -164,11 +174,6 @@ class MockApiClient: AnyQueryable {
                 completion(.success(result))
             }
         }
-        #else
-        queue.async {
-            completion(.failure(.message("Not Implemented")))
-        }
-        #endif
     }
     
     // MARK: - IntegrationQueryable
@@ -189,13 +194,21 @@ class MockApiClient: AnyQueryable {
     
     func getIntegration(_ id: Integration.ID, queue: DispatchQueue?, completion: @escaping IntegrationResultHandler) {
         let queue = queue ?? returnQueue
-        #if swift(>=5.3)
+        
         let json: String
         switch id {
         case .dynumite24:
+            #if swift(>=5.3)
             json = "integration"
+            #else
+            json = integrationJson
+            #endif
         case .structured18:
+            #if swift(>=5.3)
             json = "structured18"
+            #else
+            json = structured18Json
+            #endif
         default:
             queue.async {
                 completion(.failure(.noIntegration(id)))
@@ -204,7 +217,12 @@ class MockApiClient: AnyQueryable {
         }
         
         dispatchQueue.async {
-            let resource: XCSIntegration? = try? Bundle.module.decodeJson(json, decoder: self.decoder)
+            let resource: XCSIntegration?
+            #if swift(>=5.3)
+            resource = try? Bundle.module.decodeJson(json, decoder: self.decoder)
+            #else
+            resource = try? self.decodeMultiline(json, decoder: self.decoder)
+            #endif
             guard let value = resource else {
                 queue.async {
                     completion(.failure(.message("Invalid Resource")))
@@ -217,11 +235,6 @@ class MockApiClient: AnyQueryable {
                 completion(.success(result))
             }
         }
-        #else
-        queue.async {
-            completion(.failure(.message("Not Implemented")))
-        }
-        #endif
     }
     
     func getArchiveForIntegration(_ id: Integration.ID, queue: DispatchQueue?, completion: @escaping DataResultHandler) {
@@ -238,11 +251,15 @@ class MockApiClient: AnyQueryable {
         }
         
         let queue = queue ?? returnQueue
-        #if swift(>=5.3)
+        
         let json: String
         switch id {
         case .structured18:
+            #if swift(>=5.3)
             json = "structured18_commits"
+            #else
+            json = structured18CommitsJson
+            #endif
         default:
             queue.async {
                 completion(.failure(.noIntegration(id)))
@@ -251,24 +268,24 @@ class MockApiClient: AnyQueryable {
         }
         
         dispatchQueue.async {
-            guard let resource = try? Bundle.module.decodeJson(json, decoder: self.decoder) as Commits else {
+            let resource: Commits?
+            #if swift(>=5.3)
+            resource = try? Bundle.module.decodeJson(json, decoder: self.decoder)
+            #else
+            resource = try? self.decodeMultiline(json, decoder: self.decoder)
+            #endif
+            guard let value = resource else {
                 queue.async {
                     completion(.failure(.message("Invalid Resource")))
                 }
                 return
             }
             
-            let commits = resource.results.commits(forIntegration: id)
+            let commits = value.results.commits(forIntegration: id)
             queue.async {
                 completion(.success(commits))
             }
         }
-        
-        #else
-        queue.async {
-            completion(.failure(.message("Not Implemented")))
-        }
-        #endif
     }
     
     func getIssuesForIntegration(_ id: Integration.ID, queue: DispatchQueue?, completion: @escaping IssueCatalogResultHandler) {
