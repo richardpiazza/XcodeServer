@@ -35,8 +35,9 @@ final class Sync: ParsableCommand, Route {
     @Option(help: "The model version to use. [1.0.0].")
     var model: Model?
     
-    @Flag(help: "Removes any store files prior to syncing.")
-    var purge: Bool = false
+//    @Flag(help: "Removes any store files prior to syncing.")
+    @Flag(wrappedValue: false, name: .long, help: "Removes any store files prior to syncing.")
+    var purge: Bool
     
     func validate() throws {
         try validateServer()
