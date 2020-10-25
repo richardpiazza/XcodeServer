@@ -11,7 +11,9 @@ public extension FileManager {
             root = try url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
             #endif
             
-            return root.appendingPathComponent(folder, isDirectory: true)
+            let directory = root.appendingPathComponent(folder, isDirectory: true)
+            try createDirectory(at: directory, withIntermediateDirectories: true, attributes: nil)
+            return directory
         } catch {
             fatalError(error.localizedDescription)
         }
