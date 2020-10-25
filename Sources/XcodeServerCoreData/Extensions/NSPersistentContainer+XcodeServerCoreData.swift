@@ -5,7 +5,12 @@ import CoreData
 
 extension NSPersistentContainer {
     convenience init(model: Model, persisted: Bool = true) {
-        let directoryURL = FileManager.default.xcodeServerDirectory
+        let objectModel = NSManagedObjectModel.make(for: model)
+        self.init(model: objectModel, persisted: persisted)
+    }
+    
+    convenience init(model: NSManagedObjectModel, persisted: Bool = true) {
+        let name = "XcodeServer"
         let storeURL = FileManager.default.storeURL
         
         let description = NSPersistentStoreDescription()
@@ -20,16 +25,15 @@ extension NSPersistentContainer {
         
         if persisted {
             do {
-                try FileManager.default.createDirectory(at: directoryURL, withIntermediateDirectories: true, attributes: nil)
                 let metadata = try NSPersistentStoreCoordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: storeURL, options: nil)
-                if !Model.v1_0_0.model.isConfiguration(withName: "XcodeServer", compatibleWithStoreMetadata: metadata) {
+                if !model.isConfiguration(withName: name, compatibleWithStoreMetadata: metadata) {
                     try FileManager.default.removeItem(at: storeURL)
                 }
             } catch let error as NSError {
                 if error.code == 260 {
                     // Expected (File Not Found)
                 } else {
-                    InternalLog.coreData.error("", error: error)
+                    InternalLog.coreData.error("Failed to load store metadata or remove existing.", error: error)
                 }
             }
         }
@@ -37,7 +41,7 @@ extension NSPersistentContainer {
         // check for migration
         // perform if necessary
         
-        self.init(name: "XcodeServer", managedObjectModel: model.model)
+        self.init(name: name, managedObjectModel: model)
         
         persistentStoreDescriptions = [description]
         loadPersistentStores { (_, error) in
@@ -59,7 +63,7 @@ extension NSPersistentContainer {
             do {
                 try persistentStoreCoordinator.remove(store)
             } catch {
-                InternalLog.coreData.error("", error: error)
+                InternalLog.coreData.error("Failed to remove persistent store from the store coordinator.", error: error)
             }
         }
     }
