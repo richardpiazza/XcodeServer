@@ -27,8 +27,7 @@ final class Versions: ParsableCommand, Route {
     @Option(help: "Password credential for the Xcode Server. (Optional).")
     var password: String?
     
-//    @Flag(help: "Displays the raw JSON response.")
-    @Flag(wrappedValue: false, name: .long, help: "Displays the raw JSON response.")
+    @Flag(help: "Displays the raw JSON response.")
     var rawResponse: Bool
     
     func validate() throws {
