@@ -32,8 +32,15 @@ public extension Repository {
     
     func update(_ commits: Set<SourceControl.Commit>, integration: XcodeServerCoreData.Integration? = nil, context: NSManagedObjectContext) {
         for commit in commits {
-            let _commit: Commit = context.commit(withHash: commit.id) ?? Commit(context: context)
-            _commit.repository = self
+            let _commit: Commit
+            if let existing = context.commit(withHash: commit.id) {
+                _commit = existing
+            } else {
+                InternalLog.coreData.info("Creating COMMIT for Repository [\(identifier)]")
+                _commit = Commit(context: context)
+                _commit.repository = self
+            }
+            
             _commit.update(commit, integration: integration, context: context)
         }
     }

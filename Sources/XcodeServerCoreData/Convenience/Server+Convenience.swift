@@ -38,8 +38,15 @@ public extension XcodeServerCoreData.Server {
     /// - parameter context: The managed context in which to perform operations.
     func update(_ entities: Set<XcodeServer.Bot>, context: NSManagedObjectContext) {
         entities.forEach({ entity in
-            let bot = context.bot(withIdentifier: entity.id) ?? Bot(context: context)
-            bot.server = self
+            let bot: Bot
+            if let existing = context.bot(withIdentifier: entity.id) {
+                bot = existing
+            } else {
+                bot = Bot(context: context)
+                bot.server = self
+                InternalLog.coreData.info("Creating BOT '\(bot.name ?? "")' [\(bot.identifier)] for Server \(fqdn)")
+            }
+            
             bot.update(entity, context: context)
         })
     }

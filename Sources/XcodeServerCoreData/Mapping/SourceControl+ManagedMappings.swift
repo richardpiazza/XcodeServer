@@ -39,7 +39,6 @@ public extension SourceControl.Change {
 
 public extension SourceControl.Remote {
     init(_ repository: XcodeServerCoreData.Repository) {
-        InternalLog.coreData.debug("Mapping XcodeServerCoreData.Repository [\(repository.identifier)] to XcodeServer.SourceControl.Remote")
         self.init(id: repository.identifier)
         system = repository.system ?? ""
         url = repository.url ?? ""
@@ -52,7 +51,6 @@ public extension SourceControl.Remote {
 
 public extension SourceControl.Location {
     init(_ repository: XcodeServerCoreData.Repository) {
-        InternalLog.coreData.debug("Mapping XcodeServerCoreData.Repository [\(repository.identifier)] to XcodeServer.SourceControl.Location")
         self.init(id: repository.branchIdentifier ?? "")
         branchOptions = Int(repository.branchOptions)
         locationType = repository.locationType ?? ""

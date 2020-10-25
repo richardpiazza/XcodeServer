@@ -4,8 +4,7 @@ import CoreData
 
 /// Xcode Server Core Data Model: **1.0.0**
 ///
-/// This is the base state of all known Xcode Server entities that are accessable
-/// via the REST API.
+/// This is the base state of all known Xcode Server entities that are accessible via the REST API.
 ///
 /// ## Additions
 ///

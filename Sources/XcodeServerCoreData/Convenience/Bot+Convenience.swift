@@ -9,9 +9,11 @@ public extension XcodeServerCoreData.Bot {
     /// - parameter context: The current managed object context for performing operations.
     func update(_ bot: XcodeServer.Bot, context: NSManagedObjectContext) {
         if configuration == nil {
+            InternalLog.coreData.info("Creating CONFIGURATION for Bot '\(bot.name)' [\(bot.id)]")
             configuration = Configuration(context: context)
         }
         if stats == nil {
+            InternalLog.coreData.info("Creating STATS for Bot '\(bot.name)' [\(bot.id)]")
             stats = Stats(context: context)
         }
         
@@ -32,8 +34,8 @@ public extension XcodeServerCoreData.Bot {
                 if let entity = context.repository(withIdentifier: remoteId) {
                     repository = entity
                 } else {
+                    InternalLog.coreData.info("Creating REPOSITORY '\(blueprint.name)' [\(remoteId)]")
                     repository = Repository(context: context)
-                    InternalLog.coreData.debug("Creating REPOSITORY '\(blueprint.name)' [\(remoteId)]")
                 }
                 repository.update(blueprint, context: context)
             }
@@ -51,6 +53,7 @@ public extension XcodeServerCoreData.Bot {
             if let existing = integrations?.first(where: { $0.identifier == integration.id }) {
                 existing.update(integration, context: context)
             } else {
+                InternalLog.coreData.info("Creating INTEGRATION '\(integration.number)' [\(integration.id)] for Bot '\(name ?? "")'")
                 let new = Integration(context: context)
                 new.update(integration, context: context)
                 new.bot = self

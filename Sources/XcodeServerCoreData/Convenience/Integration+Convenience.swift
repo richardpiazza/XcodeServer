@@ -97,12 +97,15 @@ public extension Integration {
 public extension XcodeServerCoreData.Integration {
     func update(_ integration: XcodeServer.Integration, context: NSManagedObjectContext) {
         if assets == nil {
+            InternalLog.coreData.info("Creating INTEGRATION_ASSETS for Integration '\(integration.number)' [\(integration.id)]")
             assets = IntegrationAssets(context: context)
         }
         if buildResultSummary == nil {
+            InternalLog.coreData.info("Creating BUILD_RESULT_SUMMARY for Integration '\(integration.number)' [\(integration.id)]")
             buildResultSummary = BuildResultSummary(context: context)
         }
         if issues == nil {
+            InternalLog.coreData.info("Creating INTEGRATION_ISSUES for Integration '\(integration.number)' [\(integration.id)]")
             issues = IntegrationIssues(context: context)
         }
         
@@ -147,8 +150,8 @@ public extension XcodeServerCoreData.Integration {
                 if let entity = context.repository(withIdentifier: blueprint.primaryRemoteIdentifier) {
                     repository = entity
                 } else {
+                    InternalLog.coreData.info("Creating REPOSITORY '\(blueprint.name)' [\(blueprint.primaryRemoteIdentifier)]")
                     repository = Repository(context: context)
-                    InternalLog.coreData.debug("Creating REPOSITORY '\(blueprint.name)' [\(blueprint.primaryRemoteIdentifier)]")
                 }
                 repository.update(blueprint, context: context)
             }
@@ -176,9 +179,9 @@ public extension XcodeServerCoreData.Integration {
             if let entity = context.repository(withIdentifier: remoteId) {
                 repository = entity
             } else {
+                InternalLog.coreData.info("Creating REPOSITORY '??' [\(remoteId)]")
                 repository = Repository(context: context)
                 repository.identifier = remoteId
-                InternalLog.coreData.debug("Creating REPOSITORY '??' [\(remoteId)]")
             }
             
             repository.update(commits, integration: self, context: context)
