@@ -55,35 +55,3 @@ public struct Integration: Hashable, Identifiable {
         self.id = id
     }
 }
-
-public extension Integration {
-    @available(*, deprecated, renamed: "id")
-    var identifier: String {
-        get { id }
-        set { id = newValue }
-    }
-    
-    @available(*, deprecated, renamed: "modified")
-    var lastUpdate: Date? {
-        get { modified }
-        set { modified = newValue ?? Date() }
-    }
-    
-    @available(*, deprecated, renamed: "queued")
-    var queuedTime: Date? {
-        get { queued }
-        set { queued = newValue }
-    }
-    
-    @available(*, deprecated, renamed: "started")
-    var startedTime: Date? {
-        get { started }
-        set { started = newValue }
-    }
-    
-    @available(*, deprecated, renamed: "ended")
-    var endedTime: Date? {
-        get { ended }
-        set { ended = newValue }
-    }
-}

@@ -1,5 +1,5 @@
 public extension Trigger {
-    
+    ///
     struct Email: Hashable {
         
         /// Type of email being sent.
@@ -61,8 +61,3 @@ public extension Trigger {
         }
     }
 }
-
-@available(*, deprecated, renamed: "Trigger.Email.Category")
-public typealias EmailType = Trigger.Email.Category
-@available(*, deprecated, renamed: "Trigger.Email.Schedule")
-public typealias ReportSchedule = Trigger.Email.Schedule

@@ -12,6 +12,7 @@ public extension Server {
         case v2_0 = "2.0"
     }
     
+    ///
     struct Version: Hashable, Encodable {
         
         /// The **API** version.
@@ -39,8 +40,3 @@ public extension Server {
         }
     }
 }
-
-@available(*, deprecated, renamed: "Server.API")
-public typealias APIVersion = Server.API
-@available(*, deprecated, renamed: "Server.App")
-public typealias XcodeServerVersion = Server.App

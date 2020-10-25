@@ -9,11 +9,7 @@ public enum XcodeServerProcedureError: Swift.Error, LocalizedError {
     }
     
     case invalidInput
-    @available(*, deprecated, renamed: "existingXcodeServer(id:)")
-    case existingXcodeServer(fqdn: String)
     case existingXcodeServer(id: Server.ID)
-    @available(*, deprecated, renamed: "failedToCreateXcodeServer(id:)")
-    case failedToCreateXcodeServer(fqdn: String)
     case failedToCreateXcodeServer(id: Server.ID)
     case failedToCreateIntegration(id: Integration.ID)
     case unassignedObject(type: UnassignedObjectType)

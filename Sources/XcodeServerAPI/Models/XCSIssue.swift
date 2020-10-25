@@ -68,12 +68,3 @@ extension XCSIssue: Equatable {
 // MARK: - Hashable
 extension XCSIssue: Hashable {
 }
-
-// MARK: - Deprecations
-public extension XCSIssue {
-    @available(*, deprecated, renamed: "id")
-    var identifier: String {
-        get { _id }
-        set { _id = newValue }
-    }
-}

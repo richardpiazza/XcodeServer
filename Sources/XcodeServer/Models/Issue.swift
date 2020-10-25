@@ -1,5 +1,6 @@
 import Foundation
 
+///
 public struct Issue: Hashable, Identifiable {
     
     // MARK: - Metadata
@@ -23,13 +24,5 @@ public struct Issue: Hashable, Identifiable {
     
     public init(id: Issue.ID = "") {
         self.id = id
-    }
-}
-
-public extension Issue {
-    @available(*, deprecated, renamed: "id")
-    var identifier: String {
-        get { id }
-        set { id = newValue }
     }
 }

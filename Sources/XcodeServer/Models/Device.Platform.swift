@@ -1,5 +1,5 @@
 public extension Device {
-
+    ///
     struct Platform: Hashable, Identifiable {
         public var id: String
         public var buildNumber: String = ""
@@ -11,13 +11,5 @@ public extension Device {
         public init(id: Platform.ID = "") {
             self.id = id
         }
-    }
-}
-
-public extension Device.Platform {
-    @available(*, deprecated, renamed: "id")
-    var identifier: String {
-        get { id }
-        set { id = newValue }
     }
 }

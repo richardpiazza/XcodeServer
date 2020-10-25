@@ -1,5 +1,5 @@
 public extension Issue {
-    
+    ///
     enum IdentificationStrategy: Int, Codable {
         case blameLineAgainstCommits = 0
         case fileHasBeenModifiedByCommits = 1
@@ -10,6 +10,3 @@ public extension Issue {
         case multipleCommitsSingleUserInIntegration = 6
     }
 }
-
-@available(*, deprecated, renamed: "Issue.IdentificationStrategy")
-public typealias IssueIdentificationStrategy = Issue.IdentificationStrategy

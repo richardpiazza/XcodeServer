@@ -1,5 +1,4 @@
 public extension Issue {
-    
     /// Identifies the type of an `Integration` issue.
     enum Category: String, Codable {
         case unknown = "unknown"
@@ -50,6 +49,3 @@ public extension Issue.Category {
         }
     }
 }
-
-@available(*, deprecated, renamed: "Issue.Category")
-public typealias IssueType = Issue.Category

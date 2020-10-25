@@ -1,5 +1,4 @@
 public extension Integration {
-    
     /// The outcome of the `Integration`.
     ///
     /// /Applications/Xcode.app/Contents/Developer/usr/share/xcs/xcsd/constants.js
@@ -48,6 +47,3 @@ extension Integration.Result: CustomStringConvertible {
         }
     }
 }
-
-@available(*, deprecated, renamed: "Integration.Result")
-public typealias IntegrationResult = Integration.Result

@@ -12,15 +12,6 @@ extension NSManagedObject {
         
         return entityName
     }
-    
-    @available(*, deprecated)
-    convenience init?(managedObjectContext context: NSManagedObjectContext) {
-        guard let entityDescription = NSEntityDescription.entity(forEntityName: type(of: self).entityName, in: context) else {
-            return nil
-        }
-        
-        self.init(entity: entityDescription, insertInto: context)
-    }
 }
 
 #endif

@@ -33,12 +33,3 @@ extension XCSPlatform: Equatable {
 // MARK: - Hashable
 extension XCSPlatform: Hashable {
 }
-
-// MARK: - Deprecations
-public extension XCSPlatform {
-    @available(*, deprecated, renamed: "id")
-    var identifier: String {
-        get { _id }
-        set { _id = newValue }
-    }
-}

@@ -8,25 +8,8 @@ import NIOHTTP1
 import FoundationNetworking
 #endif
 
-@available(*, deprecated, renamed: "APIClient.Error")
-public typealias APIClientError = APIClient.Error
-@available(*, deprecated, renamed: "APIClient.Headers")
-public typealias APIClientHeaders = APIClient.Headers
-
 public protocol APIClientAuthorizationDelegate: class {
     func credentials(for fqdn: String) -> (username: String, password: String)?
-    @available(*, deprecated, renamed: "credentials(for:)")
-    func authorization(for fqdn: String?) -> HTTP.Authorization?
-}
-
-public extension APIClientAuthorizationDelegate {
-    @available(*, deprecated, renamed: "credentials(for:)")
-    func authorization(for fqdn: String?) -> HTTP.Authorization? {
-        guard let creds = credentials(for: fqdn ?? "") else {
-            return nil
-        }
-        return .basic(username: creds.username, password: creds.password)
-    }
 }
 
 public class APIClient {
@@ -53,11 +36,6 @@ public class APIClient {
     
     public struct Headers {
         public static let xcsAPIVersion = "x-xcsapiversion"
-        
-        @available(*, deprecated, renamed: "xcsAPIVersion")
-        public static var xscAPIVersion: String {
-            return xcsAPIVersion
-        }
     }
     
     private static var rfc1123: DateFormatter = {
@@ -426,12 +404,6 @@ public extension APIClient {
             
             completion(.success((filename, result)))
         }
-    }
-    
-    /// Requests the '`/integrations/{id}/assets`' endpoint from the Xcode Server API.
-    @available(*, deprecated, renamed: "archive(forIntegrationWithIdentifier:completion:)")
-    func assets(forIntegrationWithIdentifier identifier: String, completion: @escaping (Result<(String, Data), Error>) -> Void) {
-        archive(forIntegrationWithIdentifier: identifier, completion: completion)
     }
 }
 

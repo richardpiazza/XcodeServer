@@ -1,6 +1,7 @@
 public struct Tests {
-    
+    ///
     public typealias DeviceIdentifier = String
+    ///
     public typealias Results = (name: String, result: Result)
     
     struct CodingKeys: CodingKey {
@@ -20,16 +21,10 @@ public struct Tests {
         internal static let aggregateDeviceStatus = Tests.CodingKeys(stringValue: "_xcsAggrDeviceStatus")!
     }
     
+    ///
     public enum Result: Int {
         case passed = 0
         case failed = 1
         case skipped = 2
     }
 }
-
-@available(*, deprecated, renamed: "Tests.DeviceIdentifier")
-public typealias TestDeviceIdentifier = Tests.DeviceIdentifier
-@available(*, deprecated, renamed: "Tests.CodingKeys")
-typealias TestKey = Tests.CodingKeys
-@available(*, deprecated, renamed: "Tests.Results")
-public typealias TestResult = (name: String, passed: Bool)

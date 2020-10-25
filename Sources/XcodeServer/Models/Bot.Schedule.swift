@@ -1,5 +1,4 @@
 public extension Bot {
-    
     /// Indicates how often should an Xcode Bot run.
     enum Schedule: Int, Codable {
         case periodic = 1
@@ -7,6 +6,3 @@ public extension Bot {
         case manual = 3
     }
 }
-
-@available(*, deprecated, renamed: "Bot.Schedule")
-public typealias BotSchedule = Bot.Schedule

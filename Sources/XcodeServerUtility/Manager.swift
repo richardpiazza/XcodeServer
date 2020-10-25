@@ -46,11 +46,6 @@ public class Manager {
         return client
     }
     
-    @available(*, deprecated, renamed: "resetClient(forServer:)")
-    public func resetClient(forFQDN fqdn: String) {
-        resetClient(forServer: fqdn)
-    }
-    
     public func resetClient(forServer id: Server.ID) {
         clients[id] = nil
     }

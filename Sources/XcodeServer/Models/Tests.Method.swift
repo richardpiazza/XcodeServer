@@ -1,6 +1,7 @@
 import Foundation
 
 public extension Tests {
+    ///
     struct Method: Hashable, Codable {
         public var name: String = ""
         public var deviceResults: [Tests.DeviceIdentifier: Int] = [:]
@@ -101,6 +102,3 @@ private extension String {
         return characterSet.contains(UnicodeScalar(c)!)
     }
 }
-
-@available(*, deprecated, renamed: "Tests.Method")
-public typealias TestMethod = Tests.Method

@@ -1,5 +1,4 @@
 public extension Trigger {
-    
     /// The type of trigger being executed.
     ///
     /// /Applications/Xcode.app/Contents/Developer/usr/share/xcs/xcsd/constants.js
@@ -14,6 +13,3 @@ public extension Trigger {
         case email = 2
     }
 }
-
-@available(*, deprecated, renamed: "Trigger.Category")
-public typealias TriggerType = Trigger.Category

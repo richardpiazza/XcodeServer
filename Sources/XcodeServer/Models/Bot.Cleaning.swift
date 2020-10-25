@@ -1,5 +1,5 @@
 public extension Bot {
-    
+    /// Integration cleaning schedule
     enum Cleaning: Int, Codable {
         case never = 0
         case always = 1
@@ -7,6 +7,3 @@ public extension Bot {
         case weekly = 3
     }
 }
-
-@available(*, deprecated, renamed: "Bot.Cleaning")
-public typealias CleanSchedule = Bot.Cleaning

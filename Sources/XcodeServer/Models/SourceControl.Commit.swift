@@ -1,7 +1,7 @@
 import Foundation
 
 public extension SourceControl {
-    
+    ///
     struct Commit: Hashable, Identifiable {
         
         // MARK: - Attributes
@@ -19,12 +19,6 @@ public extension SourceControl {
         
         public init(id: Commit.ID = "") {
             self.id = id
-        }
-        
-        @available(*, deprecated, renamed: "id")
-        public var commitHash: String {
-            get { id }
-            set { id = newValue }
         }
     }
 }

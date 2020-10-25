@@ -1,5 +1,4 @@
 public extension Bot {
-    
     /// Intervals available for `Schedule.periodic`.
     enum PeriodicInterval: Int, Codable {
         case none = 0
@@ -9,6 +8,3 @@ public extension Bot {
         case integration = 4
     }
 }
-
-@available(*, deprecated, renamed: "Bot.PeriodicInterval")
-public typealias PeriodicScheduleInterval = Bot.PeriodicInterval

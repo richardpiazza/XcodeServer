@@ -23,8 +23,6 @@ final class Integrations: ParsableCommand, Route {
         case issues
         case coverage
         case archive
-        @available(*, deprecated, renamed: "archive")
-        case assets
     }
     
     @Argument(help: "Fully Qualified Domain Name of the Xcode Server.")
@@ -82,7 +80,7 @@ final class Integrations: ParsableCommand, Route {
                 
                 Self.exit()
             }
-        case .some(.assets), .some(.archive):
+        case .some(.archive):
             client.archive(forIntegrationWithIdentifier: id) { (result) in
                 switch result {
                 case .success(let asset):

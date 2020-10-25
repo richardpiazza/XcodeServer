@@ -36,23 +36,3 @@ public extension Bot {
         return Array(integrations).sorted(by: { $0.number < $1.number }).last
     }
 }
-
-public extension Bot {
-    @available(*, deprecated, renamed: "id")
-    var identifier: String {
-        get { id }
-        set { id = newValue }
-    }
-    
-    @available(*, deprecated, renamed: "nextIntegrationNumber")
-    var integrationCounter: Int {
-        get { nextIntegrationNumber }
-        set { nextIntegrationNumber = newValue }
-    }
-    
-    @available(*, deprecated, renamed: "modified")
-    var lastUpdate: Date? {
-        get { modified }
-        set { modified = newValue ?? Date() }
-    }
-}

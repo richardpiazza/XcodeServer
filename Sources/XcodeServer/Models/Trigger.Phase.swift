@@ -1,5 +1,4 @@
 public extension Trigger {
-    
     /// When a trigger may be executed during the `Integration` lifecycle.
     ///
     /// /Applications/Xcode.app/Contents/Developer/usr/share/xcs/xcsd/constants.js
@@ -14,6 +13,3 @@ public extension Trigger {
         case afterIntegration = 2
     }
 }
-
-@available(*, deprecated, renamed: "Trigger.Phase")
-public typealias TriggerPhase = Trigger.Phase

@@ -1,3 +1,4 @@
+///
 public struct Device: Hashable, Identifiable {
     
     public var id: String
@@ -20,13 +21,5 @@ public struct Device: Hashable, Identifiable {
     
     public init(id: Device.ID = "") {
         self.id = id
-    }
-}
-
-public extension Device {
-    @available(*, deprecated, renamed: "id")
-    var identifier: String {
-        get { id }
-        set { id = newValue }
     }
 }

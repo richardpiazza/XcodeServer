@@ -1,4 +1,5 @@
 public extension Tests {
+    ///
     struct Class: Hashable, Codable {
         public var name: String = ""
         public var methods: [Tests.Method] = []
@@ -46,6 +47,3 @@ public extension Tests.Class {
         return aggregateResults.contains(where: { $0.value != 1.0 })
     }
 }
-
-@available(*, deprecated, renamed: "Tests.Class")
-public typealias TestClass = Tests.Class

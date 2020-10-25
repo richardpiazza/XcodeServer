@@ -7,7 +7,6 @@ public struct XCSVersion: Codable {
         case docType = "doc_type"
         case macOSVersion = "os"
         case serverAppVersion = "server"
-        case tinyID
         case xcodeAppVersion = "xcode"
         case xcodeServerVersion = "xcodeServer"
     }
@@ -19,8 +18,6 @@ public struct XCSVersion: Codable {
     public var _rev: String = ""
     /// Document Type
     public var docType: String = "version"
-    @available(*, deprecated, message: "tinyID is not useful for most contexts.")
-    public var tinyID: String = ""
     
     // MARK: - Properties
     
@@ -59,31 +56,4 @@ extension XCSVersion: Equatable {
 
 // MARK: - Hashable
 extension XCSVersion: Hashable {
-}
-
-// MARK: - Deprecations
-public extension XCSVersion {
-    @available(*, deprecated, renamed: "macOSVersion")
-    var os: String? {
-        get { macOSVersion }
-        set { macOSVersion = newValue }
-    }
-    
-    @available(*, deprecated, renamed: "xcodeAppVersion")
-    var xcode: String? {
-        get { xcodeAppVersion }
-        set { xcodeAppVersion = newValue }
-    }
-    
-    @available(*, deprecated, renamed: "serverAppVersion")
-    var server: String? {
-        get { serverAppVersion }
-        set { serverAppVersion = newValue }
-    }
-    
-    @available(*, deprecated, renamed: "xcodeServerVersion")
-    var xcodeServer: String? {
-        get { xcodeServerVersion }
-        set { xcodeServerVersion = newValue }
-    }
 }

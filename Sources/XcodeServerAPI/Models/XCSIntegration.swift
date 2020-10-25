@@ -153,12 +153,3 @@ extension XCSIntegration: Identifiable {
         set { _id = newValue }
     }
 }
-
-// MARK: - Deprecations
-public extension XCSIntegration {
-    @available(*, deprecated, renamed: "id")
-    var identifier: String {
-        get { _id }
-        set { _id = newValue }
-    }
-}

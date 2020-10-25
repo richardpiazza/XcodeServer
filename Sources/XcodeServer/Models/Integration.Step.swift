@@ -1,5 +1,4 @@
 public extension Integration {
-    
     /// Current state of the `Integration` as it moves through the lifecycle.
     ///
     /// /Applications/Xcode.app/Contents/Developer/usr/share/xcs/xcsd/constants.js
@@ -47,6 +46,3 @@ extension Integration.Step: CustomStringConvertible {
         }
     }
 }
-
-@available(*, deprecated, renamed: "Integration.Step")
-public typealias IntegrationStep = Integration.Step

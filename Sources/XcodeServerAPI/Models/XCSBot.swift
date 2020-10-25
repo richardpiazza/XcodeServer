@@ -67,24 +67,3 @@ extension XCSBot: Equatable {
 // MARK: - Hashable
 extension XCSBot: Hashable {
 }
-
-// MARK: - Deprecations
-public extension XCSBot {
-    @available(*, deprecated, renamed: "id")
-    var identifier: String {
-        get { _id }
-        set { _id = newValue }
-    }
-    
-    @available(*, deprecated, renamed: "nextIntegrationNumber")
-    var integrationCounter: Int32 {
-        get { Int32(nextIntegrationNumber) }
-        set { nextIntegrationNumber = Int(newValue)  }
-    }
-    
-    @available(*, deprecated, renamed: "type")
-    var typeRawValue: Int16 {
-        get { Int16(type) }
-        set { type = Int(newValue) }
-    }
-}

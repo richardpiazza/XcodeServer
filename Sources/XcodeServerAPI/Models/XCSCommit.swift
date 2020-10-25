@@ -7,10 +7,8 @@ public struct XCSCommit: Codable {
         case _id
         case _rev
         case docType = "doc_type"
-        case tinyID
         case integration
         case botID
-        case botTinyID
         case endedTimeDate
         case commits
     }
@@ -28,16 +26,12 @@ public struct XCSCommit: Codable {
     
     ///
     public var botID: String?
-    @available(*, deprecated, message: "botTinyID is not useful for most contexts.")
-    public var botTinyID: String?
     ///
     public var commits: [String : [XCSRepositoryCommit]]?
     ///
     public var endedTimeDate: [Int]?
     ///
     public var integration: String?
-    @available(*, deprecated, message: "tinyID is not useful for most contexts.")
-    public var tinyID: String
 }
 
 // MARK: - Identifiable

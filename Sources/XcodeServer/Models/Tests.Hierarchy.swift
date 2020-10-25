@@ -1,5 +1,5 @@
 public extension Tests {
-    
+    ///
     struct Hierarchy: Hashable, Codable {
         public var suites: [Tests.Suite] = []
         
@@ -35,6 +35,3 @@ public extension Tests.Hierarchy {
         return suites.contains(where: { $0.hasFailures })
     }
 }
-
-@available(*, deprecated, renamed: "Tests.Hierarchy")
-public typealias TestHierarchy = Tests.Hierarchy
