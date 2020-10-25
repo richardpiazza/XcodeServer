@@ -24,14 +24,6 @@ class MockApiClient: AnyQueryable {
         returnQueue = dispatchQueue
     }
     
-    private func decodeMultiline<T>(_ string: String, decoder: JSONDecoder) throws -> T where T: Decodable {
-        guard let data = string.data(using: .utf8) else {
-            throw CocoaError(.coderReadCorrupt)
-        }
-        
-        return try decoder.decode(T.self, from: data)
-    }
-    
     // MARK: - ServerQueryable
     
     func getServers(queue: DispatchQueue?, completion: @escaping ServersResultHandler) {
@@ -58,20 +50,21 @@ class MockApiClient: AnyQueryable {
         }
         
         dispatchQueue.async {
-            let resource: XCSVersion?
-            #if swift(>=5.3)
-            resource = try? Bundle.module.decodeJson("versions", decoder: self.decoder)
-            #else
-            resource = try? self.decodeMultiline(versionsJson, decoder: self.decoder)
-            #endif
-            guard let versions = resource else {
+            let resource: XCSVersion
+            do {
+                #if swift(>=5.3)
+                resource = try Bundle.module.decodeJson("versions", decoder: self.decoder)
+                #else
+                resource = try versionsJson.decodeMultiline(decoder: self.decoder)
+                #endif
+            } catch {
                 queue.async {
-                    completion(.failure(.noServer(id)))
+                    completion(.failure(.error(error)))
                 }
                 return
             }
             
-            let result = Server(id: id, version: versions, api: 19)
+            let result = Server(id: id, version: resource, api: 19)
             queue.async {
                 completion(.success(result))
             }
@@ -89,20 +82,21 @@ class MockApiClient: AnyQueryable {
         }
         
         dispatchQueue.async {
-            let resource: Bots?
-            #if swift(>=5.3)
-            resource = try? Bundle.module.decodeJson("bots", decoder: self.decoder)
-            #else
-            resource = try? self.decodeMultiline(botsJson, decoder: self.decoder)
-            #endif
-            guard let value = resource else {
+            let resource: Bots
+            do {
+                #if swift(>=5.3)
+                resource = try Bundle.module.decodeJson("bots", decoder: self.decoder)
+                #else
+                resource = try botsJson.decodeMultiline(decoder: self.decoder)
+                #endif
+            } catch {
                 queue.async {
-                    completion(.failure(.message("Invalid Resource")))
+                    completion(.failure(.error(error)))
                 }
                 return
             }
             
-            let result = value.results.map({ Bot($0, server: self.serverId) })
+            let result = resource.results.map({ Bot($0, server: self.serverId) })
             queue.async {
                 completion(.success(result))
             }
@@ -126,20 +120,21 @@ class MockApiClient: AnyQueryable {
         }
         
         dispatchQueue.async {
-            let resource: XCSBot?
-            #if swift(>=5.3)
-            resource = try? Bundle.module.decodeJson("bot", decoder: self.decoder)
-            #else
-            resource = try? self.decodeMultiline(botJson, decoder: self.decoder)
-            #endif
-            guard let value = resource else {
+            let resource: XCSBot
+            do {
+                #if swift(>=5.3)
+                resource = try Bundle.module.decodeJson("bot", decoder: self.decoder)
+                #else
+                resource = try botJson.decodeMultiline(decoder: self.decoder)
+                #endif
+            } catch {
                 queue.async {
-                    completion(.failure(.message("Invalid Resource")))
+                    completion(.failure(.error(error)))
                 }
                 return
             }
             
-            let result = XcodeServer.Bot(value, server: self.serverId)
+            let result = XcodeServer.Bot(resource, server: self.serverId)
             queue.async {
                 completion(.success(result))
             }
@@ -156,20 +151,21 @@ class MockApiClient: AnyQueryable {
         }
         
         dispatchQueue.async {
-            let resource: XCSStats?
-            #if swift(>=5.3)
-            resource = try? Bundle.module.decodeJson("stats", decoder: self.decoder)
-            #else
-            resource = try? self.decodeMultiline(statsJson, decoder: self.decoder)
-            #endif
-            guard let value = resource else {
+            let resource: XCSStats
+            do {
+                #if swift(>=5.3)
+                resource = try Bundle.module.decodeJson("stats", decoder: self.decoder)
+                #else
+                resource = try statsJson.decodeMultiline(decoder: self.decoder)
+                #endif
+            } catch {
                 queue.async {
-                    completion(.failure(.message("Invalid Resource")))
+                    completion(.failure(.error(error)))
                 }
                 return
             }
             
-            let result = XcodeServer.Bot.Stats(value)
+            let result = XcodeServer.Bot.Stats(resource)
             queue.async {
                 completion(.success(result))
             }
@@ -217,20 +213,21 @@ class MockApiClient: AnyQueryable {
         }
         
         dispatchQueue.async {
-            let resource: XCSIntegration?
-            #if swift(>=5.3)
-            resource = try? Bundle.module.decodeJson(json, decoder: self.decoder)
-            #else
-            resource = try? self.decodeMultiline(json, decoder: self.decoder)
-            #endif
-            guard let value = resource else {
+            let resource: XCSIntegration
+            do {
+                #if swift(>=5.3)
+                resource = try Bundle.module.decodeJson(json, decoder: self.decoder)
+                #else
+                resource = try json.decodeMultiline(decoder: self.decoder)
+                #endif
+            } catch {
                 queue.async {
-                    completion(.failure(.message("Invalid Resource")))
+                    completion(.failure(.error(error)))
                 }
                 return
             }
             
-            let result = XcodeServer.Integration(value, bot: nil, server: nil)
+            let result = XcodeServer.Integration(resource, bot: nil, server: nil)
             queue.async {
                 completion(.success(result))
             }
@@ -268,20 +265,21 @@ class MockApiClient: AnyQueryable {
         }
         
         dispatchQueue.async {
-            let resource: Commits?
-            #if swift(>=5.3)
-            resource = try? Bundle.module.decodeJson(json, decoder: self.decoder)
-            #else
-            resource = try? self.decodeMultiline(json, decoder: self.decoder)
-            #endif
-            guard let value = resource else {
+            let resource: Commits
+            do {
+                #if swift(>=5.3)
+                resource = try Bundle.module.decodeJson(json, decoder: self.decoder)
+                #else
+                resource = try json.decodeMultiline(decoder: self.decoder)
+                #endif
+            } catch {
                 queue.async {
-                    completion(.failure(.message("Invalid Resource")))
+                    completion(.failure(.error(error)))
                 }
                 return
             }
             
-            let commits = value.results.commits(forIntegration: id)
+            let commits = resource.results.commits(forIntegration: id)
             queue.async {
                 completion(.success(commits))
             }

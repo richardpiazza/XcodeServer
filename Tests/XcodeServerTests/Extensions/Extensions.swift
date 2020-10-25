@@ -17,3 +17,13 @@ extension Bundle {
         return try decoder.decode(T.self, from: data)
     }
 }
+
+extension String {
+    func decodeMultiline<T: Decodable>(decoder: JSONDecoder = .init()) throws -> T {
+        guard let data = self.data(using: .utf8) else {
+            throw CocoaError(.coderReadCorrupt)
+        }
+        
+        return try decoder.decode(T.self, from: data)
+    }
+}

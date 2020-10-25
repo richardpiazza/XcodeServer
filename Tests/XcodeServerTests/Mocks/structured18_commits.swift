@@ -673,7 +673,7 @@ let structured18CommitsJson: String = """
               "XCSContributorDisplayName": "Richard Piazza"
             },
             "XCSCommitHash": "45e33bdd9e9257ba68fd0b0e5c4e1339e3688247",
-            "XCSCommitMessage": "Swift 5 Conversion\n",
+            "XCSCommitMessage": "Swift 5 Conversion\\n",
             "XCSCommitIsMerge": "NO",
             "XCSCommitTimestamp": "2019-04-20T18:29:06.000Z",
             "XCSCommitTimestampDate": [
@@ -854,7 +854,7 @@ let structured18CommitsJson: String = """
               "XCSContributorDisplayName": "Richard Piazza"
             },
             "XCSCommitHash": "77d2490c095abd1ee0741f32e3b9b0f85f896ff4",
-            "XCSCommitMessage": "Pod update\n",
+            "XCSCommitMessage": "Pod update\\n",
             "XCSCommitIsMerge": "NO",
             "XCSCommitTimestamp": "2019-03-16T20:16:25.000Z",
             "XCSCommitTimestampDate": [
@@ -915,7 +915,7 @@ let structured18CommitsJson: String = """
               "XCSContributorDisplayName": "Richard Piazza"
             },
             "XCSCommitHash": "5f3a7146b1aec541461e7b7ca18a4e71f5385a86",
-            "XCSCommitMessage": "Project update checks for Xcode 10 / Swift 4.2\n",
+            "XCSCommitMessage": "Project update checks for Xcode 10 / Swift 4.2\\n",
             "XCSCommitIsMerge": "NO",
             "XCSCommitTimestamp": "2018-09-29T21:25:44.000Z",
             "XCSCommitTimestampDate": [
@@ -976,7 +976,7 @@ let structured18CommitsJson: String = """
               "XCSContributorDisplayName": "Richard Piazza"
             },
             "XCSCommitHash": "de4e594d76296d4faa20fac562ebc27f76b434d1",
-            "XCSCommitMessage": "Enum Array handling.\n",
+            "XCSCommitMessage": "Enum Array handling.\\n",
             "XCSCommitIsMerge": "NO",
             "XCSCommitTimestamp": "2018-05-19T21:09:39.000Z",
             "XCSCommitTimestampDate": [
@@ -1081,7 +1081,7 @@ let structured18CommitsJson: String = """
               "XCSContributorDisplayName": "Richard Piazza"
             },
             "XCSCommitHash": "b588409228c48b2355960803a36048b5cc0ca267",
-            "XCSCommitMessage": "Remaining singular nullable enums.\n",
+            "XCSCommitMessage": "Remaining singular nullable enums.\\n",
             "XCSCommitIsMerge": "NO",
             "XCSCommitTimestamp": "2018-05-19T12:22:03.000Z",
             "XCSCommitTimestampDate": [
@@ -1274,7 +1274,7 @@ let structured18CommitsJson: String = """
               "XCSContributorDisplayName": "Richard Piazza"
             },
             "XCSCommitHash": "c0acb87d19eaaa3ba861d978ce0d9be1343536ca",
-            "XCSCommitMessage": "AttributedEnum view controller.\n",
+            "XCSCommitMessage": "AttributedEnum view controller.\\n",
             "XCSCommitIsMerge": "NO",
             "XCSCommitTimestamp": "2018-05-18T20:56:56.000Z",
             "XCSCommitTimestampDate": [
@@ -1531,7 +1531,7 @@ let structured18CommitsJson: String = """
               "XCSContributorDisplayName": "Richard Piazza"
             },
             "XCSCommitHash": "26649263f478a65f3f32eff02135929521bef7cd",
-            "XCSCommitMessage": "Dependency Update\n",
+            "XCSCommitMessage": "Dependency Update\\n",
             "XCSCommitIsMerge": "NO",
             "XCSCommitTimestamp": "2018-05-18T01:40:45.000Z",
             "XCSCommitTimestampDate": [
@@ -1620,7 +1620,7 @@ let structured18CommitsJson: String = """
               "XCSContributorDisplayName": "Richard Piazza"
             },
             "XCSCommitHash": "43112e486740bf5dc04dc570c0316107c75a33d0",
-            "XCSCommitMessage": "Stubs for enum and combination attribute view controllers.\n",
+            "XCSCommitMessage": "Stubs for enum and combination attribute view controllers.\\n",
             "XCSCommitIsMerge": "NO",
             "XCSCommitTimestamp": "2018-05-17T17:56:12.000Z",
             "XCSCommitTimestampDate": [
@@ -1757,7 +1757,7 @@ let structured18CommitsJson: String = """
               "XCSContributorDisplayName": "Richard Piazza"
             },
             "XCSCommitHash": "e06186f6b5eeb68f8fa031346104a0a9b811848e",
-            "XCSCommitMessage": "Competed Migration to PrimitiveAttributes view controllers.\n",
+            "XCSCommitMessage": "Competed Migration to PrimitiveAttributes view controllers.\\n",
             "XCSCommitIsMerge": "NO",
             "XCSCommitTimestamp": "2018-05-17T17:31:32.000Z",
             "XCSCommitTimestampDate": [
@@ -1910,7 +1910,7 @@ let structured18CommitsJson: String = """
               "XCSContributorDisplayName": "Richard Piazza"
             },
             "XCSCommitHash": "648b548b8ce205a47317b83105785e369b45c793",
-            "XCSCommitMessage": "PrimitivesViewController subclasses.\n",
+            "XCSCommitMessage": "PrimitivesViewController subclasses.\\n",
             "XCSCommitIsMerge": "NO",
             "XCSCommitTimestamp": "2018-05-16T18:38:02.000Z",
             "XCSCommitTimestampDate": [
@@ -1951,7 +1951,7 @@ let structured18CommitsJson: String = """
               "XCSContributorDisplayName": "Richard Piazza"
             },
             "XCSCommitHash": "6bd0c0e685ce4aa7451e2f492793501092d53153",
-            "XCSCommitMessage": "JSON view reload.\n",
+            "XCSCommitMessage": "JSON view reload.\\n",
             "XCSCommitIsMerge": "NO",
             "XCSCommitTimestamp": "2018-04-01T12:48:38.000Z",
             "XCSCommitTimestampDate": [
@@ -2000,7 +2000,7 @@ let structured18CommitsJson: String = """
               "XCSContributorDisplayName": "Richard Piazza"
             },
             "XCSCommitHash": "6e7e5e90290e7cbda5d339b63c5e53e7c7b44e5a",
-            "XCSCommitMessage": "Updated Dependencies\n",
+            "XCSCommitMessage": "Updated Dependencies\\n",
             "XCSCommitIsMerge": "NO",
             "XCSCommitTimestamp": "2018-03-26T17:25:03.000Z",
             "XCSCommitTimestampDate": [
@@ -2149,7 +2149,7 @@ let structured18CommitsJson: String = """
               "XCSContributorDisplayName": "Richard Piazza"
             },
             "XCSCommitHash": "809888c9e89f09eba65395244081d0c790bd7c1d",
-            "XCSCommitMessage": "Removed all styling to see what the hell is going on.\n",
+            "XCSCommitMessage": "Removed all styling to see what the hell is going on.\\n",
             "XCSCommitIsMerge": "NO",
             "XCSCommitTimestamp": "2018-03-02T14:52:44.000Z",
             "XCSCommitTimestampDate": [
@@ -2218,7 +2218,7 @@ let structured18CommitsJson: String = """
               "XCSContributorDisplayName": "Richard Piazza"
             },
             "XCSCommitHash": "cde652cd57da06d0fe0cc6046d7629f0b8374dcc",
-            "XCSCommitMessage": "Duration entry and value cells.\n",
+            "XCSCommitMessage": "Duration entry and value cells.\\n",
             "XCSCommitIsMerge": "NO",
             "XCSCommitTimestamp": "2018-03-01T20:14:11.000Z",
             "XCSCommitTimestampDate": [
@@ -2343,7 +2343,7 @@ let structured18CommitsJson: String = """
               "XCSContributorDisplayName": "Richard Piazza"
             },
             "XCSCommitHash": "08152b9332158b9ec38507b91ee730db7b7b6b8d",
-            "XCSCommitMessage": "Updated Dependencies\n",
+            "XCSCommitMessage": "Updated Dependencies\\n",
             "XCSCommitIsMerge": "NO",
             "XCSCommitTimestamp": "2018-02-27T23:24:43.000Z",
             "XCSCommitTimestampDate": [

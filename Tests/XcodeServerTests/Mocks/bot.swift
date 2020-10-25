@@ -11,7 +11,7 @@ let botJson: String = """
     "triggers": [
       {
         "phase": 1,
-        "scriptBody": "#!/bin/bash\n\nPROJECT_NAME=\"Dynumite\"\nGIT_USER_NAME=\"Xcode Server\"\nGIT_USER_EMAIL=\"xcodeserver@richardpiazza.com\"\n\necho \"Checking Git Global Configuration\"\nUSERNAME=`git config --global --get user.name`\nUSEREMAIL=`git config --global --get user.email`\n\nif [ -z \"$USERNAME\" ];\nthen\necho \"Setting Git Global user.name\"\n`git config --global user.name \"$GIT_USER_NAME\"`\nelse\necho \"Git Global user.name: $USERNAME\"\nfi\n\nif [ -z \"$USEREMAIL\" ];\nthen\necho \"Setting Git Global user.email\"\n`git config --global user.email \"$GIT_USER_EMAIL\"`\nelse\necho \"Git Global user.email: $USEREMAIL\"\nfi\n",
+        "scriptBody": "#!/bin/bash\\n\\nPROJECT_NAME=\\"Dynumite\\"\\nGIT_USER_NAME=\\"Xcode Server\\"\\nGIT_USER_EMAIL=\\"xcodeserver@richardpiazza.com\\"\\n\\necho \\"Checking Git Global Configuration\\"\\nUSERNAME=`git config --global --get user.name`\\nUSEREMAIL=`git config --global --get user.email`\\n\\nif [ -z \\"$USERNAME\\" ];\\nthen\\necho \\"Setting Git Global user.name\\"\\n`git config --global user.name \\"$GIT_USER_NAME\\"`\\nelse\\necho \\"Git Global user.name: $USERNAME\\"\\nfi\\n\\nif [ -z \\"$USEREMAIL\\" ];\\nthen\\necho \\"Setting Git Global user.email\\"\\n`git config --global user.email \\"$GIT_USER_EMAIL\\"`\\nelse\\necho \\"Git Global user.email: $USEREMAIL\\"\\nfi\\n",
         "type": 1,
         "name": "GIT Configuration",
         "conditions": {
@@ -26,7 +26,7 @@ let botJson: String = """
       },
       {
         "phase": 1,
-        "scriptBody": "#!/bin/bash\n\nPROJECT_NAME=\"Dynumite\"\nPROJECT_PLATFORM=\"macOS\"\n\necho \"Tagging Repository\"\n\nif [ -n \"$XCS_INTEGRATION_NUMBER\" ];\nthen\necho \"Source Directory: $XCS_SOURCE_DIR\"\necho \"Project Directory: $PROJECT_NAME\"\necho \"Integration: $XCS_INTEGRATION_NUMBER\"\nTAG=\"$PROJECT_PLATFORM-$XCS_INTEGRATION_NUMBER\"\nGITSOURCE=\"$XCS_SOURCE_DIR/$PROJECT_NAME\"\n`git -C \"$GITSOURCE\" tag -a \"$TAG\" -m \"$PROJECT_PLATFORM Build $XCS_INTEGRATION_NUMBER\"`\n`git -C \"$GITSOURCE\" push origin tag \"$TAG\"`;\nelse\necho \"No XCS Integration Number\";\nfi\n",
+        "scriptBody": "#!/bin/bash\\n\\nPROJECT_NAME=\\"Dynumite\\"\\nPROJECT_PLATFORM=\\"macOS\\"\\n\\necho \\"Tagging Repository\\"\\n\\nif [ -n \\"$XCS_INTEGRATION_NUMBER\\" ];\\nthen\\necho \\"Source Directory: $XCS_SOURCE_DIR\\"\\necho \\"Project Directory: $PROJECT_NAME\\"\\necho \\"Integration: $XCS_INTEGRATION_NUMBER\\"\\nTAG=\\"$PROJECT_PLATFORM-$XCS_INTEGRATION_NUMBER\\"\\nGITSOURCE=\\"$XCS_SOURCE_DIR/$PROJECT_NAME\\"\\n`git -C \\"$GITSOURCE\\" tag -a \\"$TAG\\" -m \\"$PROJECT_PLATFORM Build $XCS_INTEGRATION_NUMBER\\"`\\n`git -C \\"$GITSOURCE\\" push origin tag \\"$TAG\\"`;\\nelse\\necho \\"No XCS Integration Number\\";\\nfi\\n",
         "type": 1,
         "name": "Tag Repository",
         "conditions": {
