@@ -28,7 +28,7 @@ final class Versions: ParsableCommand, Route {
     var password: String?
     
     @Flag(help: "Displays the raw JSON response.")
-    var raw: Bool = false
+    var rawResponse: Bool = false
     
     func validate() throws {
         try validateServer()
@@ -37,7 +37,7 @@ final class Versions: ParsableCommand, Route {
     func run() throws {
         let client = try APIClient(fqdn: server, authorizationDelegate: self)
         
-        if raw {
+        if rawResponse {
             client.versions { (result) in
                 switch result {
                 case .failure(let error):
