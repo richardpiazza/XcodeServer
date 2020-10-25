@@ -288,16 +288,16 @@ private extension XcodeServer.Server {
 private extension XcodeServer.Bot {
     static let dynumite: Self = {
         let _bot: XCSBot
-        #if swift(>=5.3)
         do {
+            #if swift(>=5.3)
             _bot = try Bundle.module.decodeJson("bot")
+            #else
+            _bot = try botJson.decodeMultiline()
+            #endif
         } catch {
-            print(error)
             _bot = XCSBot()
         }
-        #else
-        _bot = XCSBot()
-        #endif
+        
         return XcodeServer.Bot(_bot, server: .dynumiteMacOS)
     }()
 }

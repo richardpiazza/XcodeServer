@@ -206,16 +206,18 @@ private extension XcodeServer.Server {
 
 private extension XcodeServer.Bot {
     static let dynumite: Self = {
-        #if swift(>=5.3)
+        let _bot: XCSBot
         do {
-            let _bot: XCSBot = try Bundle.module.decodeJson("bot")
-            return XcodeServer.Bot(_bot, server: Server.exampleServer.id)
+            #if swift(>=5.3)
+            _bot = try Bundle.module.decodeJson("bot")
+            #else
+            _bot = try botJson.decodeMultiline()
+            #endif
         } catch {
             preconditionFailure(error.localizedDescription)
         }
-        #else
-        return XcodeServer.Bot(id: .dynumiteMacOS)
-        #endif
+        
+        return XcodeServer.Bot(_bot, server: Server.exampleServer.id)
     }()
 }
 
@@ -225,21 +227,29 @@ private extension XcodeServer.Integration {
             let count: Int
             let results: [XCSCommit]
         }
-        #if swift(>=5.3)
+        
+        let _integration: XCSIntegration
+        let issues: XCSIssues
+        let commits: Commits
+        var integration: XcodeServer.Integration
         do {
-            let _integration: XCSIntegration = try Bundle.module.decodeJson("integration", decoder: XcodeServerAPI.APIClient.jsonDecoder)
-            let issues: XCSIssues = try Bundle.module.decodeJson("issues")
-            let commits: Commits = try Bundle.module.decodeJson("commits", decoder: XcodeServerAPI.APIClient.jsonDecoder)
-            var integration = XcodeServer.Integration(_integration, bot: XcodeServer.Bot.dynumite.id, server: nil)
-            integration.issues = IssueCatalog(issues, integration: integration.id)
-            integration.commits = Set(commits.results.commits(forIntegration: integration.id))
-            return integration
+            #if swift(>=5.3)
+            _integration = try Bundle.module.decodeJson("integration", decoder: XcodeServerAPI.APIClient.jsonDecoder)
+            issues = try Bundle.module.decodeJson("issues")
+            commits = try Bundle.module.decodeJson("commits", decoder: XcodeServerAPI.APIClient.jsonDecoder)
+            #else
+            _integration = try integrationJson.decodeMultiline(decoder: XcodeServerAPI.APIClient.jsonDecoder)
+            issues = try issuesJson.decodeMultiline(decoder: XcodeServerAPI.APIClient.jsonDecoder)
+            commits = try commitsJson.decodeMultiline(decoder: XcodeServerAPI.APIClient.jsonDecoder)
+            #endif
         } catch {
             preconditionFailure(error.localizedDescription)
         }
-        #else
-        return XcodeServer.Integration(id: .dynumite24)
-        #endif
+        
+        integration = XcodeServer.Integration(_integration, bot: XcodeServer.Bot.dynumite.id, server: nil)
+        integration.issues = IssueCatalog(issues, integration: integration.id)
+        integration.commits = Set(commits.results.commits(forIntegration: integration.id))
+        return integration
     }()
 }
 #endif
