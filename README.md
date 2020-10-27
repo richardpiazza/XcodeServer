@@ -81,3 +81,4 @@ $ swift run xcscli --help
 * [Buildasaurs/XcodeServer-API-Docs](https://github.com/buildasaurs/XcodeServer-API-Docs)
 * [Honza Dvorskys Xcode Server Tutorials](https://honzadvorsky.com/pages/xcode_server_tutorials/)
 * [API Reference Guide](Documentation/XcodeServerAPIReference.md)
+* [Tips & Tricks](Documentation/TipsAndTricks.md)

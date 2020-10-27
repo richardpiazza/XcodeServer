@@ -20,9 +20,7 @@ import CoreData
 ///
 class Model_1_0_0: NSManagedObjectModel {
     
-    public static let instance: Model_1_0_0 = Model_1_0_0()
-    
-    private override init() {
+    internal override init() {
         super.init()
         
         let asset = NSEntityDescription(name: "Asset")

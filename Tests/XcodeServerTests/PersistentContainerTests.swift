@@ -15,13 +15,9 @@ final class PersistentContainerTests: XCTestCase {
         ("testFullStore_Model_1_0_0_Metadata", testFullStore_Model_1_0_0_Metadata),
     ]
     
-    lazy var model: NSManagedObjectModel = {
-        return Model_1_0_0.instance
-    }()
-    
     func testXCModelHashes() throws {
         #if swift(>=5.3)
-        let model = try XCTUnwrap(NSManagedObjectModel.xcodeServer)
+        let model = NSManagedObjectModel.xcodeServer
         let entityHashes = model.entityVersionHashesByName
         XCTAssertEqual(entityHashes[Asset.entityName]!.hexString, "b31a95b5bd19f89ddfe7e0fcedd7d7cb8be8b49b83a0a4b0d7ed2b533c99cce7")
         XCTAssertEqual(entityHashes[Bot.entityName]!.hexString, "3cff8578a69bd56fefa0c8e7c189c1b21152c55c40db63c888bf2eb262f07ad4")
@@ -50,6 +46,7 @@ final class PersistentContainerTests: XCTestCase {
     }
     
     func testModel_1_0_0_Hashes() {
+        let model = NSManagedObjectModel.make(for: .v1_0_0)
         let entityHashes = model.entityVersionHashesByName
         
         XCTAssertEqual(entityHashes[Asset.entityName]!.hexString, "b31a95b5bd19f89ddfe7e0fcedd7d7cb8be8b49b83a0a4b0d7ed2b533c99cce7")
@@ -87,6 +84,8 @@ final class PersistentContainerTests: XCTestCase {
         description.shouldInferMappingModelAutomatically = false
         description.shouldMigrateStoreAutomatically = false
         
+        let model = NSManagedObjectModel.make(for: .v1_0_0)
+        
         let container = NSPersistentContainer.init(name: "XcodeServer", managedObjectModel: model)
         container.persistentStoreDescriptions = [description]
         container.loadPersistentStores { (storeDescription, error) in
@@ -104,6 +103,7 @@ final class PersistentContainerTests: XCTestCase {
     
     func testEmptyStore_Model_1_0_0_Metadata() throws {
         #if swift(>=5.3)
+        let model = NSManagedObjectModel.make(for: .v1_0_0)
         let url = try XCTUnwrap(Bundle.module.url(forResource: "XcodeServer_1.0.0_empty", withExtension: "sqlite"))
         let metadata = try NSPersistentStoreCoordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: url, options: nil)
         XCTAssertTrue(model.isConfiguration(withName: nil, compatibleWithStoreMetadata: metadata))
@@ -112,6 +112,7 @@ final class PersistentContainerTests: XCTestCase {
     
     func testFullStore_Model_1_0_0_Metadata() throws {
         #if swift(>=5.3)
+        let model = NSManagedObjectModel.make(for: .v1_0_0)
         let url = try XCTUnwrap(Bundle.module.url(forResource: "XcodeServer_1.0.0_full", withExtension: "sqlite"))
         let metadata = try NSPersistentStoreCoordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: url, options: nil)
         XCTAssertTrue(model.isConfiguration(withName: nil, compatibleWithStoreMetadata: metadata))

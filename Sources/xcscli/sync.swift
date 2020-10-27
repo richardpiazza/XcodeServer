@@ -97,13 +97,7 @@ final class Sync: ParsableCommand, Route {
 extension Sync: ManagerAuthorizationDelegate {
 }
 
-extension Model: CaseIterable, ExpressibleByArgument {
-    public typealias AllCases = [Model]
-    
-    public static var allCases: [Model] {
-        return [.v1_0_0]
-    }
-    
+extension Model: ExpressibleByArgument {
     var stringValue: String {
         switch self {
         case .v1_0_0: return "1.0.0"
