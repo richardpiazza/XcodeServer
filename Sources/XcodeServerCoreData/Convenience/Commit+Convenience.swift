@@ -14,12 +14,12 @@ public extension XcodeServerCoreData.Commit {
         date = commit.date
         commitContributor?.update(commit.contributor)
         
-//        commitChanges?.forEach({ context.delete($0) })
-//        commit.changes.forEach { (change) in
-//            let _change = CommitChange(context: context)
-//            _change.update(change)
-//            _change.commit = self
-//        }
+        commitChanges?.forEach({ context.delete($0) })
+        commit.changes.forEach { (change) in
+            let _change = CommitChange(context: context)
+            _change.update(change)
+            _change.commit = self
+        }
         
         if let integration = integration {
             if context.revisionBlueprint(withCommit: self, andIntegration: integration) == nil {
