@@ -11,7 +11,11 @@ final class ServerWriteAndUpdateTests: XCTestCase {
     ]
     
     lazy var persistedStore: CoreDataStore = {
-        return CoreDataStore(model: .v1_0_0, persisted: false)
+        do {
+            return try CoreDataStore(model: .v1_0_0, persisted: false)
+        } catch {
+            preconditionFailure(error.localizedDescription)
+        }
     }()
     
     var store: (ServerPersistable & ServerQueryable) {

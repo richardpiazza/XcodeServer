@@ -4,14 +4,37 @@ import Foundation
 import CoreData
 
 extension NSPersistentContainer {
-    convenience init(model: Model, persisted: Bool = true) {
-        let objectModel = NSManagedObjectModel.make(for: model)
-        self.init(model: objectModel, persisted: persisted)
-    }
-    
-    convenience init(model: NSManagedObjectModel, persisted: Bool = true) {
-        let name = "XcodeServer"
+    /// Initializes the `NSPersistentContainer` with a specified `Model` version.
+    ///
+    /// If an existing store exists and the default URL, a _heavyweight_ migration will be performed. Any existing store
+    /// will be removed if the migration fails due to:
+    /// * `Migration.Error.noMigrationPath`
+    /// * `Migration.Error.unidentifiedSource`
+    convenience init(model: Model, persisted: Bool = true) throws {
         let storeURL = FileManager.default.storeURL
+        
+        // Attempt Migration (if required / if persisted)
+        if persisted {
+            do {
+                if let source = try Migration.migrateStore(at: storeURL, to: model) {
+                    InternalLog.coreData.info("Successful Migration from \(source.rawValue) to \(model.rawValue)")
+                }
+            } catch let error as Migration.Error {
+                switch error {
+                case .noMigrationPath, .unidentifiedSource:
+                    InternalLog.coreData.error("Migration failed due to unrecoverable errors.", error: error)
+                    if FileManager.default.fileExists(atPath: storeURL.path) {
+                        try FileManager.default.removeItem(at: storeURL)
+                    }
+                default:
+                    throw error
+                }
+            }
+        }
+        
+        let objectModel = NSManagedObjectModel.make(for: model)
+        
+        self.init(name: FileManager.containerName, managedObjectModel: objectModel)
         
         let description = NSPersistentStoreDescription()
         if persisted {
@@ -23,31 +46,15 @@ extension NSPersistentContainer {
         description.shouldInferMappingModelAutomatically = false
         description.shouldMigrateStoreAutomatically = false
         
-        if persisted {
-            do {
-                let metadata = try NSPersistentStoreCoordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: storeURL, options: nil)
-                if !model.isConfiguration(withName: name, compatibleWithStoreMetadata: metadata) {
-                    try FileManager.default.removeItem(at: storeURL)
-                }
-            } catch let error as NSError {
-                if error.code == 260 {
-                    // Expected (File Not Found)
-                } else {
-                    InternalLog.coreData.error("Failed to load store metadata or remove existing.", error: error)
-                }
-            }
-        }
-        
-        // check for migration
-        // perform if necessary
-        
-        self.init(name: name, managedObjectModel: model)
+        var loadError: Error? = nil
         
         persistentStoreDescriptions = [description]
         loadPersistentStores { (_, error) in
-            if let e = error {
-                fatalError(e.localizedDescription)
-            }
+            loadError = error
+        }
+        
+        if let error = loadError {
+            throw error
         }
         
         viewContext.automaticallyMergesChangesFromParent = true

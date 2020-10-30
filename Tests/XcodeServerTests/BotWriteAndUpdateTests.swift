@@ -12,7 +12,11 @@ final class BotWriteAndUpdateTests: XCTestCase {
     ]
     
     private lazy var persistedStore: CoreDataStore = {
-        return CoreDataStore(model: .v1_0_0, persisted: false)
+        do {
+            return try CoreDataStore(model: .v1_0_0, persisted: false)
+        } catch {
+            preconditionFailure(error.localizedDescription)
+        }
     }()
     
     private lazy var client: MockApiClient = {
