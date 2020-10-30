@@ -1,0 +1,93 @@
+import Foundation
+
+let statsJson: String = """
+{
+  "lastCleanIntegration": {
+    "integrationID": "ce5f34cace5a2142835263cd2f210744",
+    "endedTime": "2020-07-01T14:03:35.260Z"
+  },
+  "bestSuccessStreak": {
+    "integrationID": "ce5f34cace5a2142835263cd2f210744",
+    "success_streak": 2,
+    "endedTime": "2020-07-01T14:03:35.260Z"
+  },
+  "numberOfIntegrations": 4,
+  "numberOfCommits": 7,
+  "averageIntegrationTime": {
+    "sum": 1496.814,
+    "count": 4,
+    "min": 309.869,
+    "max": 506.51,
+    "avg": 374.2035,
+    "stdDev": 173.20508075688772,
+    "sumsqr": 585574.680834
+  },
+  "testAdditionRate": 55,
+  "analysisWarnings": {
+    "sum": 4,
+    "count": 2,
+    "min": 2,
+    "max": 2,
+    "avg": 2,
+    "stdDev": 100,
+    "sumsqr": 8
+  },
+  "testFailures": {
+    "sum": 0,
+    "count": 4,
+    "min": 0,
+    "max": 0,
+    "avg": 0,
+    "stdDev": 0,
+    "sumsqr": 0
+  },
+  "errors": {
+    "sum": 0,
+    "count": 4,
+    "min": 0,
+    "max": 0,
+    "avg": 0,
+    "stdDev": 0,
+    "sumsqr": 0
+  },
+  "regressedPerfTests": {
+    "sum": 0,
+    "count": 4,
+    "min": 0,
+    "max": 0,
+    "avg": 0,
+    "stdDev": 0,
+    "sumsqr": 0
+  },
+  "warnings": {
+    "sum": 4,
+    "count": 4,
+    "min": 0,
+    "max": 2,
+    "avg": 1,
+    "stdDev": 173.20508075688772,
+    "sumsqr": 8
+  },
+  "improvedPerfTests": {
+    "sum": 0,
+    "count": 4,
+    "min": 0,
+    "max": 0,
+    "avg": 0,
+    "stdDev": 0,
+    "sumsqr": 0
+  },
+  "tests": {
+    "sum": 187,
+    "count": 4,
+    "min": 44,
+    "max": 55,
+    "avg": 46.75,
+    "stdDev": 173.20508075688775,
+    "sumsqr": 8833
+  },
+  "codeCoveragePercentageDelta": 0,
+  "numberOfSuccessfulIntegrations": 2,
+  "sinceDate": "2019-07-02T14:24:11.929Z"
+}
+"""

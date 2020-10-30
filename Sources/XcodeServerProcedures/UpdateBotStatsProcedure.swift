@@ -1,18 +1,20 @@
-import Foundation
+import XcodeServer
 import ProcedureKit
-import XcodeServerAPI
-#if canImport(CoreData)
-import CoreData
-import XcodeServerCoreData
+import Foundation
 
-public class UpdateBotStatsProcedure: NSManagedObjectProcedure<Bot>, InputProcedure {
+@available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+@available(swift, introduced: 5.1)
+public class UpdateBotStatsProcedure: Procedure, InputProcedure {
     
-    public typealias Input = XCSStats
+    private let destination: BotPersistable
+    private var bot: Bot
     
-    public var input: Pending<Input> = .pending
+    public var input: Pending<Bot.Stats> = .pending
     
-    public init(container: NSPersistentContainer, bot: Bot, input: Input? = nil) {
-        super.init(container: container, object: bot)
+    public init(destination: BotPersistable, bot: Bot, input: Bot.Stats? = nil) {
+        self.destination = destination
+        self.bot = bot
+        super.init()
         
         if let value = input {
             self.input = .ready(value)
@@ -26,28 +28,22 @@ public class UpdateBotStatsProcedure: NSManagedObjectProcedure<Bot>, InputProced
         
         guard let value = input.value else {
             let error = XcodeServerProcedureError.invalidInput
-            cancel(with: error)
+            InternalLog.procedures.error("UpdateBotStatsProcedure Failed", error: error)
             finish(with: error)
             return
         }
         
-        let id = objectID
+        let id = bot.id
         
-        print("Updating Stats for Bot '\(managedObject.identifier)'")
-        
-        container.performBackgroundTask { [weak self] (context) in
-            let bot = context.object(with: id) as! Bot
-            
-            bot.stats?.update(withStats: value)
-            
-            do {
-                try context.save()
-                self?.finish()
-            } catch {
+        destination.saveStats(value, forBot: id) { [weak self] (result) in
+            switch result {
+            case .failure(let error):
+                InternalLog.procedures.error("UpdateBotStatsProcedure Failed", error: error)
                 self?.finish(with: error)
+            case .success:
+                NotificationCenter.default.postBotDidChange(id)
+                self?.finish()
             }
         }
     }
 }
-
-#endif

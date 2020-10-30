@@ -1,20 +1,20 @@
-import Foundation
+import XcodeServer
 import ProcedureKit
-import XcodeServerAPI
-#if canImport(CoreData)
-import CoreData
-import XcodeServerCoreData
+import Foundation
 
-public class UpdateBotIntegrationsProcedure: NSManagedObjectProcedure<Bot>, InputProcedure, OutputProcedure {
+@available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+@available(swift, introduced: 5.1)
+public class UpdateBotIntegrationsProcedure: Procedure, InputProcedure {
     
-    public typealias Input = [XCSIntegration]
-    public typealias Output = [XcodeServerProcedureEvent]
+    private let destination: IntegrationPersistable
+    private var bot: Bot
     
-    public var input: Pending<Input> = .pending
-    public var output: Pending<ProcedureResult<Output>> = .pending
+    public var input: Pending<[Integration]> = .pending
     
-    public init(container: NSPersistentContainer, bot: Bot, input: Input? = nil) {
-        super.init(container: container, object: bot)
+    public init(destination: IntegrationPersistable, bot: Bot, input: [Integration]? = nil) {
+        self.destination = destination
+        self.bot = bot
+        super.init()
         
         if let value = input {
             self.input = .ready(value)
@@ -28,32 +28,22 @@ public class UpdateBotIntegrationsProcedure: NSManagedObjectProcedure<Bot>, Inpu
         
         guard let value = input.value else {
             let error = XcodeServerProcedureError.invalidInput
-            cancel(with: error)
-            output = .ready(.failure(error))
+            InternalLog.procedures.error("", error: error)
             finish(with: error)
             return
         }
         
-        let id = objectID
+        let id = bot.id
         
-        print("Updating Integrations for Bot '\(managedObject.identifier)'")
-        
-        container.performBackgroundTask { [weak self] (context) in
-            let bot = context.object(with: id) as! Bot
-            
-            let events = bot.update(withIntegrations: value)
-            bot.lastUpdate = Date()
-            
-            do {
-                try context.save()
-                self?.output = .ready(.success(events))
-                self?.finish()
-            } catch {
-                self?.output = .ready(.failure(error))
+        destination.saveIntegrations(value, forBot: id) { [weak self] (result) in
+            switch result {
+            case .failure(let error):
+                InternalLog.procedures.error("", error: error)
                 self?.finish(with: error)
+            case .success:
+                NotificationCenter.default.postBotDidChange(id)
+                self?.finish()
             }
         }
     }
 }
-
-#endif

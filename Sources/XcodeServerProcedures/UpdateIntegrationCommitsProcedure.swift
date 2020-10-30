@@ -1,18 +1,19 @@
-import Foundation
+import XcodeServer
 import ProcedureKit
-import XcodeServerAPI
-#if canImport(CoreData)
-import CoreData
-import XcodeServerCoreData
+import Foundation
 
-public class UpdateIntegrationCommitsProcedure: NSManagedObjectProcedure<Integration>, InputProcedure {
+@available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+@available(swift, introduced: 5.1)
+public class UpdateIntegrationCommitsProcedure: Procedure, InputProcedure {
     
-    public typealias Input = [XCSCommit]
+    private let destination: IntegrationPersistable
+    private let integration: Integration
+    public var input: Pending<[SourceControl.Commit]> = .pending
     
-    public var input: Pending<Input> = .pending
-    
-    public init(container: NSPersistentContainer, integration: Integration, input: Input? = nil) {
-        super.init(container: container, object: integration)
+    public init(destination: IntegrationPersistable, integration: Integration, input: [SourceControl.Commit]? = nil) {
+        self.destination = destination
+        self.integration = integration
+        super.init()
         
         if let value = input {
             self.input = .ready(value)
@@ -26,33 +27,22 @@ public class UpdateIntegrationCommitsProcedure: NSManagedObjectProcedure<Integra
         
         guard let value = input.value else {
             let error = XcodeServerProcedureError.invalidInput
-            cancel(with: error)
+            InternalLog.procedures.error("UpdateIntegrationCommitsProcedure Failed", error: error)
             finish(with: error)
             return
         }
         
-        let id = objectID
+        let id = integration.id
         
-        print("Updating Commits for Integration '\(managedObject.identifier)'")
-        
-        container.performBackgroundTask { [weak self] (context) in
-            let integration = context.object(with: id) as! Integration
-            let repositories = context.repositories()
-            
-            repositories.forEach({ (repository) in
-                repository.update(withIntegrationCommits: value, integration: integration)
-            })
-            
-            integration.hasRetrievedCommits = true
-            
-            do {
-                try context.save()
-                self?.finish()
-            } catch {
+        destination.saveCommits(value, forIntegration: id) { [weak self] (result) in
+            switch result {
+            case .failure(let error):
+                InternalLog.procedures.error("UpdateIntegrationCommitsProcedure Failed", error: error)
                 self?.finish(with: error)
+            case .success:
+                NotificationCenter.default.postIntegrationDidChange(id)
+                self?.finish()
             }
         }
     }
 }
-
-#endif

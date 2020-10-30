@@ -1,18 +1,19 @@
-import Foundation
+import XcodeServer
 import ProcedureKit
-import XcodeServerAPI
-#if canImport(CoreData)
-import CoreData
-import XcodeServerCoreData
+import Foundation
 
-public class UpdateIntegrationIssuesProcedure: NSManagedObjectProcedure<Integration>, InputProcedure {
+@available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+@available(swift, introduced: 5.1)
+public class UpdateIntegrationIssuesProcedure: Procedure, InputProcedure {
     
-    public typealias Input = XCSIssues
+    private let destination: IntegrationPersistable
+    private let integration: Integration
+    public var input: Pending<Integration.IssueCatalog> = .pending
     
-    public var input: Pending<Input> = .pending
-    
-    public init(container: NSPersistentContainer, integration: Integration, input: Input? = nil) {
-        super.init(container: container, object: integration)
+    public init(destination: IntegrationPersistable, integration: Integration, input: Integration.IssueCatalog? = nil) {
+        self.destination = destination
+        self.integration = integration
+        super.init()
         
         if let value = input {
             self.input = .ready(value)
@@ -26,29 +27,22 @@ public class UpdateIntegrationIssuesProcedure: NSManagedObjectProcedure<Integrat
         
         guard let value = input.value else {
             let error = XcodeServerProcedureError.invalidInput
-            cancel(with: error)
+            InternalLog.procedures.error("UpdateIntegrationIssuesProcedure Failed", error: error)
             finish(with: error)
             return
         }
         
-        let id = objectID
+        let id = integration.id
         
-        print("Updating Issues for Integration '\(managedObject.identifier)'")
-        
-        container.performBackgroundTask { [weak self] (context) in
-            let integration = context.object(with: id) as! Integration
-            
-            integration.issues?.update(withIntegrationIssues: value)
-            integration.hasRetrievedIssues = true
-            
-            do {
-                try context.save()
-                self?.finish()
-            } catch {
+        destination.saveIssues(value, forIntegration: id) { [weak self] (result) in
+            switch result {
+            case .failure(let error):
+                InternalLog.procedures.error("UpdateIntegrationIssuesProcedure Failed", error: error)
                 self?.finish(with: error)
+            case .success:
+                NotificationCenter.default.postIntegrationDidChange(id)
+                self?.finish()
             }
         }
     }
 }
-
-#endif

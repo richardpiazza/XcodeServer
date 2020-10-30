@@ -1,23 +1,24 @@
-import Foundation
+import XcodeServer
 import ProcedureKit
-import XcodeServerAPI
-#if canImport(CoreData)
-import CoreData
-import XcodeServerCoreData
 
-public class SyncServerProcedure: NSManagedObjectProcedure<Server>, OutputProcedure {
+@available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+@available(swift, introduced: 5.1)
+public class SyncServerProcedure: Procedure {
     
-    public typealias Output = [XcodeServerProcedureEvent]
+    public typealias Source = AnyQueryable
+    public typealias Destination = (AnyQueryable & AnyPersistable)
     
-    public let apiClient: APIClient
+    private let source: Source
+    private let destination: Destination
+    private let server: Server
     private let procedureQueue: ProcedureQueue = ProcedureQueue()
     
-    public var output: Pending<ProcedureResult<Output>> = .pending
-    private var events: [XcodeServerProcedureEvent] = []
-    
-    public init(container: NSPersistentContainer, server: Server, apiClient: APIClient) {
-        self.apiClient = apiClient
-        super.init(container: container, object: server)
+    public init(source: Source, destination: Destination, server: Server) {
+        self.source = source
+        self.destination = destination
+        self.server = server
+        super.init()
+        
         procedureQueue.delegate = self
         procedureQueue.maxConcurrentOperationCount = 1
     }
@@ -27,82 +28,65 @@ public class SyncServerProcedure: NSManagedObjectProcedure<Server>, OutputProced
             return
         }
         
-        let version = SyncVersionProcedure(container: container, server: managedObject, apiClient: apiClient)
-        let bots = SyncServerBotsProcedure(container: container, server: managedObject, apiClient: apiClient)
-        bots.addDependency(version)
-        
-        procedureQueue.addOperations([version, bots])
+        let syncVersion = SyncVersionProcedure(source: source, destination: destination, server: server)
+        let syncBots = SyncServerBotsGroupProcedure(source: source, destination: destination, server: server)
+        procedureQueue.addOperations([syncVersion, syncBots])
     }
 }
 
+@available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+@available(swift, introduced: 5.1)
 extension SyncServerProcedure: ProcedureQueueDelegate {
     public func procedureQueue(_ queue: ProcedureQueue, didFinishProcedure procedure: Procedure, with error: Error?) {
         switch procedure {
         case is SyncVersionProcedure:
-            return
-        case is SyncServerBotsProcedure:
-            guard error == nil else {
-                print(error!)
-                return
+            break
+        case is SyncServerBotsGroupProcedure:
+            let proc = procedure as! SyncServerBotsGroupProcedure
+            if let bots = proc.output.value?.value {
+                for bot in bots {
+                    let syncStats = SyncBotStatsProcedure(source: source, destination: destination, bot: bot)
+                    let syncIntegrations = SyncBotIntegrationsGroupProcedure(source: source, destination: destination, bot: bot)
+                    queue.addOperations([syncStats, syncIntegrations])
+                }
             }
-            
-            let sync = procedure as! SyncServerBotsProcedure
-            if let events = sync.output.success {
-                self.events.append(contentsOf: events)
+        case is SyncBotIntegrationsGroupProcedure:
+            let proc = procedure as! SyncBotIntegrationsGroupProcedure
+            if let integrations = proc.output.value?.value {
+                for integration in integrations {
+                    if integration.step != .completed {
+                        let syncIntegration = SyncIntegrationGroupProcedure(source: source, destination: destination, integration: integration)
+                        queue.addOperation(syncIntegration)
+                    } else {
+                        if integration.shouldRetrieveIssues {
+                            let syncIssues = SyncIntegrationIssuesProcedure(source: source, destination: destination, integration: integration)
+                            queue.addOperation(syncIssues)
+                        }
+                        if integration.shouldRetrieveCommits {
+                            let syncCommits = SyncIntegrationCommitsProcedure(source: source, destination: destination, integration: integration)
+                            queue.addOperation(syncCommits)
+                        }
+                    }
+                }
             }
-            let server = container.viewContext.object(with: sync.objectID) as! Server
-            for bot in (server.bots ?? []) {
-                let stats = SyncBotStatsProcedure(container: container, bot: bot, apiClient: sync.apiClient)
-                let next = SyncBotIntegrationsProcedure(container: container, bot: bot, apiClient: sync.apiClient)
-                next.addDependency(stats)
-                queue.addOperations([stats, next])
+        case is SyncIntegrationGroupProcedure:
+            let proc = procedure as! SyncIntegrationGroupProcedure
+            if let integration = proc.output.value?.value {
+                if integration.shouldRetrieveIssues {
+                    let syncIssues = SyncIntegrationIssuesProcedure(source: source, destination: destination, integration: integration)
+                    queue.addOperation(syncIssues)
+                }
+                if integration.shouldRetrieveCommits {
+                    let syncCommits = SyncIntegrationCommitsProcedure(source: source, destination: destination, integration: integration)
+                    queue.addOperation(syncCommits)
+                }
             }
-            
-            return
-        case is SyncBotIntegrationsProcedure:
-            guard error == nil else {
-                print(error!)
-                return
-            }
-            
-            let sync = procedure as! SyncBotIntegrationsProcedure
-            if let events = sync.output.success {
-                self.events.append(contentsOf: events)
-            }
-            let bot = container.viewContext.object(with: sync.objectID) as! Bot
-            for integration in (bot.integrations ?? []) {
-                let next = SyncIntegrationProcedure(container: container, integration: integration, apiClient: sync.apiClient)
-                queue.addOperation(next)
-            }
-            
-            return
-        case is SyncIntegrationProcedure:
-            guard error == nil else {
-                print(error!)
-                return
-            }
-            
-            let sync = procedure as! SyncIntegrationProcedure
-            if let events = sync.output.success {
-                self.events.append(contentsOf: events)
-            }
-            let integration = container.viewContext.object(with: sync.objectID) as! Integration
-            
-            let issues = SyncIntegrationIssuesProcedure(container: container, integration: integration, apiClient: sync.apiClient)
-            let commits = SyncIntegrationCommitsProcedure(container: container, integration: integration, apiClient: sync.apiClient)
-            
-            queue.addOperations([issues, commits])
-            
-            return
         default:
             break
         }
         
         if queue.operationCount == 0 {
-            output = .ready(.success(events))
             finish()
         }
     }
 }
-
-#endif

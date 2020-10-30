@@ -15,7 +15,7 @@ let package = Package(
         // Products define the executables and libraries produced by a package, and make them visible to other packages.
         .library(
             name: "XcodeServer",
-            targets: ["XcodeServer"]),
+            targets: ["XcodeServer", "XcodeServerAPI", "XcodeServerCoreData", "XcodeServerProcedures", "XcodeServerUtility"]),
         .executable(
             name: "xcscli",
             targets: ["xcscli"]),
@@ -25,8 +25,9 @@ let package = Package(
         // .package(url: /* package url */, from: "1.0.0"),
         .package(url: "https://github.com/tsolomko/SWCompression", .upToNextMinor(from: "4.5.5")),
         .package(url: "https://github.com/richardpiazza/ProcedureKit.git", .branch("feature/cross-platform")),
-        .package(url: "https://github.com/apple/swift-argument-parser.git", .upToNextMinor(from: "0.1.0")),
         .package(url: "https://github.com/swift-server/async-http-client", from: "1.2.1"),
+        .package(url: "https://github.com/apple/swift-argument-parser.git", .upToNextMinor(from: "0.1.0")),
+        .package(url: "https://github.com/apple/swift-tools-support-core.git", .upToNextMinor(from: "0.1.10")),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -34,30 +35,32 @@ let package = Package(
         .target(
             name: "xcscli",
             dependencies: [
-                "XcodeServer",
+                "XcodeServerUtility",
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
+                .product(name: "SwiftToolsSupport", package: "swift-tools-support-core"),
             ]),
         .target(
             name: "XcodeServer",
-            dependencies: ["XcodeServerCommon", "XcodeServerAPI", "XcodeServerCoreData", "XcodeServerProcedures"]),
-        .target(
-            name: "XcodeServerCommon",
             dependencies: []),
         .target(
             name: "XcodeServerAPI",
             dependencies: [
+                "XcodeServer",
                 "SWCompression",
                 .product(name: "AsyncHTTPClient", package: "async-http-client"),
             ]),
         .target(
             name: "XcodeServerCoreData",
-            dependencies: ["XcodeServerCommon"]),
+            dependencies: ["XcodeServer"]),
         .target(
             name: "XcodeServerProcedures",
-            dependencies: ["XcodeServerCommon", "XcodeServerAPI", "XcodeServerCoreData", "ProcedureKit"]),
+            dependencies: ["XcodeServer", "ProcedureKit"]),
+        .target(
+            name: "XcodeServerUtility",
+            dependencies: ["XcodeServer", "XcodeServerAPI", "XcodeServerCoreData", "XcodeServerProcedures"]),
         .testTarget(
             name: "XcodeServerTests",
-            dependencies: ["XcodeServer", "XcodeServerCommon", "XcodeServerAPI", "XcodeServerCoreData"]),
+            dependencies: ["XcodeServer", "XcodeServerAPI", "XcodeServerCoreData", "XcodeServerUtility"]),
     ],
     swiftLanguageVersions: [.v5]
 )

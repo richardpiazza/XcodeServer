@@ -27,25 +27,49 @@ final class Versions: ParsableCommand, Route {
     @Option(help: "Password credential for the Xcode Server. (Optional).")
     var password: String?
     
+    @Flag(help: "Displays the raw JSON response.")
+    var rawResponse: Bool
+    
     func validate() throws {
         try validateServer()
     }
     
     func run() throws {
         let client = try APIClient(fqdn: server, authorizationDelegate: self)
-        client.versions { (result) in
-            switch result {
-            case .success(let value):
-                if let json = value.0.asPrettyJSON() {
-                    print(json)
-                } else {
-                    print("OK")
+        
+        if rawResponse {
+            client.versions { (result) in
+                switch result {
+                case .failure(let error):
+                    print(error.localizedDescription)
+                case .success(let value):
+                    print(value.0.asPrettyJSON() ?? "OK")
                 }
-            case .failure(let error):
-                print(error.localizedDescription)
+
+                Self.exit()
             }
-            
-            Self.exit()
+        } else {
+            client.getServer(server) { (result) in
+                switch result {
+                case .failure(let error):
+                    print(error.localizedDescription)
+                case .success(let value):
+                    let url = value.url?.appendingPathComponent("versions") ?? URL(fileURLWithPath: "")
+                    terminal?.write("GET ", inColor: .cyan, bold: true)
+                    terminal?.write(url.absoluteString, inColor: .yellow, bold: true)
+                    terminal?.writeLine(" 200", inColor: .green, bold: true)
+                    terminal?.writePrefixPadded("macOS: ", length: 14, inColor: .white, bold: true)
+                    terminal?.writeLine(value.version.macOSVersion, inColor: .white, bold: false)
+                    terminal?.writePrefixPadded("Xcode.app: ", length: 14, inColor: .white, bold: true)
+                    terminal?.writeLine(value.version.xcodeAppVersion, inColor: .white, bold: false)
+                    terminal?.writePrefixPadded("Xcode Server: ", length: 14, inColor: .white, bold: true)
+                    terminal?.writeLine(value.version.app.rawValue, inColor: .white, bold: false)
+                    terminal?.writePrefixPadded("API Version: ", length: 14, inColor: .white, bold: true)
+                    terminal?.writeLine("\(value.version.api.rawValue)", inColor: .white, bold: false)
+                }
+                
+                Self.exit()
+            }
         }
         
         dispatchMain()

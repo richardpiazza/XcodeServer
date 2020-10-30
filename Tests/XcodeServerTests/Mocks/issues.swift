@@ -1,0 +1,47 @@
+import Foundation
+
+let issuesJson: String = """
+{
+  "buildServiceErrors": [
+      {
+        "_id": "2ce4a2fd2f57d53039edddc51e002a26",
+        "_rev": "3-633623302b851df3b8f116ef941ee58a",
+        "message": "Trigger exited with non-zero status 128.",
+        "type": "triggerError",
+        "fixItType": "trigger-error",
+        "issueType": "triggerError",
+        "commits": [],
+        "integrationID": "2ce4a2fd2f57d53039edddc51e0009cf",
+        "age": 0,
+        "status": 0,
+        "issueAuthors": []
+      }
+  ],
+  "buildServiceWarnings": [],
+  "triggerErrors": [],
+  "errors": {
+    "unresolvedIssues": [],
+    "freshIssues": [],
+    "resolvedIssues": [],
+    "silencedIssues": []
+  },
+  "warnings": {
+    "unresolvedIssues": [],
+    "freshIssues": [],
+    "resolvedIssues": [],
+    "silencedIssues": []
+  },
+  "testFailures": {
+    "unresolvedIssues": [],
+    "freshIssues": [],
+    "resolvedIssues": [],
+    "silencedIssues": []
+  },
+  "analyzerWarnings": {
+    "unresolvedIssues": [],
+    "freshIssues": [],
+    "resolvedIssues": [],
+    "silencedIssues": []
+  }
+}
+"""

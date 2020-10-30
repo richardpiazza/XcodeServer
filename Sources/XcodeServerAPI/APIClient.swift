@@ -1,3 +1,4 @@
+import XcodeServer
 import Foundation
 import SWCompression
 import AsyncHTTPClient
@@ -7,25 +8,8 @@ import NIOHTTP1
 import FoundationNetworking
 #endif
 
-@available(*, deprecated, renamed: "APIClient.Error")
-public typealias APIClientError = APIClient.Error
-@available(*, deprecated, renamed: "APIClient.Headers")
-public typealias APIClientHeaders = APIClient.Headers
-
 public protocol APIClientAuthorizationDelegate: class {
     func credentials(for fqdn: String) -> (username: String, password: String)?
-    @available(*, deprecated, renamed: "credentials(for:)")
-    func authorization(for fqdn: String?) -> HTTP.Authorization?
-}
-
-public extension APIClientAuthorizationDelegate {
-    @available(*, deprecated, renamed: "credentials(for:)")
-    func authorization(for fqdn: String?) -> HTTP.Authorization? {
-        guard let creds = credentials(for: fqdn ?? "") else {
-            return nil
-        }
-        return .basic(username: creds.username, password: creds.password)
-    }
 }
 
 public class APIClient {
@@ -51,7 +35,7 @@ public class APIClient {
     }
     
     public struct Headers {
-        public static let xscAPIVersion = "x-xcsapiversion"
+        public static let xcsAPIVersion = "x-xcsapiversion"
     }
     
     private static var rfc1123: DateFormatter = {
@@ -81,21 +65,29 @@ public class APIClient {
     }()
     
     private static var _eventLoopGroup: EventLoopGroup?
-    
+    public let fqdn: String
     public var baseURL: URL
     public let client: HTTPClient
     public var jsonEncoder: JSONEncoder = APIClient.jsonEncoder
     public var jsonDecoder: JSONDecoder = APIClient.jsonDecoder
+    internal let internalQueue: DispatchQueue = DispatchQueue(label: "XcodeServer.XcodeServerAPI.APIClient")
+    internal let returnQueue: DispatchQueue
     
     /// Delegate responsible for handling all authentication for
     /// `XCServerClient` instances.
     public var authorizationDelegate: APIClientAuthorizationDelegate?
     
-    public init(fqdn: String, authorizationDelegate: APIClientAuthorizationDelegate? = nil) throws {
+    /// Initialize an Xcode Server API client
+    ///
+    /// - parameter fqdn: The Fully-Qualified-Domain-Name (or IP) of the Xcode Server (HOST ONLY)
+    /// - parameter dispatchQueue: DispatchQueue on which all results will be returned (when not specified).
+    /// - parameter authorizationDelegate: 
+    public init(fqdn: String, dispatchQueue: DispatchQueue = .main, authorizationDelegate: APIClientAuthorizationDelegate? = nil) throws {
         guard let url = URL(string: "https://\(fqdn):20343/api") else {
             throw APIClient.Error.fqdn
         }
         
+        self.fqdn = fqdn
         baseURL = url
         
         var config = HTTPClient.Configuration()
@@ -114,6 +106,7 @@ public class APIClient {
             Self._eventLoopGroup = client.eventLoopGroup
         }
         
+        returnQueue = dispatchQueue
         self.authorizationDelegate = authorizationDelegate
     }
     
@@ -229,13 +222,9 @@ public extension APIClient {
             var apiVersion: Int?
             
             if let responseHeaders = headers {
-                if let version = responseHeaders[APIClient.Headers.xscAPIVersion].first {
+                if let version = responseHeaders[APIClient.Headers.xcsAPIVersion].first {
                     apiVersion = Int(version)
                 }
-                
-                print("\(self.baseURL) API Version: \(apiVersion ?? -1)")
-            } else {
-                print("No Response Headers!")
             }
             
             completion(.success((result, apiVersion)))
@@ -245,14 +234,14 @@ public extension APIClient {
 
 // MARK: - Bots
 public extension APIClient {
-    private struct Bots: Codable {
-        public var count: Int
-        public var results: [XCSBot]
-    }
-    
     /// Requests the '`/bots`' endpoint from the Xcode Server API.
     func bots(_ completion: @escaping (Result<[XCSBot], Error>) -> Void) {
-        get("bots") { (statusCode, headers, data: Bots?, error) in
+        struct Response: Codable {
+            public var count: Int
+            public var results: [XCSBot]
+        }
+        
+        get("bots") { (statusCode, headers, data: Response?, error) in
             completion(self.serverResult(statusCode, headers, data: data?.results, error))
         }
     }
@@ -274,14 +263,26 @@ public extension APIClient {
 
 // MARK: - Integrations
 public extension APIClient {
-    private struct Integrations: Codable {
-        public var count: Int
-        public var results: [XCSIntegration]
+    /// Requests the '`/integrations`' endpoint from the Xcode Server API.
+    func integrations(completion: @escaping (Result<[XCSIntegration], Error>) -> Void) {
+        struct Response: Codable {
+            public var count: Int
+            public var results: [XCSIntegration]
+        }
+        
+        get("integrations") { (statusCode, headers, data: Response?, error) in
+            completion(self.serverResult(statusCode, headers, data: data?.results, error))
+        }
     }
     
     /// Requests the '`/bots/{id}/integrations`' endpoint from the Xcode Server API.
     func integrations(forBotWithIdentifier identifier: String, completion: @escaping (Result<[XCSIntegration], Error>) -> Void) {
-        get("bots/\(identifier)/integrations") { (statusCode, headers, data: Integrations?, error) in
+        struct Response: Codable {
+            public var count: Int
+            public var results: [XCSIntegration]
+        }
+        
+        get("bots/\(identifier)/integrations") { (statusCode, headers, data: Response?, error) in
             completion(self.serverResult(statusCode, headers, data: data?.results, error))
         }
     }
@@ -303,14 +304,14 @@ public extension APIClient {
 
 // MARK: - Commits
 public extension APIClient {
-    private struct IntegrationCommits: Codable {
-        public var count: Int
-        public var results: [XCSCommit]
-    }
-    
     /// Requests the '`/integrations/{id}/commits`' endpoint from the Xcode Server API.
     func commits(forIntegrationWithIdentifier identifier: String, completion: @escaping (Result<[XCSCommit], Error>) -> Void) {
-        get("integrations/\(identifier)/commits") { (statusCode, headers, data: IntegrationCommits?, error) in
+        struct Response: Codable {
+            public var count: Int
+            public var results: [XCSCommit]
+        }
+        
+        get("integrations/\(identifier)/commits") { (statusCode, headers, data: Response?, error) in
             completion(self.serverResult(statusCode, headers, data: data?.results, error))
         }
     }
@@ -375,9 +376,11 @@ public extension APIClient {
 
 // MARK: - Assets
 public extension APIClient {
-    
+    /// Retrieve the _post-integration_ asset archive.
+    ///
     /// Requests the '`/integrations/{id}/assets`' endpoint from the Xcode Server API.
-    func assets(forIntegrationWithIdentifier identifier: String, completion: @escaping (Result<(String, Data), Error>) -> Void) {
+    /// This `.tar` file will contain all of the integration logs, test summaries, and IPA.
+    func archive(forIntegrationWithIdentifier identifier: String, completion: @escaping (Result<(String, Data), Error>) -> Void) {
         get("integrations/\(identifier)/assets") { (statusCode, headers, data: Data?, error) in
             guard statusCode != .unauthorized else {
                 completion(.failure(APIClient.Error.authorization))
@@ -632,6 +635,9 @@ public extension APIClient {
             self.decode(statusCode: statusCode, headers: headers, data: data, error: error, completion: completion)
         }
     }
+}
+
+extension APIClient: AnyQueryable {
 }
 
 private extension HTTPResponseStatus {

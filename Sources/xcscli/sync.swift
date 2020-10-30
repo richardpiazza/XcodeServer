@@ -2,10 +2,12 @@ import Foundation
 import ArgumentParser
 import XcodeServer
 import XcodeServerAPI
+import XcodeServerUtility
 #if canImport(CoreData)
 import CoreData
 import XcodeServerCoreData
 
+@available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 final class Sync: ParsableCommand, Route {
     
     static var configuration: CommandConfiguration = {
@@ -59,27 +61,29 @@ final class Sync: ParsableCommand, Route {
         }
         
         let _model = model ?? Model.v1_0_0
-        let container = NSPersistentContainer(model: _model)
-        let manager: XcodeServer.Manager = Manager(container: container, authorizationDelegate: self)
+        let store = CoreDataStore(model: _model)
+        let manager: XcodeServerUtility.Manager = Manager(store: store, authorizationDelegate: self)
         
-        manager.createServer(withFQDN: server) { (error) in
+        manager.createServer(withId: server) { (error) in
             guard error == nil else {
                 print(error!.localizedDescription)
                 Self.exit()
             }
             
-            manager.syncServer(withFQDN: self.server) { (syncError) in
+            let start = Date()
+            manager.syncServer(withId: self.server) { (syncError) in
                 guard syncError == nil else {
                     print(syncError!.localizedDescription)
                     Self.exit()
                 }
                 
-                print("Sync Complete")
-                if let url = container.persistentStoreCoordinator.persistentStores.first?.url {
-                    print("URL: \(url)")
+                let end = Date()
+                print("Sync Complete - \(end.timeIntervalSince(start)) Seconds")
+                if let url = store.persistentContainer.persistentStoreCoordinator.persistentStores.first?.url {
+                    print("\(url)")
                 }
                 
-                container.unload()
+                store.persistentContainer.unload()
                 
                 Self.exit()
             }
@@ -89,16 +93,11 @@ final class Sync: ParsableCommand, Route {
     }
 }
 
+@available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 extension Sync: ManagerAuthorizationDelegate {
 }
 
-extension Model: CaseIterable, ExpressibleByArgument {
-    public typealias AllCases = [Model]
-    
-    public static var allCases: [Model] {
-        return [.v1_0_0]
-    }
-    
+extension Model: ExpressibleByArgument {
     var stringValue: String {
         switch self {
         case .v1_0_0: return "1.0.0"

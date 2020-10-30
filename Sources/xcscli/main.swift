@@ -1,5 +1,8 @@
 import Foundation
 import ArgumentParser
+import TSCBasic
+
+let terminal = TerminalController(stream: stdoutStream)
 
 struct Command: ParsableCommand {
     
@@ -13,7 +16,9 @@ struct Command: ParsableCommand {
         ]
         
         #if canImport(CoreData)
-        subcommands.append(Sync.self)
+        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *) {
+            subcommands.append(Sync.self)
+        }
         #endif
         
         return CommandConfiguration(

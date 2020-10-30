@@ -1,20 +1,20 @@
-import Foundation
+import XcodeServer
 import ProcedureKit
-import XcodeServerAPI
-#if canImport(CoreData)
-import CoreData
-import XcodeServerCoreData
+import Foundation
 
-public class UpdateBotProcedure: NSManagedObjectProcedure<Bot>, InputProcedure, OutputProcedure {
+@available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+@available(swift, introduced: 5.1)
+public class UpdateBotProcedure: Procedure, InputProcedure {
     
-    public typealias Input = XCSBot
-    public typealias Output = [XcodeServerProcedureEvent]
+    private let destination: BotPersistable
+    private let bot: Bot
     
-    public var input: Pending<Input> = .pending
-    public var output: Pending<ProcedureResult<Output>> = .pending
+    public var input: Pending<Bot> = .pending
     
-    public init(container: NSPersistentContainer, bot: Bot, input: Input? = nil) {
-        super.init(container: container, object: bot)
+    public init(destination: BotPersistable, bot: Bot, input: Bot? = nil) {
+        self.destination = destination
+        self.bot = bot
+        super.init()
         
         if let value = input {
             self.input = .ready(value)
@@ -28,32 +28,29 @@ public class UpdateBotProcedure: NSManagedObjectProcedure<Bot>, InputProcedure, 
         
         guard let value = input.value else {
             let error = XcodeServerProcedureError.invalidInput
-            cancel(with: error)
-            output = .ready(.failure(error))
+            InternalLog.procedures.error("UpdateBotProcedure Failed", error: error)
             finish(with: error)
             return
         }
         
-        let id = objectID
+        guard let serverId = bot.serverId else {
+            let error = XcodeServerProcedureError.invalidInput
+            InternalLog.procedures.error("UpdateBotProcedure Failed - No Server ID", error: error)
+            finish(with: error)
+            return
+        }
         
-        print("Updating Bot '\(managedObject.identifier)'")
+        let id = bot.id
         
-        container.performBackgroundTask { [weak self] (context) in
-            let bot = context.object(with: id) as! Bot
-            
-            let events = bot.update(withBot: value)
-            bot.lastUpdate = Date()
-            
-            do {
-                try context.save()
-                self?.output = .ready(.success(events))
-                self?.finish()
-            } catch {
-                self?.output = .ready(.failure(error))
+        destination.saveBot(value, forServer: serverId) { [weak self] (result) in
+            switch result {
+            case .failure(let error):
+                InternalLog.procedures.error("UpdateBotProcedure Failed", error: error)
                 self?.finish(with: error)
+            case .success:
+                NotificationCenter.default.postBotDidChange(id)
+                self?.finish()
             }
         }
     }
 }
-
-#endif

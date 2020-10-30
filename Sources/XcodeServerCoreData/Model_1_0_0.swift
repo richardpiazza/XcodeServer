@@ -4,8 +4,7 @@ import CoreData
 
 /// Xcode Server Core Data Model: **1.0.0**
 ///
-/// This is the base state of all known Xcode Server entities that are accessable
-/// via the REST API.
+/// This is the base state of all known Xcode Server entities that are accessible via the REST API.
 ///
 /// ## Additions
 ///
@@ -21,23 +20,7 @@ import CoreData
 ///
 class Model_1_0_0: NSManagedObjectModel {
     
-    public static let instance: Model_1_0_0 = Model_1_0_0()
-    
-    #if swift(>=5.3)
-    public static var bundle: NSManagedObjectModel? {
-        guard let url = Bundle.module.url(forResource: "XcodeServer", withExtension: "momd") else {
-            return nil
-        }
-        
-        guard let model = NSManagedObjectModel(contentsOf: url) else {
-            return nil
-        }
-        
-        return model
-    }
-    #endif
-    
-    private override init() {
+    internal override init() {
         super.init()
         
         let asset = NSEntityDescription(name: "Asset")

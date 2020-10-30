@@ -1,18 +1,19 @@
-import Foundation
+import XcodeServer
 import ProcedureKit
-import XcodeServerAPI
-#if canImport(CoreData)
-import CoreData
-import XcodeServerCoreData
+import Foundation
 
-public class UpdateVersionProcedure: NSManagedObjectProcedure<Server>, InputProcedure {
+@available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+@available(swift, introduced: 5.1)
+public class UpdateVersionProcedure: Procedure, InputProcedure {
     
-    public typealias Input = (XCSVersion, Int?)
+    private let destination: ServerPersistable
+    private var server: Server
+    public var input: Pending<Server.Version> = .pending
     
-    public var input: Pending<Input> = .pending
-    
-    public init(container: NSPersistentContainer, server: Server, input: Input? = nil) {
-        super.init(container: container, object: server)
+    public init(destination: ServerPersistable, server: Server, input: Server.Version? = nil) {
+        self.destination = destination
+        self.server = server
+        super.init()
         
         if let value = input {
             self.input = .ready(value)
@@ -26,29 +27,24 @@ public class UpdateVersionProcedure: NSManagedObjectProcedure<Server>, InputProc
         
         guard let value = input.value else {
             let error = XcodeServerProcedureError.invalidInput
-            cancel(with: error)
+            InternalLog.procedures.error("UpdateVersionProcedure Failed", error: error)
             finish(with: error)
             return
         }
         
-        let id = objectID
+        let id = server.id
         
-        print("Updating Versions for Server '\(managedObject.fqdn)'")
+        server.version = value
         
-        container.performBackgroundTask { [weak self] (context) in
-            let server = context.object(with: id) as! Server
-            
-            server.lastUpdate = Date()
-            server.update(withVersion: value.0, api: value.1)
-            
-            do {
-                try context.save()
-                self?.finish()
-            } catch {
+        destination.saveServer(server) { [weak self] (result) in
+            switch result {
+            case .failure(let error):
+                InternalLog.procedures.error("UpdateVersionProcedure Failed", error: error)
                 self?.finish(with: error)
+            case .success:
+                NotificationCenter.default.postServerDidChange(id)
+                self?.finish()
             }
         }
     }
 }
-
-#endif

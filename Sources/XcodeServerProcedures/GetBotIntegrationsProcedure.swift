@@ -1,17 +1,16 @@
-import Foundation
+import XcodeServer
 import ProcedureKit
-import XcodeServerAPI
 
-public class GetBotIntegrationsProcedure: APIClientProcedure, InputProcedure, OutputProcedure {
+public class GetBotIntegrationsProcedure: Procedure, InputProcedure, OutputProcedure {
     
-    public typealias Input = String
-    public typealias Output = [XCSIntegration]
+    private let source: IntegrationQueryable
     
-    public var input: Pending<Input> = .pending
-    public var output: Pending<ProcedureResult<Output>> = .pending
+    public var input: Pending<Bot.ID> = .pending
+    public var output: Pending<ProcedureResult<[Integration]>> = .pending
     
-    public init(client: APIClient, input: Input? = nil) {
-        super.init(client: client)
+    public init(source: IntegrationQueryable, input: Bot.ID? = nil) {
+        self.source = source
+        super.init()
         
         if let value = input {
             self.input = .ready(value)
@@ -25,20 +24,21 @@ public class GetBotIntegrationsProcedure: APIClientProcedure, InputProcedure, Ou
         
         guard let id = input.value else {
             let error = XcodeServerProcedureError.invalidInput
-            cancel(with: error)
+            InternalLog.procedures.error("GetBotIntegrationsProcedure Failed", error: error)
             output = .ready(.failure(error))
             finish(with: error)
             return
         }
         
-        print("Getting Integrations for Bot '\(id)'")
+        InternalLog.procedures.debug("Getting INTEGRATIONS for Bot [\(id)]")
         
-        client.integrations(forBotWithIdentifier: id) { [weak self] (result) in
+        source.getIntegrations(forBot: id) { [weak self] (result) in
             switch result {
             case .success(let value):
                 self?.output = .ready(.success(value))
                 self?.finish()
             case .failure(let error):
+                InternalLog.procedures.error("GetBotIntegrationsProcedure Failed", error: error)
                 self?.output = .ready(.failure(error))
                 self?.finish(with: error)
             }

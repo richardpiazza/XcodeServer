@@ -1,17 +1,16 @@
-import Foundation
+import XcodeServer
 import ProcedureKit
-import XcodeServerAPI
 
-public class GetIntegrationIssuesProcedure: APIClientProcedure, InputProcedure, OutputProcedure {
+public class GetIntegrationIssuesProcedure: Procedure, InputProcedure, OutputProcedure {
     
-    public typealias Input = String
-    public typealias Output = XCSIssues
+    private let source: IntegrationQueryable
     
-    public var input: Pending<Input> = .pending
-    public var output: Pending<ProcedureResult<Output>> = .pending
+    public var input: Pending<Integration.ID> = .pending
+    public var output: Pending<ProcedureResult<Integration.IssueCatalog>> = .pending
     
-    public init(client: APIClient, input: Input? = nil) {
-        super.init(client: client)
+    public init(source: IntegrationQueryable, input: Integration.ID? = nil) {
+        self.source = source
+        super.init()
         
         if let value = input {
             self.input = .ready(value)
@@ -25,20 +24,21 @@ public class GetIntegrationIssuesProcedure: APIClientProcedure, InputProcedure, 
         
         guard let id = input.value else {
             let error = XcodeServerProcedureError.invalidInput
-            cancel(with: error)
+            InternalLog.procedures.error("GetIntegrationIssuesProcedure Failed", error: error)
             output = .ready(.failure(error))
             finish(with: error)
             return
         }
         
-        print("Getting Issues for Integration '\(id)'")
+        InternalLog.procedures.debug("Getting ISSUES from Integration [\(id)]")
         
-        client.issues(forIntegrationWithIdentifier: id) { [weak self] (result) in
+        source.getIssuesForIntegration(id) { [weak self] (result) in
             switch result {
             case .success(let value):
                 self?.output = .ready(.success(value))
                 self?.finish()
             case .failure(let error):
+                InternalLog.procedures.error("GetIntegrationIssuesProcedure Failed", error: error)
                 self?.output = .ready(.failure(error))
                 self?.finish(with: error)
             }
