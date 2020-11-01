@@ -87,12 +87,6 @@ public extension XcodeServer.Bot.Stats {
         if let breakdown = stats.warnings {
             warnings = Analysis(breakdown)
         }
-        if let integration = stats.bestSuccessStreak {
-            bestSuccessStreak = XcodeServer.Integration(integration)
-        }
-        if let integration = stats.lastCleanIntegration {
-            lastCleanIntegration = XcodeServer.Integration(integration)
-        }
     }
 }
 

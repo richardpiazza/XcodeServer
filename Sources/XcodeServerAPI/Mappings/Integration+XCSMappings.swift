@@ -32,6 +32,7 @@ public extension Integration {
         serverId = server
     }
     
+    @available(*, deprecated, message: "Appears to no longer be available. Noted Xcode 12.1")
     init(_ snippet: XCSIntegrationSnippet) {
         self.init(id: snippet.id)
         ended = snippet.endedTime

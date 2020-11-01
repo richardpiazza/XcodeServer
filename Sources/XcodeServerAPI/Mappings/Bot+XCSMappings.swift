@@ -125,12 +125,6 @@ public extension Bot.Stats {
         if let summary = stats.warnings {
             warnings = Analysis(summary)
         }
-        if let snippet = stats.bestSuccessStreak {
-            bestSuccessStreak = Integration(snippet)
-        }
-        if let snippet = stats.lastCleanIntegration {
-            lastCleanIntegration = Integration(snippet)
-        }
     }
 }
 

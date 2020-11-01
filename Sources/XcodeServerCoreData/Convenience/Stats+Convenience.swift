@@ -96,26 +96,6 @@ public extension XcodeServerCoreData.Stats {
             new.update(stats.warnings)
             warnings = new
         }
-        
-        if let integration = stats.bestSuccessStreak, bestSuccessStreak == nil {
-            if let existing = context.integration(withIdentifier: integration.id) {
-                bestSuccessStreak = existing
-            } else {
-                let new = Integration(context: context)
-                new.update(integration, context: context)
-                bestSuccessStreak = new
-            }
-        }
-        
-        if let integration = stats.lastCleanIntegration, lastCleanIntegration == nil {
-            if let existing = context.integration(withIdentifier: integration.id) {
-                lastCleanIntegration = existing
-            } else {
-                let new = Integration(context: context)
-                new.update(integration, context: context)
-                lastCleanIntegration = new
-            }
-        }
     }
 }
 #endif

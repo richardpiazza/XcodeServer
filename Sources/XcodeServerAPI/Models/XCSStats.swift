@@ -2,7 +2,9 @@ import Foundation
 
 /// Statistical information about a specific bot.
 public struct XCSStats: Codable {
+    @available(*, deprecated, message: "Appears to no longer be available. Noted Xcode 12.1")
     public var lastCleanIntegration: XCSIntegrationSnippet?
+    @available(*, deprecated, message: "Appears to no longer be available. Noted Xcode 12.1")
     public var bestSuccessStreak: XCSIntegrationSnippet?
     public var numberOfIntegrations: Int?
     public var numberOfCommits: Int?

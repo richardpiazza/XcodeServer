@@ -32,9 +32,6 @@ public extension Bot {
         public var tests: Analysis = Analysis()
         public var warnings: Analysis = Analysis()
         
-        public var bestSuccessStreak: Integration?
-        public var lastCleanIntegration: Integration?
-        
         public init() {
             
         }

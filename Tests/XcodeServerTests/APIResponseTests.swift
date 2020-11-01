@@ -9,7 +9,6 @@ final class APIResponseTests: XCTestCase {
         ("testVersions", testVersions),
         ("testBots", testBots),
         ("testBot", testBot),
-        ("testStats", testStats),
         ("testIntegrations", testIntegrations),
         ("testIntegration", testIntegration),
         ("testRunIntegration", testRunIntegration),
@@ -47,11 +46,6 @@ final class APIResponseTests: XCTestCase {
     func testBot() throws {
         let bot: XCSBot = try Bundle.module.decodeJson("bot", decoder: decoder)
         XCTAssertEqual(bot.id, "705d82e27dbb120dddc09af79100116b")
-    }
-    
-    func testStats() throws {
-        let stats: XCSStats = try Bundle.module.decodeJson("stats", decoder: decoder)
-        XCTAssertNotNil(stats.lastCleanIntegration)
     }
     
     func testIntegrations() throws {

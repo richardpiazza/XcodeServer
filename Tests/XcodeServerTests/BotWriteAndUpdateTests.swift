@@ -253,24 +253,6 @@ final class BotWriteAndUpdateTests: XCTestCase {
         XCTAssertEqual(stats.tests.average, 46.75)
         XCTAssertEqual(stats.tests.standardDeviation, 173.20508075688775)
         XCTAssertEqual(stats.tests.sumOfSquares, 0.0)
-        
-        let cal = Calendar(identifier: .gregorian)
-        let components: DateComponents = .init(calendar: nil, timeZone: nil, era: nil, year: 2020, month: 7, day: 1, hour: 14, minute: 3, second: 35, nanosecond: 260, weekday: nil, weekdayOrdinal: nil, quarter: nil, weekOfMonth: nil, weekOfYear: nil, yearForWeekOfYear: nil)
-        let date: Date = cal.date(from: components)!
-        
-        let lastClean = try XCTUnwrap(stats.lastCleanIntegration)
-        XCTAssertEqual(lastClean.id, "ce5f34cace5a2142835263cd2f210744")
-        var compare = Calendar.current.compare(lastClean.ended!, to: date, toGranularity: .second)
-        XCTAssertTrue(compare == .orderedSame)
-        
-        let bestStreak = try XCTUnwrap(stats.bestSuccessStreak)
-        XCTAssertEqual(bestStreak.id, "ce5f34cace5a2142835263cd2f210744")
-        XCTAssertEqual(bestStreak.successStreak, 2)
-        compare = Calendar.current.compare(bestStreak.ended!, to: date, toGranularity: .second)
-        XCTAssertTrue(compare == .orderedSame)
-        /*
-         public var sinceDate: Date = Date()
-         */
     }
 }
 
