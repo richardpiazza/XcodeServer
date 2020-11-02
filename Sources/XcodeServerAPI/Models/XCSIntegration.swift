@@ -57,6 +57,7 @@ public struct XCSIntegration: Codable {
         case checkoutError = "checkout-error"
         case internalError = "internal-error"
         case internalBuildError = "internal-build-error"
+        case internalProcessingError = "internal-processing-error"
         case succeeded
         case testFailures = "test-failures"
         case triggerError = "trigger-error"
