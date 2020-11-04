@@ -3,7 +3,7 @@ import XCTest
 @testable import XcodeServerAPI
 @testable import XcodeServerCoreData
 
-#if canImport(CoreData)
+#if canImport(CoreData) && swift(>=5.3)
 final class IntegrationWriteAndUpdateTests: XCTestCase {
     
     static var allTests = [
@@ -11,21 +11,27 @@ final class IntegrationWriteAndUpdateTests: XCTestCase {
         ("testIntegrationCommitsAndIssues", testIntegrationCommitsAndIssues),
     ]
     
-    private lazy var persistedStore: CoreDataStore = {
-        return CoreDataStore(model: .v1_0_0, persisted: false)
-    }()
-    
-    private lazy var client: MockApiClient = {
-        return MockApiClient(serverId: .example)
-    }()
-    
-    var api: IntegrationQueryable {
-        return client
+    private class Client: MockApiClient {
+        override func getIntegration(_ id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping IntegrationResultHandler) {
+            let queue = queue ?? returnQueue
+            dispatchQueue.async {
+                do {
+                    let resource: XCSIntegration = try Bundle.module.decodeJson("integration", decoder: self.decoder)
+                    let result = XcodeServer.Integration(resource, bot: nil, server: nil)
+                    queue.async {
+                        completion(.success(result))
+                    }
+                } catch {
+                    queue.async {
+                        completion(.failure(.error(error)))
+                    }
+                }
+            }
+        }
     }
     
-    var store: (AnyQueryable & AnyPersistable) {
-        return persistedStore
-    }
+    private let store: CoreDataStore = CoreDataStore(model: .v1_0_0, persisted: false)
+    private let client: MockApiClient = Client(serverId: .server1)
     
     var server: XcodeServer.Server!
     
@@ -51,11 +57,11 @@ final class IntegrationWriteAndUpdateTests: XCTestCase {
     }
     
     func testWriteIntegration() throws {
-        var bot = try XCTUnwrap(server.bots.first(where: { $0.id == .dynumiteMacOS }))
+        var bot = try XCTUnwrap(server.bots.first(where: { $0.id == .bot1 }))
         var queryResult: XcodeServer.Integration?
         
         let queryIntegration = expectation(description: "Retrieve Integration")
-        api.getIntegration(.dynumite24) { (result) in
+        client.getIntegration(.integration1) { (result) in
             switch result {
             case .success(let value):
                 queryResult = value
@@ -72,7 +78,7 @@ final class IntegrationWriteAndUpdateTests: XCTestCase {
         var updatedBot: XcodeServer.Bot?
         
         let saveBot = expectation(description: "Save Bot")
-        store.saveBot(bot, forServer: .example) { (result) in
+        store.saveBot(bot, forServer: .server1) { (result) in
             switch result {
             case .success(let value):
                 updatedBot = value
@@ -85,17 +91,17 @@ final class IntegrationWriteAndUpdateTests: XCTestCase {
         
         // Evaluate Persisted Bot
         let _bot = try XCTUnwrap(updatedBot)
-        let _integration = try XCTUnwrap(_bot.integrations.first(where: { $0.id == .dynumite24 }))
+        let _integration = try XCTUnwrap(_bot.integrations.first(where: { $0.id == .integration1 }))
         try verifyDynumite24(_integration)
         try verifyDynumiteAssets(_integration)
     }
     
     func testIntegrationCommitsAndIssues() throws {
-        var bot = try XCTUnwrap(server.bots.first(where: { $0.id == .dynumiteMacOS }))
+        var bot = try XCTUnwrap(server.bots.first(where: { $0.id == .bot1 }))
         bot.integrations.insert(.dynumite24)
         
         let saveBot = expectation(description: "Save Bot")
-        store.saveBot(bot, forServer: .example) { (result) in
+        store.saveBot(bot, forServer: .server1) { (result) in
             switch result {
             case .success:
                 saveBot.fulfill()
@@ -195,7 +201,7 @@ extension IntegrationWriteAndUpdateTests {
 
 private extension XcodeServer.Server {
     static let exampleServer: Self = {
-        var server = XcodeServer.Server(id: .example)
+        var server = XcodeServer.Server(id: .server1)
         server.version.app = .v2_0
         server.version.api = .v19
         server.version.macOSVersion = "11.0"
@@ -251,5 +257,17 @@ private extension XcodeServer.Integration {
         integration.commits = Set(commits.results.commits(forIntegration: integration.id))
         return integration
     }()
+}
+
+private extension XcodeServer.Server.ID {
+    static let server1: Self = "test.server.host"
+}
+
+private extension XcodeServer.Bot.ID {
+    static let bot1: Self = "705d82e27dbb120dddc09af79100116b"
+}
+
+private extension XcodeServer.Integration.ID {
+    static let integration1: Self = "2ce4a2fd2f57d53039edddc51e0009cf"
 }
 #endif

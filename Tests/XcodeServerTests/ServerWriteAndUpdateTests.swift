@@ -1,8 +1,8 @@
 import XCTest
 @testable import XcodeServer
 @testable import XcodeServerCoreData
-#if canImport(CoreData)
 
+#if canImport(CoreData)
 final class ServerWriteAndUpdateTests: XCTestCase {
     
     static var allTests = [
@@ -27,24 +27,24 @@ final class ServerWriteAndUpdateTests: XCTestCase {
             case .failure(let error):
                 XCTFail(error.localizedDescription)
             case .success(let mappedValue):
-                XCTAssertEqual(mappedValue.id, .example)
+                XCTAssertEqual(mappedValue.id, .server1)
                 XCTAssertEqual(mappedValue.version.api, .v19)
                 XCTAssertEqual(mappedValue.version.app, .v2_0)
                 XCTAssertEqual(mappedValue.version.macOSVersion, "10.15")
                 XCTAssertEqual(mappedValue.version.xcodeAppVersion, "11.6")
                 XCTAssertEqual(mappedValue.url, URL(string: "https://xcodeserver.apple.com:20343/api"))
                 
-                guard let exampleServer = self.persistedStore.exampleServer else {
+                guard let server1 = self.persistedStore.server1 else {
                     XCTFail("No persisted 'Server' with FQDN '\(server.id)'.")
                     return
                 }
                 
-                XCTAssertEqual(exampleServer.fqdn, server.id)
-                XCTAssertEqual(exampleServer.apiVersion, 19)
-                XCTAssertEqual(exampleServer.xcodeServer, "2.0")
-                XCTAssertEqual(exampleServer.os, "10.15")
-                XCTAssertEqual(exampleServer.xcode, "11.6")
-                XCTAssertEqual(exampleServer.apiURL, URL(string: "https://xcodeserver.apple.com:20343/api"))
+                XCTAssertEqual(server1.fqdn, server.id)
+                XCTAssertEqual(server1.apiVersion, 19)
+                XCTAssertEqual(server1.xcodeServer, "2.0")
+                XCTAssertEqual(server1.os, "10.15")
+                XCTAssertEqual(server1.xcode, "11.6")
+                XCTAssertEqual(server1.apiURL, URL(string: "https://xcodeserver.apple.com:20343/api"))
                 
                 complete.fulfill()
             }
@@ -62,7 +62,7 @@ final class ServerWriteAndUpdateTests: XCTestCase {
             case .failure(let error):
                 XCTFail(error.localizedDescription)
             case .success:
-                guard let initialState = self.persistedStore.exampleServer else {
+                guard let initialState = self.persistedStore.server1 else {
                     XCTFail()
                     return
                 }
@@ -78,7 +78,7 @@ final class ServerWriteAndUpdateTests: XCTestCase {
                         XCTAssertEqual(mappedValue.version.macOSVersion, "11.0")
                         XCTAssertEqual(mappedValue.version.xcodeAppVersion, "12.0")
                         
-                        guard let updatedState = self.persistedStore.exampleServer else {
+                        guard let updatedState = self.persistedStore.server1 else {
                             XCTFail()
                             return
                         }
@@ -98,7 +98,7 @@ final class ServerWriteAndUpdateTests: XCTestCase {
 
 private extension XcodeServer.Server {
     static let testServer: Self = {
-        var server = XcodeServer.Server(id: .example)
+        var server = XcodeServer.Server(id: .server1)
         server.version.api = .v19
         server.version.app = .v2_0
         server.version.macOSVersion = "10.15"
@@ -107,12 +107,44 @@ private extension XcodeServer.Server {
     }()
     
     static let updateServer: Self = {
-        var server = XcodeServer.Server(id: .example)
+        var server = XcodeServer.Server(id: .server1)
         server.version.api = .v19
         server.version.app = .v2_0
         server.version.macOSVersion = "11.0"
         server.version.xcodeAppVersion = "12.0"
         return server
     }()
+}
+
+private extension XcodeServer.Server.ID {
+    static let server1: Self = "xcodeserver.apple.com"
+}
+
+private extension XcodeServer.Bot.ID {
+    static let bot1: Self = "705d82e27dbb120dddc09af79100116b"
+}
+
+private extension XcodeServer.Integration.ID {
+    static let integration1: Self = "2ce4a2fd2f57d53039edddc51e0009cf"
+}
+
+extension CoreDataStore {
+    var server1: XcodeServerCoreData.Server? {
+        let request = XcodeServerCoreData.Server.fetchRequest() as! NSFetchRequest<XcodeServerCoreData.Server>
+        request.predicate = NSPredicate(format: "%K == %@", #keyPath(XcodeServerCoreData.Server.fqdn), XcodeServer.Server.ID.server1)
+        return try? persistentContainer.viewContext.fetch(request).first
+    }
+    
+    var bot1: XcodeServerCoreData.Bot? {
+        let request = XcodeServerCoreData.Bot.fetchRequest() as! NSFetchRequest<XcodeServerCoreData.Bot>
+        request.predicate = NSPredicate(format: "%K == %@", #keyPath(XcodeServerCoreData.Bot.identifier), XcodeServer.Bot.ID.bot1)
+        return try? persistentContainer.viewContext.fetch(request).first
+    }
+    
+    var integration1: XcodeServerCoreData.Integration? {
+        let request = XcodeServerCoreData.Integration.fetchRequest() as! NSFetchRequest<XcodeServerCoreData.Integration>
+        request.predicate = NSPredicate(format: "%K == %@", #keyPath(XcodeServerCoreData.Integration.identifier), XcodeServer.Integration.ID.integration1)
+        return try? persistentContainer.viewContext.fetch(request).first
+    }
 }
 #endif
