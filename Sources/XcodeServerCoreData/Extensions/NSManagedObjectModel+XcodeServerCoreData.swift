@@ -13,7 +13,12 @@ public extension NSManagedObjectModel {
     ///
     /// Ensure `Model.current` matches expected version.
     static var xcodeServer: NSManagedObjectModel = {
-        guard let url = Bundle.module.url(forResource: "XcodeServer", withExtension: "momd") else {
+        let url: URL
+        if let _url = Bundle.module.url(forResource: "XcodeServer", withExtension: "momd") {
+            url = _url
+        } else if let _url = Bundle.module.url(forResource: "XcodeServer", withExtension: "mom") {
+            url = _url
+        } else {
             preconditionFailure("Unable to locate 'XcodeServer.momd' in `Bundle.module`.")
         }
         
