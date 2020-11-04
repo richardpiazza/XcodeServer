@@ -3,7 +3,7 @@ import XCTest
 @testable import XcodeServerAPI
 @testable import XcodeServerCoreData
 
-#if canImport(CoreData)
+#if canImport(CoreData) && swift(>=5.3)
 final class BotWriteAndUpdateTests: XCTestCase {
     
     static var allTests = [
@@ -11,25 +11,50 @@ final class BotWriteAndUpdateTests: XCTestCase {
         ("testUpdateBotStats", testUpdateBotStats),
     ]
     
-    private lazy var persistedStore: CoreDataStore = {
+    private class Client: MockApiClient {
+        override func getBot(_ id: XcodeServer.Bot.ID, queue: DispatchQueue?, completion: @escaping BotResultHandler) {
+            let queue = queue ?? returnQueue
+            dispatchQueue.async {
+                do {
+                    let resource: XCSBot = try Bundle.module.decodeJson("bot", decoder: self.decoder)
+                    let result = XcodeServer.Bot(resource, server: self.serverId)
+                    queue.async {
+                        completion(.success(result))
+                    }
+                } catch {
+                    queue.async {
+                        completion(.failure(.error(error)))
+                    }
+                }
+            }
+        }
+        
+        override func getStatsForBot(_ id: XcodeServer.Bot.ID, queue: DispatchQueue?, completion: @escaping BotStatsResultHandler) {
+            let queue = queue ?? returnQueue
+            dispatchQueue.async {
+                do {
+                    let resource: XCSStats = try Bundle.module.decodeJson("stats", decoder: self.decoder)
+                    let result = XcodeServer.Bot.Stats(resource)
+                    queue.async {
+                        completion(.success(result))
+                    }
+                } catch {
+                    queue.async {
+                        completion(.failure(.error(error)))
+                    }
+                }
+            }
+        }
+    }
+    
+    private let client: MockApiClient = Client(serverId: .server1)
+    private lazy var store: CoreDataStore = {
         do {
             return try CoreDataStore(model: .v1_0_0, persisted: false)
         } catch {
             preconditionFailure(error.localizedDescription)
         }
     }()
-    
-    private lazy var client: MockApiClient = {
-        return MockApiClient(serverId: .example)
-    }()
-    
-    var api: BotQueryable {
-        return client
-    }
-    
-    var store: (ServerPersistable & BotPersistable) {
-        return persistedStore
-    }
     
     func testWriteBot() throws {
         let saveServer = expectation(description: "Save Server")
@@ -45,7 +70,7 @@ final class BotWriteAndUpdateTests: XCTestCase {
         
         let queryBot = expectation(description: "Retrieve Bot")
         var bot: XcodeServer.Bot?
-        api.getBot(.dynumiteMacOS) { (result) in
+        client.getBot(.bot1) { (result) in
             switch result {
             case .success(let value):
                 bot = value
@@ -75,12 +100,12 @@ final class BotWriteAndUpdateTests: XCTestCase {
         // Evaluate retrieved server.
         let _retrievedServer = try XCTUnwrap(retrievedServer)
         let retrievedBot = try XCTUnwrap(_retrievedServer.bots.first)
-        XCTAssertEqual(retrievedBot.id, .dynumiteMacOS)
+        XCTAssertEqual(retrievedBot.id, .bot1)
         XCTAssertEqual(retrievedBot.name, "Dynumite macOS")
         XCTAssertEqual(retrievedBot.nextIntegrationNumber, 24)
         XCTAssertEqual(retrievedBot.type, 1)
         XCTAssertEqual(retrievedBot.requiresUpgrade, false)
-        XCTAssertEqual(retrievedBot.serverId, .example)
+        XCTAssertEqual(retrievedBot.serverId, .server1)
 //        XCTAssertEqual(retrievedBot.stats, XcodeServer.Bot.Stats())
         XCTAssertEqual(retrievedBot.integrations.count, 0)
         
@@ -148,7 +173,7 @@ final class BotWriteAndUpdateTests: XCTestCase {
         // currently empty as the core data entity structure doesn't allow for it.
         // but, the repository object should have been created.
         XCTAssertEqual(config.sourceControlBlueprint, SourceControl.Blueprint())
-        let repository = try XCTUnwrap(persistedStore.persistentContainer.viewContext.repository(withIdentifier: "0430DC0FCD6EB7BC51C585D722CCD37A72BD7D71"))
+        let repository = try XCTUnwrap(store.persistentContainer.viewContext.repository(withIdentifier: "0430DC0FCD6EB7BC51C585D722CCD37A72BD7D71"))
         XCTAssertEqual(repository.identifier, "0430DC0FCD6EB7BC51C585D722CCD37A72BD7D71")
         XCTAssertEqual(repository.system, "com.apple.dt.Xcode.sourcecontrol.Git")
         XCTAssertEqual(repository.url, "bitbucket.org:richardpiazza/com.richardpiazza.dynumite.git")
@@ -177,7 +202,7 @@ final class BotWriteAndUpdateTests: XCTestCase {
         var _stats: XcodeServer.Bot.Stats?
         
         let getStats = expectation(description: "Get Stats")
-        api.getStatsForBot(bot.id) { (result) in
+        client.getStatsForBot(bot.id) { (result) in
             switch result {
             case .success(let value):
                 _stats = value
@@ -280,7 +305,7 @@ final class BotWriteAndUpdateTests: XCTestCase {
 
 private extension XcodeServer.Server {
     static let exampleServer: Self = {
-        var server = XcodeServer.Server(id: .example)
+        var server = XcodeServer.Server(id: .server1)
         server.version.app = .v2_0
         server.version.api = .v19
         server.version.macOSVersion = "11.0"
@@ -302,7 +327,19 @@ private extension XcodeServer.Bot {
             _bot = XCSBot()
         }
         
-        return XcodeServer.Bot(_bot, server: .dynumiteMacOS)
+        return XcodeServer.Bot(_bot, server: .server1)
     }()
+}
+
+private extension XcodeServer.Server.ID {
+    static let server1: Self = "test.server.host"
+}
+
+private extension XcodeServer.Bot.ID {
+    static let bot1: Self = "705d82e27dbb120dddc09af79100116b"
+}
+
+private extension XcodeServer.Integration.ID {
+    static let integration1: Self = "2ce4a2fd2f57d53039edddc51e0009cf"
 }
 #endif

@@ -1,0 +1,326 @@
+{
+  "_id": "2911c1d6174047dcf2a52f464a019ee9",
+  "_rev": "17-303da097b57f57aae6d5afa01efc5f52",
+  "bot": {
+    "_id": "2911c1d6174047dcf2a52f464a0135f6",
+    "_rev": "6-badacde45ff4acc88e2ed3dfe5b47ffe",
+    "group": {
+      "name": "B988051F-B8D4-47A4-9FA1-E33BCC580F0B"
+    },
+    "configuration": {
+      "triggers": [],
+      "testingDestinationType": 0,
+      "performsUpgradeIntegration": true,
+      "disableAppThinning": true,
+      "provisioningConfiguration": {
+        "addMissingDevicesToTeams": false,
+        "manageCertsAndProfiles": true
+      },
+      "periodicScheduleInterval": 0,
+      "deviceSpecification": {
+        "filters": [
+          {
+            "platform": {
+              "_id": "2911c1d6174047dcf2a52f464a0054bd",
+              "displayName": "iOS",
+              "_rev": "3-fe549092142e2a51c9aa798f5ebf0aac",
+              "simulatorIdentifier": "com.apple.platform.iphonesimulator",
+              "identifier": "com.apple.platform.iphoneos",
+              "buildNumber": "18A8394",
+              "version": "14.1"
+            },
+            "filterType": 2,
+            "architectureType": 0
+          }
+        ],
+        "deviceIdentifiers": []
+      },
+      "buildEnvironmentVariables": {},
+      "schemeName": "Pocket Bot",
+      "additionalBuildArguments": [],
+      "codeCoveragePreference": 2,
+      "performsTestAction": true,
+      "scheduleType": 3,
+      "useParallelDeviceTesting": true,
+      "performsArchiveAction": true,
+      "builtFromClean": 0,
+      "performsAnalyzeAction": true,
+      "sourceControlBlueprint": {
+        "DVTSourceControlWorkspaceBlueprintVersion": 205,
+        "DVTSourceControlWorkspaceBlueprintNameKey": "Pocket Bot",
+        "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey": "Pocket Bot.xcodeproj",
+        "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey": "6D9FFC92170BF5EE19CA25700175BFFFBA40751A",
+        "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey": {},
+        "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey": {
+          "6D9FFC92170BF5EE19CA25700175BFFFBA40751A": "PocketBot/"
+        },
+        "DVTSourceControlWorkspaceBlueprintIdentifierKey": "567E0F5B-B3CC-432A-8FFB-D4AFBCF93EFB",
+        "DVTSourceControlWorkspaceBlueprintAdditionalValidationRemoteRepositoriesKey": [
+          {
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryEnforceTrustCertFingerprintKey": true,
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "https://github.com/swift-server/async-http-client",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "2947213B190AAE6EECCB0B8397749BF6482F2DF7"
+          },
+          {
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryEnforceTrustCertFingerprintKey": true,
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "https://github.com/tsolomko/BitByteData",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "F37C1DCCC130D51D8E1259D0AF0ADE5ED2A05653"
+          },
+          {
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryEnforceTrustCertFingerprintKey": true,
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "https://github.com/richardpiazza/CodeQuickKit.git",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "3CBDEDAE95CE25E53B615AC684AAEE3F90A98DFE"
+          },
+          {
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryEnforceTrustCertFingerprintKey": true,
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "https://github.com/richardpiazza/CoordinatorPlus.git",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "0700CCFD28B0E514196B4920F991EB5DCE707358"
+          },
+          {
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryEnforceTrustCertFingerprintKey": true,
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "https://github.com/richardpiazza/GraphPoint.git",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "A1F5D049FD4665DE5191D03CED810C575819E7F6"
+          },
+          {
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryEnforceTrustCertFingerprintKey": true,
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "https://github.com/kishikawakatsumi/KeychainAccess",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "AFADF01AFBA46DFD7A5AFD980110E89E8E63AACD"
+          },
+          {
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryEnforceTrustCertFingerprintKey": true,
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "https://github.com/richardpiazza/ProcedureKit.git",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "3A999A0044F026F7ADF66A6D83E1CB8EDCDF46AF"
+          },
+          {
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryEnforceTrustCertFingerprintKey": true,
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "https://github.com/tsolomko/SWCompression",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "E6373B3D22BA326BAF0D2B1F94F2798ED4E2E654"
+          },
+          {
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryEnforceTrustCertFingerprintKey": true,
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "https://github.com/tsolomko/SWCompression-Test-Files.git",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "E55B9DA30F1163EC736BDAD4EEB642F8EFAC54CD"
+          },
+          {
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryEnforceTrustCertFingerprintKey": true,
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "https://github.com/apple/swift-argument-parser.git",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "5D8F13AB0A91F3C4B90F666D22D2FA0DFBBCBC06"
+          },
+          {
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryEnforceTrustCertFingerprintKey": true,
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "https://github.com/apple/swift-log.git",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "D59CEFC12521F922C6538D541E0CC9EAB761EFFF"
+          },
+          {
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryEnforceTrustCertFingerprintKey": true,
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "https://github.com/apple/swift-nio-extras.git",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "DCE940618D759C37751BDCA30AFCA09C3825115E"
+          },
+          {
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryEnforceTrustCertFingerprintKey": true,
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "https://github.com/apple/swift-nio-ssl.git",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "8A12EC34756FA8CBE1C0388143E13D95416B61E0"
+          },
+          {
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryEnforceTrustCertFingerprintKey": true,
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "https://github.com/apple/swift-nio-transport-services.git",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "A79174A8E1131CDA01AA76C29A225E3E5A95A36D"
+          },
+          {
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryEnforceTrustCertFingerprintKey": true,
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "https://github.com/apple/swift-nio.git",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "7636FE82F8509011B6FA0507A7FDABA3395B7E9D"
+          },
+          {
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryEnforceTrustCertFingerprintKey": true,
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "https://github.com/apple/swift-tools-support-core.git",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "6506C40088E8E4A0A4B78F60F1C47F578DC22399"
+          },
+          {
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryEnforceTrustCertFingerprintKey": true,
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "https://github.com/richardpiazza/XcodeServer.git",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "E52D14185CC53451EAD5F8C6AAF1C74E0581D237"
+          }
+        ],
+        "DVTSourceControlWorkspaceBlueprintRemoteRepositoryAuthenticationStrategiesKey": {
+          "6D9FFC92170BF5EE19CA25700175BFFFBA40751A": {
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryAuthenticationTypeKey": "DVTSourceControlAuthenticationStrategy"
+          }
+        },
+        "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey": {
+          "6D9FFC92170BF5EE19CA25700175BFFFBA40751A": 0
+        },
+        "DVTSourceControlWorkspaceBlueprintLocationsKey": {
+          "6D9FFC92170BF5EE19CA25700175BFFFBA40751A": {
+            "DVTSourceControlBranchIdentifierKey": "develop",
+            "DVTSourceControlBranchOptionsKey": 4,
+            "DVTSourceControlWorkspaceBlueprintLocationTypeKey": "DVTSourceControlBranch"
+          }
+        },
+        "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey": [
+          {
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "github.com:richardpiazza/PocketBot.git",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+            "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "6D9FFC92170BF5EE19CA25700175BFFFBA40751A"
+          }
+        ]
+      },
+      "exportsProductFromArchive": true,
+      "weeklyScheduleDay": 0,
+      "runOnlyDisabledTests": false,
+      "minutesAfterHourToIntegrate": 0,
+      "testLocalizations": [
+        {
+          "testRegion": "IDELocalizationPopUpUseSchemeSetting",
+          "testLanguage": "IDELocalizationPopUpUseSchemeSetting"
+        }
+      ],
+      "hourOfIntegration": 0
+    },
+    "requiresUpgrade": false,
+    "name": "Pocket Bot (iOS)",
+    "type": 1,
+    "sourceControlBlueprintIdentifier": "ADA52F80-80D7-40A0-AD4E-6016A05EC0E6",
+    "integration_counter": 2,
+    "doc_type": "bot",
+    "tinyID": "E92E452",
+    "lastRevisionBlueprint": {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey": [
+        {
+          "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+          "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "github.com:richardpiazza/PocketBot.git",
+          "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "6D9FFC92170BF5EE19CA25700175BFFFBA40751A"
+        }
+      ],
+      "DVTSourceControlWorkspaceBlueprintLocationsKey": {
+        "6D9FFC92170BF5EE19CA25700175BFFFBA40751A": {
+          "DVTSourceControlBranchIdentifierKey": "develop",
+          "DVTSourceControlLocationRevisionKey": "1f1454d0933626c856557e42f93e91589b12691f",
+          "DVTSourceControlBranchOptionsKey": 4,
+          "DVTSourceControlBranchRemoteNameKey": "origin",
+          "DVTSourceControlWorkspaceBlueprintLocationTypeKey": "DVTSourceControlBranch"
+        }
+      },
+      "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey": "6D9FFC92170BF5EE19CA25700175BFFFBA40751A",
+      "DVTSourceControlWorkspaceBlueprintIdentifierKey": "21D24363-964F-48C9-BC26-ED7F585CCDE1",
+      "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey": {
+        "6D9FFC92170BF5EE19CA25700175BFFFBA40751A": "PocketBot/"
+      },
+      "DVTSourceControlWorkspaceBlueprintNameKey": "Pocket Bot",
+      "DVTSourceControlWorkspaceBlueprintVersion": 205,
+      "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey": "Pocket Bot.xcodeproj",
+      "DVTSourceControlWorkspaceBlueprintAdditionalValidationRemoteRepositoriesKey": []
+    }
+  },
+  "number": 2,
+  "currentStep": "completed",
+  "result": "internal-processing-error",
+  "queuedDate": "2020-11-01T20:39:51.654Z",
+  "success_streak": 0,
+  "shouldClean": false,
+  "assets": {
+    "xcodebuildOutput": {
+      "size": 5738430,
+      "fileName": "xcodebuild_result.xcresult.zip",
+      "allowAnonymousAccess": false,
+      "isDirectory": true,
+      "relativePath": "2911c1d6174047dcf2a52f464a0135f6-Pocket Bot (iOS)/2/xcodebuild_result.xcresult.zip"
+    },
+    "buildServiceLog": {
+      "size": 18926,
+      "fileName": "buildService.log",
+      "allowAnonymousAccess": false,
+      "relativePath": "2911c1d6174047dcf2a52f464a0135f6-Pocket Bot (iOS)/2/buildService.log"
+    },
+    "xcodebuildLog": {
+      "size": 15509673,
+      "fileName": "xcodebuild.log",
+      "allowAnonymousAccess": false,
+      "relativePath": "2911c1d6174047dcf2a52f464a0135f6-Pocket Bot (iOS)/2/xcodebuild.log"
+    },
+    "sourceControlLog": {
+      "size": 2702,
+      "fileName": "sourceControl.log",
+      "allowAnonymousAccess": false,
+      "relativePath": "2911c1d6174047dcf2a52f464a0135f6-Pocket Bot (iOS)/2/sourceControl.log"
+    }
+  },
+  "doc_type": "integration",
+  "tinyID": "ADACFD3",
+  "buildServiceFingerprint": "2B:BE:EF:D4:78:5C:AF:13:DD:4C:A1:8B:67:CD:F6:48:73:0D:4F:7A",
+  "tags": [],
+  "startedTime": "2020-11-01T20:39:53.721Z",
+  "revisionBlueprint": {
+    "DVTSourceControlWorkspaceBlueprintAdditionalValidationRemoteRepositoriesKey": [],
+    "DVTSourceControlWorkspaceBlueprintLocationsKey": {
+      "6D9FFC92170BF5EE19CA25700175BFFFBA40751A": {
+        "DVTSourceControlBranchIdentifierKey": "develop",
+        "DVTSourceControlLocationRevisionKey": "1f1454d0933626c856557e42f93e91589b12691f",
+        "DVTSourceControlBranchOptionsKey": 4,
+        "DVTSourceControlBranchRemoteNameKey": "origin",
+        "DVTSourceControlWorkspaceBlueprintLocationTypeKey": "DVTSourceControlBranch"
+      }
+    },
+    "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey": "6D9FFC92170BF5EE19CA25700175BFFFBA40751A",
+    "DVTSourceControlWorkspaceBlueprintIdentifierKey": "6E8232D0-2F80-4B56-857E-B07DBC44D5A9",
+    "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey": {
+      "6D9FFC92170BF5EE19CA25700175BFFFBA40751A": "PocketBot/"
+    },
+    "DVTSourceControlWorkspaceBlueprintNameKey": "Pocket Bot",
+    "DVTSourceControlWorkspaceBlueprintVersion": 205,
+    "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey": "Pocket Bot.xcodeproj",
+    "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey": [
+      {
+        "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "github.com:richardpiazza/PocketBot.git",
+        "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+        "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "6D9FFC92170BF5EE19CA25700175BFFFBA40751A"
+      }
+    ]
+  },
+  "buildResultSummary": {
+    "analyzerWarningCount": 0,
+    "testFailureCount": 0,
+    "testsChange": 16,
+    "errorCount": 0,
+    "testsCount": 16,
+    "testFailureChange": 0,
+    "warningChange": 0,
+    "regressedPerfTestCount": 0,
+    "warningCount": 0,
+    "errorChange": -2,
+    "improvedPerfTestCount": 0,
+    "analyzerWarningChange": 0,
+    "codeCoveragePercentage": 0,
+    "codeCoveragePercentageDelta": 0
+  },
+  "endedTime": "2020-11-01T21:01:37.683Z",
+  "endedTimeDate": [
+    2020,
+    11,
+    1,
+    21,
+    1,
+    37,
+    683
+  ],
+  "duration": 1303.962,
+  "ccPercentage": 0,
+  "ccPercentageDelta": 0
+}

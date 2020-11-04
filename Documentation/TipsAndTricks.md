@@ -29,7 +29,7 @@ Configuration: `/Library/Developer/XcodeServer/Configuration/xcscouch.ini`
 ### Compile Core Data Model to `.momd`
 
 ```bash
-/Applications/Xcode.app/Contents/Develop/usr/bin/momc {Source.xcdatamodeld} {Destination.momd}
+/Applications/Xcode.app/Contents/Developer/usr/bin/momc {Source.xcdatamodeld} {Destination.momd}
 ```
 
 ## Simulator

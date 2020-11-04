@@ -3,14 +3,34 @@ import XCTest
 @testable import XcodeServerAPI
 @testable import XcodeServerCoreData
 
-#if canImport(CoreData)
+#if canImport(CoreData) && swift(>=5.3)
 final class EdgeCaseTests: XCTestCase {
     
     static var allTests = [
         ("testIntegrationCommitRemoteId", testIntegrationCommitRemoteId),
     ]
     
-    private lazy var persistedStore: CoreDataStore = {
+    private class Client: MockApiClient {
+        override func getCommitsForIntegration(_ id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping CommitsResultHandler) {
+            let queue = queue ?? returnQueue
+            dispatchQueue.async {
+                do {
+                    let resource: XCSResults<XCSCommit> = try Bundle.module.decodeJson("structured18_commits", decoder: self.decoder)
+                    let result: [SourceControl.Commit] = resource.results.commits(forIntegration: id)
+                    queue.async {
+                        completion(.success(result))
+                    }
+                } catch {
+                    queue.async {
+                        completion(.failure(.error(error)))
+                    }
+                }
+            }
+        }
+    }
+    
+    private let client: MockApiClient = Client(serverId: .server1)
+    private lazy var store: CoreDataStore = {
         do {
             return try CoreDataStore(model: .v1_0_0, persisted: false)
         } catch {
@@ -18,15 +38,11 @@ final class EdgeCaseTests: XCTestCase {
         }
     }()
     
-    private lazy var client: MockApiClient = {
-        return MockApiClient(serverId: .example)
-    }()
-    
     func testIntegrationCommitRemoteId() throws {
         var retrievedCommits: [SourceControl.Commit]?
         
         let query = expectation(description: "Retrieve Commits")
-        client.getCommitsForIntegration(.structured18) { (result) in
+        client.getCommitsForIntegration(.integration1) { (result) in
             switch result {
             case .failure(let error):
                 XCTFail(error.localizedDescription)
@@ -43,5 +59,13 @@ final class EdgeCaseTests: XCTestCase {
             XCTAssertNotNil(commit.remoteId)
         }
     }
+}
+
+private extension XcodeServer.Server.ID {
+    static let server1: Self = "test.server.host"
+}
+
+private extension XcodeServer.Integration.ID {
+    static let integration1: Self = "4dce4862459fab67e33ff9cae7004b04"
 }
 #endif
