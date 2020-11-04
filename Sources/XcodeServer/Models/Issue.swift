@@ -17,9 +17,14 @@ public struct Issue: Hashable, Identifiable {
     public var target: String = ""
     public var testCase: String = ""
     public var type: Category = .unknown
+    /// Additional type categorization data. For instance _'Swift Compiler Error'_.
+    ///
+    /// - note: Represented by 'issueType' in the API.
+    public var extendedType: String = ""
     
     // MARK: - Relationships
     public var integrationId: Integration.ID?
+    public var authors: [Author] = []
     public var commits: Set<SourceControl.Commit> = []
     
     public init(id: Issue.ID = "") {
