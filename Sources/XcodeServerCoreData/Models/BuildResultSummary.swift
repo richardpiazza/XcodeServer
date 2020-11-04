@@ -4,7 +4,15 @@ import CoreData
 
 @objc(BuildResultSummary)
 public class BuildResultSummary: NSManagedObject {
-    
+
+}
+
+extension BuildResultSummary {
+
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<BuildResultSummary> {
+        return NSFetchRequest<BuildResultSummary>(entityName: "BuildResultSummary")
+    }
+
     @NSManaged public var analyzerWarningChange: Int32
     @NSManaged public var analyzerWarningCount: Int32
     @NSManaged public var codeCoveragePercentage: Int32
@@ -20,7 +28,7 @@ public class BuildResultSummary: NSManagedObject {
     @NSManaged public var warningChange: Int32
     @NSManaged public var warningCount: Int32
     @NSManaged public var integration: Integration?
-    
+
 }
 
 #endif

@@ -128,12 +128,12 @@ public extension XcodeServerCoreData.Configuration {
         schemeName = configuration.schemeName
         deviceSpecification?.update(configuration.deviceSpecification, context: context)
         
-        triggers?.forEach({ context.delete($0) })
+        (triggers as? Set<XcodeServerCoreData.Trigger>)?.forEach({ context.delete($0) })
         configuration.triggers.forEach { (trigger) in
             InternalLog.coreData.info("Creating TRIGGER for Configuration '\(bot?.name ?? "")'")
             let _trigger = XcodeServerCoreData.Trigger(context: context)
             _trigger.update(trigger, context: context)
-            _trigger.configuration = self
+            addToTriggers(_trigger)
         }
         
         let remoteId = configuration.sourceControlBlueprint.primaryRemoteIdentifier

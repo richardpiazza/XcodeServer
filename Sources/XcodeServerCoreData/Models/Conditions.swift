@@ -4,7 +4,15 @@ import CoreData
 
 @objc(Conditions)
 public class Conditions: NSManagedObject {
-    
+
+}
+
+extension Conditions {
+
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Conditions> {
+        return NSFetchRequest<Conditions>(entityName: "Conditions")
+    }
+
     @NSManaged public var onAllIssuesResolved: Bool
     @NSManaged public var onAnalyzerWarnings: Bool
     @NSManaged public var onBuildErrors: Bool
@@ -14,7 +22,6 @@ public class Conditions: NSManagedObject {
     @NSManaged public var onWarnings: Bool
     @NSManaged public var statusRawValue: Int16
     @NSManaged public var trigger: Trigger?
-    
-}
 
+}
 #endif

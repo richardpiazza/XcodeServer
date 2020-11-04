@@ -11,7 +11,7 @@ extension NSPersistentContainer {
     /// * `Migration.Error.noMigrationPath`
     /// * `Migration.Error.unidentifiedSource`
     convenience init(model: Model, persisted: Bool = true) throws {
-        let storeURL = FileManager.default.storeURL
+        let storeURL: URL = .storeURL
         
         // Attempt Migration (if required / if persisted)
         if persisted {
@@ -29,12 +29,15 @@ extension NSPersistentContainer {
                 default:
                     throw error
                 }
+            } catch {
+                print(error)
+                throw error
             }
         }
         
         let objectModel = NSManagedObjectModel.make(for: model)
         
-        self.init(name: FileManager.containerName, managedObjectModel: objectModel)
+        self.init(name: .containerName, managedObjectModel: objectModel)
         
         let description = NSPersistentStoreDescription()
         if persisted {

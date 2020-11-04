@@ -7,10 +7,10 @@ public extension XcodeServer.Server {
     ///
     /// - parameter server: The managed entity to transform.
     init(_ server: XcodeServerCoreData.Server) {
-        self.init(id: server.fqdn)
+        self.init(id: server.fqdn ?? "")
         modified = server.lastUpdate ?? Date()
         version = Version(server)
-        if let bots = server.bots {
+        if let bots = server.bots as? Set<Bot> {
             self.bots = Set(bots.map { XcodeServer.Bot($0) })
         }
     }

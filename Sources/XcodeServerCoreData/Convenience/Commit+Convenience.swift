@@ -14,16 +14,16 @@ public extension XcodeServerCoreData.Commit {
         date = commit.date
         commitContributor?.update(commit.contributor)
         
-        commitChanges?.forEach({ context.delete($0) })
+        (commitChanges as? Set<CommitChange>)?.forEach({ context.delete($0) })
         commit.changes.forEach { (change) in
             let _change = CommitChange(context: context)
             _change.update(change)
-            _change.commit = self
+            addToCommitChanges(_change)
         }
         
         if let integration = integration {
             if context.revisionBlueprint(withCommit: self, andIntegration: integration) == nil {
-                InternalLog.coreData.info("Creating REVISION_BLUEPRINT for Commit [\(commitHash)] and Integration [\(integration.identifier)]")
+                InternalLog.coreData.info("Creating REVISION_BLUEPRINT for Commit [\(commit.id)] and Integration [\(integration.identifier ?? "")]")
                 let blueprint = RevisionBlueprint(context: context)
                 blueprint.commit = self
                 blueprint.integration = integration

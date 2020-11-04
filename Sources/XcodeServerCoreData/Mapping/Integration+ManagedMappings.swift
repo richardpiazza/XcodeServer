@@ -3,7 +3,7 @@ import XcodeServer
 
 public extension XcodeServer.Integration {
     init(_ integration: XcodeServerCoreData.Integration) {
-        self.init(id: integration.identifier)
+        self.init(id: integration.identifier ?? "")
         number = Int(integration.number)
         step = integration.currentStep
         shouldClean = integration.shouldClean
@@ -59,7 +59,7 @@ public extension XcodeServer.Integration.BuildSummary {
 public extension XcodeServer.Integration.AssetCatalog {
     init(_ assets: IntegrationAssets) {
         self.init()
-        if let asset = assets.triggerAssets {
+        if let asset = assets.triggerAssets as? Set<Asset> {
             triggerAssets = asset.map { XcodeServer.Integration.Asset($0) }
         }
         if let asset = assets.sourceControlLog {
@@ -98,47 +98,52 @@ public extension XcodeServer.Integration.Asset {
 public extension XcodeServer.Integration.IssueCatalog {
     init(_ issues: XcodeServerCoreData.IntegrationIssues) {
         self.init()
-        if let value = issues.buildServiceErrors {
+        if let value = issues.buildServiceErrors as? Set<Issue> {
             buildServiceErrors = Set(value.map { XcodeServer.Issue($0) })
         }
-        if let value = issues.buildServiceWarnings {
+        if let value = issues.buildServiceWarnings as? Set<Issue> {
             buildServiceWarnings = Set(value.map { XcodeServer.Issue($0) })
         }
-        if let value = issues.freshErrors {
+        if let value = issues.freshErrors as? Set<Issue> {
             errors.freshIssues = Set(value.map { XcodeServer.Issue($0) })
         }
-        if let value = issues.freshWarnings {
+        if let value = issues.freshWarnings as? Set<Issue> {
             warnings.freshIssues = Set(value.map { XcodeServer.Issue($0) })
         }
-        if let value = issues.freshTestFailures {
+        if let value = issues.freshTestFailures as? Set<Issue> {
             testFailures.freshIssues = Set(value.map { XcodeServer.Issue($0) })
         }
-        if let value = issues.freshAnalyzerWarnings {
+        if let value = issues.freshAnalyzerWarnings as? Set<Issue> {
             analyzerWarnings.freshIssues = Set(value.map { XcodeServer.Issue($0) })
         }
-        if let value = issues.resolvedErrors {
+        if let value = issues.resolvedErrors as? Set<Issue> {
             errors.resolvedIssues = Set(value.map { XcodeServer.Issue($0) })
         }
-        if let value = issues.resolvedWarnings {
+        if let value = issues.resolvedWarnings as? Set<Issue> {
             warnings.resolvedIssues = Set(value.map { XcodeServer.Issue($0) })
         }
-        if let value = issues.resolvedTestFailures {
+        if let value = issues.resolvedTestFailures as? Set<Issue> {
             testFailures.resolvedIssues = Set(value.map { XcodeServer.Issue($0) })
         }
-        if let value = issues.resolvedAnalyzerWarnings {
+        if let value = issues.resolvedAnalyzerWarnings as? Set<Issue> {
             analyzerWarnings.resolvedIssues = Set(value.map { XcodeServer.Issue($0) })
         }
-        if let value = issues.unresolvedErrors {
+        if let value = issues.unresolvedErrors as? Set<Issue> {
             errors.unresolvedIssues = Set(value.map { XcodeServer.Issue($0) })
         }
-        if let value = issues.unresolvedWarnings {
+        if let value = issues.unresolvedWarnings as? Set<Issue> {
             warnings.unresolvedIssues = Set(value.map { XcodeServer.Issue($0) })
         }
-        if let value = issues.unresolvedTestFailures {
+        if let value = issues.unresolvedTestFailures as? Set<Issue> {
             testFailures.unresolvedIssues = Set(value.map { XcodeServer.Issue($0) })
         }
-        if let value = issues.unresolvedAnalyzerWarnings {
+        if let value = issues.unresolvedAnalyzerWarnings as? Set<Issue> {
             analyzerWarnings.unresolvedIssues = Set(value.map { XcodeServer.Issue($0) })
+        }
+        
+        // Model 1.1.0
+        if let value = issues.primitiveValue(forKey: #keyPath(IntegrationIssues.triggerErrors)) as? Set<Issue> {
+            triggerErrors = Set(value.map({ XcodeServer.Issue($0) }))
         }
     }
 }

@@ -43,7 +43,7 @@ extension CoreDataStore: ServerPersistable {
                 
                 _server.update(Set(bots), context: context)
                 
-                let result = (_server.bots ?? []).map({ XcodeServer.Bot($0) })
+                let result = (_server.bots as? Set<XcodeServerCoreData.Bot> ?? []).map({ XcodeServer.Bot($0) })
                 
                 do {
                     try context.save()

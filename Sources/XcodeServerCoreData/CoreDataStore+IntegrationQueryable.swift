@@ -1,5 +1,5 @@
-import Dispatch
 import XcodeServer
+import Dispatch
 #if canImport(CoreData)
 import CoreData
 
@@ -71,7 +71,7 @@ extension CoreDataStore: IntegrationQueryable {
                     return
                 }
                 
-                guard let blueprints = integration.revisionBlueprints else {
+                guard let blueprints = integration.revisionBlueprints as? Set<RevisionBlueprint> else {
                     queue.async {
                         completion(.success([]))
                     }

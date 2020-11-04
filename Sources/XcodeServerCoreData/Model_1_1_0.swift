@@ -2,13 +2,14 @@ import Foundation
 #if canImport(CoreData)
 import CoreData
 
-/// Xcode Server Core Data Model: **1.0.0**
+/// Xcode Server Core Data Model: **1.1.0**
 ///
-/// This is the base state of all known Xcode Server entities that are accessible via the REST API.
+/// This represents a small tweak to the base model, primarily to ensure the migration process.
 ///
 /// ## Additions
 ///
-/// _N/A_
+/// * `IntegrationIssues.triggerErrors`: Trigger errors can occur and are available through the api. The original model
+///   did not account for these, so some Integrations could potentially report no errors.
 ///
 /// ## Transformations
 ///
@@ -18,7 +19,7 @@ import CoreData
 ///
 /// _N/A_
 ///
-class Model_1_0_0: NSManagedObjectModel {
+class Model_1_1_0: NSManagedObjectModel {
     
     internal override init() {
         super.init()
@@ -338,6 +339,7 @@ class Model_1_0_0: NSManagedObjectModel {
         let integrationIssues_unresolvedErrors = NSRelationshipDescription(name: "unresolvedErrors", maxCount: 0, deleteRule: .cascadeDeleteRule)
         let integrationIssues_unresolvedTestFailures = NSRelationshipDescription(name: "unresolvedTestFailures", maxCount: 0, deleteRule: .cascadeDeleteRule)
         let integrationIssues_unresolvedWarnings = NSRelationshipDescription(name: "unresolvedWarnings", maxCount: 0, deleteRule: .cascadeDeleteRule)
+        let integrationIssues_triggerErrors = NSRelationshipDescription(name: "triggerErrors", maxCount: 0, deleteRule: .cascadeDeleteRule)
         let issue_inverseBuildServiceErrors = NSRelationshipDescription(name: "inverseBuildServiceErrors", maxCount: 1, deleteRule: .nullifyDeleteRule)
         let issue_inverseBuildServiceWarnings = NSRelationshipDescription(name: "inverseBuildServiceWarnings", maxCount: 1, deleteRule: .nullifyDeleteRule)
         let issue_inverseFreshAnalyzerWarnings = NSRelationshipDescription(name: "inverseFreshAnalyzerWarnings", maxCount: 1, deleteRule: .nullifyDeleteRule)
@@ -352,6 +354,7 @@ class Model_1_0_0: NSManagedObjectModel {
         let issue_inverseUnresolvedErrors = NSRelationshipDescription(name: "inverseUnresolvedErrors", maxCount: 1, deleteRule: .nullifyDeleteRule)
         let issue_inverseUnresolvedTestFailures = NSRelationshipDescription(name: "inverseUnresolvedTestFailures", maxCount: 1, deleteRule: .nullifyDeleteRule)
         let issue_inverseUnresolvedWarnings = NSRelationshipDescription(name: "inverseUnresolvedWarnings", maxCount: 1, deleteRule: .nullifyDeleteRule)
+        let issue_inverseTriggerErrors = NSRelationshipDescription(name: "inverseTriggerErrors", maxCount: 1, deleteRule: .nullifyDeleteRule)
         let platform_filter = NSRelationshipDescription(name: "filter", maxCount: 1, deleteRule: .nullifyDeleteRule)
         let repository_commits = NSRelationshipDescription(name: "commits", maxCount: 0, deleteRule: .cascadeDeleteRule)
         let repository_configurations = NSRelationshipDescription(name: "configurations", maxCount: 0, deleteRule: .nullifyDeleteRule)
@@ -523,6 +526,8 @@ class Model_1_0_0: NSManagedObjectModel {
         integrationIssues_unresolvedTestFailures.inverseRelationship = issue_inverseUnresolvedTestFailures
         integrationIssues_unresolvedWarnings.destinationEntity = issue
         integrationIssues_unresolvedWarnings.inverseRelationship = issue_inverseUnresolvedWarnings
+        integrationIssues_triggerErrors.destinationEntity = issue
+        integrationIssues_triggerErrors.inverseRelationship = issue_inverseTriggerErrors
         
         issue_inverseBuildServiceErrors.destinationEntity = integrationIssues
         issue_inverseBuildServiceErrors.inverseRelationship = integrationIssues_buildServiceErrors
@@ -552,6 +557,8 @@ class Model_1_0_0: NSManagedObjectModel {
         issue_inverseUnresolvedTestFailures.inverseRelationship = integrationIssues_unresolvedTestFailures
         issue_inverseUnresolvedWarnings.destinationEntity = integrationIssues
         issue_inverseUnresolvedWarnings.inverseRelationship = integrationIssues_unresolvedWarnings
+        issue_inverseTriggerErrors.destinationEntity = integrationIssues
+        issue_inverseTriggerErrors.inverseRelationship = integrationIssues_triggerErrors
         
         platform_filter.destinationEntity = filter
         platform_filter.inverseRelationship = filter_platform
@@ -723,6 +730,7 @@ class Model_1_0_0: NSManagedObjectModel {
             integrationIssues_unresolvedErrors,
             integrationIssues_unresolvedTestFailures,
             integrationIssues_unresolvedWarnings,
+            integrationIssues_triggerErrors,
             ])
         
         issue.properties.append(contentsOf: [
@@ -740,6 +748,7 @@ class Model_1_0_0: NSManagedObjectModel {
             issue_inverseUnresolvedErrors,
             issue_inverseUnresolvedTestFailures,
             issue_inverseUnresolvedWarnings,
+            issue_inverseTriggerErrors,
             ])
         
         platform.properties.append(contentsOf: [

@@ -80,7 +80,7 @@ public extension Integration {
     
     var commits: [Commit] {
         var commits: [Commit] = []
-        guard let revisionBlueprints = self.revisionBlueprints else {
+        guard let revisionBlueprints = self.revisionBlueprints as? Set<RevisionBlueprint> else {
             return commits
         }
         

@@ -4,7 +4,15 @@ import CoreData
 
 @objc(Asset)
 public class Asset: NSManagedObject {
-    
+
+}
+
+extension Asset {
+
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Asset> {
+        return NSFetchRequest<Asset>(entityName: "Asset")
+    }
+
     @NSManaged public var allowAnonymousAccess: Bool
     @NSManaged public var fileName: String?
     @NSManaged public var isDirectory: Bool
@@ -18,7 +26,7 @@ public class Asset: NSManagedObject {
     @NSManaged public var inverseTriggerAssets: IntegrationAssets?
     @NSManaged public var inverseXcodebuildLog: IntegrationAssets?
     @NSManaged public var inverseXcodebuildOutput: IntegrationAssets?
-    
+
 }
 
 #endif

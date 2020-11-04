@@ -6,7 +6,7 @@ public extension Server {
     /// The root API URL for this `XcodeServer`.
     /// Apple by default requires the HTTPS scheme and port 20343.
     var apiURL: URL? {
-        return URL(string: "https://\(self.fqdn):20343/api")
+        return URL(string: "https://\(self.fqdn ?? ""):20343/api")
     }
 }
 
@@ -43,8 +43,8 @@ public extension XcodeServerCoreData.Server {
                 bot = existing
             } else {
                 bot = Bot(context: context)
-                bot.server = self
-                InternalLog.coreData.info("Creating BOT '\(bot.name ?? "")' [\(bot.identifier)] for Server \(fqdn)")
+                addToBots(bot)
+                InternalLog.coreData.info("Creating BOT '\(bot.name ?? "")' [\(bot.identifier ?? "")] for Server \(fqdn ?? "")")
             }
             
             bot.update(entity, context: context)

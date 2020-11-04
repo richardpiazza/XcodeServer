@@ -44,20 +44,7 @@ final class Sync: ParsableCommand, Route {
     
     func run() throws {
         if purge {
-            let fileManager = FileManager.default
-            let storeURL = fileManager.storeURL
-            let shmURL = storeURL.appendingPathExtension("-shm")
-            let walURL = storeURL.appendingPathExtension("-wal")
-            
-            if fileManager.fileExists(atPath: walURL.path) {
-                try fileManager.removeItem(at: walURL)
-            }
-            if fileManager.fileExists(atPath: shmURL.path) {
-                try fileManager.removeItem(at: shmURL)
-            }
-            if fileManager.fileExists(atPath: storeURL.path) {
-                try fileManager.removeItem(at: storeURL)
-            }
+            try FileManager.default.purgeDefaultStore()
         }
         
         let _model = model ?? Model.v1_0_0
@@ -98,19 +85,6 @@ extension Sync: ManagerAuthorizationDelegate {
 }
 
 extension Model: ExpressibleByArgument {
-    var stringValue: String {
-        switch self {
-        case .v1_0_0: return "1.0.0"
-        }
-    }
-    
-    public init?(argument: String) {
-        guard let model = Model.allCases.first(where: { $0.stringValue == argument }) else {
-            return nil
-        }
-        
-        self = model
-    }
 }
 
 #endif

@@ -50,13 +50,13 @@ public extension XcodeServerCoreData.Bot {
     /// - parameter context: The current managed object context for performing operations.
     func update(_ entities: [XcodeServer.Integration], context: NSManagedObjectContext) {
         entities.forEach({ integration in
-            if let existing = integrations?.first(where: { $0.identifier == integration.id }) {
+            if let existing = (integrations as? Set<XcodeServerCoreData.Integration>)?.first(where: { $0.identifier == integration.id }) {
                 existing.update(integration, context: context)
             } else {
                 InternalLog.coreData.info("Creating INTEGRATION '\(integration.number)' [\(integration.id)] for Bot '\(name ?? "")'")
                 let new = Integration(context: context)
                 new.update(integration, context: context)
-                new.bot = self
+                addToIntegrations(new)
             }
         })
     }

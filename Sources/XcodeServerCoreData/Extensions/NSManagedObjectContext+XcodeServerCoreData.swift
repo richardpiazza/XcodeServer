@@ -6,8 +6,8 @@ import CoreData
 // MARK: - Bots
 extension NSManagedObjectContext {
     /// Retrieves all `Bot` entities from the Core Data `NSManagedObjectContext`
-    func bots() -> [Bot] {
-        let fetchRequest = NSFetchRequest<Bot>(entityName: Bot.entityName)
+    func bots() -> [XcodeServerCoreData.Bot] {
+        let fetchRequest = NSFetchRequest<XcodeServerCoreData.Bot>(entityName: XcodeServerCoreData.Bot.entityName)
         do {
             return try self.fetch(fetchRequest)
         } catch {
@@ -18,8 +18,8 @@ extension NSManagedObjectContext {
     }
     
     /// Retrieves all `Bot` entities for a specific `Server`.
-    func bots(forServer id: XcodeServer.Server.ID) -> [Bot] {
-        let fetchRequest = NSFetchRequest<Bot>(entityName: Bot.entityName)
+    func bots(forServer id: XcodeServer.Server.ID) -> [XcodeServerCoreData.Bot] {
+        let fetchRequest = NSFetchRequest<XcodeServerCoreData.Bot>(entityName: XcodeServerCoreData.Bot.entityName)
         fetchRequest.predicate = NSPredicate(format: "server.fqdn = %@", argumentArray: [id])
         do {
             return try self.fetch(fetchRequest)
@@ -31,8 +31,8 @@ extension NSManagedObjectContext {
     
     /// Retrieves the first `Bot` entity from the Core Data `NSManagedObjectContext`
     /// that matches the specified identifier.
-    func bot(withIdentifier identifier: String) -> Bot? {
-        let fetchRequest = NSFetchRequest<Bot>(entityName: Bot.entityName)
+    func bot(withIdentifier identifier: String) -> XcodeServerCoreData.Bot? {
+        let fetchRequest = NSFetchRequest<XcodeServerCoreData.Bot>(entityName: XcodeServerCoreData.Bot.entityName)
         fetchRequest.predicate = NSPredicate(format: "identifier = %@", argumentArray: [identifier])
         do {
             let results = try self.fetch(fetchRequest)
@@ -50,8 +50,8 @@ extension NSManagedObjectContext {
 // MARK: - Commits
 extension NSManagedObjectContext {
     /// Retrieves all `Commit` entities from the Core Data `NSManagedObjectContext`
-    func commits() -> [Commit] {
-        let request = NSFetchRequest<Commit>(entityName: Commit.entityName)
+    func commits() -> [XcodeServerCoreData.Commit] {
+        let request = NSFetchRequest<XcodeServerCoreData.Commit>(entityName: XcodeServerCoreData.Commit.entityName)
         
         do {
             return try fetch(request)
@@ -64,8 +64,8 @@ extension NSManagedObjectContext {
     
     /// Retrieves the first `Commit` entity from the Core Data `NSManagedObjectContext`
     /// that matches the specified Hash identifier.
-    func commit(withHash identifier: String) -> Commit? {
-        let request = NSFetchRequest<Commit>(entityName: Commit.entityName)
+    func commit(withHash identifier: String) -> XcodeServerCoreData.Commit? {
+        let request = NSFetchRequest<XcodeServerCoreData.Commit>(entityName: XcodeServerCoreData.Commit.entityName)
         request.predicate = NSPredicate(format: "commitHash = %@", argumentArray: [identifier])
         
         do {
@@ -80,8 +80,8 @@ extension NSManagedObjectContext {
         return nil
     }
     
-    func incompleteCommits() -> [Commit] {
-        let request = Commit.fetchRequest() as! NSFetchRequest<Commit>
+    func incompleteCommits() -> [XcodeServerCoreData.Commit] {
+        let request = NSFetchRequest<XcodeServerCoreData.Commit>(entityName: XcodeServerCoreData.Commit.entityName)
         request.predicate = NSPredicate(format: "message == nil OR commitContributor == nil", argumentArray: nil)
         
         do {
@@ -97,8 +97,8 @@ extension NSManagedObjectContext {
 // MARK: - Devices
 extension NSManagedObjectContext {
     /// Retrieves all `Device` entities from the Core Data `NSManagedObjectContext`
-    func devices() -> [Device] {
-        let fetchRequest = NSFetchRequest<Device>(entityName: Device.entityName)
+    func devices() -> [XcodeServerCoreData.Device] {
+        let fetchRequest = NSFetchRequest<XcodeServerCoreData.Device>(entityName: XcodeServerCoreData.Device.entityName)
         do {
             return try self.fetch(fetchRequest)
         } catch {
@@ -110,8 +110,8 @@ extension NSManagedObjectContext {
     
     /// Retrieves the first `Device` entity from the Core Data `NSManagedObjectContext`
     /// that matches the specified identifier.
-    func device(withIdentifier identifier: String) -> Device? {
-        let fetchRequest = NSFetchRequest<Device>(entityName: Device.entityName)
+    func device(withIdentifier identifier: String) -> XcodeServerCoreData.Device? {
+        let fetchRequest = NSFetchRequest<XcodeServerCoreData.Device>(entityName: XcodeServerCoreData.Device.entityName)
         fetchRequest.predicate = NSPredicate(format: "identifier = %@", argumentArray: [identifier])
         do {
             let results = try self.fetch(fetchRequest)
@@ -129,8 +129,8 @@ extension NSManagedObjectContext {
 // MARK: - Integrations
 extension NSManagedObjectContext {
     /// Retrieves all `Integration` entities from the Core Data `NSManagedObjectContext`
-    func integrations() -> [Integration] {
-        let request = Integration.fetchRequest() as! NSFetchRequest<Integration>
+    func integrations() -> [XcodeServerCoreData.Integration] {
+        let request = NSFetchRequest<XcodeServerCoreData.Integration>(entityName: XcodeServerCoreData.Integration.entityName)
         
         do {
             return try fetch(request)
@@ -142,8 +142,8 @@ extension NSManagedObjectContext {
     }
     
     /// Retrieves all `Integration` entities for the specified `Bot`.
-    func integrations(forBot id: XcodeServer.Bot.ID) -> [Integration] {
-        let request = Integration.fetchRequest() as! NSFetchRequest<Integration>
+    func integrations(forBot id: XcodeServer.Bot.ID) -> [XcodeServerCoreData.Integration] {
+        let request = NSFetchRequest<XcodeServerCoreData.Integration>(entityName: XcodeServerCoreData.Integration.entityName)
         request.predicate = NSPredicate(format: "bot.identifier = %@", argumentArray: [id])
         do {
             return try fetch(request)
@@ -155,8 +155,8 @@ extension NSManagedObjectContext {
     
     /// Retrieves the first `Integration` entity from the Core Data `NSManagedObjectContext`
     /// that matches the specified identifier.
-    func integration(withIdentifier identifier: String) -> Integration? {
-        let request = Integration.fetchRequest() as! NSFetchRequest<Integration>
+    func integration(withIdentifier identifier: String) -> XcodeServerCoreData.Integration? {
+        let request = NSFetchRequest<XcodeServerCoreData.Integration>(entityName: XcodeServerCoreData.Integration.entityName)
         request.predicate = NSPredicate(format: "identifier = %@", argumentArray: [identifier])
         
         do {
@@ -172,8 +172,8 @@ extension NSManagedObjectContext {
     }
     
     /// All Integrations that are not in the 'completed' step.
-    func incompleteIntegrations() -> [Integration] {
-        let request = Integration.fetchRequest() as! NSFetchRequest<Integration>
+    func incompleteIntegrations() -> [XcodeServerCoreData.Integration] {
+        let request = NSFetchRequest<XcodeServerCoreData.Integration>(entityName: XcodeServerCoreData.Integration.entityName)
         request.predicate = NSPredicate(format: "currentStepRawValue != %@", argumentArray: [XcodeServer.Integration.Step.completed.rawValue])
         
         do {
@@ -189,8 +189,8 @@ extension NSManagedObjectContext {
 // MARK: - Issues
 extension NSManagedObjectContext {
     ///
-    func issue(withIdentifier identifier: String) -> Issue? {
-        let fetchRequest = NSFetchRequest<Issue>(entityName: Issue.entityName)
+    func issue(withIdentifier identifier: String) -> XcodeServerCoreData.Issue? {
+        let fetchRequest = NSFetchRequest<XcodeServerCoreData.Issue>(entityName: XcodeServerCoreData.Issue.entityName)
         fetchRequest.predicate = NSPredicate(format: "identifier = %@", argumentArray: [identifier])
         do {
             return try self.fetch(fetchRequest).first
@@ -205,8 +205,8 @@ extension NSManagedObjectContext {
 // MARK: - Repositories
 extension NSManagedObjectContext {
     /// Retrieves all `Repository` entities from the Core Data `NSManagedObjectContext`
-    func repositories() -> [Repository] {
-        let fetchRequest = NSFetchRequest<Repository>(entityName: Repository.entityName)
+    func repositories() -> [XcodeServerCoreData.Repository] {
+        let fetchRequest = NSFetchRequest<XcodeServerCoreData.Repository>(entityName: XcodeServerCoreData.Repository.entityName)
         do {
             return try self.fetch(fetchRequest)
         } catch {
@@ -218,8 +218,8 @@ extension NSManagedObjectContext {
     
     /// Retrieves the first `Repository` entity from the Core Data `NSManagedObjectContext`
     /// that matches the specified identifier.
-    func repository(withIdentifier identifier: String) -> Repository? {
-        let fetchRequest = NSFetchRequest<Repository>(entityName: Repository.entityName)
+    func repository(withIdentifier identifier: String) -> XcodeServerCoreData.Repository? {
+        let fetchRequest = NSFetchRequest<XcodeServerCoreData.Repository>(entityName: XcodeServerCoreData.Repository.entityName)
         fetchRequest.predicate = NSPredicate(format: "identifier = %@", argumentArray: [identifier])
         do {
             let results = try self.fetch(fetchRequest)
@@ -237,8 +237,8 @@ extension NSManagedObjectContext {
 // MARK: - Revision Blueprints
 extension NSManagedObjectContext {
     /// Retrieves all `RevisionBlueprint` entities from the Core Data `NSManagedObjectContext`
-    func revisionBlueprints() -> [RevisionBlueprint] {
-        let fetchRequest = NSFetchRequest<RevisionBlueprint>(entityName: RevisionBlueprint.entityName)
+    func revisionBlueprints() -> [XcodeServerCoreData.RevisionBlueprint] {
+        let fetchRequest = NSFetchRequest<XcodeServerCoreData.RevisionBlueprint>(entityName: XcodeServerCoreData.RevisionBlueprint.entityName)
         do {
             return try self.fetch(fetchRequest)
         } catch {
@@ -250,8 +250,8 @@ extension NSManagedObjectContext {
     
     /// Retrieves the first `RevisionBlueprint` entity from the Core Data `NSManagedObjectContext`
     /// that has a specific `Commit` and `Integration` associated with it.
-    func revisionBlueprint(withCommit commit: Commit, andIntegration integration: Integration) -> RevisionBlueprint? {
-        let fetchRequest = NSFetchRequest<RevisionBlueprint>(entityName: RevisionBlueprint.entityName)
+    func revisionBlueprint(withCommit commit: XcodeServerCoreData.Commit, andIntegration integration: XcodeServerCoreData.Integration) -> XcodeServerCoreData.RevisionBlueprint? {
+        let fetchRequest = NSFetchRequest<XcodeServerCoreData.RevisionBlueprint>(entityName: XcodeServerCoreData.RevisionBlueprint.entityName)
         fetchRequest.predicate = NSPredicate(format: "commit = %@ AND integration = %@", argumentArray: [commit, integration])
         do {
             let results = try self.fetch(fetchRequest)
@@ -269,8 +269,8 @@ extension NSManagedObjectContext {
 // MARK: - Servers
 extension NSManagedObjectContext {
     /// Retrieves all `Server` entities from the Core Data `NSManagedObjectContext`
-    func servers() -> [Server] {
-        let fetchRequest = NSFetchRequest<Server>(entityName: Server.entityName)
+    func servers() -> [XcodeServerCoreData.Server] {
+        let fetchRequest = NSFetchRequest<XcodeServerCoreData.Server>(entityName: XcodeServerCoreData.Server.entityName)
         do {
             return try self.fetch(fetchRequest)
         } catch {
@@ -282,8 +282,8 @@ extension NSManagedObjectContext {
     
     /// Retrieves the first `Server` entity from the Core Data `NSManagedObjectContext`
     /// that matches the specified FQDN identifier.
-    func server(withFQDN identifier: String) -> Server? {
-        let fetchRequest = NSFetchRequest<Server>(entityName: Server.entityName)
+    func server(withFQDN identifier: String) -> XcodeServerCoreData.Server? {
+        let fetchRequest = NSFetchRequest<XcodeServerCoreData.Server>(entityName: XcodeServerCoreData.Server.entityName)
         fetchRequest.predicate = NSPredicate(format: "fqdn = %@", argumentArray: [identifier])
         do {
             let results = try self.fetch(fetchRequest)
@@ -297,8 +297,8 @@ extension NSManagedObjectContext {
         return nil
     }
     
-    func serversLastUpdatedOnOrBefore(_ date: Date) -> [Server] {
-        let fetchRequest = NSFetchRequest<Server>(entityName: Server.entityName)
+    func serversLastUpdatedOnOrBefore(_ date: Date) -> [XcodeServerCoreData.Server] {
+        let fetchRequest = NSFetchRequest<XcodeServerCoreData.Server>(entityName: XcodeServerCoreData.Server.entityName)
         fetchRequest.predicate = NSPredicate(format: "lastUpdate == nil OR lastUpdate < %@", argumentArray: [date])
         
         do {

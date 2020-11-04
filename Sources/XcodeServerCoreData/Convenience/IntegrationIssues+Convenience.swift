@@ -3,6 +3,9 @@ import XcodeServer
 import CoreData
 
 public extension XcodeServerCoreData.IntegrationIssues {
+    /// Update Integration Issues
+    ///
+    /// - note: Using the '_inverse_ = self' references here as an Issue may be linked to multiple Integrations.
     func update(_ catalog: XcodeServer.Integration.IssueCatalog, context: NSManagedObjectContext) {
         catalog.buildServiceErrors.forEach({
             let issue: XcodeServerCoreData.Issue

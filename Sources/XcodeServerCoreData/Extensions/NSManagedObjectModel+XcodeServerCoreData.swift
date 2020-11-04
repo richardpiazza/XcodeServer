@@ -8,28 +8,6 @@ import CoreData
 fileprivate var models: [Model: NSManagedObjectModel] = [:]
 
 public extension NSManagedObjectModel {
-    #if swift(>=5.3)
-    /// The **XcodeServer.xcdatamodeld** referenced in the module resources.
-    ///
-    /// Ensure `Model.current` matches expected version.
-    static var xcodeServer: NSManagedObjectModel = {
-        let url: URL
-        if let _url = Bundle.module.url(forResource: FileManager.containerName, withExtension: "momd") {
-            url = _url
-        } else if let _url = Bundle.module.url(forResource: FileManager.containerName, withExtension: "mom") {
-            url = _url
-        } else {
-            preconditionFailure("Unable to locate '\(FileManager.containerName).momd' in `Bundle.module`.")
-        }
-        
-        guard let model = NSManagedObjectModel(contentsOf: url) else {
-            preconditionFailure("Unable to construct `NSManagedObjectModel` from url '\(url)'.")
-        }
-        
-        return model
-    }()
-    #endif
-    
     /// Creates (if needed) and returns a `NSManagedObjectModel` for a defined `Model`.
     static func make(for model: Model) -> NSManagedObjectModel {
         if let existing = models[model] {
@@ -39,13 +17,41 @@ public extension NSManagedObjectModel {
         let loaded: NSManagedObjectModel
         
         switch model {
+        #if swift(>=5.3)
+        case .current:
+            loaded = xcodeServer
+        #endif
         case .v1_0_0:
             loaded = Model_1_0_0()
+        case .v1_1_0:
+            loaded = Model_1_1_0()
         }
         
         models[model] = loaded
         return loaded
     }
+}
+
+internal extension NSManagedObjectModel {
+    #if swift(>=5.3)
+    /// The **XcodeServer.xcdatamodeld** referenced in the module resources.
+    ///
+    /// Ensure `Model.current` matches expected version.
+    static var xcodeServer: NSManagedObjectModel = {
+        let url: URL
+        if let _url = Bundle.module.url(forResource: .containerName, withExtension: .momd) {
+            url = _url
+        } else {
+            preconditionFailure("Unable to locate '\(String.containerName).momd' in `Bundle.module`.")
+        }
+        
+        guard let model = NSManagedObjectModel(contentsOf: url) else {
+            preconditionFailure("Unable to construct `NSManagedObjectModel` from url '\(url)'.")
+        }
+        
+        return model
+    }()
+    #endif
 }
 
 #endif

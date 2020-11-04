@@ -17,7 +17,7 @@ enum Migration {
         let mapping: NSMappingModel
     }
     
-    /// Runs a multi-step '_heavyweight_' migration.
+    /// Runs a multi-step '_progressive_' migration.
     ///
     /// - returns The initial `Model` version that was replaced.
     @discardableResult
@@ -30,7 +30,7 @@ enum Migration {
         let destinationModel = NSManagedObjectModel.make(for: destination)
         
         let metadata = try NSPersistentStoreCoordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: storeURL, options: nil)
-        if destinationModel.isConfiguration(withName: FileManager.configurationName, compatibleWithStoreMetadata: metadata) {
+        if destinationModel.isConfiguration(withName: .configurationName, compatibleWithStoreMetadata: metadata) {
             // The store is already consistent with the model version
             return nil
         }
@@ -46,7 +46,7 @@ enum Migration {
         let sourceModel = NSManagedObjectModel.make(for: source)
         try checkpoint(storeAtURL: storeURL, model: sourceModel)
         
-        let tempURL = FileManager.default.temporaryStoreURL
+        let tempURL: URL = .temporaryStoreURL
         let storeType = NSSQLiteStoreType
         
         let steps = try migrationSteps(from: source, to: destination)
@@ -54,10 +54,11 @@ enum Migration {
             let source = NSManagedObjectModel.make(for: step.source)
             let destination = NSManagedObjectModel.make(for: step.destination)
             let manager = NSMigrationManager(sourceModel: source, destinationModel: destination)
-            try manager.migrateStore(from: storeURL, sourceType: storeType, options: nil, with: step.mapping, toDestinationURL: tempURL, destinationType: storeType, destinationOptions: nil)
             let coordinator = NSPersistentStoreCoordinator(managedObjectModel: .init())
+            try manager.migrateStore(from: storeURL, sourceType: storeType, options: nil, with: step.mapping, toDestinationURL: tempURL, destinationType: storeType, destinationOptions: nil)
             try coordinator.destroyPersistentStore(at: storeURL, ofType: storeType, options: nil)
             try coordinator.replacePersistentStore(at: storeURL, destinationOptions: nil, withPersistentStoreFrom: tempURL, sourceOptions: nil, ofType: storeType)
+            try FileManager.default.removeItem(at: tempURL)
         }
         
         return source
@@ -78,7 +79,7 @@ enum Migration {
     static func checkpoint(storeAtURL url: URL, model: NSManagedObjectModel) throws {
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
         let options = [NSSQLitePragmasOption: ["journal_mode": "DELETE"]]
-        let store = try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: FileManager.configurationName, at: url, options: options)
+        let store = try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: .configurationName, at: url, options: options)
         try coordinator.remove(store)
     }
     
@@ -87,16 +88,9 @@ enum Migration {
         
         var current: Model = from
         while let next = current.nextVersion {
-            let resource = "MappingModel_\(current.rawValue)_\(next.rawValue)"
-            guard let url = Bundle.module.url(forResource: resource, withExtension: "xcmappingmodel") else {
-                throw Error.resource(name: resource)
-            }
-            
-            guard let mapping = NSMappingModel(contentsOf: url) else {
-                throw Error.load(url: url)
-            }
-            
+            let mapping = try NSMappingModel.make(from: current, to: next)
             steps.append(Step(source: current, destination: next, mapping: mapping))
+            
             guard next != to else {
                 return steps
             }
@@ -112,7 +106,7 @@ extension Model {
     init?(compatibleWith metadata: [String: Any]) {
         for model in Model.allCases {
             let managedModel = NSManagedObjectModel.make(for: model)
-            if managedModel.isConfiguration(withName: FileManager.configurationName, compatibleWithStoreMetadata: metadata) {
+            if managedModel.isConfiguration(withName: .configurationName, compatibleWithStoreMetadata: metadata) {
                 self = model
                 return
             }

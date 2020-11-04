@@ -4,12 +4,20 @@ import CoreData
 
 @objc(Issue)
 public class Issue: NSManagedObject {
-    
+
+}
+
+extension Issue {
+
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Issue> {
+        return NSFetchRequest<Issue>(entityName: "Issue")
+    }
+
     @NSManaged public var age: Int32
     @NSManaged public var documentFilePath: String?
     @NSManaged public var documentLocationData: String?
     @NSManaged public var fixItType: String?
-    @NSManaged public var identifier: String
+    @NSManaged public var identifier: String?
     @NSManaged public var issueType: String?
     @NSManaged public var lineNumber: Int32
     @NSManaged public var message: String?
@@ -31,7 +39,6 @@ public class Issue: NSManagedObject {
     @NSManaged public var inverseUnresolvedErrors: IntegrationIssues?
     @NSManaged public var inverseUnresolvedTestFailures: IntegrationIssues?
     @NSManaged public var inverseUnresolvedWarnings: IntegrationIssues?
-    
-}
 
+}
 #endif

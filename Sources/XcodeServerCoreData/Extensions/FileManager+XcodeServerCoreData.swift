@@ -1,19 +1,21 @@
-import XcodeServer
 import Foundation
 
 public extension FileManager {
-    
-    internal static let containerName: String = "XcodeServer"
-    internal static let configurationName: String = "XcodeServer"
-    internal static let sqlite: String = "sqlite"
-    
-    /// The default `NSPersistentContainer` store url.
-    var storeURL: URL {
-        return xcodeServerDirectory.appendingPathComponent(Self.configurationName).appendingPathExtension(Self.sqlite)
-    }
-    
-    var temporaryStoreURL: URL {
-        let filename = "\(Self.configurationName)_temp"
-        return xcodeServerDirectory.appendingPathComponent(filename).appendingPathExtension(Self.sqlite)
+    /// Removes the default `NSPersistentContainer` store files.
+    func purgeDefaultStore() throws {
+        let localDb: URL = .storeURL
+        if fileExists(atPath: localDb.path) {
+            try removeItem(at: localDb)
+        }
+        
+        let localShm: URL = .shmURL
+        if fileExists(atPath: localShm.path) {
+            try removeItem(at: localShm)
+        }
+        
+        let localWal: URL = .walURL
+        if fileExists(atPath: localWal.path) {
+            try removeItem(at: localWal)
+        }
     }
 }
