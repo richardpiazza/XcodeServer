@@ -186,6 +186,22 @@ extension NSManagedObjectContext {
     }
 }
 
+// MARK: - Issues
+extension NSManagedObjectContext {
+    ///
+    func issue(withIdentifier identifier: String) -> Issue? {
+        let fetchRequest = NSFetchRequest<Issue>(entityName: Issue.entityName)
+        fetchRequest.predicate = NSPredicate(format: "identifier = %@", argumentArray: [identifier])
+        do {
+            return try self.fetch(fetchRequest).first
+        } catch {
+            InternalLog.coreData.error("", error: error)
+        }
+        
+        return nil
+    }
+}
+
 // MARK: - Repositories
 extension NSManagedObjectContext {
     /// Retrieves all `Repository` entities from the Core Data `NSManagedObjectContext`

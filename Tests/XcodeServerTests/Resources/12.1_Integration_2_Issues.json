@@ -1,0 +1,42 @@
+{
+  "buildServiceErrors": [
+    {
+      "_id": "2911c1d6174047dcf2a52f464a020662",
+      "_rev": "3-8aefc3c1d6b2cb6e93db79c243d1fb2b",
+      "message": "Integration results could not be uploaded. Test attachments and integration logs may be unavailable for this integration.",
+      "type": "buildServiceError",
+      "issueType": "buildServiceError",
+      "commits": [],
+      "integrationID": "2911c1d6174047dcf2a52f464a019ee9",
+      "age": 0,
+      "status": 0,
+      "issueAuthors": []
+    }
+  ],
+  "buildServiceWarnings": [],
+  "triggerErrors": [],
+  "errors": {
+    "unresolvedIssues": [],
+    "freshIssues": [],
+    "resolvedIssues": [],
+    "silencedIssues": []
+  },
+  "warnings": {
+    "unresolvedIssues": [],
+    "freshIssues": [],
+    "resolvedIssues": [],
+    "silencedIssues": []
+  },
+  "testFailures": {
+    "unresolvedIssues": [],
+    "freshIssues": [],
+    "resolvedIssues": [],
+    "silencedIssues": []
+  },
+  "analyzerWarnings": {
+    "unresolvedIssues": [],
+    "freshIssues": [],
+    "resolvedIssues": [],
+    "silencedIssues": []
+  }
+}

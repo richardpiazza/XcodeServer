@@ -1,0 +1,668 @@
+{
+  "count": 1,
+  "results": [
+    {
+      "_id": "2911c1d6174047dcf2a52f464a0141c0",
+      "_rev": "3-788bee1a13ba0708f56837dd3d8e593b",
+      "commits": {
+        "6D9FFC92170BF5EE19CA25700175BFFFBA40751A": [
+          {
+            "XCSBlueprintRepositoryID": "6D9FFC92170BF5EE19CA25700175BFFFBA40751A",
+            "XCSCommitCommitChangeFilePaths": [
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Coordinators/AppCoordinator.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Views/BotMetadataView.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Views/BotStatsView.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Controllers/IntegrationsTableViewController.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot.xcodeproj/project.pbxproj"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Views/ServerMetadataView.swift"
+              }
+            ],
+            "XCSCommitContributor": {
+              "XCSContributorEmails": [
+                "richard@richardpiazza.com"
+              ],
+              "XCSContributorName": "Richard Piazza",
+              "XCSContributorDisplayName": "Richard Piazza"
+            },
+            "XCSCommitHash": "1f1454d0933626c856557e42f93e91589b12691f",
+            "XCSCommitMessage": "Removed HUD in favor of AlertActivityViewController;\nRemoved 'success streak' as it is no longer available through the API.\n",
+            "XCSCommitIsMerge": "NO",
+            "XCSCommitTimestamp": "2020-11-01T14:18:15.000Z",
+            "XCSCommitTimestampDate": [
+              2020,
+              11,
+              1,
+              14,
+              18,
+              15,
+              0
+            ]
+          },
+          {
+            "XCSBlueprintRepositoryID": "6D9FFC92170BF5EE19CA25700175BFFFBA40751A",
+            "XCSCommitCommitChangeFilePaths": [
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Controllers/BotsTableViewController.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Views/BotTableViewCell.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Extensions/CGFloat+PocketBot.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Controllers/CommitsTableViewController.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Views/CommitTableViewCell.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Views/CommitView.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Views/CredentialView.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Views/FQDNView.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Controllers/IntegrationsTableViewController.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Views/IntegrationTableViewCell.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Controllers/IntegrationTableViewController.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Views/IssueTableViewCell.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Views/IssueView.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot.xcodeproj/project.pbxproj"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Controllers/RepositoriesTableViewController.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Views/RepositorySummaryTableViewCell.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Controllers/ServersTableViewController.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Views/ServerTableViewCell.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Controllers/SetupViewController.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Views/TestResultTableViewCell.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Views/TestView.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Extensions/UIColor+PocketBot.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Extensions/UILabel+PocketBot.swift"
+              },
+              {
+                "status": 1,
+                "filePath": "Pocket Bot/Extensions/UITableView.Style+PocketBot.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Extensions/UITextField+PocketBot.swift"
+              }
+            ],
+            "XCSCommitContributor": {
+              "XCSContributorEmails": [
+                "richard@richardpiazza.com"
+              ],
+              "XCSContributorName": "Richard Piazza",
+              "XCSContributorDisplayName": "Richard Piazza"
+            },
+            "XCSCommitHash": "bdbdac6f845ca3f7c7291345d257c7de357bfb08",
+            "XCSCommitMessage": "Cleaned up platform checking code.\n",
+            "XCSCommitIsMerge": "NO",
+            "XCSCommitTimestamp": "2020-10-29T11:46:31.000Z",
+            "XCSCommitTimestampDate": [
+              2020,
+              10,
+              29,
+              11,
+              46,
+              31,
+              0
+            ]
+          },
+          {
+            "XCSBlueprintRepositoryID": "6D9FFC92170BF5EE19CA25700175BFFFBA40751A",
+            "XCSCommitCommitChangeFilePaths": [
+              {
+                "status": 1,
+                "filePath": "Pocket Bot/Controllers/AlertActivityViewController.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Coordinators/AppCoordinator.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot tvOS/AppDelegate.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/AppDelegate.swift"
+              },
+              {
+                "status": 2,
+                "filePath": "Pocket Bot/Extensions/Bot+PocketPot.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Views/BotMetadataView.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Controllers/BotsTableViewController.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Views/BotStatsView.swift"
+              },
+              {
+                "status": 1,
+                "filePath": "Pocket Bot/Data Sources/BotsViewModel.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Views/BotTableViewCell.swift"
+              },
+              {
+                "status": 2,
+                "filePath": "Pocket Bot/Extensions/Commit+PocketBot.swift"
+              },
+              {
+                "status": 2,
+                "filePath": "Pocket Bot/Extensions/CommitContributor+PocketBot.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Views/CommitContributorView.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Controllers/CommitsTableViewController.swift"
+              },
+              {
+                "status": 1,
+                "filePath": "Pocket Bot/Data Sources/CommitsViewModel.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Views/CommitTableViewCell.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Views/CommitView.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Views/CyclingComponentView.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Data Sources/CyclingTableViewController.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Coordinators/DashboardCoordinator.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Views/DashboardView.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Controllers/DashboardViewController.swift"
+              },
+              {
+                "status": 1,
+                "filePath": "Pocket Bot/Data Sources/DashboardViewModel.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot Tests/FoundationExtensionTests.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Coordinators/HomeCoordinator.swift"
+              },
+              {
+                "status": 2,
+                "filePath": "Pocket Bot/Extensions/Integration+PocketBot.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Views/IntegrationDatesView.swift"
+              },
+              {
+                "status": 2,
+                "filePath": "Pocket Bot/Extensions/IntegrationResult+PocketBot.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Controllers/IntegrationsTableViewController.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Views/IntegrationStatusView.swift"
+              },
+              {
+                "status": 1,
+                "filePath": "Pocket Bot/Data Sources/IntegrationsViewModel.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Views/IntegrationTableViewCell.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Controllers/IntegrationTableViewController.swift"
+              },
+              {
+                "status": 1,
+                "filePath": "Pocket Bot/Data Sources/IntegrationViewModel.swift"
+              },
+              {
+                "status": 2,
+                "filePath": "Pocket Bot/Extensions/Issue+PocketBot.swift"
+              },
+              {
+                "status": 1,
+                "filePath": "Pocket Bot/Views/IssueComponentView.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Views/IssueTableViewCell.swift"
+              },
+              {
+                "status": 2,
+                "filePath": "Pocket Bot/Extensions/IssueType+PocketBot.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Views/IssueView.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Services/KeychainService.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/it.lproj/Localizable.strings"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/ja.lproj/Localizable.strings"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/ru.lproj/Localizable.strings"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/de.lproj/Localizable.strings"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/ko.lproj/Localizable.strings"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/zh-Hans.lproj/Localizable.strings"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/es.lproj/Localizable.strings"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Base.lproj/Localizable.strings"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/fr.lproj/Localizable.strings"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/zh-Hant.lproj/Localizable.strings"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/nl.lproj/Localizable.strings"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/pt-BR.lproj/Localizable.strings"
+              },
+              {
+                "status": 2,
+                "filePath": "Pocket Bot/Extensions/Notification+PocketBot.swift"
+              },
+              {
+                "status": 2,
+                "filePath": "Pocket Bot/Extensions/NSManagedObjectContext+PocketBot.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot.xcodeproj/xcshareddata/xcschemes/Pocket Bot.xcscheme"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot.xcodeproj/project.pbxproj"
+              },
+              {
+                "status": 1,
+                "filePath": "Pocket Bot/Controllers/RefreshableTableViewController.swift"
+              },
+              {
+                "status": 1,
+                "filePath": "Pocket Bot/Data Sources/RemotesViewModel.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Coordinators/RepositoriesCoordinator.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Controllers/RepositoriesTableViewController.swift"
+              },
+              {
+                "status": 2,
+                "filePath": "Pocket Bot/Extensions/Repository+PocketBot.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Views/RepositorySummaryTableViewCell.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Views/RepositorySummaryView.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Views/ServerMetadataView.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Coordinators/ServersCoordinator.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Controllers/ServersTableViewController.swift"
+              },
+              {
+                "status": 1,
+                "filePath": "Pocket Bot/Data Sources/ServersViewModel.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Views/ServerTableViewCell.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Coordinators/SetupCoordinator.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Controllers/SetupViewController.swift"
+              },
+              {
+                "status": 2,
+                "filePath": "Pocket Bot/Extensions/String+PocketBot.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Views/TestResultTableViewCell.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Views/TestView.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Extensions/UIColor+PocketBot.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Extensions/UserDefaults+PocketBot.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Extensions/XcodeServer+PocketBot.swift"
+              }
+            ],
+            "XCSCommitContributor": {
+              "XCSContributorEmails": [
+                "richard@richardpiazza.com"
+              ],
+              "XCSContributorName": "Richard Piazza",
+              "XCSContributorDisplayName": "Richard Piazza"
+            },
+            "XCSCommitHash": "77e0dd5d1d8307fcf7a846410717ecd09c3c2d0e",
+            "XCSCommitMessage": "Value Semantics (#1)\n\nThis work focuses on removing the need to reference Core Data throughout the app. Using an updated XcodeServer framework, which helps to establish a unified model that can be used across all modules.",
+            "XCSCommitIsMerge": "NO",
+            "XCSCommitTimestamp": "2020-10-24T17:08:41.000Z",
+            "XCSCommitTimestampDate": [
+              2020,
+              10,
+              24,
+              17,
+              8,
+              41,
+              0
+            ]
+          },
+          {
+            "XCSBlueprintRepositoryID": "6D9FFC92170BF5EE19CA25700175BFFFBA40751A",
+            "XCSCommitCommitChangeFilePaths": [
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Coordinators/AppCoordinator.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Controllers/DashboardViewController.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/es.lproj/Localizable.strings"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/nl.lproj/Localizable.strings"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/pt-BR.lproj/Localizable.strings"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/ko.lproj/Localizable.strings"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/de.lproj/Localizable.strings"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Base.lproj/Localizable.strings"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/zh-Hant.lproj/Localizable.strings"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/zh-Hans.lproj/Localizable.strings"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/ja.lproj/Localizable.strings"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/it.lproj/Localizable.strings"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/ru.lproj/Localizable.strings"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/fr.lproj/Localizable.strings"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot tvOS/Base.lproj/Main.storyboard"
+              },
+              {
+                "status": 1,
+                "filePath": "Pocket Bot/Views/NoServersView.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot.xcodeproj/project.pbxproj"
+              }
+            ],
+            "XCSCommitContributor": {
+              "XCSContributorEmails": [
+                "richard@richardpiazza.com"
+              ],
+              "XCSContributorName": "Richard Piazza",
+              "XCSContributorDisplayName": "Richard Piazza"
+            },
+            "XCSCommitHash": "095b34804a984ac4ab018f4dbb5c7444de5e6a6f",
+            "XCSCommitMessage": "Added a 'NoServersView' as placeholder on tvOS Dashboard.\n",
+            "XCSCommitIsMerge": "NO",
+            "XCSCommitTimestamp": "2020-08-04T21:53:49.000Z",
+            "XCSCommitTimestampDate": [
+              2020,
+              8,
+              4,
+              21,
+              53,
+              49,
+              0
+            ]
+          },
+          {
+            "XCSBlueprintRepositoryID": "6D9FFC92170BF5EE19CA25700175BFFFBA40751A",
+            "XCSCommitCommitChangeFilePaths": [
+              {
+                "status": 4,
+                "filePath": "Pocket Bot/Coordinators/AppCoordinator.swift"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved"
+              },
+              {
+                "status": 4,
+                "filePath": "Pocket Bot.xcodeproj/project.pbxproj"
+              }
+            ],
+            "XCSCommitContributor": {
+              "XCSContributorEmails": [
+                "richard@richardpiazza.com"
+              ],
+              "XCSContributorName": "Richard Piazza",
+              "XCSContributorDisplayName": "Richard Piazza"
+            },
+            "XCSCommitHash": "f3979df31c0ce179ad8141dbac70d6c985835e4c",
+            "XCSCommitMessage": "Updated Coordinator package with fixes for presentation/completion handling;\nAdded a 'coordinators' dictionary to track a single instance of a coordinator.\n",
+            "XCSCommitIsMerge": "NO",
+            "XCSCommitTimestamp": "2020-08-03T13:27:37.000Z",
+            "XCSCommitTimestampDate": [
+              2020,
+              8,
+              3,
+              13,
+              27,
+              37,
+              0
+            ]
+          }
+        ]
+      },
+      "integration": "2911c1d6174047dcf2a52f464a013c88",
+      "botID": "2911c1d6174047dcf2a52f464a0135f6",
+      "botTinyID": "E92E452",
+      "endedTimeDate": [
+        2020,
+        11,
+        1,
+        20,
+        31,
+        16,
+        503
+      ],
+      "doc_type": "commit",
+      "tinyID": "1B82BCC"
+    }
+  ]
+}

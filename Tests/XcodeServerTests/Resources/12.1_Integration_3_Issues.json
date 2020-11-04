@@ -1,21 +1,17 @@
-import Foundation
-
-let issuesJson: String = """
 {
   "buildServiceErrors": [
-      {
-        "_id": "2ce4a2fd2f57d53039edddc51e002a26",
-        "_rev": "3-633623302b851df3b8f116ef941ee58a",
-        "message": "Trigger exited with non-zero status 128.",
-        "type": "triggerError",
-        "fixItType": "trigger-error",
-        "issueType": "triggerError",
-        "commits": [],
-        "integrationID": "2ce4a2fd2f57d53039edddc51e0009cf",
-        "age": 0,
-        "status": 0,
-        "issueAuthors": []
-      }
+    {
+      "_id": "2911c1d6174047dcf2a52f464a07ca5a",
+      "_rev": "3-2cfb1204a4dea7b8be2e39b74c8360df",
+      "message": "exportArchive: Found no compatible export methods for: <DVTFilePath:0x7f7fd0089470:'/Users/xcodeserver/Library/Caches/XCSBuilder/Integration-2911c1d6174047dcf2a52f464a020b89/Pocket Bot.xcarchive'>",
+      "type": "buildServiceError",
+      "issueType": "buildServiceError",
+      "commits": [],
+      "integrationID": "2911c1d6174047dcf2a52f464a020b89",
+      "age": 0,
+      "status": 0,
+      "issueAuthors": []
+    }
   ],
   "buildServiceWarnings": [],
   "triggerErrors": [],
@@ -44,4 +40,3 @@ let issuesJson: String = """
     "silencedIssues": []
   }
 }
-"""
