@@ -5,7 +5,6 @@ import CoreData
 
 extension CoreDataStore: SourceControlQueryable {
     public func getRemotes(queue: DispatchQueue?, completion: @escaping RemotesResultHandler) {
-        InternalLog.coreData.debug("Retrieving ALL Remotes")
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in
@@ -19,7 +18,6 @@ extension CoreDataStore: SourceControlQueryable {
     }
     
     public func getRemote(_ id: SourceControl.Remote.ID, queue: DispatchQueue?, completion: @escaping RemoteResultHandler) {
-        InternalLog.coreData.debug("Retrieving Remote [\(id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in

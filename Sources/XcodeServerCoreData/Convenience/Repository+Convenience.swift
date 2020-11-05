@@ -36,7 +36,7 @@ public extension Repository {
             if let existing = context.commit(withHash: commit.id) {
                 _commit = existing
             } else {
-                InternalLog.coreData.info("Creating COMMIT for Repository [\(identifier)]")
+                InternalLog.coreData.debug("Creating COMMIT for Repository [\(identifier)]")
                 _commit = Commit(context: context)
                 _commit.repository = self
             }

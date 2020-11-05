@@ -36,21 +36,6 @@ public struct Integration: Hashable, Identifiable {
     public var botName: String?
     public var serverId: Server.ID?
     
-    // MARK: - Framework Management
-    
-    /// Indicates wether the _.xcarchive_ has been previously retrieved for this `Integration`.
-    ///
-    /// The archive only become available after the integration completes.
-    public var shouldRetrieveArchive: Bool = true
-    /// Indicates wether _Commits_ have been previously retrieved for this `Integration`.
-    ///
-    /// Commits could _not_ be available for the integration, and if detected, this flag should indicate false.
-    public var shouldRetrieveCommits: Bool = true
-    /// Indicates wether _Issues_ have been previously retrieved for this `Integration`.
-    ///
-    /// Issues only become available after the integration completes.
-    public var shouldRetrieveIssues: Bool = true
-    
     public init(id: Integration.ID = "") {
         self.id = id
     }

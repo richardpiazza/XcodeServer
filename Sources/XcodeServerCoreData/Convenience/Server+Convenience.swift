@@ -44,7 +44,7 @@ public extension XcodeServerCoreData.Server {
             } else {
                 bot = Bot(context: context)
                 bot.server = self
-                InternalLog.coreData.info("Creating BOT '\(bot.name ?? "")' [\(bot.identifier)] for Server \(fqdn)")
+                InternalLog.coreData.debug("Creating BOT '\(bot.name ?? "")' [\(bot.identifier)] for Server \(fqdn)")
             }
             
             bot.update(entity, context: context)

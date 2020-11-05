@@ -5,7 +5,6 @@ import CoreData
 
 extension CoreDataStore: ServerQueryable {
     public func getServers(queue: DispatchQueue?, completion: @escaping ServersResultHandler) {
-        InternalLog.coreData.debug("Retrieving ALL Servers")
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in
@@ -19,7 +18,6 @@ extension CoreDataStore: ServerQueryable {
     }
     
     public func getServer(_ id: XcodeServer.Server.ID, queue: DispatchQueue?, completion: @escaping ServerResultHandler) {
-        InternalLog.coreData.debug("Retrieving Server [\(id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in
