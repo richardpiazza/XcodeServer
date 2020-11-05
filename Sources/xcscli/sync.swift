@@ -38,6 +38,9 @@ final class Sync: ParsableCommand, Route {
     @Flag(help: "Removes any store files prior to syncing.")
     var purge: Bool
     
+    @Option(help: "The minimum output log level.")
+    var logLevel: InternalLog.Level = .warn
+    
     func validate() throws {
         try validateServer()
     }
@@ -60,6 +63,11 @@ final class Sync: ParsableCommand, Route {
             }
         }
         
+        InternalLog.apiClient.minimumConsoleLevel = logLevel
+        InternalLog.coreData.minimumConsoleLevel = logLevel
+        InternalLog.procedures.minimumConsoleLevel = logLevel
+        InternalLog.utility.minimumConsoleLevel = logLevel
+        
         let _model = model ?? Model.v1_0_0
         let store = CoreDataStore(model: _model)
         let manager: XcodeServerUtility.Manager = Manager(store: store, authorizationDelegate: self)
@@ -79,8 +87,8 @@ final class Sync: ParsableCommand, Route {
                 
                 let end = Date()
                 print("Sync Complete - \(end.timeIntervalSince(start)) Seconds")
-                if let url = store.persistentContainer.persistentStoreCoordinator.persistentStores.first?.url {
-                    print("\(url)")
+                if let path = store.persistentContainer.persistentStoreCoordinator.persistentStores.first?.url?.path {
+                    print("\(path)")
                 }
                 
                 store.persistentContainer.unload()
@@ -111,6 +119,9 @@ extension Model: ExpressibleByArgument {
         
         self = model
     }
+}
+
+extension InternalLog.Level: ExpressibleByArgument {
 }
 
 #endif

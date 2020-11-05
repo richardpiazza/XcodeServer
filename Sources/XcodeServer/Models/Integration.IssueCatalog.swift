@@ -13,3 +13,17 @@ public extension Integration {
         }
     }
 }
+
+public extension Integration.IssueCatalog {
+    var allIssues: [Issue] {
+        var output: [Issue] = []
+        output.append(contentsOf: buildServiceErrors)
+        output.append(contentsOf: buildServiceWarnings)
+        output.append(contentsOf: triggerErrors)
+        output.append(contentsOf: errors.allIssues)
+        output.append(contentsOf: warnings.allIssues)
+        output.append(contentsOf: testFailures.allIssues)
+        output.append(contentsOf: analyzerWarnings.allIssues)
+        return output
+    }
+}

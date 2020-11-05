@@ -118,34 +118,18 @@ public class Manager {
     
     /// Create a `Server` entity in the destination store (`AnyQueryable & AnyPersistable`).
     ///
-    /// Multiple procedures will be initiated:
-    /// * `CreateServerProcedure`
-    /// * `SyncServerProcedure`
-    ///
-    /// The `completion` block will be executed upon finishing the `CreateServerProcedure`.
-    ///
     /// - parameter id: The unique identifier (FQDN/IP) of the server.
     /// - parameter queue: `DispatchQueue` on which the `completion` block will be executed.
     /// - parameter completion: Block result handler to execute upon completion of the primary operation.
     public func createServer(withId id: Server.ID, queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
-        let _server = Server(id: id)
-        var operations: [Procedure] = []
-        
         let procedure = CreateServerProcedure(destination: store, input: id)
         procedure.addDidFinishBlockObserver { (proc, error) in
             queue.async {
                 completion(error)
             }
         }
-        operations.append(procedure)
         
-        if let client = try? self.client(forServer: id) {
-            let sync = SyncServerProcedure(source: client, destination: store, server: _server)
-            sync.addDependency(procedure)
-            operations.append(sync)
-        }
-        
-        procedureQueue.addOperations(operations)
+        procedureQueue.addOperations(procedure)
     }
     
     public func deleteServer(_ server: Server, queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
@@ -645,6 +629,10 @@ extension Manager: APIClientAuthorizationDelegate {
 @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 @available(swift, introduced: 5.1)
 extension Manager: ProcedureQueueDelegate {
+    public func procedureQueue(_ queue: ProcedureQueue, didAddProcedure procedure: Procedure, context: Any?) {
+        InternalLog.utility.debug("Enqueued Procedure '\(procedure)'")
+    }
+    
     public func procedureQueue(_ queue: ProcedureQueue, didFinishProcedure procedure: Procedure, with error: Swift.Error?) {
         
     }

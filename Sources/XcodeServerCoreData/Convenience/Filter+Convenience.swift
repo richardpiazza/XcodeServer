@@ -5,7 +5,7 @@ import CoreData
 public extension Filter {
     func update(_ filter: XcodeServer.Device.Filter, context: NSManagedObjectContext) {
         if platform == nil {
-            InternalLog.coreData.info("Creating PLATFORM for Filter")
+            InternalLog.coreData.debug("Creating PLATFORM for Filter")
             platform = Platform(context: context)
         }
         
