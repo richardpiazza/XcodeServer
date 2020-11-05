@@ -9,6 +9,7 @@ enum Migration {
         case load(url: URL)
         case unidentifiedSource
         case noMigrationPath
+        case mapping(source: Model, destination: Model)
     }
     
     struct Step: Hashable {
@@ -88,7 +89,10 @@ enum Migration {
         
         var current: Model = from
         while let next = current.nextVersion {
-            let mapping = try NSMappingModel.make(from: current, to: next)
+            guard let mapping = NSMappingModel.make(from: current, to: next) else {
+                throw Error.mapping(source: current, destination: next)
+            }
+            
             steps.append(Step(source: current, destination: next, mapping: mapping))
             
             guard next != to else {

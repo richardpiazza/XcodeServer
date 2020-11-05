@@ -14,10 +14,10 @@ final class ModelTests: XCTestCase {
     
     func testXCModelHashes() throws {
         #if swift(>=5.3)
-        let model = Model.current
         let managedObjectModel = NSManagedObjectModel.xcodeServer
-        let entityHashes = managedObjectModel.entityVersionHashesByName
-        try model.verifyHashes(entityHashes)
+        try XCTSkipIf(managedObjectModel == nil)
+        let entityHashes = managedObjectModel!.entityVersionHashesByName
+        try Model.current.verifyHashes(entityHashes)
         #endif
     }
     
@@ -89,10 +89,5 @@ extension Model {
             XCTAssertEqual(entityHashes[Trigger.entityName]!.hexString, "588238886b3c6f153e95108032277a25bd43f2efd0b8e01ea7c7abb9c8dd8298")
         }
     }
-}
-
-private typealias Resource = String
-private extension Resource {
-    
 }
 #endif

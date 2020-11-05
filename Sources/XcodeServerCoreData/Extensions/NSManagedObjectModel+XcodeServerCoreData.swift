@@ -17,10 +17,6 @@ public extension NSManagedObjectModel {
         let loaded: NSManagedObjectModel
         
         switch model {
-        #if swift(>=5.3)
-        case .current:
-            loaded = xcodeServer
-        #endif
         case .v1_0_0:
             loaded = Model_1_0_0()
         case .v1_1_0:
@@ -37,16 +33,13 @@ internal extension NSManagedObjectModel {
     /// The **XcodeServer.xcdatamodeld** referenced in the module resources.
     ///
     /// Ensure `Model.current` matches expected version.
-    static var xcodeServer: NSManagedObjectModel = {
-        let url: URL
-        if let _url = Bundle.module.url(forResource: .containerName, withExtension: .momd) {
-            url = _url
-        } else {
-            preconditionFailure("Unable to locate '\(String.containerName).momd' in `Bundle.module`.")
+    static var xcodeServer: NSManagedObjectModel? = {
+        guard let url = Bundle.module.url(forResource: .containerName, withExtension: .momd) else {
+            return nil
         }
         
         guard let model = NSManagedObjectModel(contentsOf: url) else {
-            preconditionFailure("Unable to construct `NSManagedObjectModel` from url '\(url)'.")
+            return nil
         }
         
         return model
