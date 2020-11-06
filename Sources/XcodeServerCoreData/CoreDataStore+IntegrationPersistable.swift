@@ -9,17 +9,18 @@ extension CoreDataStore: IntegrationPersistable {
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in
-                guard let _bot = context.bot(withIdentifier: bot) else {
-                    queue.async {
-                        completion(.failure(.noBot(bot)))
-                    }
-                    return
-                }
-                
                 let _integration: XcodeServerCoreData.Integration
+                
                 if let existing = context.integration(withIdentifier: integration.id) {
                     _integration = existing
                 } else {
+                    guard let _bot = context.bot(withIdentifier: bot) else {
+                        queue.async {
+                            completion(.failure(.noBot(bot)))
+                        }
+                        return
+                    }
+                    
                     _integration = XcodeServerCoreData.Integration(context: context)
                     _integration.bot = _bot
                 }

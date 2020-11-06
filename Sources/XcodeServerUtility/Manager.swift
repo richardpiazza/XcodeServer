@@ -176,17 +176,14 @@ public class Manager {
             return
         }
         
-        let _server = Server(id: id)
-        let get = GetVersionProcedure(source: client, input: _server.id)
-        let update = UpdateVersionProcedure(destination: store, server: _server)
-        update.injectResult(from: get)
-        update.addDidFinishBlockObserver() { (proc, error) in
+        let procedure = SyncVersionProcedure(source: client, destination: store, server: Server(id: id))
+        procedure.addDidFinishBlockObserver() { (proc, error) in
             queue.async {
                 completion(error)
             }
         }
         
-        procedureQueue.addOperations([get, update])
+        procedureQueue.addOperation(procedure)
     }
     
     /// Retrieves all `Bot`s from the `Server`
@@ -201,16 +198,14 @@ public class Manager {
             return
         }
         
-        let get = GetBotsProcedure(source: client)
-        let update = UpdateServerBotsProcedure(destination: store, server: server)
-        update.injectResult(from: get)
-        update.addDidFinishBlockObserver() { (proc, error) in
+        let procedure = SyncServerProcedure(source: client, destination: store, server: server, syncBots: false)
+        procedure.addDidFinishBlockObserver() { (proc, error) in
             queue.async {
                 completion(error)
             }
         }
         
-        procedureQueue.addOperations([get, update])
+        procedureQueue.addOperation(procedure)
     }
     
     /// Retrieves the information for a given `Bot` from the `Server`.
@@ -365,16 +360,14 @@ public class Manager {
             return
         }
         
-        let get = GetIntegrationProcedure(source: client, input: integration.id)
-        let update = UpdateIntegrationProcedure(destination: store)
-        update.injectResult(from: get)
-        update.addDidFinishBlockObserver() { (proc, error) in
+        let procedure = SyncIntegrationProcedure(source: client, destination: store, integration: integration)
+        procedure.addDidFinishBlockObserver() { (proc, error) in
             queue.async {
                 completion(error)
             }
         }
         
-        procedureQueue.addOperations([get, update])
+        procedureQueue.addOperation(procedure)
     }
     
     /// Retrieves the `Repository` commits for a specified `Integration`.
