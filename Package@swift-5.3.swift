@@ -27,7 +27,6 @@ let package = Package(
         .package(url: "https://github.com/richardpiazza/ProcedureKit.git", from: "6.0.0-beta.1"),
         .package(url: "https://github.com/swift-server/async-http-client", from: "1.2.1"),
         .package(url: "https://github.com/apple/swift-argument-parser.git", .upToNextMinor(from: "0.3.1")),
-        .package(url: "https://github.com/apple/swift-tools-support-core.git", .upToNextMinor(from: "0.1.10")),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -37,7 +36,6 @@ let package = Package(
             dependencies: [
                 "XcodeServerUtility",
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
-                .product(name: "SwiftToolsSupport", package: "swift-tools-support-core"),
             ]),
         .target(
             name: "XcodeServer",

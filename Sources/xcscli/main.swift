@@ -1,8 +1,5 @@
 import Foundation
 import ArgumentParser
-import TSCBasic
-
-let terminal = TerminalController(stream: stdoutStream)
 
 struct Command: ParsableCommand {
     

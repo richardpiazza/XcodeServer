@@ -90,15 +90,6 @@
           "revision": "bb56586c4cab9a79dce6ec4738baddb5802c5de7",
           "version": "1.9.0"
         }
-      },
-      {
-        "package": "swift-tools-support-core",
-        "repositoryURL": "https://github.com/apple/swift-tools-support-core.git",
-        "state": {
-          "branch": null,
-          "revision": "31747ebaede7e1a1f2b15346790193d5b5e5e7be",
-          "version": "0.1.11"
-        }
       }
     ]
   },
