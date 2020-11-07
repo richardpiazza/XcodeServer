@@ -229,16 +229,14 @@ public class Manager {
             return
         }
         
-        let get = GetBotProcedure(source: client, input: bot.id)
-        let update = UpdateBotProcedure(destination: store, bot: bot)
-        update.injectResult(from: get)
-        update.addDidFinishBlockObserver() { (proc, error) in
+        let procedure = SyncBotProcedure(source: client, destination: store, bot: bot, syncIntegrations: false)
+        procedure.addDidFinishBlockObserver() { (proc, error) in
             queue.async {
                 completion(error)
             }
         }
         
-        procedureQueue.addOperations([get, update])
+        procedureQueue.addOperation(procedure)
     }
     
     /// Gets the cumulative integration stats for the specified `Bot`.
@@ -262,16 +260,14 @@ public class Manager {
             return
         }
         
-        let get = GetBotStatsProcedure(source: client, input: bot.id)
-        let update = UpdateBotStatsProcedure(destination: store, bot: bot)
-        update.injectResult(from: get)
-        update.addDidFinishBlockObserver() { (proc, error) in
+        let procedure = SyncBotStatsProcedure(source: client, destination: store, bot: bot)
+        procedure.addDidFinishBlockObserver() { (proc, error) in
             queue.async {
                 completion(error)
             }
         }
         
-        procedureQueue.addOperations([get, update])
+        procedureQueue.addOperation(procedure)
     }
     
     /// Begin a new integration for the specified `Bot`.
@@ -295,15 +291,16 @@ public class Manager {
             return
         }
         
-        client.runIntegration(forBotWithIdentifier: bot.id) { (result) in
-            switch result {
-            case .failure(let error):
+        let trigger = TriggerIntegrationProcedure(source: client, input: bot.id)
+        let update = UpdateBotIntegrationsProcedure(destination: store, bot: bot)
+        update.injectResult(from: trigger)
+        update.addDidFinishBlockObserver { (proc, error) in
+            queue.async {
                 completion(error)
-            case .success:
-                completion(nil)
-                NotificationCenter.default.postBotDidChange(id)
             }
         }
+        
+        procedureQueue.addOperations([trigger, update])
     }
     
     /// Gets a list of `Integration` for a specified `Bot`.
@@ -327,16 +324,14 @@ public class Manager {
             return
         }
         
-        let get = GetBotIntegrationsProcedure(source: client, input: bot.id)
-        let update = UpdateBotIntegrationsProcedure(destination: store, bot: bot)
-        update.injectResult(from: get)
-        update.addDidFinishBlockObserver() { (proc, error) in
+        let procedure = SyncBotProcedure(source: client, destination: store, bot: bot)
+        procedure.addDidFinishBlockObserver() { (proc, error) in
             queue.async {
                 completion(error)
             }
         }
         
-        procedureQueue.addOperations([get, update])
+        procedureQueue.addOperation(procedure)
     }
     
     /// Gets a single `Integration` from the `XcodeServer`.
@@ -372,6 +367,7 @@ public class Manager {
     
     /// Retrieves the `Repository` commits for a specified `Integration`.
     /// Updates the supplied `Integration` entity with the response.
+    @available(*, deprecated, renamed: "syncIntegration(integration:queue:completion:)")
     public func syncCommits(forIntegration integration: Integration, queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
         guard let serverId = integration.serverId else {
             let error = Error.noProvidedServerId
@@ -405,6 +401,7 @@ public class Manager {
     
     /// Retrieves `Issue` related to a given `Integration`.
     /// Updates the supplied `Integration` entity with the response.
+    @available(*, deprecated, renamed: "syncIntegration(integration:queue:completion:)")
     public func syncIssues(forIntegration integration: Integration, queue: DispatchQueue = .main, completion: @escaping ManagerErrorCompletion) {
         guard let serverId = integration.serverId else {
             let error = Error.noProvidedServerId
@@ -436,6 +433,7 @@ public class Manager {
         procedureQueue.addOperations([get, update])
     }
     
+    /// Syncs `Integration`s that are not in a **completed** state.
     public func syncIncompleteIntegrations(queue: DispatchQueue = .main, completion: @escaping ManagerIntegrationIdsCompletion) {
         store.getServers { (result) in
             switch result {
@@ -491,6 +489,7 @@ public class Manager {
         procedureQueue.addOperation(group)
     }
     
+    @available(*, deprecated, message: "Commits underlying storage updates should now make this no loger needed.")
     public func syncIncompleteCommits(queue: DispatchQueue = .main, completion: @escaping ManagerIntegrationIdsCompletion) {
         store.getServers { (result) in
             switch result {
