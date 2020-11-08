@@ -13,7 +13,7 @@ extension CoreDataStore: SourceControlPersistable {
                 if let entity = context.repository(withIdentifier: remote.id) {
                     repository = entity
                 } else {
-                    repository = Repository(context: context)
+                    repository = context.make()
                     InternalLog.coreData.debug("Creating REPOSITORY '\(remote.name)' [\(remote.id)]")
                 }
                 

@@ -6,7 +6,7 @@ public extension XcodeServerCoreData.Commit {
     func update(_ commit: SourceControl.Commit, integration: XcodeServerCoreData.Integration? = nil, context: NSManagedObjectContext) {
         if commitContributor == nil {
             InternalLog.coreData.debug("Creating COMMIT_CONTRIBUTOR for Commit [\(commit.id)]")
-            commitContributor = CommitContributor(context: context)
+            commitContributor = context.make()
         }
         
         commitHash = commit.id
@@ -16,7 +16,7 @@ public extension XcodeServerCoreData.Commit {
         
         (commitChanges as? Set<CommitChange>)?.forEach({ context.delete($0) })
         commit.changes.forEach { (change) in
-            let _change = CommitChange(context: context)
+            let _change: CommitChange = context.make()
             _change.update(change)
             addToCommitChanges(_change)
         }
@@ -24,7 +24,7 @@ public extension XcodeServerCoreData.Commit {
         if let integration = integration {
             if context.revisionBlueprint(withCommit: self, andIntegration: integration) == nil {
                 InternalLog.coreData.debug("Creating REVISION_BLUEPRINT for Commit [\(commit.id)] and Integration [\(integration.identifier ?? "")]")
-                let blueprint = RevisionBlueprint(context: context)
+                let blueprint: RevisionBlueprint = context.make()
                 blueprint.commit = self
                 blueprint.integration = integration
             }

@@ -12,7 +12,7 @@ public extension XcodeServerCoreData.IntegrationIssues {
             if let existing = context.issue(withIdentifier: $0.id) {
                 issue = existing
             } else {
-                issue = Issue(context: context)
+                issue = context.make()
             }
             
             issue.update($0, context: context)
@@ -24,7 +24,7 @@ public extension XcodeServerCoreData.IntegrationIssues {
             if let existing = context.issue(withIdentifier: $0.id) {
                 issue = existing
             } else {
-                issue = Issue(context: context)
+                issue = context.make()
             }
             
             issue.update($0, context: context)
@@ -36,7 +36,7 @@ public extension XcodeServerCoreData.IntegrationIssues {
             if let existing = context.issue(withIdentifier: $0.id) {
                 issue = existing
             } else {
-                issue = Issue(context: context)
+                issue = context.make()
             }
             
             issue.update($0, context: context)
@@ -48,7 +48,7 @@ public extension XcodeServerCoreData.IntegrationIssues {
             if let existing = context.issue(withIdentifier: $0.id) {
                 issue = existing
             } else {
-                issue = Issue(context: context)
+                issue = context.make()
             }
             
             issue.update($0, context: context)
@@ -60,7 +60,7 @@ public extension XcodeServerCoreData.IntegrationIssues {
             if let existing = context.issue(withIdentifier: $0.id) {
                 issue = existing
             } else {
-                issue = Issue(context: context)
+                issue = context.make()
             }
             
             issue.update($0, context: context)
@@ -72,7 +72,7 @@ public extension XcodeServerCoreData.IntegrationIssues {
             if let existing = context.issue(withIdentifier: $0.id) {
                 issue = existing
             } else {
-                issue = Issue(context: context)
+                issue = context.make()
             }
             
             issue.update($0, context: context)
@@ -84,7 +84,7 @@ public extension XcodeServerCoreData.IntegrationIssues {
             if let existing = context.issue(withIdentifier: $0.id) {
                 issue = existing
             } else {
-                issue = Issue(context: context)
+                issue = context.make()
             }
             
             issue.update($0, context: context)
@@ -96,7 +96,7 @@ public extension XcodeServerCoreData.IntegrationIssues {
             if let existing = context.issue(withIdentifier: $0.id) {
                 issue = existing
             } else {
-                issue = Issue(context: context)
+                issue = context.make()
             }
             
             issue.update($0, context: context)
@@ -108,7 +108,7 @@ public extension XcodeServerCoreData.IntegrationIssues {
             if let existing = context.issue(withIdentifier: $0.id) {
                 issue = existing
             } else {
-                issue = Issue(context: context)
+                issue = context.make()
             }
             
             issue.update($0, context: context)
@@ -120,7 +120,7 @@ public extension XcodeServerCoreData.IntegrationIssues {
             if let existing = context.issue(withIdentifier: $0.id) {
                 issue = existing
             } else {
-                issue = Issue(context: context)
+                issue = context.make()
             }
             
             issue.update($0, context: context)
@@ -132,7 +132,7 @@ public extension XcodeServerCoreData.IntegrationIssues {
             if let existing = context.issue(withIdentifier: $0.id) {
                 issue = existing
             } else {
-                issue = Issue(context: context)
+                issue = context.make()
             }
             
             issue.update($0, context: context)
@@ -144,7 +144,7 @@ public extension XcodeServerCoreData.IntegrationIssues {
             if let existing = context.issue(withIdentifier: $0.id) {
                 issue = existing
             } else {
-                issue = Issue(context: context)
+                issue = context.make()
             }
             
             issue.update($0, context: context)
@@ -156,7 +156,7 @@ public extension XcodeServerCoreData.IntegrationIssues {
             if let existing = context.issue(withIdentifier: $0.id) {
                 issue = existing
             } else {
-                issue = Issue(context: context)
+                issue = context.make()
             }
             
             issue.update($0, context: context)
@@ -168,7 +168,7 @@ public extension XcodeServerCoreData.IntegrationIssues {
             if let existing = context.issue(withIdentifier: $0.id) {
                 issue = existing
             } else {
-                issue = Issue(context: context)
+                issue = context.make()
             }
             
             issue.update($0, context: context)

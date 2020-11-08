@@ -21,7 +21,7 @@ extension CoreDataStore: IntegrationPersistable {
                         return
                     }
                     
-                    _integration = XcodeServerCoreData.Integration(context: context)
+                    _integration = context.make()
                     _integration.bot = _bot
                 }
                 
@@ -63,7 +63,7 @@ extension CoreDataStore: IntegrationPersistable {
                     if let existing = context.integration(withIdentifier: integration.id) {
                         _integration = existing
                     } else {
-                        _integration = XcodeServerCoreData.Integration(context: context)
+                        _integration = context.make()
                         _integration.bot = _bot
                     }
                     
@@ -118,7 +118,7 @@ extension CoreDataStore: IntegrationPersistable {
                     if let entity = context.repository(withIdentifier: remoteId) {
                         repository = entity
                     } else {
-                        repository = Repository(context: context)
+                        repository = context.make()
                         repository.identifier = remoteId
                         InternalLog.coreData.debug("Creating REPOSITORY '??' [\(remoteId)]")
                     }

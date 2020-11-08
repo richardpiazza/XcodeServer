@@ -9,7 +9,7 @@ extension CoreDataStore: ServerPersistable {
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in
-                let _server = context.server(withFQDN: server.id) ?? XcodeServerCoreData.Server(context: context)
+                let _server = context.server(withFQDN: server.id) ?? context.make()
                 _server.update(server, context: context)
                 _server.lastUpdate = Date()
 

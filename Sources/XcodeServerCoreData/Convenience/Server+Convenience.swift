@@ -42,7 +42,7 @@ public extension XcodeServerCoreData.Server {
             if let existing = context.bot(withIdentifier: entity.id) {
                 bot = existing
             } else {
-                bot = Bot(context: context)
+                bot = context.make()
                 addToBots(bot)
                 InternalLog.coreData.debug("Creating BOT '\(bot.name ?? "")' [\(bot.identifier ?? "")] for Server \(fqdn ?? "")")
             }

@@ -25,10 +25,10 @@ public extension Trigger {
 public extension Trigger {
     func update(_ trigger: XcodeServer.Trigger, context: NSManagedObjectContext) {
         if conditions == nil {
-            conditions = Conditions(context: context)
+            conditions = context.make()
         }
         if emailConfiguration == nil {
-            emailConfiguration = EmailConfiguration(context: context)
+            emailConfiguration = context.make()
         }
         
         conditions?.update(trigger.conditions, context: context)

@@ -37,7 +37,7 @@ public extension Repository {
                 _commit = existing
             } else {
                 InternalLog.coreData.debug("Creating COMMIT for Repository [\(identifier ?? "")]")
-                _commit = Commit(context: context)
+                _commit = context.make()
                 addToCommits(_commit)
             }
             

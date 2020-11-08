@@ -8,7 +8,7 @@ public extension DeviceSpecification {
         
         specification.filters.forEach { (filter) in
             InternalLog.coreData.debug("Creating FILTER for DeviceSpecification")
-            let _filter = Filter(context: context)
+            let _filter: Filter = context.make()
             _filter.update(filter, context: context)
             addToFilters(_filter)
         }
@@ -21,7 +21,7 @@ public extension DeviceSpecification {
                 addToDevices(entity)
             } else {
                 InternalLog.coreData.debug("Creating DEVICE for DeviceSpecification")
-                let _device = Device(context: context)
+                let _device: Device = context.make()
                 _device.update(device, context: context)
                 addToDevices(_device)
             }

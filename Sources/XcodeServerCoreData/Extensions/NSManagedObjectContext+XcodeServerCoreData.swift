@@ -3,6 +3,17 @@ import XcodeServer
 #if canImport(CoreData)
 import CoreData
 
+extension NSManagedObjectContext {
+    /// Inserts a new entity for the specified type.
+    ///
+    /// When initializing multiple models with duplicate entities, the standard `NSManagedObject.init(context:)` will
+    /// have difficulties disambiguating the references. Using `NSEntityDescription.insertNewObject(forEntityName:into:)`
+    /// do not have the problem.
+    func make<T>() -> T where T: NSManagedObject {
+        return NSEntityDescription.insertNewObject(forEntityName: T.entityName, into: self) as! T
+    }
+}
+
 // MARK: - Bots
 extension NSManagedObjectContext {
     /// Retrieves all `Bot` entities from the Core Data `NSManagedObjectContext`

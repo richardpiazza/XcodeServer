@@ -36,7 +36,7 @@ public extension XcodeServerCoreData.Stats {
         if let breakdown = analysisWarnings {
             breakdown.update(stats.analysisWarnings)
         } else {
-            let new = StatsBreakdown(context: context)
+            let new: StatsBreakdown = context.make()
             new.update(stats.analysisWarnings)
             analysisWarnings = new
         }
@@ -44,7 +44,7 @@ public extension XcodeServerCoreData.Stats {
         if let breakdown = averageIntegrationTime {
             breakdown.update(stats.averageIntegrationTime)
         } else {
-            let new = StatsBreakdown(context: context)
+            let new: StatsBreakdown = context.make()
             new.update(stats.averageIntegrationTime)
             averageIntegrationTime = new
         }
@@ -52,7 +52,7 @@ public extension XcodeServerCoreData.Stats {
         if let breakdown = errors {
             breakdown.update(stats.errors)
         } else {
-            let new = StatsBreakdown(context: context)
+            let new: StatsBreakdown = context.make()
             new.update(stats.errors)
             errors = new
         }
@@ -60,7 +60,7 @@ public extension XcodeServerCoreData.Stats {
         if let breakdown = improvedPerfTests {
             breakdown.update(stats.improvedPerformanceTests)
         } else {
-            let new = StatsBreakdown(context: context)
+            let new: StatsBreakdown = context.make()
             new.update(stats.improvedPerformanceTests)
             improvedPerfTests = new
         }
@@ -68,7 +68,7 @@ public extension XcodeServerCoreData.Stats {
         if let breakdown = regressedPerfTests {
             breakdown.update(stats.regressedPerformanceTests)
         } else {
-            let new = StatsBreakdown(context: context)
+            let new: StatsBreakdown = context.make()
             new.update(stats.regressedPerformanceTests)
             regressedPerfTests = new
         }
@@ -76,7 +76,7 @@ public extension XcodeServerCoreData.Stats {
         if let breakdown = testFailures {
             breakdown.update(stats.testFailures)
         } else {
-            let new = StatsBreakdown(context: context)
+            let new: StatsBreakdown = context.make()
             new.update(stats.testFailures)
             testFailures = new
         }
@@ -84,7 +84,7 @@ public extension XcodeServerCoreData.Stats {
         if let breakdown = tests {
             breakdown.update(stats.tests)
         } else {
-            let new = StatsBreakdown(context: context)
+            let new: StatsBreakdown = context.make()
             new.update(stats.tests)
             tests = new
         }
@@ -92,7 +92,7 @@ public extension XcodeServerCoreData.Stats {
         if let breakdown = warnings {
             breakdown.update(stats.warnings)
         } else {
-            let new = StatsBreakdown(context: context)
+            let new: StatsBreakdown = context.make()
             new.update(stats.warnings)
             warnings = new
         }
@@ -101,7 +101,7 @@ public extension XcodeServerCoreData.Stats {
             if let existing = context.integration(withIdentifier: integration.id) {
                 bestSuccessStreak = existing
             } else {
-                let new = Integration(context: context)
+                let new: Integration = context.make()
                 new.update(integration, context: context)
                 bestSuccessStreak = new
             }
@@ -111,7 +111,7 @@ public extension XcodeServerCoreData.Stats {
             if let existing = context.integration(withIdentifier: integration.id) {
                 lastCleanIntegration = existing
             } else {
-                let new = Integration(context: context)
+                let new: Integration = context.make()
                 new.update(integration, context: context)
                 lastCleanIntegration = new
             }
