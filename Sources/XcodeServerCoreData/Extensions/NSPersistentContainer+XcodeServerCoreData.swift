@@ -6,11 +6,15 @@ import CoreData
 extension NSPersistentContainer {
     /// Initializes the `NSPersistentContainer` with a specified `Model` version.
     ///
-    /// If an existing store exists and the default URL, a _heavyweight_ migration will be performed. Any existing store
-    /// will be removed if the migration fails due to:
+    /// If an existing store exists at the default URL, a _heavyweight_ migration will be performed. If
+    /// `silentMigrationFailure` is true, than any existing store will be removed if failure is due to:
     /// * `Migration.Error.noMigrationPath`
     /// * `Migration.Error.unidentifiedSource`
-    convenience init(model: Model, persisted: Bool = true) throws {
+    ///
+    /// - parameter model: The `Model` version with which to initialize the container.
+    /// - parameter persisted: Controls the underlying store type. SQLite for persisted, In-Memory for not.
+    /// - parameter silentMigrationFailure: When enabled, some migration errors will fall back to a clean state.
+    convenience init(model: Model, persisted: Bool = true, silentMigrationFailure: Bool = true) throws {
         let storeURL: URL = .storeURL
         
         // Attempt Migration (if required / if persisted)
@@ -22,15 +26,21 @@ extension NSPersistentContainer {
             } catch let error as Migration.Error {
                 switch error {
                 case .noMigrationPath, .unidentifiedSource:
-                    InternalLog.coreData.error("Migration failed due to unrecoverable errors.", error: error)
-                    if FileManager.default.fileExists(atPath: storeURL.path) {
-                        try FileManager.default.removeItem(at: storeURL)
+                    if silentMigrationFailure {
+                        InternalLog.coreData.error("Migration Failed, cleaning store.", error: error)
+                        if FileManager.default.fileExists(atPath: storeURL.path) {
+                            try FileManager.default.removeItem(at: storeURL)
+                        }
+                    } else {
+                        InternalLog.coreData.error("Migration Failed", error: error)
+                        throw error
                     }
                 default:
+                    InternalLog.coreData.error("Migration Failed", error: error)
                     throw error
                 }
             } catch {
-                print(error)
+                InternalLog.coreData.error("Migration Failed", error: error)
                 throw error
             }
         }

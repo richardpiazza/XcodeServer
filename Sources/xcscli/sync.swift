@@ -55,7 +55,7 @@ final class Sync: ParsableCommand, Route {
         InternalLog.procedures.minimumConsoleLevel = logLevel
         InternalLog.utility.minimumConsoleLevel = logLevel
         
-        let _model = model ?? Model.v1_0_0
+        let _model = model ?? Model.current
         let store = try CoreDataStore(model: _model)
         let manager: XcodeServerUtility.Manager = Manager(store: store, authorizationDelegate: self)
         
