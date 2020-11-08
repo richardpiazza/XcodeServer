@@ -148,7 +148,7 @@ public class InternalLog {
         /// A standardize format for printing/writing log entries.
         /// For example: [2019-03-06 04:31:34Z 🦠 DEBUG at Log.playground 16] Testing
         public var formattedString: String {
-            var output = "[ \(formattedDate) \(level.gem) \(level.paddedRawValue.uppercased()) at \(fileName) \(line)] \(message)"
+            var output = "[\(formattedDate) \(level.gem) \(level.paddedRawValue.uppercased()) at \(fileName) \(line)] \(message)"
             if let error = error {
                 output += " \(error.localizedDescription)"
             }

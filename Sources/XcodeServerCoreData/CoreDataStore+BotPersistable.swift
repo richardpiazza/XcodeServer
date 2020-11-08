@@ -9,17 +9,18 @@ extension CoreDataStore: BotPersistable {
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in
-                guard let _server = context.server(withFQDN: server) else {
-                    queue.async {
-                        completion(.failure(.noServer(server)))
-                    }
-                    return
-                }
-                
                 let _bot: XcodeServerCoreData.Bot
+                
                 if let existing = context.bot(withIdentifier: bot.id) {
                     _bot = existing
                 } else {
+                    guard let _server = context.server(withFQDN: server) else {
+                        queue.async {
+                            completion(.failure(.noServer(server)))
+                        }
+                        return
+                    }
+                    
                     _bot = XcodeServerCoreData.Bot(context: context)
                     _bot.server = _server
                 }

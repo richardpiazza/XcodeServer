@@ -103,7 +103,7 @@ public extension Configuration {
 public extension XcodeServerCoreData.Configuration {
     func update(_ configuration: XcodeServer.Bot.Configuration, context: NSManagedObjectContext) {
         if deviceSpecification == nil {
-            InternalLog.coreData.info("Creating DEVICE_SPECIFICATION for Configuration '\(bot?.name ?? "")'")
+            InternalLog.coreData.debug("Creating DEVICE_SPECIFICATION for Configuration '\(bot?.name ?? "")'")
             deviceSpecification = DeviceSpecification(context: context)
         }
         
@@ -130,7 +130,7 @@ public extension XcodeServerCoreData.Configuration {
         
         (triggers as? Set<XcodeServerCoreData.Trigger>)?.forEach({ context.delete($0) })
         configuration.triggers.forEach { (trigger) in
-            InternalLog.coreData.info("Creating TRIGGER for Configuration '\(bot?.name ?? "")'")
+            InternalLog.coreData.debug("Creating TRIGGER for Configuration '\(bot?.name ?? "")'")
             let _trigger = XcodeServerCoreData.Trigger(context: context)
             _trigger.update(trigger, context: context)
             addToTriggers(_trigger)

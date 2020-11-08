@@ -30,8 +30,6 @@ public class GetBotIntegrationsProcedure: Procedure, InputProcedure, OutputProce
             return
         }
         
-        InternalLog.procedures.debug("Getting INTEGRATIONS for Bot [\(id)]")
-        
         source.getIntegrations(forBot: id) { [weak self] (result) in
             switch result {
             case .success(let value):
