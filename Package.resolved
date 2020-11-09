@@ -29,6 +29,15 @@
         }
       },
       {
+        "package": "SessionPlus",
+        "repositoryURL": "https://github.com/richardpiazza/SessionPlus.git",
+        "state": {
+          "branch": null,
+          "revision": "fa2c76ea8a6ee0dfa155ea42916b22204e6e501d",
+          "version": "1.0.0"
+        }
+      },
+      {
         "package": "SWCompression",
         "repositoryURL": "https://github.com/tsolomko/SWCompression",
         "state": {

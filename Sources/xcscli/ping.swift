@@ -32,7 +32,7 @@ final class Ping: ParsableCommand, Route {
     }
     
     func run() throws {
-        let client = try APIClient(fqdn: server, authorizationDelegate: self)
+        let client = try APIClient(fqdn: server, credentialDelegate: self)
         client.ping { (result) in
             switch result {
             case .success:

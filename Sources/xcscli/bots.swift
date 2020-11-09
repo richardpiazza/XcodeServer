@@ -44,7 +44,7 @@ final class Bots: ParsableCommand, Route {
     }
     
     func run() throws {
-        let client = try APIClient(fqdn: server, authorizationDelegate: self)
+        let client = try APIClient(fqdn: server, credentialDelegate: self)
         switch (id) {
         case .some(let id) where path == .some(.stats):
             client.stats(forBotWithIdentifier: id) { (result) in

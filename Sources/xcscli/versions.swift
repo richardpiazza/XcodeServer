@@ -32,7 +32,7 @@ final class Versions: ParsableCommand, Route {
     }
     
     func run() throws {
-        let client = try APIClient(fqdn: server, authorizationDelegate: self)
+        let client = try APIClient(fqdn: server, credentialDelegate: self)
         
         client.versions { (result) in
             switch result {
