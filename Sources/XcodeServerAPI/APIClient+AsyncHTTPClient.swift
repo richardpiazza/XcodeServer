@@ -1,4 +1,4 @@
-#if !canImport(ObjectiveC)
+#if canImport(AsyncHTTPClient)
 import Foundation
 import Dispatch
 import AsyncHTTPClient

@@ -1,7 +1,7 @@
 import Dispatch
 import XcodeServer
 
-extension APIClient: BotQueryable {
+extension XCSClient: BotQueryable {
     public func getBots(queue: DispatchQueue?, completion: @escaping BotsResultHandler) {
         InternalLog.apiClient.info("Retrieving ALL Bots")
         let queue = queue ?? returnQueue

@@ -1,7 +1,7 @@
 import Dispatch
 import XcodeServer
 
-extension APIClient: ServerQueryable {
+extension XCSClient: ServerQueryable {
     public func getServers(queue: DispatchQueue?, completion: @escaping ServersResultHandler) {
         InternalLog.apiClient.info("Retrieving ALL Servers")
         let queue = queue ?? returnQueue

@@ -1,7 +1,7 @@
 import Dispatch
 import XcodeServer
 
-extension APIClient: IntegrationQueryable {
+extension XCSClient: IntegrationQueryable {
     public func getIntegrations(queue: DispatchQueue?, completion: @escaping IntegrationsResultHandler) {
         InternalLog.apiClient.info("Retrieving ALL Integrations")
         let queue = queue ?? returnQueue

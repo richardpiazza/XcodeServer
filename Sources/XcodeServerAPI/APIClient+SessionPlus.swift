@@ -1,4 +1,4 @@
-#if canImport(ObjectiveC)
+#if canImport(SessionPlus)
 import Foundation
 import SessionPlus
 
