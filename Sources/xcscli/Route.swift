@@ -2,7 +2,7 @@ import Foundation
 import ArgumentParser
 import XcodeServerAPI
 
-protocol Route: APIClientAuthorizationDelegate {
+protocol Route: CredentialDelegate {
     var server: String { get set }
     var username: String? { get set }
     var password: String? { get set }

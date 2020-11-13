@@ -45,7 +45,7 @@ final class Integrations: ParsableCommand, Route {
     }
     
     func run() throws {
-        let client = try APIClient(fqdn: server, authorizationDelegate: self)
+        let client = try APIClient(fqdn: server, credentialDelegate: self)
         switch (path) {
         case .some(.commits):
             client.commits(forIntegrationWithIdentifier: id) { (result) in

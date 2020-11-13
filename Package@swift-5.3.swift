@@ -25,6 +25,7 @@ let package = Package(
         // .package(url: /* package url */, from: "1.0.0"),
         .package(url: "https://github.com/tsolomko/SWCompression", .upToNextMinor(from: "4.5.5")),
         .package(url: "https://github.com/richardpiazza/ProcedureKit.git", from: "6.0.0-beta.1"),
+        .package(url: "https://github.com/richardpiazza/SessionPlus.git", .upToNextMinor(from: "1.0.0")),
         .package(url: "https://github.com/swift-server/async-http-client", from: "1.2.1"),
         .package(url: "https://github.com/apple/swift-argument-parser.git", .upToNextMinor(from: "0.3.1")),
     ],
@@ -44,7 +45,8 @@ let package = Package(
             name: "XcodeServerAPI",
             dependencies: [
                 "SWCompression",
-                .product(name: "AsyncHTTPClient", package: "async-http-client"),
+                .product(name: "SessionPlus", package: "SessionPlus", condition: .when(platforms: [.macOS, .iOS, .tvOS, .watchOS])),
+                .product(name: "AsyncHTTPClient", package: "async-http-client", condition: .when(platforms: [.linux, .android, .windows])),
             ]),
         .target(
             name: "XcodeServerCoreData",
