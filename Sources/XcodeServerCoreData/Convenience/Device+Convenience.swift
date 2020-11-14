@@ -29,7 +29,7 @@ public extension XcodeServerCoreData.Device {
         case (.some, .some(let proxiedDevice)):
             activeProxiedDevice?.update(proxiedDevice)
         case (.none, .some(let proxiedDevice)):
-            let new = Device(context: context)
+            let new: Device = context.make()
             new.update(proxiedDevice)
             activeProxiedDevice = new
         }

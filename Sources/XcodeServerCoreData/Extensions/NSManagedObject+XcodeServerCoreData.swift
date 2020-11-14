@@ -1,4 +1,4 @@
-import Foundation
+import XcodeServer
 #if canImport(CoreData)
 import CoreData
 

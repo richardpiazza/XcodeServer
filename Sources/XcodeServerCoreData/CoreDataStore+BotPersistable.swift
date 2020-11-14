@@ -21,7 +21,7 @@ extension CoreDataStore: BotPersistable {
                         return
                     }
                     
-                    _bot = XcodeServerCoreData.Bot(context: context)
+                    _bot = context.make()
                     _bot.server = _server
                 }
                 
@@ -56,7 +56,7 @@ extension CoreDataStore: BotPersistable {
             }
             
             if _bot.stats == nil {
-                _bot.stats = XcodeServerCoreData.Stats(context: context)
+                _bot.stats = context.make()
             }
             
             _bot.stats?.update(stats, context: context)

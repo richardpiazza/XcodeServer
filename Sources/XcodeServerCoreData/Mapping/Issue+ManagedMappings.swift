@@ -3,7 +3,7 @@ import XcodeServer
 
 public extension XcodeServer.Issue {
     init(_ issue: XcodeServerCoreData.Issue) {
-        self.init(id: issue.identifier)
+        self.init(id: issue.identifier ?? "")
         age = Int(issue.age)
         documentFilePath = issue.documentFilePath ?? ""
         fixItType = issue.fixItType ?? ""

@@ -3,7 +3,7 @@ import XcodeServer
 
 public extension XcodeServer.Device {
     init(_ device: XcodeServerCoreData.Device) {
-        self.init(id: device.identifier)
+        self.init(id: device.identifier ?? "")
         name = device.name ?? ""
         deviceType = device.deviceType ?? ""
         modelName = device.modelName ?? ""
@@ -27,7 +27,7 @@ public extension XcodeServer.Device {
 
 public extension XcodeServer.Device.Platform {
     init(_ platform: Platform) {
-        self.init(id: platform.identifier)
+        self.init(id: platform.identifier ?? "")
         buildNumber = platform.buildNumber ?? ""
         displayName = platform.displayName ?? ""
         platformIdentifier = platform.platformIdentifier ?? ""
@@ -50,10 +50,10 @@ public extension XcodeServer.Device.Filter {
 public extension XcodeServer.Device.Specification {
     init(_ specification: DeviceSpecification) {
         self.init()
-        if let filters = specification.filters {
+        if let filters = specification.filters as? Set<Filter> {
             self.filters = filters.map { XcodeServer.Device.Filter($0) }
         }
-        if let identifiers = specification.devices {
+        if let identifiers = specification.devices as? Set<Device> {
             devices = Set(identifiers.map { XcodeServer.Device($0) })
         }
     }
@@ -61,7 +61,7 @@ public extension XcodeServer.Device.Specification {
 
 public extension XcodeServer.Device.ProxiedDevice {
     init(_ device: XcodeServerCoreData.Device) {
-        self.init(id: device.identifier)
+        self.init(id: device.identifier ?? "")
         name = device.name ?? ""
         deviceType = device.deviceType ?? ""
         modelName = device.modelName ?? ""

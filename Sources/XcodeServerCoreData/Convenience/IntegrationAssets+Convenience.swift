@@ -6,7 +6,7 @@ public extension IntegrationAssets {
     func update(_ catalog: XcodeServer.Integration.AssetCatalog, context: NSManagedObjectContext) {
         switch (archive, catalog.archive) {
         case (.none, .some(let asset)):
-            archive = Asset(context: context)
+            archive = context.make()
             fallthrough
         case (.some, .some(let asset)):
             archive?.update(asset)
@@ -18,7 +18,7 @@ public extension IntegrationAssets {
         
         switch (buildServiceLog) {
         case .none:
-            buildServiceLog = Asset(context: context)
+            buildServiceLog = context.make()
             fallthrough
         case .some:
             buildServiceLog?.update(catalog.buildServiceLog)
@@ -26,7 +26,7 @@ public extension IntegrationAssets {
         
         switch (product, catalog.product) {
         case (.none, .some(let asset)):
-            product = Asset(context: context)
+            product = context.make()
             fallthrough
         case (.some, .some(let asset)):
             product?.update(asset)
@@ -38,7 +38,7 @@ public extension IntegrationAssets {
         
         switch (sourceControlLog) {
         case .none:
-            sourceControlLog = Asset(context: context)
+            sourceControlLog = context.make()
             fallthrough
         case .some:
             sourceControlLog?.update(catalog.sourceControlLog)
@@ -46,7 +46,7 @@ public extension IntegrationAssets {
         
         switch (xcodebuildLog, catalog.xcodebuildLog) {
         case (.none, .some(let asset)):
-            xcodebuildLog = Asset(context: context)
+            xcodebuildLog = context.make()
             fallthrough
         case (.some, .some(let asset)):
             xcodebuildLog?.update(asset)
@@ -58,7 +58,7 @@ public extension IntegrationAssets {
         
         switch (xcodebuildOutput, catalog.xcodebuildOutput) {
         case (.none, .some(let asset)):
-            xcodebuildOutput = Asset(context: context)
+            xcodebuildOutput = context.make()
             fallthrough
         case (.some, .some(let asset)):
             xcodebuildOutput?.update(asset)
@@ -68,12 +68,12 @@ public extension IntegrationAssets {
             break
         }
         
-        triggerAssets?.forEach({ context.delete($0) })
+        (triggerAssets as? Set<Asset>)?.forEach({ context.delete($0) })
         
         catalog.triggerAssets.forEach({
-            let asset = Asset(context: context)
+            let asset: Asset = context.make()
             asset.update($0)
-            asset.inverseTriggerAssets = self
+            addToTriggerAssets(asset)
         })
     }
 }

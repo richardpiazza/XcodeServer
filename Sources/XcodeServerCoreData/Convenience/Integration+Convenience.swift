@@ -80,7 +80,7 @@ public extension Integration {
     
     var commits: [Commit] {
         var commits: [Commit] = []
-        guard let revisionBlueprints = self.revisionBlueprints else {
+        guard let revisionBlueprints = self.revisionBlueprints as? Set<RevisionBlueprint> else {
             return commits
         }
         
@@ -98,15 +98,15 @@ public extension XcodeServerCoreData.Integration {
     func update(_ integration: XcodeServer.Integration, context: NSManagedObjectContext) {
         if assets == nil {
             InternalLog.coreData.debug("Creating INTEGRATION_ASSETS for Integration '\(integration.number)' [\(integration.id)]")
-            assets = IntegrationAssets(context: context)
+            assets = context.make()
         }
         if buildResultSummary == nil {
             InternalLog.coreData.debug("Creating BUILD_RESULT_SUMMARY for Integration '\(integration.number)' [\(integration.id)]")
-            buildResultSummary = BuildResultSummary(context: context)
+            buildResultSummary = context.make()
         }
         if issues == nil {
             InternalLog.coreData.debug("Creating INTEGRATION_ISSUES for Integration '\(integration.number)' [\(integration.id)]")
-            issues = IntegrationIssues(context: context)
+            issues = context.make()
         }
         
         currentStep = integration.step
@@ -151,7 +151,7 @@ public extension XcodeServerCoreData.Integration {
                     repository = entity
                 } else {
                     InternalLog.coreData.debug("Creating REPOSITORY '\(blueprint.name)' [\(blueprint.primaryRemoteIdentifier)]")
-                    repository = Repository(context: context)
+                    repository = context.make()
                 }
                 repository.update(blueprint, context: context)
             }
@@ -170,7 +170,7 @@ public extension XcodeServerCoreData.Integration {
                 repository = entity
             } else {
                 InternalLog.coreData.debug("Creating REPOSITORY '??' [\(remoteId)]")
-                repository = Repository(context: context)
+                repository = context.make()
                 repository.identifier = remoteId
             }
             

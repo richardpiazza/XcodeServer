@@ -104,7 +104,7 @@ public extension XcodeServerCoreData.Configuration {
     func update(_ configuration: XcodeServer.Bot.Configuration, context: NSManagedObjectContext) {
         if deviceSpecification == nil {
             InternalLog.coreData.debug("Creating DEVICE_SPECIFICATION for Configuration '\(bot?.name ?? "")'")
-            deviceSpecification = DeviceSpecification(context: context)
+            deviceSpecification = context.make()
         }
         
         additionalBuildArguments = configuration.buildArguments
@@ -128,12 +128,12 @@ public extension XcodeServerCoreData.Configuration {
         schemeName = configuration.schemeName
         deviceSpecification?.update(configuration.deviceSpecification, context: context)
         
-        triggers?.forEach({ context.delete($0) })
+        (triggers as? Set<XcodeServerCoreData.Trigger>)?.forEach({ context.delete($0) })
         configuration.triggers.forEach { (trigger) in
             InternalLog.coreData.debug("Creating TRIGGER for Configuration '\(bot?.name ?? "")'")
-            let _trigger = XcodeServerCoreData.Trigger(context: context)
+            let _trigger: XcodeServerCoreData.Trigger = context.make()
             _trigger.update(trigger, context: context)
-            _trigger.configuration = self
+            addToTriggers(_trigger)
         }
         
         let remoteId = configuration.sourceControlBlueprint.primaryRemoteIdentifier
@@ -143,7 +143,7 @@ public extension XcodeServerCoreData.Configuration {
                 repository = entity
             } else {
                 InternalLog.coreData.info("Creating REPOSITORY '\(configuration.sourceControlBlueprint.name)' [\(remoteId)]")
-                repository = Repository(context: context)
+                repository = context.make()
             }
             
             if repositories == nil || repositories?.contains(repository) == false {

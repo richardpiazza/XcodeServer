@@ -40,11 +40,16 @@ final class Integrations: ParsableCommand, Route {
     @Option(help: "Specified the additional path component for the Integration. [commits | issues | coverage | assets]")
     var path: Path?
     
+    @Option(help: "The minimum output log level.")
+    var logLevel: InternalLog.Level = .warn
+    
     func validate() throws {
         try validateServer()
     }
     
     func run() throws {
+        configureLog()
+        
         let client = try APIClient(fqdn: server, credentialDelegate: self)
         switch (path) {
         case .some(.commits):
@@ -105,7 +110,7 @@ final class Integrations: ParsableCommand, Route {
                     public var results: [XCSIntegration]
                 }
                 
-                client.get("integrations") { (status, headers, data: Integrations?, error) in
+                client.getPath("integrations") { (status, headers, data: Integrations?, error) in
                     if let value = data?.results {
                         print(value.asPrettyJSON() ?? "")
                     }

@@ -20,13 +20,13 @@ public extension Repository {
             url = remote.url
         }
         
-        if let location = blueprint.locations[identifier] {
+        if let location = blueprint.locations[identifier ?? ""] {
             branchIdentifier = location.id
             branchOptions = Int16(location.branchOptions)
             locationType = location.locationType
         }
         
-        if let _ = blueprint.authenticationStrategies[identifier] {
+        if let _ = blueprint.authenticationStrategies[identifier ?? ""] {
         }
     }
     
@@ -36,9 +36,9 @@ public extension Repository {
             if let existing = context.commit(withHash: commit.id) {
                 _commit = existing
             } else {
-                InternalLog.coreData.debug("Creating COMMIT for Repository [\(identifier)]")
-                _commit = Commit(context: context)
-                _commit.repository = self
+                InternalLog.coreData.debug("Creating COMMIT for Repository [\(identifier ?? "")]")
+                _commit = context.make()
+                addToCommits(_commit)
             }
             
             _commit.update(commit, integration: integration, context: context)

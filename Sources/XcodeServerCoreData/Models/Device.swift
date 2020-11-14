@@ -4,10 +4,18 @@ import CoreData
 
 @objc(Device)
 public class Device: NSManagedObject {
-    
+
+}
+
+extension Device {
+
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Device> {
+        return NSFetchRequest<Device>(entityName: "Device")
+    }
+
     @NSManaged public var architecture: String?
     @NSManaged public var deviceType: String?
-    @NSManaged public var identifier: String
+    @NSManaged public var identifier: String?
     @NSManaged public var isConnected: Bool
     @NSManaged public var isEnabledForDevelopment: Bool
     @NSManaged public var isRetina: Bool
@@ -23,34 +31,43 @@ public class Device: NSManagedObject {
     @NSManaged public var osVersion: String?
     @NSManaged public var platformIdentifier: String?
     @NSManaged public var activeProxiedDevice: Device?
-    @NSManaged public var deviceSpecifications: Set<DeviceSpecification>?
-    @NSManaged public var integrations: Set<Integration>?
+    @NSManaged public var deviceSpecifications: NSSet?
+    @NSManaged public var integrations: NSSet?
     @NSManaged public var inverseActiveProxiedDevice: Device?
-    
-    @objc(addDeviceSpecificationsObject:)
-    @NSManaged public func addToDeviceSpecifications(_ value: DeviceSpecification)
-    
-    @objc(removeDeviceSpecificationsObject:)
-    @NSManaged public func removeFromDeviceSpecifications(_ value: DeviceSpecification)
-    
-    @objc(addDeviceSpecifications:)
-    @NSManaged public func addToDeviceSpecifications(_ values: Set<DeviceSpecification>)
-    
-    @objc(removeDeviceSpecifications:)
-    @NSManaged public func removeFromDeviceSpecifications(_ values: Set<DeviceSpecification>)
-    
-    @objc(addIntegrationsObject:)
-    @NSManaged public func addToIntegrations(_ value: Integration)
-    
-    @objc(removeIntegrationsObject:)
-    @NSManaged public func removeFromIntegrations(_ value: Integration)
-    
-    @objc(addIntegrations:)
-    @NSManaged public func addToIntegrations(_ values: Set<Integration>)
-    
-    @objc(removeIntegrations:)
-    @NSManaged public func removeFromIntegrations(_ values: Set<Integration>)
-    
+
 }
 
+// MARK: Generated accessors for deviceSpecifications
+extension Device {
+
+    @objc(addDeviceSpecificationsObject:)
+    @NSManaged public func addToDeviceSpecifications(_ value: DeviceSpecification)
+
+    @objc(removeDeviceSpecificationsObject:)
+    @NSManaged public func removeFromDeviceSpecifications(_ value: DeviceSpecification)
+
+    @objc(addDeviceSpecifications:)
+    @NSManaged public func addToDeviceSpecifications(_ values: NSSet)
+
+    @objc(removeDeviceSpecifications:)
+    @NSManaged public func removeFromDeviceSpecifications(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for integrations
+extension Device {
+
+    @objc(addIntegrationsObject:)
+    @NSManaged public func addToIntegrations(_ value: Integration)
+
+    @objc(removeIntegrationsObject:)
+    @NSManaged public func removeFromIntegrations(_ value: Integration)
+
+    @objc(addIntegrations:)
+    @NSManaged public func addToIntegrations(_ values: NSSet)
+
+    @objc(removeIntegrations:)
+    @NSManaged public func removeFromIntegrations(_ values: NSSet)
+
+}
 #endif

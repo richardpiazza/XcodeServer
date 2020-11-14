@@ -4,14 +4,50 @@ import Foundation
 import CoreData
 
 extension NSPersistentContainer {
-    convenience init(model: Model, persisted: Bool = true) {
+    /// Initializes the `NSPersistentContainer` with a specified `Model` version.
+    ///
+    /// If an existing store exists at the default URL, a _heavyweight_ migration will be performed. If
+    /// `silentMigrationFailure` is true, than any existing store will be removed if failure is due to:
+    /// * `Migration.Error.noMigrationPath`
+    /// * `Migration.Error.unidentifiedSource`
+    ///
+    /// - parameter model: The `Model` version with which to initialize the container.
+    /// - parameter persisted: Controls the underlying store type. SQLite for persisted, In-Memory for not.
+    /// - parameter silentMigrationFailure: When enabled, some migration errors will fall back to a clean state.
+    convenience init(model: Model, persisted: Bool = true, silentMigrationFailure: Bool = true) throws {
+        let storeURL: URL = .storeURL
+        
+        // Attempt Migration (if required / if persisted)
+        if persisted {
+            do {
+                if let source = try Migration.migrateStore(at: storeURL, to: model) {
+                    InternalLog.coreData.info("Successful Migration from \(source.rawValue) to \(model.rawValue)")
+                }
+            } catch let error as Migration.Error {
+                switch error {
+                case .noMigrationPath, .unidentifiedSource:
+                    if silentMigrationFailure {
+                        InternalLog.coreData.error("Migration Failed, cleaning store.", error: error)
+                        if FileManager.default.fileExists(atPath: storeURL.path) {
+                            try FileManager.default.removeItem(at: storeURL)
+                        }
+                    } else {
+                        InternalLog.coreData.error("Migration Failed", error: error)
+                        throw error
+                    }
+                default:
+                    InternalLog.coreData.error("Migration Failed", error: error)
+                    throw error
+                }
+            } catch {
+                InternalLog.coreData.error("Migration Failed", error: error)
+                throw error
+            }
+        }
+        
         let objectModel = NSManagedObjectModel.make(for: model)
-        self.init(model: objectModel, persisted: persisted)
-    }
-    
-    convenience init(model: NSManagedObjectModel, persisted: Bool = true) {
-        let name = "XcodeServer"
-        let storeURL = FileManager.default.storeURL
+        
+        self.init(name: .containerName, managedObjectModel: objectModel)
         
         let description = NSPersistentStoreDescription()
         if persisted {
@@ -23,31 +59,15 @@ extension NSPersistentContainer {
         description.shouldInferMappingModelAutomatically = false
         description.shouldMigrateStoreAutomatically = false
         
-        if persisted {
-            do {
-                let metadata = try NSPersistentStoreCoordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: storeURL, options: nil)
-                if !model.isConfiguration(withName: name, compatibleWithStoreMetadata: metadata) {
-                    try FileManager.default.removeItem(at: storeURL)
-                }
-            } catch let error as NSError {
-                if error.code == 260 {
-                    // Expected (File Not Found)
-                } else {
-                    InternalLog.coreData.error("Failed to load store metadata or remove existing.", error: error)
-                }
-            }
-        }
-        
-        // check for migration
-        // perform if necessary
-        
-        self.init(name: name, managedObjectModel: model)
+        var loadError: Error? = nil
         
         persistentStoreDescriptions = [description]
         loadPersistentStores { (_, error) in
-            if let e = error {
-                fatalError(e.localizedDescription)
-            }
+            loadError = error
+        }
+        
+        if let error = loadError {
+            throw error
         }
         
         viewContext.automaticallyMergesChangesFromParent = true

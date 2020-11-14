@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17162" systemVersion="20A4299v" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17192" systemVersion="19H2" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Asset" representedClassName="Asset" syncable="YES">
         <attribute name="allowAnonymousAccess" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="fileName" optional="YES" attributeType="String"/>
@@ -340,28 +340,28 @@
         <relationship name="emailConfiguration" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="EmailConfiguration" inverseName="trigger" inverseEntity="EmailConfiguration"/>
     </entity>
     <elements>
-        <element name="Asset" positionX="-85.62890625" positionY="-319.5859375" width="128" height="224"/>
-        <element name="Bot" positionX="-94.6875" positionY="-48.45703125" width="128" height="179"/>
-        <element name="BuildResultSummary" positionX="444.1171875" positionY="-307.36328125" width="128" height="254"/>
-        <element name="Commit" positionX="-239.77734375" positionY="378.33203125" width="128" height="134"/>
-        <element name="CommitChange" positionX="-250.328125" positionY="617.3125" width="128" height="74"/>
-        <element name="CommitContributor" positionX="-431.6796875" positionY="623.61328125" width="128" height="89"/>
-        <element name="Conditions" positionX="-32.57421875" positionY="656.78515625" width="128" height="164"/>
-        <element name="Configuration" positionX="-349.6171875" positionY="-115.2890625" width="128" height="404"/>
-        <element name="Device" positionX="242.953125" positionY="167.30078125" width="128" height="344"/>
-        <element name="DeviceSpecification" positionX="-35.5703125" positionY="198.46484375" width="128" height="74"/>
-        <element name="EmailConfiguration" positionX="132.60546875" positionY="548.19921875" width="128" height="269"/>
-        <element name="Filter" positionX="-600.046875" positionY="233.98828125" width="128" height="89"/>
-        <element name="Integration" positionX="244.38671875" positionY="-316.546875" width="128" height="389"/>
-        <element name="IntegrationAssets" positionX="83.0859375" positionY="-311.1328125" width="128" height="149"/>
-        <element name="IntegrationIssues" positionX="574.84375" positionY="387.09765625" width="128" height="254"/>
-        <element name="Issue" positionX="801.67578125" positionY="305.66796875" width="128" height="419"/>
-        <element name="Platform" positionX="-611.125" positionY="-36.5078125" width="128" height="134"/>
-        <element name="Repository" positionX="-507.671875" positionY="385.48828125" width="128" height="179"/>
-        <element name="RevisionBlueprint" positionX="-35.66796875" positionY="301.7265625" width="128" height="59"/>
-        <element name="Server" positionX="-297.23046875" positionY="-313.47265625" width="128" height="149"/>
-        <element name="Stats" positionX="599.10546875" positionY="-46.6640625" width="128" height="284"/>
-        <element name="StatsBreakdown" positionX="797.65234375" positionY="-1.47265625" width="128" height="239"/>
-        <element name="Trigger" positionX="-33.48828125" positionY="397.375" width="128" height="134"/>
+        <element name="Asset" positionX="-85.62890625" positionY="-319.5859375" width="128" height="238"/>
+        <element name="Bot" positionX="-94.6875" positionY="-48.45703125" width="128" height="193"/>
+        <element name="BuildResultSummary" positionX="444.1171875" positionY="-307.36328125" width="128" height="268"/>
+        <element name="Commit" positionX="-239.77734375" positionY="378.33203125" width="128" height="148"/>
+        <element name="CommitChange" positionX="-250.328125" positionY="617.3125" width="128" height="88"/>
+        <element name="CommitContributor" positionX="-431.6796875" positionY="623.61328125" width="128" height="103"/>
+        <element name="Conditions" positionX="-32.57421875" positionY="656.78515625" width="128" height="178"/>
+        <element name="Configuration" positionX="-349.6171875" positionY="-115.2890625" width="128" height="418"/>
+        <element name="Device" positionX="242.953125" positionY="167.30078125" width="128" height="358"/>
+        <element name="DeviceSpecification" positionX="-35.5703125" positionY="198.46484375" width="128" height="88"/>
+        <element name="EmailConfiguration" positionX="132.60546875" positionY="548.19921875" width="128" height="283"/>
+        <element name="Filter" positionX="-600.046875" positionY="233.98828125" width="128" height="103"/>
+        <element name="Integration" positionX="244.38671875" positionY="-316.546875" width="128" height="403"/>
+        <element name="IntegrationAssets" positionX="83.0859375" positionY="-311.1328125" width="128" height="163"/>
+        <element name="IntegrationIssues" positionX="574.84375" positionY="387.09765625" width="128" height="268"/>
+        <element name="Issue" positionX="801.67578125" positionY="305.66796875" width="128" height="433"/>
+        <element name="Platform" positionX="-611.125" positionY="-36.5078125" width="128" height="148"/>
+        <element name="Repository" positionX="-507.671875" positionY="385.48828125" width="128" height="193"/>
+        <element name="RevisionBlueprint" positionX="-35.66796875" positionY="301.7265625" width="128" height="73"/>
+        <element name="Server" positionX="-297.23046875" positionY="-313.47265625" width="128" height="163"/>
+        <element name="Stats" positionX="599.10546875" positionY="-46.6640625" width="128" height="298"/>
+        <element name="StatsBreakdown" positionX="797.65234375" positionY="-1.47265625" width="128" height="253"/>
+        <element name="Trigger" positionX="-33.48828125" positionY="397.375" width="128" height="148"/>
     </elements>
 </model>

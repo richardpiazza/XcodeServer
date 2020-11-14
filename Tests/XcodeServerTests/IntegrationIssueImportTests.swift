@@ -44,8 +44,14 @@ final class IntegrationIssueImportTests: XCTestCase {
         }
     }
     
-    let store = CoreDataStore(model: .v1_0_0, persisted: false)
-    let client: MockApiClient = Client(serverId: "test.server.host")
+    private let client: MockApiClient = Client(serverId: "test.server.host")
+    private lazy var store: CoreDataStore = {
+        do {
+            return try CoreDataStore(model: .v1_0_0, persisted: false)
+        } catch {
+            preconditionFailure(error.localizedDescription)
+        }
+    }()
     
     private let integration1 = XcodeServer.Integration(id: .integration1)
     private let integration2 = XcodeServer.Integration(id: .integration2)

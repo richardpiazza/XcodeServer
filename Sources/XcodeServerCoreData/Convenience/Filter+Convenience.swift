@@ -6,7 +6,7 @@ public extension Filter {
     func update(_ filter: XcodeServer.Device.Filter, context: NSManagedObjectContext) {
         if platform == nil {
             InternalLog.coreData.debug("Creating PLATFORM for Filter")
-            platform = Platform(context: context)
+            platform = context.make()
         }
         
         filterTypeRawValue = Int16(filter.type)

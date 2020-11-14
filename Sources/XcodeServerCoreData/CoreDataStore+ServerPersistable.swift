@@ -9,7 +9,7 @@ extension CoreDataStore: ServerPersistable {
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in
-                let _server = context.server(withFQDN: server.id) ?? XcodeServerCoreData.Server(context: context)
+                let _server = context.server(withFQDN: server.id) ?? context.make()
                 _server.update(server, context: context)
                 _server.lastUpdate = Date()
 
@@ -43,7 +43,7 @@ extension CoreDataStore: ServerPersistable {
                 
                 _server.update(Set(bots), context: context)
                 
-                let result = (_server.bots ?? []).map({ XcodeServer.Bot($0) })
+                let result = (_server.bots as? Set<XcodeServerCoreData.Bot> ?? []).map({ XcodeServer.Bot($0) })
                 
                 do {
                     try context.save()

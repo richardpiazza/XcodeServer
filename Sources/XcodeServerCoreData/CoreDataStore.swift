@@ -14,8 +14,9 @@ public class CoreDataStore {
     /// - parameter model: `Model` version the store should be initialized with. (Migration if needed/able)
     /// - parameter dispatchQueue: DispatchQueue on which all results will be returned (when not specified).
     /// - parameter persisted: When false, this store will only be maintained in memory.
-    public init(model: Model, dispatchQueue: DispatchQueue = .main, persisted: Bool = true) {
-        persistentContainer = NSPersistentContainer(model: model, persisted: persisted)
+    /// - parameter silentFailure: When enabled, some migration errors will fall back to a clean state.
+    public init(model: Model, dispatchQueue: DispatchQueue = .main, persisted: Bool = true, silentFailure: Bool = true) throws {
+        persistentContainer = try NSPersistentContainer(model: model, persisted: persisted, silentMigrationFailure: silentFailure)
         returnQueue = dispatchQueue
     }
 }

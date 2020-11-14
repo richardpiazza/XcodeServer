@@ -11,7 +11,11 @@ final class ServerWriteAndUpdateTests: XCTestCase {
     ]
     
     lazy var persistedStore: CoreDataStore = {
-        return CoreDataStore(model: .v1_0_0, persisted: false)
+        do {
+            return try CoreDataStore(model: .v1_0_0, persisted: false)
+        } catch {
+            preconditionFailure(error.localizedDescription)
+        }
     }()
     
     var store: (ServerPersistable & ServerQueryable) {
@@ -130,19 +134,19 @@ private extension XcodeServer.Integration.ID {
 
 extension CoreDataStore {
     var server1: XcodeServerCoreData.Server? {
-        let request = XcodeServerCoreData.Server.fetchRequest() as! NSFetchRequest<XcodeServerCoreData.Server>
+        let request: NSFetchRequest<XcodeServerCoreData.Server> = NSFetchRequest(entityName: XcodeServerCoreData.Server.entityName)
         request.predicate = NSPredicate(format: "%K == %@", #keyPath(XcodeServerCoreData.Server.fqdn), XcodeServer.Server.ID.server1)
         return try? persistentContainer.viewContext.fetch(request).first
     }
     
     var bot1: XcodeServerCoreData.Bot? {
-        let request = XcodeServerCoreData.Bot.fetchRequest() as! NSFetchRequest<XcodeServerCoreData.Bot>
+        let request: NSFetchRequest<XcodeServerCoreData.Bot> = NSFetchRequest(entityName: XcodeServerCoreData.Bot.entityName)
         request.predicate = NSPredicate(format: "%K == %@", #keyPath(XcodeServerCoreData.Bot.identifier), XcodeServer.Bot.ID.bot1)
         return try? persistentContainer.viewContext.fetch(request).first
     }
     
     var integration1: XcodeServerCoreData.Integration? {
-        let request = XcodeServerCoreData.Integration.fetchRequest() as! NSFetchRequest<XcodeServerCoreData.Integration>
+        let request: NSFetchRequest<XcodeServerCoreData.Integration> = NSFetchRequest(entityName: XcodeServerCoreData.Integration.entityName)
         request.predicate = NSPredicate(format: "%K == %@", #keyPath(XcodeServerCoreData.Integration.identifier), XcodeServer.Integration.ID.integration1)
         return try? persistentContainer.viewContext.fetch(request).first
     }

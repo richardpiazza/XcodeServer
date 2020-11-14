@@ -803,5 +803,4 @@ class Model_1_0_0: NSManagedObjectModel {
         fatalError("init(coder:) has not been implemented")
     }
 }
-
 #endif

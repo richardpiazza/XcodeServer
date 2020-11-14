@@ -4,7 +4,7 @@ import Foundation
 
 public extension XcodeServer.Bot {
     init(_ bot: XcodeServerCoreData.Bot) {
-        self.init(id: bot.identifier)
+        self.init(id: bot.identifier ?? "")
         modified = bot.lastUpdate ?? Date()
         name = bot.name ?? ""
         nextIntegrationNumber = Int(bot.integrationCounter)
@@ -17,7 +17,7 @@ public extension XcodeServer.Bot {
         if let stats = bot.stats {
             self.stats = Stats(stats)
         }
-        if let integrations = bot.integrations {
+        if let integrations = bot.integrations as? Set<XcodeServerCoreData.Integration> {
             self.integrations = Set(integrations.map { XcodeServer.Integration($0) })
         }
     }
@@ -48,7 +48,7 @@ public extension XcodeServer.Bot.Configuration {
         if let specification = configuration.deviceSpecification {
             deviceSpecification = XcodeServer.Device.Specification(specification)
         }
-        if let triggers = configuration.triggers {
+        if let triggers = configuration.triggers as? Set<XcodeServerCoreData.Trigger> {
             self.triggers = triggers.map { XcodeServer.Trigger($0) }
         }
     }
