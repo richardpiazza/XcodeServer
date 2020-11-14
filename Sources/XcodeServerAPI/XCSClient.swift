@@ -131,27 +131,27 @@ public class XCSClient {
     }
     
     /// Convenience method for generating and executing a request using the `GET` http method.
-    public func get(_ path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping DataTaskCompletion) {
+    public func getPath(_ path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping DataTaskCompletion) {
         completion(0, nil, nil, Error.notImplemented)
     }
     
     /// Convenience method for generating and executing a request using the `PUT` http method.
-    public func put(_ data: Data?, path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping DataTaskCompletion) {
+    public func putData(_ data: Data?, path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping DataTaskCompletion) {
         completion(0, nil, nil, Error.notImplemented)
     }
     
     /// Convenience method for generating and executing a request using the `POST` http method.
-    public func post(_ data: Data?, path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping DataTaskCompletion) {
+    public func postData(_ data: Data?, path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping DataTaskCompletion) {
         completion(0, nil, nil, Error.notImplemented)
     }
     
     /// Convenience method for generating and executing a request using the `PATCH` http method.
-    public func patch(_ data: Data?, path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping DataTaskCompletion) {
+    public func patchData(_ data: Data?, path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping DataTaskCompletion) {
         completion(0, nil, nil, Error.notImplemented)
     }
     
     /// Convenience method for generating and executing a request using the `DELETE` http method.
-    public func delete(_ path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping DataTaskCompletion) {
+    public func deletePath(_ path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping DataTaskCompletion) {
         completion(0, nil, nil, Error.notImplemented)
     }
     
@@ -178,13 +178,13 @@ public class XCSClient {
         }
     }
     
-    public func get<D: Decodable>(_ path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping CodableTaskCompletion<D>) {
-        self.get(path, queryItems: queryItems) { (statusCode, headers, data: Data?, error) in
+    public func getPath<D: Decodable>(_ path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping CodableTaskCompletion<D>) {
+        self.getPath(path, queryItems: queryItems) { (statusCode, headers, data: Data?, error) in
             self.decode(statusCode: statusCode, headers: headers, data: data, error: error, completion: completion)
         }
     }
     
-    public func put<E: Encodable, D: Decodable>(_ encodable: E?, path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping CodableTaskCompletion<D>) {
+    public func putData<E: Encodable, D: Decodable>(_ encodable: E?, path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping CodableTaskCompletion<D>) {
         var data: Data? = nil
         do {
             data = try self.encode(encodable)
@@ -193,12 +193,12 @@ public class XCSClient {
             return
         }
         
-        self.put(data, path: path, queryItems: queryItems) { (statusCode, headers, data: Data?, error) in
+        self.putData(data, path: path, queryItems: queryItems) { (statusCode, headers, data: Data?, error) in
             self.decode(statusCode: statusCode, headers: headers, data: data, error: error, completion: completion)
         }
     }
     
-    public func post<E: Encodable, D: Decodable>(_ encodable: E?, path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping CodableTaskCompletion<D>) {
+    public func postData<E: Encodable, D: Decodable>(_ encodable: E?, path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping CodableTaskCompletion<D>) {
         var data: Data? = nil
         do {
             data = try self.encode(encodable)
@@ -207,18 +207,18 @@ public class XCSClient {
             return
         }
         
-        self.post(data, path: path, queryItems: queryItems) { (statusCode, headers, data: Data?, error) in
+        self.postData(data, path: path, queryItems: queryItems) { (statusCode, headers, data: Data?, error) in
             self.decode(statusCode: statusCode, headers: headers, data: data, error: error, completion: completion)
         }
     }
     
-    public func post<D: Decodable>(_ data: Data?, path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping CodableTaskCompletion<D>) {
-        self.post(data, path: path, queryItems: queryItems) { (statusCode, headers, data: Data?, error) in
+    public func postData<D: Decodable>(_ data: Data?, path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping CodableTaskCompletion<D>) {
+        self.postData(data, path: path, queryItems: queryItems) { (statusCode, headers, data: Data?, error) in
             self.decode(statusCode: statusCode, headers: headers, data: data, error: error, completion: completion)
         }
     }
     
-    public func patch<E: Encodable, D: Decodable>(_ encodable: E?, path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping CodableTaskCompletion<D>) {
+    public func patchData<E: Encodable, D: Decodable>(_ encodable: E?, path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping CodableTaskCompletion<D>) {
         var data: Data? = nil
         do {
             data = try self.encode(encodable)
@@ -227,13 +227,13 @@ public class XCSClient {
             return
         }
         
-        self.patch(data, path: path, queryItems: queryItems) { (statusCode, headers, data: Data?, error) in
+        self.patchData(data, path: path, queryItems: queryItems) { (statusCode, headers, data: Data?, error) in
             self.decode(statusCode: statusCode, headers: headers, data: data, error: error, completion: completion)
         }
     }
     
-    public func delete<D: Decodable>(_ path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping CodableTaskCompletion<D>) {
-        self.delete(path, queryItems: queryItems) { (statusCode, headers, data: Data?, error) in
+    public func deletePath<D: Decodable>(_ path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping CodableTaskCompletion<D>) {
+        self.deletePath(path, queryItems: queryItems) { (statusCode, headers, data: Data?, error) in
             self.decode(statusCode: statusCode, headers: headers, data: data, error: error, completion: completion)
         }
     }
@@ -243,7 +243,7 @@ public class XCSClient {
 public extension XCSClient {
     /// Requests the '`/ping`' endpoint from the Xcode Server API.
     func ping(_ completion: @escaping (Result<Void, Error>) -> Void) {
-        get("ping") { (statusCode, headers, data: Data?, error) in
+        getPath("ping") { (statusCode, headers, data: Data?, error) in
             guard statusCode == 204 else {
                 completion(.failure(Error.xcodeServer))
                 return
@@ -254,7 +254,7 @@ public extension XCSClient {
     }
     
     func versions(_ completion: @escaping (Result<(XCSVersion, Int?), Error>) -> Void) {
-        get("versions") { (statusCode, headers, data: XCSVersion?, error) in
+        getPath("versions") { (statusCode, headers, data: XCSVersion?, error) in
             guard statusCode != 401 else {
                 completion(.failure(Error.authorization))
                 return
@@ -292,21 +292,21 @@ public extension XCSClient {
             public var results: [XCSBot]
         }
         
-        get("bots") { (statusCode, headers, data: Response?, error) in
+        getPath("bots") { (statusCode, headers, data: Response?, error) in
             completion(self.serverResult(statusCode, headers, data: data?.results, error))
         }
     }
     
     /// Requests the '`/bots/{id}`' endpoint from the Xcode Server API.
     func bot(withIdentifier identifier: String, completion: @escaping (Result<XCSBot, Error>) -> Void) {
-        get("bots/\(identifier)") { (statusCode, headers, data: XCSBot?, error) in
+        getPath("bots/\(identifier)") { (statusCode, headers, data: XCSBot?, error) in
             completion(self.serverResult(statusCode, headers, data: data, error))
         }
     }
     
     /// Requests the '`/bots/{id}/stats`' endpoint from the Xcode Server API.
     func stats(forBotWithIdentifier identifier: String, completion: @escaping (Result<XCSStats, Error>) -> Void) {
-        get("bots/\(identifier)/stats") { (statusCode, headers, data: XCSStats?, error) in
+        getPath("bots/\(identifier)/stats") { (statusCode, headers, data: XCSStats?, error) in
             completion(self.serverResult(statusCode, headers, data: data, error))
         }
     }
@@ -321,7 +321,7 @@ public extension XCSClient {
             public var results: [XCSIntegration]
         }
         
-        get("integrations") { (statusCode, headers, data: Response?, error) in
+        getPath("integrations") { (statusCode, headers, data: Response?, error) in
             completion(self.serverResult(statusCode, headers, data: data?.results, error))
         }
     }
@@ -333,21 +333,21 @@ public extension XCSClient {
             public var results: [XCSIntegration]
         }
         
-        get("bots/\(identifier)/integrations") { (statusCode, headers, data: Response?, error) in
+        getPath("bots/\(identifier)/integrations") { (statusCode, headers, data: Response?, error) in
             completion(self.serverResult(statusCode, headers, data: data?.results, error))
         }
     }
     
     /// Posts a request to the '`/bots/{id}`' endpoint from the Xcode Server API.
     func runIntegration(forBotWithIdentifier identifier: String, completion: @escaping (Result<XCSIntegration, Error>) -> Void) {
-        post(nil, path: "bots/\(identifier)/integrations") { (statusCode, headers, data: XCSIntegration?, error) in
+        postData(nil, path: "bots/\(identifier)/integrations") { (statusCode, headers, data: XCSIntegration?, error) in
             completion(self.serverResult(statusCode, headers, data: data, error))
         }
     }
     
     /// Requests the '`/integrations/{id}`' endpoint from the Xcode Server API.
     func integration(withIdentifier identifier: String, completion: @escaping (Result<XCSIntegration, Error>) -> Void) {
-        get("integrations/\(identifier)") { (statusCode, headers, data: XCSIntegration?, error) in
+        getPath("integrations/\(identifier)") { (statusCode, headers, data: XCSIntegration?, error) in
             completion(self.serverResult(statusCode, headers, data: data, error))
         }
     }
@@ -362,7 +362,7 @@ public extension XCSClient {
             public var results: [XCSCommit]
         }
         
-        get("integrations/\(identifier)/commits") { (statusCode, headers, data: Response?, error) in
+        getPath("integrations/\(identifier)/commits") { (statusCode, headers, data: Response?, error) in
             completion(self.serverResult(statusCode, headers, data: data?.results, error))
         }
     }
@@ -372,7 +372,7 @@ public extension XCSClient {
 public extension XCSClient {
     /// Requests the '`/integrations/{id}/issues`' endpoint from the Xcode Server API.
     func issues(forIntegrationWithIdentifier identifier: String, completion: @escaping (Result<XCSIssues, Error>) -> Void) {
-        get("integrations/\(identifier)/issues") { (statusCode, headers, data: XCSIssues?, error) in
+        getPath("integrations/\(identifier)/issues") { (statusCode, headers, data: XCSIssues?, error) in
             completion(self.serverResult(statusCode, headers, data: data, error))
         }
     }
@@ -383,7 +383,7 @@ public extension XCSClient {
     
     /// Requests the '`/integrations/{id}/coverage`' endpoint from the Xcode Server API.
     func coverage(forIntegrationWithIdentifier identifier: String, completion: @escaping (Result<XCSCoverageHierarchy?, Swift.Error>) -> Void) {
-        get("integrations/\(identifier)/coverage") { (statusCode, headers, data: Data?, error) in
+        getPath("integrations/\(identifier)/coverage") { (statusCode, headers, data: Data?, error) in
             guard statusCode != 401 else {
                 completion(.failure(Error.authorization))
                 return
@@ -432,7 +432,7 @@ public extension XCSClient {
     /// Requests the '`/integrations/{id}/assets`' endpoint from the Xcode Server API.
     /// This `.tar` file will contain all of the integration logs, test summaries, and IPA.
     func archive(forIntegrationWithIdentifier identifier: String, completion: @escaping (Result<(String, Data), Error>) -> Void) {
-        get("integrations/\(identifier)/assets") { (statusCode, headers, data: Data?, error) in
+        getPath("integrations/\(identifier)/assets") { (statusCode, headers, data: Data?, error) in
             guard statusCode != 401 else {
                 completion(.failure(Error.authorization))
                 return

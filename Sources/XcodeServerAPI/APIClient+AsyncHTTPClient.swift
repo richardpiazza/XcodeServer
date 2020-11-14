@@ -1,4 +1,4 @@
-#if canImport(AsyncHTTPClient)
+#if !canImport(ObjectiveC) && canImport(AsyncHTTPClient)
 import Foundation
 import Dispatch
 import AsyncHTTPClient
@@ -67,7 +67,7 @@ public class APIClient: XCSClient {
         return try HTTPClient.Request(url: url, method: method, headers: headers, body: body)
     }
     
-    public override func get(_ path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping DataTaskCompletion) {
+    public override func getPath(_ path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping DataTaskCompletion) {
         do {
             let request = try self.request(method: .GET, path: path, queryItems: queryItems, data: nil)
             client.execute(request: request).whenComplete { (result) in
@@ -91,7 +91,7 @@ public class APIClient: XCSClient {
         }
     }
     
-    public override func put(_ data: Data?, path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping DataTaskCompletion) {
+    public override func putData(_ data: Data?, path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping DataTaskCompletion) {
         do {
             let request = try self.request(method: .PUT, path: path, queryItems: queryItems, data: data)
             client.execute(request: request).whenComplete { (result) in
@@ -115,7 +115,7 @@ public class APIClient: XCSClient {
         }
     }
     
-    public override func post(_ data: Data?, path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping DataTaskCompletion) {
+    public override func postData(_ data: Data?, path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping DataTaskCompletion) {
         do {
             let request = try self.request(method: .POST, path: path, queryItems: queryItems, data: data)
             client.execute(request: request).whenComplete { (result) in
@@ -139,7 +139,7 @@ public class APIClient: XCSClient {
         }
     }
     
-    public override func patch(_ data: Data?, path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping DataTaskCompletion) {
+    public override func patchData(_ data: Data?, path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping DataTaskCompletion) {
         do {
             let request = try self.request(method: .PATCH, path: path, queryItems: queryItems, data: data)
             client.execute(request: request).whenComplete { (result) in
@@ -163,7 +163,7 @@ public class APIClient: XCSClient {
         }
     }
     
-    public override func delete(_ path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping DataTaskCompletion) {
+    public override func deletePath(_ path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping DataTaskCompletion) {
         do {
             let request = try self.request(method: .DELETE, path: path, queryItems: queryItems, data: nil)
             client.execute(request: request).whenComplete { (result) in

@@ -1,4 +1,4 @@
-#if canImport(SessionPlus)
+#if canImport(ObjectiveC) && canImport(SessionPlus)
 import Foundation
 import SessionPlus
 
@@ -38,6 +38,36 @@ public class APIClient: XCSClient, HTTPClient, HTTPCodable {
         }
         
         return request
+    }
+    
+    public override func getPath(_ path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping XCSClient.DataTaskCompletion) {
+        self.get(path, queryItems: queryItems) { (statusCode, headers, data: Data?, error) in
+            completion(statusCode, headers as? [String: String], data, error)
+        }
+    }
+    
+    public override func putData(_ data: Data?, path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping XCSClient.DataTaskCompletion) {
+        self.put(data, path: path, queryItems: queryItems) { (statusCode, headers, data: Data?, error) in
+            completion(statusCode, headers as? [String: String], data, error)
+        }
+    }
+    
+    public override func postData(_ data: Data?, path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping XCSClient.DataTaskCompletion) {
+        self.post(data, path: path, queryItems: queryItems) { (statusCode, headers, data: Data?, error) in
+            completion(statusCode, headers as? [String: String], data, error)
+        }
+    }
+    
+    public override func patchData(_ data: Data?, path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping XCSClient.DataTaskCompletion) {
+        self.patch(data, path: path, queryItems: queryItems) { (statusCode, headers, data: Data?, error) in
+            completion(statusCode, headers as? [String: String], data, error)
+        }
+    }
+    
+    public override func deletePath(_ path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping XCSClient.DataTaskCompletion) {
+        self.delete(path, queryItems: queryItems) { (statusCode, headers, data: Data?, error) in
+            completion(statusCode, headers as? [String: String], data, error)
+        }
     }
 }
 #endif

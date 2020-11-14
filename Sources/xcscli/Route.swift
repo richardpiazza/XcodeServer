@@ -1,11 +1,13 @@
 import Foundation
 import ArgumentParser
+import XcodeServer
 import XcodeServerAPI
 
 protocol Route: CredentialDelegate {
     var server: String { get set }
     var username: String? { get set }
     var password: String? { get set }
+    var logLevel: InternalLog.Level { get set }
 }
 
 extension Route {
@@ -17,6 +19,13 @@ extension Route {
         guard let _ = URL(string: server) else {
             throw ValidationError("Malformed Hostname: '\(server)'")
         }
+    }
+    
+    func configureLog() {
+        InternalLog.apiClient.minimumConsoleLevel = logLevel
+        InternalLog.coreData.minimumConsoleLevel = logLevel
+        InternalLog.procedures.minimumConsoleLevel = logLevel
+        InternalLog.utility.minimumConsoleLevel = logLevel
     }
     
     // MARK: - APIClientAuthorizationDelegate

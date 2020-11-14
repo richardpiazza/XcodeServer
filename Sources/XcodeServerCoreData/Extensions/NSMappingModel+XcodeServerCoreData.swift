@@ -10,7 +10,12 @@ extension NSMappingModel {
     /// instance: "MappingModel_1.0.0_1.1.0".
     static func make(from: Model, to: Model) -> NSMappingModel? {
         let resource = "MappingModel_\(from.rawValue)_\(to.rawValue)"
-        guard let url = Bundle.module.url(forResource: resource, withExtension: .cdm) else {
+        let url: URL
+        if let _url = Bundle.module.url(forResource: resource, withExtension: .cdm) {
+            url = _url
+        } else if let _url = Bundle.module.url(forResource: resource, withExtension: "\(String.cdm)\(String.precompiled)") {
+            url = _url
+        } else {
             return nil
         }
         

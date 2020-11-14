@@ -39,11 +39,16 @@ final class Bots: ParsableCommand, Route {
     @Option(help: "Specified the additional path component for the Bot. [stats | integrations | run]")
     var path: Path?
     
+    @Option(help: "The minimum output log level.")
+    var logLevel: InternalLog.Level = .warn
+    
     func validate() throws {
         try validateServer()
     }
     
     func run() throws {
+        configureLog()
+        
         let client = try APIClient(fqdn: server, credentialDelegate: self)
         switch (id) {
         case .some(let id) where path == .some(.stats):

@@ -34,7 +34,12 @@ internal extension NSManagedObjectModel {
     ///
     /// Ensure `Model.current` matches expected version.
     static var xcodeServer: NSManagedObjectModel? = {
-        guard let url = Bundle.module.url(forResource: .containerName, withExtension: .momd) else {
+        let url: URL
+        if let _url = Bundle.module.url(forResource: .containerName, withExtension: .momd) {
+            url = _url
+        } else if let _url = Bundle.module.url(forResource: .containerName, withExtension: "\(String.momd)\(String.precompiled)") {
+            url = _url
+        } else {
             return nil
         }
         

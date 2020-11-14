@@ -14,4 +14,6 @@ internal extension String {
     static let cdm: String = "cdm"
     /// Extension for processed/compiled `NSManagedObjectModel`s.
     static let momd: String = "momd"
+    /// Suffix appended to Copy resources
+    static let precompiled: String = "_precompiled"
 }

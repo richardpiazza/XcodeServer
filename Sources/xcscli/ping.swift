@@ -27,11 +27,16 @@ final class Ping: ParsableCommand, Route {
     @Option(help: "Password credential for the Xcode Server. (Optional).")
     var password: String?
     
+    @Option(help: "The minimum output log level.")
+    var logLevel: InternalLog.Level = .warn
+    
     func validate() throws {
         try validateServer()
     }
     
     func run() throws {
+        configureLog()
+        
         let client = try APIClient(fqdn: server, credentialDelegate: self)
         client.ping { (result) in
             switch result {

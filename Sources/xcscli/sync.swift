@@ -46,14 +46,11 @@ final class Sync: ParsableCommand, Route {
     }
     
     func run() throws {
+        configureLog()
+        
         if purge {
             try FileManager.default.purgeDefaultStore()
         }
-        
-        InternalLog.apiClient.minimumConsoleLevel = logLevel
-        InternalLog.coreData.minimumConsoleLevel = logLevel
-        InternalLog.procedures.minimumConsoleLevel = logLevel
-        InternalLog.utility.minimumConsoleLevel = logLevel
         
         let _model = model ?? Model.current
         let store = try CoreDataStore(model: _model)
