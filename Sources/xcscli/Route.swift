@@ -2,6 +2,9 @@ import Foundation
 import ArgumentParser
 import XcodeServer
 import XcodeServerAPI
+import XcodeServerCoreData
+import XcodeServerProcedures
+import XcodeServerUtility
 
 protocol Route: CredentialDelegate {
     var server: String { get set }

@@ -92,7 +92,4 @@ extension Sync: ManagerAuthorizationDelegate {
 extension Model: ExpressibleByArgument {
 }
 
-extension InternalLog.Level: ExpressibleByArgument {
-}
-
 #endif
