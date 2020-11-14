@@ -41,7 +41,7 @@ public class Manager {
             return client
         }
         
-        let client = try APIClient(fqdn: id, authorizationDelegate: self)
+        let client = try APIClient(fqdn: id, credentialDelegate: self)
         clients[id] = client
         return client
     }
@@ -612,7 +612,7 @@ public class Manager {
 
 @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 @available(swift, introduced: 5.1)
-extension Manager: APIClientAuthorizationDelegate {
+extension Manager: CredentialDelegate {
     public func credentials(for fqdn: String) -> (username: String, password: String)? {
         return authorizationDelegate?.credentialsForServer(withFQDN: fqdn)
     }

@@ -1,7 +1,7 @@
 import Dispatch
 import XcodeServer
 
-extension APIClient: SourceControlQueryable {
+extension XCSClient: SourceControlQueryable {
     public func getRemotes(queue: DispatchQueue?, completion: @escaping RemotesResultHandler) {
         InternalLog.apiClient.info("Retrieving ALL Remotes")
         let queue = queue ?? returnQueue
