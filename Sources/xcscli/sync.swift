@@ -3,9 +3,9 @@ import ArgumentParser
 import XcodeServer
 import XcodeServerAPI
 import XcodeServerUtility
-#if canImport(CoreData)
-import CoreData
 import XcodeServerCoreData
+import XcodeServerPersistence
+#if canImport(CoreData)
 
 @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 final class Sync: ParsableCommand, Route {
@@ -71,11 +71,11 @@ final class Sync: ParsableCommand, Route {
                 
                 let end = Date()
                 print("Sync Complete - \(end.timeIntervalSince(start)) Seconds")
-                if let path = store.persistentContainer.persistentStoreCoordinator.persistentStores.first?.url?.path {
+                if let path = store.path {
                     print("\(path)")
                 }
                 
-                store.persistentContainer.unload()
+                store.unload()
                 
                 Self.exit()
             }

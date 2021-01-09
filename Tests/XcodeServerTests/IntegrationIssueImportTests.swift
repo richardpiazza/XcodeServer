@@ -2,6 +2,7 @@ import XCTest
 @testable import XcodeServer
 @testable import XcodeServerAPI
 @testable import XcodeServerCoreData
+@testable import XcodeServerPersistence
 
 #if canImport(CoreData) && swift(>=5.3)
 final class IntegrationIssueImportTests: XCTestCase {

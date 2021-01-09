@@ -22,13 +22,17 @@ enum Migration {
     ///
     /// - returns The initial `Model` version that was replaced.
     @discardableResult
-    static func migrateStore(at storeURL: URL, to destination: Model) throws -> Model? {
+    static func migrateStore(
+        at storeURL: URL,
+        to destination: Model,
+        assistant: ModelAssistant
+    ) throws -> Model? {
         guard FileManager.default.fileExists(atPath: storeURL.path) else {
             // No store exists at the path
             return nil
         }
         
-        let destinationModel = NSManagedObjectModel.make(for: destination)
+        let destinationModel: NSManagedObjectModel = assistant.managedObjectModelFor(destination)
         
         let metadata = try NSPersistentStoreCoordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: storeURL, options: nil)
         if destinationModel.isConfiguration(withName: .configurationName, compatibleWithStoreMetadata: metadata) {
@@ -36,7 +40,7 @@ enum Migration {
             return nil
         }
         
-        guard let source = Model(compatibleWith: metadata) else {
+        guard let source = assistant.modelCompatibleWith(metadata) else {
             throw Error.unidentifiedSource
         }
         
@@ -44,16 +48,16 @@ enum Migration {
             throw Error.noMigrationPath
         }
         
-        let sourceModel = NSManagedObjectModel.make(for: source)
+        let sourceModel: NSManagedObjectModel = assistant.managedObjectModelFor(source)
         try checkpoint(storeAtURL: storeURL, model: sourceModel)
         
         let tempURL: URL = .temporaryStoreURL
         let storeType = NSSQLiteStoreType
         
-        let steps = try migrationSteps(from: source, to: destination)
+        let steps = try migrationSteps(from: source, to: destination, assistant: assistant)
         for step in steps {
-            let source = NSManagedObjectModel.make(for: step.source)
-            let destination = NSManagedObjectModel.make(for: step.destination)
+            let source: NSManagedObjectModel = assistant.managedObjectModelFor(step.source)
+            let destination: NSManagedObjectModel = assistant.managedObjectModelFor(step.destination)
             let manager = NSMigrationManager(sourceModel: source, destinationModel: destination)
             let coordinator = NSPersistentStoreCoordinator(managedObjectModel: .init())
             try manager.migrateStore(from: storeURL, sourceType: storeType, options: nil, with: step.mapping, toDestinationURL: tempURL, destinationType: storeType, destinationOptions: nil)
@@ -84,12 +88,12 @@ enum Migration {
         try coordinator.remove(store)
     }
     
-    static func migrationSteps(from: Model, to: Model) throws -> [Step] {
+    static func migrationSteps(from: Model, to: Model, assistant: ModelAssistant) throws -> [Step] {
         var steps: [Step] = []
         
         var current: Model = from
         while let next = current.nextVersion {
-            guard let mapping = NSMappingModel.make(from: current, to: next) else {
+            guard let mapping = assistant.mappingModelTo(next) else {
                 throw Error.mapping(source: current, destination: next)
             }
             
@@ -105,19 +109,4 @@ enum Migration {
         return steps
     }
 }
-
-extension Model {
-    init?(compatibleWith metadata: [String: Any]) {
-        for model in Model.allCases {
-            let managedModel = NSManagedObjectModel.make(for: model)
-            if managedModel.isConfiguration(withName: .configurationName, compatibleWithStoreMetadata: metadata) {
-                self = model
-                return
-            }
-        }
-        
-        return nil
-    }
-}
-
 #endif

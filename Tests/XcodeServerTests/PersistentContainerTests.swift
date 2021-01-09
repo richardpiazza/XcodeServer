@@ -1,6 +1,7 @@
 import XCTest
 @testable import XcodeServer
 @testable import XcodeServerCoreData
+import XcodeServerPersistence
 #if canImport(CoreData)
 import CoreData
 
@@ -23,7 +24,7 @@ final class PersistentContainerTests: XCTestCase {
         description.shouldInferMappingModelAutomatically = false
         description.shouldMigrateStoreAutomatically = false
         
-        let model = NSManagedObjectModel.make(for: .v1_0_0)
+        let model = Model.v1_0_0.managedObjectModel
         
         let container = NSPersistentContainer.init(name: .containerName, managedObjectModel: model)
         container.persistentStoreDescriptions = [description]
@@ -42,7 +43,7 @@ final class PersistentContainerTests: XCTestCase {
     
     func testEmptyStore_Model_1_0_0_Metadata() throws {
         #if swift(>=5.3)
-        let model = NSManagedObjectModel.make(for: .v1_0_0)
+        let model = Model.v1_0_0.managedObjectModel
         let url = try XCTUnwrap(Bundle.module.url(forResource: .model_1_0_0_empty, withExtension: .sqlite))
         let metadata = try NSPersistentStoreCoordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: url, options: nil)
         XCTAssertTrue(model.isConfiguration(withName: nil, compatibleWithStoreMetadata: metadata))
@@ -51,7 +52,7 @@ final class PersistentContainerTests: XCTestCase {
     
     func testFullStore_Model_1_0_0_Metadata() throws {
         #if swift(>=5.3)
-        let model = NSManagedObjectModel.make(for: .v1_0_0)
+        let model = Model.v1_0_0.managedObjectModel
         let url = try XCTUnwrap(Bundle.module.url(forResource: .model_1_0_0_populated, withExtension: .sqlite))
         let metadata = try NSPersistentStoreCoordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: url, options: nil)
         XCTAssertTrue(model.isConfiguration(withName: nil, compatibleWithStoreMetadata: metadata))
@@ -62,12 +63,12 @@ final class PersistentContainerTests: XCTestCase {
         #if swift(>=5.3)
         try FileManager.default.overwriteDefaultStore(withResource: .model_1_0_0_populated)
         let storeURL: URL = .storeURL
-        let storeModel: NSManagedObjectModel = .make(for: .v1_0_0)
+        let storeModel = Model.v1_0_0.managedObjectModel
         var metadata: [String: Any] = try NSPersistentStoreCoordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: storeURL, options: nil)
         XCTAssertTrue(storeModel.isConfiguration(withName: .configurationName, compatibleWithStoreMetadata: metadata))
         
         let model = Model.current
-        let objectModel: NSManagedObjectModel = .make(for: model)
+        let objectModel: NSManagedObjectModel = model.managedObjectModel
         let _ = try CoreDataStore(model: model)
         metadata = try NSPersistentStoreCoordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: storeURL, options: nil)
         XCTAssertTrue(objectModel.isConfiguration(withName: .configurationName, compatibleWithStoreMetadata: metadata))

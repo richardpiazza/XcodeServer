@@ -15,10 +15,19 @@ let package = Package(
         // Products define the executables and libraries produced by a package, and make them visible to other packages.
         .library(
             name: "XcodeServer",
-            targets: ["XcodeServer", "XcodeServerAPI", "XcodeServerCoreData", "XcodeServerProcedures", "XcodeServerUtility"]),
+            targets: [
+                "XcodeServer",
+                "XcodeServerAPI",
+                "XcodeServerCoreData",
+                "XcodeServerPersistence",
+                "XcodeServerProcedures",
+                "XcodeServerUtility"
+            ]
+        ),
         .executable(
             name: "xcscli",
-            targets: ["xcscli"]),
+            targets: ["xcscli"]
+        ),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -36,32 +45,67 @@ let package = Package(
             name: "xcscli",
             dependencies: [
                 "XcodeServerUtility",
+                "XcodeServerCoreData",
+                "XcodeServerPersistence",
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
-            ]),
+            ]
+        ),
         .target(
             name: "XcodeServer",
-            dependencies: []),
+            dependencies: []
+        ),
         .target(
             name: "XcodeServerAPI",
             dependencies: [
                 "SWCompression",
                 .product(name: "SessionPlus", package: "SessionPlus", condition: .when(platforms: [.macOS, .iOS, .tvOS, .watchOS])),
                 .product(name: "AsyncHTTPClient", package: "async-http-client", condition: .when(platforms: [.linux, .android, .windows])),
-            ]),
+            ]
+        ),
         .target(
             name: "XcodeServerCoreData",
-            dependencies: ["XcodeServer"],
-            resources: [.process("Resources")]),
+            dependencies: ["XcodeServer"]
+        ),
+        .target(
+            name: "XcodeServerModel_1_0_0",
+            dependencies: ["XcodeServer", "XcodeServerCoreData"],
+            resources: [.process("Resources")]
+        ),
+        .target(
+            name: "XcodeServerModel_1_1_0",
+            dependencies: ["XcodeServer", "XcodeServerCoreData"],
+            resources: [.process("Resources")]
+        ),
+        .target(
+            name: "XcodeServerPersistence",
+            dependencies: [
+                "XcodeServer",
+                "XcodeServerCoreData",
+                "XcodeServerModel_1_0_0",
+                "XcodeServerModel_1_1_0"
+            ]
+        ),
         .target(
             name: "XcodeServerProcedures",
-            dependencies: ["XcodeServer", "ProcedureKit"]),
+            dependencies: ["XcodeServer", "ProcedureKit"]
+        ),
         .target(
             name: "XcodeServerUtility",
-            dependencies: ["XcodeServer", "XcodeServerAPI", "XcodeServerCoreData", "XcodeServerProcedures"]),
+            dependencies: ["XcodeServer", "XcodeServerAPI", "XcodeServerProcedures"]
+        ),
         .testTarget(
             name: "XcodeServerTests",
-            dependencies: ["XcodeServer", "XcodeServerAPI", "XcodeServerCoreData", "XcodeServerUtility"],
-            resources: [.process("Resources")]),
+            dependencies: [
+                "XcodeServer",
+                "XcodeServerAPI",
+                "XcodeServerCoreData",
+                "XcodeServerModel_1_0_0",
+                "XcodeServerModel_1_1_0",
+                "XcodeServerPersistence",
+                "XcodeServerUtility"
+            ],
+            resources: [.process("Resources")]
+        ),
     ],
     swiftLanguageVersions: [.v5]
 )
