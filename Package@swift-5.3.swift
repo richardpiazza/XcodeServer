@@ -18,7 +18,6 @@ let package = Package(
             targets: [
                 "XcodeServer",
                 "XcodeServerAPI",
-                "XcodeServerCoreData",
                 "XcodeServerPersistence",
                 "XcodeServerProcedures",
                 "XcodeServerUtility"
@@ -45,7 +44,6 @@ let package = Package(
             name: "xcscli",
             dependencies: [
                 "XcodeServerUtility",
-                "XcodeServerCoreData",
                 "XcodeServerPersistence",
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
             ]
