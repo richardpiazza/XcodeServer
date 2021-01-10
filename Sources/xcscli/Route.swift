@@ -2,9 +2,6 @@ import Foundation
 import ArgumentParser
 import XcodeServer
 import XcodeServerAPI
-import XcodeServerCoreData
-import XcodeServerProcedures
-import XcodeServerUtility
 
 protocol Route: CredentialDelegate {
     var server: String { get set }
@@ -25,9 +22,9 @@ extension Route {
     }
     
     func configureLog() {
-        InternalLog.apiClient.minimumConsoleLevel = logLevel
-        InternalLog.coreData.minimumConsoleLevel = logLevel
-        InternalLog.procedures.minimumConsoleLevel = logLevel
+        InternalLog.api.minimumConsoleLevel = logLevel
+        InternalLog.persistence.minimumConsoleLevel = logLevel
+        InternalLog.operations.minimumConsoleLevel = logLevel
         InternalLog.utility.minimumConsoleLevel = logLevel
     }
     
