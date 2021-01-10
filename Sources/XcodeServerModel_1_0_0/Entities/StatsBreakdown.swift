@@ -5,34 +5,34 @@ import Foundation
 import CoreData
 
 //@objc(StatsBreakdown)
-public class StatsBreakdown: NSManagedObject {
+class StatsBreakdown: NSManagedObject {
 
 }
 
 extension StatsBreakdown {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<StatsBreakdown> {
+    @nonobjc class func fetchRequest() -> NSFetchRequest<StatsBreakdown> {
         return NSFetchRequest<StatsBreakdown>(entityName: "StatsBreakdown")
     }
 
-    @NSManaged public var avg: Double
-    @NSManaged public var count: Int32
-    @NSManaged public var max: Double
-    @NSManaged public var min: Double
-    @NSManaged public var stdDev: Double
-    @NSManaged public var sum: Double
-    @NSManaged public var inverseAnalysisWarnings: Stats?
-    @NSManaged public var inverseAverageIntegrationTime: Stats?
-    @NSManaged public var inverseErrors: Stats?
-    @NSManaged public var inverseImprovedPerfTests: Stats?
-    @NSManaged public var inverseRegressedPerfTests: Stats?
-    @NSManaged public var inverseTestFailures: Stats?
-    @NSManaged public var inverseTests: Stats?
-    @NSManaged public var inverseWarnings: Stats?
+    @NSManaged var avg: Double
+    @NSManaged var count: Int32
+    @NSManaged var max: Double
+    @NSManaged var min: Double
+    @NSManaged var stdDev: Double
+    @NSManaged var sum: Double
+    @NSManaged var inverseAnalysisWarnings: Stats?
+    @NSManaged var inverseAverageIntegrationTime: Stats?
+    @NSManaged var inverseErrors: Stats?
+    @NSManaged var inverseImprovedPerfTests: Stats?
+    @NSManaged var inverseRegressedPerfTests: Stats?
+    @NSManaged var inverseTestFailures: Stats?
+    @NSManaged var inverseTests: Stats?
+    @NSManaged var inverseWarnings: Stats?
 
 }
 
-public extension StatsBreakdown {
+extension StatsBreakdown {
    func update(_ analysis: XcodeServer.Bot.Stats.Analysis) {
         avg = analysis.average
         count = Int32(analysis.count)
@@ -43,7 +43,7 @@ public extension StatsBreakdown {
     }
 }
 
-public extension XcodeServer.Bot.Stats.Analysis {
+extension XcodeServer.Bot.Stats.Analysis {
     init(_ breakdown: StatsBreakdown) {
         self.init()
         count = Int(breakdown.count)

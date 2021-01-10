@@ -5,26 +5,26 @@ import Foundation
 import CoreData
 
 //@objc(Repository)
-public class Repository: NSManagedObject {
+class Repository: NSManagedObject {
 
 }
 
 extension Repository {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Repository> {
+    @nonobjc class func fetchRequest() -> NSFetchRequest<Repository> {
         return NSFetchRequest<Repository>(entityName: "Repository")
     }
 
-    @NSManaged public var branchIdentifier: String?
-    @NSManaged public var branchOptions: Int16
-    @NSManaged public var identifier: String?
-    @NSManaged public var locationType: String?
-    @NSManaged public var system: String?
-    @NSManaged public var url: String?
-    @NSManaged public var workingCopyPath: String?
-    @NSManaged public var workingCopyState: Int32
-    @NSManaged public var commits: NSSet?
-    @NSManaged public var configurations: NSSet?
+    @NSManaged var branchIdentifier: String?
+    @NSManaged var branchOptions: Int16
+    @NSManaged var identifier: String?
+    @NSManaged var locationType: String?
+    @NSManaged var system: String?
+    @NSManaged var url: String?
+    @NSManaged var workingCopyPath: String?
+    @NSManaged var workingCopyState: Int32
+    @NSManaged var commits: NSSet?
+    @NSManaged var configurations: NSSet?
 
 }
 
@@ -62,7 +62,7 @@ extension Repository {
 
 }
 
-public extension Repository {
+extension Repository {
     /// Retrieves all `Repository` entities from the Core Data `NSManagedObjectContext`
     static func repositories(in context: NSManagedObjectContext) -> [Repository] {
         let request = NSFetchRequest<Repository>(entityName: entityName)
@@ -90,7 +90,7 @@ public extension Repository {
     }
 }
 
-public extension Repository {
+extension Repository {
     func update(_ remote: SourceControl.Remote, context: NSManagedObjectContext) {
         identifier = remote.id
         system = remote.system
@@ -134,7 +134,7 @@ public extension Repository {
     }
 }
 
-public extension SourceControl.Remote {
+extension SourceControl.Remote {
     init(_ repository: Repository) {
         self.init(id: repository.identifier ?? "")
         system = repository.system ?? ""
@@ -146,7 +146,7 @@ public extension SourceControl.Remote {
     }
 }
 
-public extension SourceControl.Location {
+extension SourceControl.Location {
     init(_ repository: Repository) {
         self.init(id: repository.branchIdentifier ?? "")
         branchOptions = Int(repository.branchOptions)

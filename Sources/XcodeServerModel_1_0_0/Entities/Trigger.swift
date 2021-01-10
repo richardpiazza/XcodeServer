@@ -5,27 +5,27 @@ import Foundation
 import CoreData
 
 //@objc(Trigger)
-public class Trigger: NSManagedObject {
+class Trigger: NSManagedObject {
 
 }
 
 extension Trigger {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Trigger> {
+    @nonobjc class func fetchRequest() -> NSFetchRequest<Trigger> {
         return NSFetchRequest<Trigger>(entityName: "Trigger")
     }
 
-    @NSManaged public var name: String?
-    @NSManaged public var phaseRawValue: Int16
-    @NSManaged public var scriptBody: String?
-    @NSManaged public var typeRawValue: Int16
-    @NSManaged public var conditions: Conditions?
-    @NSManaged public var configuration: Configuration?
-    @NSManaged public var emailConfiguration: EmailConfiguration?
+    @NSManaged var name: String?
+    @NSManaged var phaseRawValue: Int16
+    @NSManaged var scriptBody: String?
+    @NSManaged var typeRawValue: Int16
+    @NSManaged var conditions: Conditions?
+    @NSManaged var configuration: Configuration?
+    @NSManaged var emailConfiguration: EmailConfiguration?
 
 }
 
-public extension Trigger {
+extension Trigger {
     var phase: XcodeServer.Trigger.Phase {
         get {
             return XcodeServer.Trigger.Phase(rawValue: Int(phaseRawValue)) ?? .beforeIntegration
@@ -45,7 +45,7 @@ public extension Trigger {
     }
 }
 
-public extension Trigger {
+extension Trigger {
     func update(_ trigger: XcodeServer.Trigger, context: NSManagedObjectContext) {
         if conditions == nil {
             conditions = context.make()
@@ -63,7 +63,7 @@ public extension Trigger {
     }
 }
 
-public extension XcodeServer.Trigger {
+extension XcodeServer.Trigger {
     init(_ trigger: Trigger) {
         self.init()
         name = trigger.name ?? ""

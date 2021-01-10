@@ -5,35 +5,35 @@ import Foundation
 import CoreData
 
 //@objc(BuildResultSummary)
-public class BuildResultSummary: NSManagedObject {
+class BuildResultSummary: NSManagedObject {
 
 }
 
 extension BuildResultSummary {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<BuildResultSummary> {
+    @nonobjc class func fetchRequest() -> NSFetchRequest<BuildResultSummary> {
         return NSFetchRequest<BuildResultSummary>(entityName: "BuildResultSummary")
     }
 
-    @NSManaged public var analyzerWarningChange: Int32
-    @NSManaged public var analyzerWarningCount: Int32
-    @NSManaged public var codeCoveragePercentage: Int32
-    @NSManaged public var codeCoveragePercentageDelta: Int32
-    @NSManaged public var errorChange: Int32
-    @NSManaged public var errorCount: Int32
-    @NSManaged public var improvedPerfTestCount: Int32
-    @NSManaged public var regressedPerfTestCount: Int32
-    @NSManaged public var testFailureChange: Int32
-    @NSManaged public var testFailureCount: Int32
-    @NSManaged public var testsChange: Int32
-    @NSManaged public var testsCount: Int32
-    @NSManaged public var warningChange: Int32
-    @NSManaged public var warningCount: Int32
-    @NSManaged public var integration: Integration?
+    @NSManaged var analyzerWarningChange: Int32
+    @NSManaged var analyzerWarningCount: Int32
+    @NSManaged var codeCoveragePercentage: Int32
+    @NSManaged var codeCoveragePercentageDelta: Int32
+    @NSManaged var errorChange: Int32
+    @NSManaged var errorCount: Int32
+    @NSManaged var improvedPerfTestCount: Int32
+    @NSManaged var regressedPerfTestCount: Int32
+    @NSManaged var testFailureChange: Int32
+    @NSManaged var testFailureCount: Int32
+    @NSManaged var testsChange: Int32
+    @NSManaged var testsCount: Int32
+    @NSManaged var warningChange: Int32
+    @NSManaged var warningCount: Int32
+    @NSManaged var integration: Integration?
 
 }
 
-public extension BuildResultSummary {
+extension BuildResultSummary {
     func update(_ summary: XcodeServer.Integration.BuildSummary) {
         errorCount = Int32(summary.errorCount)
         errorChange = Int32(summary.errorChange)
@@ -50,7 +50,7 @@ public extension BuildResultSummary {
     }
 }
 
-public extension XcodeServer.Integration.BuildSummary {
+extension XcodeServer.Integration.BuildSummary {
     init(_ summary: BuildResultSummary) {
         self.init()
         errorCount = Int(summary.errorCount)

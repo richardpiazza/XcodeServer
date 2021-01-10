@@ -5,24 +5,24 @@ import Foundation
 import CoreData
 
 //@objc(Server)
-public class Server: NSManagedObject {
+class Server: NSManagedObject {
 
 }
 
 extension Server {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Server> {
+    @nonobjc class func fetchRequest() -> NSFetchRequest<Server> {
         return NSFetchRequest<Server>(entityName: "Server")
     }
 
-    @NSManaged public var apiVersion: Int32
-    @NSManaged public var fqdn: String?
-    @NSManaged public var lastUpdate: Date?
-    @NSManaged public var os: String?
-    @NSManaged public var server: String?
-    @NSManaged public var xcode: String?
-    @NSManaged public var xcodeServer: String?
-    @NSManaged public var bots: NSSet?
+    @NSManaged var apiVersion: Int32
+    @NSManaged var fqdn: String?
+    @NSManaged var lastUpdate: Date?
+    @NSManaged var os: String?
+    @NSManaged var server: String?
+    @NSManaged var xcode: String?
+    @NSManaged var xcodeServer: String?
+    @NSManaged var bots: NSSet?
 
 }
 
@@ -43,7 +43,7 @@ extension Server {
 
 }
 
-public extension Server {
+extension Server {
     /// Retrieves all `Server` entities from the Core Data `NSManagedObjectContext`
     static func servers(in context: NSManagedObjectContext) -> [Server] {
         let request = NSFetchRequest<Server>(entityName: entityName)
@@ -82,7 +82,7 @@ public extension Server {
     }
 }
 
-public extension Server {
+extension Server {
     /// The root API URL for this `XcodeServer`.
     /// Apple by default requires the HTTPS scheme and port 20343.
     var apiURL: URL? {
@@ -90,7 +90,7 @@ public extension Server {
     }
 }
 
-public extension Server {
+extension Server {
     /// Update the `Server`, creating relationships as needed.
     ///
     /// - parameter server: The entity with attributes to use for updates.
@@ -132,7 +132,7 @@ public extension Server {
     }
 }
 
-public extension XcodeServer.Server {
+extension XcodeServer.Server {
     /// Map `XcodeServerCoreData.Server` to `XcodeServe.Server`.
     ///
     /// - parameter server: The managed entity to transform.
@@ -146,7 +146,7 @@ public extension XcodeServer.Server {
     }
 }
 
-public extension XcodeServer.Server.Version {
+extension XcodeServer.Server.Version {
     init(_ server: Server) {
         self.init()
         api = XcodeServer.Server.API(rawValue: Int(server.apiVersion)) ?? .v19

@@ -5,40 +5,40 @@ import Foundation
 import CoreData
 
 //@objc(Integration)
-public class Integration: NSManagedObject {
+class Integration: NSManagedObject {
 
 }
 
 extension Integration {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Integration> {
+    @nonobjc class func fetchRequest() -> NSFetchRequest<Integration> {
         return NSFetchRequest<Integration>(entityName: "Integration")
     }
 
-    @NSManaged public var currentStepRawValue: String?
-    @NSManaged public var duration: Double
-    @NSManaged public var endedTime: Date?
-    @NSManaged public var hasRetrievedAssets: Bool
-    @NSManaged public var hasRetrievedCommits: Bool
-    @NSManaged public var hasRetrievedIssues: Bool
-    @NSManaged public var identifier: String?
-    @NSManaged public var lastUpdate: Date?
-    @NSManaged public var number: Int32
-    @NSManaged public var queuedDate: Date?
-    @NSManaged public var resultRawValue: String?
-    @NSManaged public var revision: String?
-    @NSManaged public var shouldClean: Bool
-    @NSManaged public var startedTime: Date?
-    @NSManaged public var successStreak: Int32
-    @NSManaged public var testHierarchyData: Data?
-    @NSManaged public var assets: IntegrationAssets?
-    @NSManaged public var bot: Bot?
-    @NSManaged public var buildResultSummary: BuildResultSummary?
-    @NSManaged public var inverseBestSuccessStreak: Stats?
-    @NSManaged public var inverseLastCleanIntegration: Stats?
-    @NSManaged public var issues: IntegrationIssues?
-    @NSManaged public var revisionBlueprints: NSSet?
-    @NSManaged public var testedDevices: NSSet?
+    @NSManaged var currentStepRawValue: String?
+    @NSManaged var duration: Double
+    @NSManaged var endedTime: Date?
+    @NSManaged var hasRetrievedAssets: Bool
+    @NSManaged var hasRetrievedCommits: Bool
+    @NSManaged var hasRetrievedIssues: Bool
+    @NSManaged var identifier: String?
+    @NSManaged var lastUpdate: Date?
+    @NSManaged var number: Int32
+    @NSManaged var queuedDate: Date?
+    @NSManaged var resultRawValue: String?
+    @NSManaged var revision: String?
+    @NSManaged var shouldClean: Bool
+    @NSManaged var startedTime: Date?
+    @NSManaged var successStreak: Int32
+    @NSManaged var testHierarchyData: Data?
+    @NSManaged var assets: IntegrationAssets?
+    @NSManaged var bot: Bot?
+    @NSManaged var buildResultSummary: BuildResultSummary?
+    @NSManaged var inverseBestSuccessStreak: Stats?
+    @NSManaged var inverseLastCleanIntegration: Stats?
+    @NSManaged var issues: IntegrationIssues?
+    @NSManaged var revisionBlueprints: NSSet?
+    @NSManaged var testedDevices: NSSet?
 
 }
 
@@ -76,7 +76,7 @@ extension Integration {
 
 }
 
-public extension Integration {
+extension Integration {
     /// Retrieves all `Integration` entities from the Core Data `NSManagedObjectContext`
     static func integrations(in context: NSManagedObjectContext) -> [Integration] {
         let request = NSFetchRequest<Integration>(entityName: entityName)
@@ -130,7 +130,7 @@ public extension Integration {
     }
 }
 
-public extension Integration {
+extension Integration {
     private static var jsonEncoder: JSONEncoder = JSONEncoder()
     private static var jsonDecoder: JSONDecoder = JSONDecoder()
     
@@ -222,7 +222,7 @@ public extension Integration {
     }
 }
 
-public extension Integration {
+extension Integration {
     func update(_ integration: XcodeServer.Integration, context: NSManagedObjectContext) {
         if assets == nil {
             InternalLog.coreData.debug("Creating INTEGRATION_ASSETS for Integration '\(integration.number)' [\(integration.id)]")
@@ -307,7 +307,7 @@ public extension Integration {
     }
 }
 
-public extension XcodeServer.Integration {
+extension XcodeServer.Integration {
     init(_ integration: Integration) {
         self.init(id: integration.identifier ?? "")
         number = Int(integration.number)

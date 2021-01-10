@@ -5,46 +5,46 @@ import Foundation
 import CoreData
 
 //@objc(Issue)
-public class Issue: NSManagedObject {
+class Issue: NSManagedObject {
 
 }
 
 extension Issue {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Issue> {
+    @nonobjc class func fetchRequest() -> NSFetchRequest<Issue> {
         return NSFetchRequest<Issue>(entityName: "Issue")
     }
 
-    @NSManaged public var age: Int32
-    @NSManaged public var documentFilePath: String?
-    @NSManaged public var documentLocationData: String?
-    @NSManaged public var fixItType: String?
-    @NSManaged public var identifier: String?
-    @NSManaged public var issueType: String?
-    @NSManaged public var lineNumber: Int32
-    @NSManaged public var message: String?
-    @NSManaged public var statusRawValue: Int16
-    @NSManaged public var target: String?
-    @NSManaged public var testCase: String?
-    @NSManaged public var typeRawValue: String?
-    @NSManaged public var inverseBuildServiceErrors: IntegrationIssues?
-    @NSManaged public var inverseBuildServiceWarnings: IntegrationIssues?
-    @NSManaged public var inverseFreshAnalyzerWarnings: IntegrationIssues?
-    @NSManaged public var inverseFreshErrors: IntegrationIssues?
-    @NSManaged public var inverseFreshTestFailures: IntegrationIssues?
-    @NSManaged public var inverseFreshWarnings: IntegrationIssues?
-    @NSManaged public var inverseResolvedAnalyzerWarnings: IntegrationIssues?
-    @NSManaged public var inverseResolvedErrors: IntegrationIssues?
-    @NSManaged public var inverseResolvedTestFailures: IntegrationIssues?
-    @NSManaged public var inverseResolvedWarnings: IntegrationIssues?
-    @NSManaged public var inverseUnresolvedAnalyzerWarnings: IntegrationIssues?
-    @NSManaged public var inverseUnresolvedErrors: IntegrationIssues?
-    @NSManaged public var inverseUnresolvedTestFailures: IntegrationIssues?
-    @NSManaged public var inverseUnresolvedWarnings: IntegrationIssues?
+    @NSManaged var age: Int32
+    @NSManaged var documentFilePath: String?
+    @NSManaged var documentLocationData: String?
+    @NSManaged var fixItType: String?
+    @NSManaged var identifier: String?
+    @NSManaged var issueType: String?
+    @NSManaged var lineNumber: Int32
+    @NSManaged var message: String?
+    @NSManaged var statusRawValue: Int16
+    @NSManaged var target: String?
+    @NSManaged var testCase: String?
+    @NSManaged var typeRawValue: String?
+    @NSManaged var inverseBuildServiceErrors: IntegrationIssues?
+    @NSManaged var inverseBuildServiceWarnings: IntegrationIssues?
+    @NSManaged var inverseFreshAnalyzerWarnings: IntegrationIssues?
+    @NSManaged var inverseFreshErrors: IntegrationIssues?
+    @NSManaged var inverseFreshTestFailures: IntegrationIssues?
+    @NSManaged var inverseFreshWarnings: IntegrationIssues?
+    @NSManaged var inverseResolvedAnalyzerWarnings: IntegrationIssues?
+    @NSManaged var inverseResolvedErrors: IntegrationIssues?
+    @NSManaged var inverseResolvedTestFailures: IntegrationIssues?
+    @NSManaged var inverseResolvedWarnings: IntegrationIssues?
+    @NSManaged var inverseUnresolvedAnalyzerWarnings: IntegrationIssues?
+    @NSManaged var inverseUnresolvedErrors: IntegrationIssues?
+    @NSManaged var inverseUnresolvedTestFailures: IntegrationIssues?
+    @NSManaged var inverseUnresolvedWarnings: IntegrationIssues?
 
 }
 
-public extension Issue {
+extension Issue {
     static func issue(_ id: XcodeServer.Issue.ID, in context: NSManagedObjectContext) -> Issue? {
         let request = NSFetchRequest<Issue>(entityName: entityName)
         request.predicate = NSPredicate(format: "identifier = %@", argumentArray: [id])
@@ -58,7 +58,7 @@ public extension Issue {
     }
 }
 
-public extension Issue {
+extension Issue {
     var status: XcodeServer.Issue.Status {
         get {
             return XcodeServer.Issue.Status(rawValue: Int(statusRawValue)) ?? .new
@@ -77,7 +77,7 @@ public extension Issue {
     }
 }
 
-public extension Issue {
+extension Issue {
     func update(_ issue: XcodeServer.Issue, context: NSManagedObjectContext) {
         identifier = issue.id
         age = Int32(issue.age)
@@ -93,7 +93,7 @@ public extension Issue {
     }
 }
 
-public extension XcodeServer.Issue {
+extension XcodeServer.Issue {
     init(_ issue: Issue) {
         self.init(id: issue.identifier ?? "")
         age = Int(issue.age)

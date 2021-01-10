@@ -5,41 +5,41 @@ import Foundation
 import CoreData
 
 //@objc(Configuration)
-public class Configuration: NSManagedObject {
+class Configuration: NSManagedObject {
 
 }
 
 extension Configuration {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Configuration> {
+    @nonobjc class func fetchRequest() -> NSFetchRequest<Configuration> {
         return NSFetchRequest<Configuration>(entityName: "Configuration")
     }
 
-    @NSManaged public var additionalBuildArgumentsData: Data?
-    @NSManaged public var addMissingDeviceToTeams: Bool
-    @NSManaged public var buildEnvironmentVariablesData: Data?
-    @NSManaged public var cleanScheduleRawValue: Int16
-    @NSManaged public var codeCoveragePreferenceRawValue: Int16
-    @NSManaged public var disableAppThinning: Bool
-    @NSManaged public var exportsProductFromArchive: Bool
-    @NSManaged public var hourOfIntegration: Int16
-    @NSManaged public var manageCertsAndProfiles: Bool
-    @NSManaged public var minutesAfterHourToIntegrate: Int16
-    @NSManaged public var performsAnalyzeAction: Bool
-    @NSManaged public var performsArchiveAction: Bool
-    @NSManaged public var performsTestAction: Bool
-    @NSManaged public var performsUpgradeIntegration: Bool
-    @NSManaged public var periodicScheduleIntervalRawValue: Int16
-    @NSManaged public var runOnlyDisabledTests: Bool
-    @NSManaged public var scheduleTypeRawValue: Int16
-    @NSManaged public var schemeName: String?
-    @NSManaged public var testingDestinationTypeRawValue: Int16
-    @NSManaged public var useParallelDeviceTesting: Bool
-    @NSManaged public var weeklyScheduleDay: Int16
-    @NSManaged public var bot: Bot?
-    @NSManaged public var deviceSpecification: DeviceSpecification?
-    @NSManaged public var repositories: NSSet?
-    @NSManaged public var triggers: NSSet?
+    @NSManaged var additionalBuildArgumentsData: Data?
+    @NSManaged var addMissingDeviceToTeams: Bool
+    @NSManaged var buildEnvironmentVariablesData: Data?
+    @NSManaged var cleanScheduleRawValue: Int16
+    @NSManaged var codeCoveragePreferenceRawValue: Int16
+    @NSManaged var disableAppThinning: Bool
+    @NSManaged var exportsProductFromArchive: Bool
+    @NSManaged var hourOfIntegration: Int16
+    @NSManaged var manageCertsAndProfiles: Bool
+    @NSManaged var minutesAfterHourToIntegrate: Int16
+    @NSManaged var performsAnalyzeAction: Bool
+    @NSManaged var performsArchiveAction: Bool
+    @NSManaged var performsTestAction: Bool
+    @NSManaged var performsUpgradeIntegration: Bool
+    @NSManaged var periodicScheduleIntervalRawValue: Int16
+    @NSManaged var runOnlyDisabledTests: Bool
+    @NSManaged var scheduleTypeRawValue: Int16
+    @NSManaged var schemeName: String?
+    @NSManaged var testingDestinationTypeRawValue: Int16
+    @NSManaged var useParallelDeviceTesting: Bool
+    @NSManaged var weeklyScheduleDay: Int16
+    @NSManaged var bot: Bot?
+    @NSManaged var deviceSpecification: DeviceSpecification?
+    @NSManaged var repositories: NSSet?
+    @NSManaged var triggers: NSSet?
 
 }
 
@@ -77,7 +77,7 @@ extension Configuration {
 
 }
 
-public extension Configuration {
+extension Configuration {
     private static var jsonEncoder: JSONEncoder = JSONEncoder()
     private static var jsonDecoder: JSONDecoder = JSONDecoder()
     
@@ -175,7 +175,7 @@ public extension Configuration {
     }
 }
 
-public extension Configuration {
+extension Configuration {
     func update(_ configuration: XcodeServer.Bot.Configuration, context: NSManagedObjectContext) {
         if deviceSpecification == nil {
             InternalLog.coreData.debug("Creating DEVICE_SPECIFICATION for Configuration '\(bot?.name ?? "")'")
@@ -230,7 +230,7 @@ public extension Configuration {
     }
 }
 
-public extension XcodeServer.Bot.Configuration {
+extension XcodeServer.Bot.Configuration {
     init(_ configuration: Configuration) {
         self.init()
         schedule = configuration.scheduleType

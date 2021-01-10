@@ -40,9 +40,5 @@ public class Container: CoreDataContainer {
     }()
     
     public static var mappingModel: NSMappingModel? { nil }
-    
-    public static var modulePrefix: String {
-        return Bundle.module.bundleURL.lastPathComponent.replacingOccurrences(of: ".bundle", with: "")
-    }
 }
 #endif

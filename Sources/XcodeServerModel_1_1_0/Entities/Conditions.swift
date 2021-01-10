@@ -5,29 +5,29 @@ import Foundation
 import CoreData
 
 //@objc(Conditions)
-public class Conditions: NSManagedObject {
+class Conditions: NSManagedObject {
 
 }
 
 extension Conditions {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Conditions> {
+    @nonobjc class func fetchRequest() -> NSFetchRequest<Conditions> {
         return NSFetchRequest<Conditions>(entityName: "Conditions")
     }
 
-    @NSManaged public var onAllIssuesResolved: Bool
-    @NSManaged public var onAnalyzerWarnings: Bool
-    @NSManaged public var onBuildErrors: Bool
-    @NSManaged public var onFailingTests: Bool
-    @NSManaged public var onInternalErrors: Bool
-    @NSManaged public var onSuccess: Bool
-    @NSManaged public var onWarnings: Bool
-    @NSManaged public var statusRawValue: Int16
-    @NSManaged public var trigger: Trigger?
+    @NSManaged var onAllIssuesResolved: Bool
+    @NSManaged var onAnalyzerWarnings: Bool
+    @NSManaged var onBuildErrors: Bool
+    @NSManaged var onFailingTests: Bool
+    @NSManaged var onInternalErrors: Bool
+    @NSManaged var onSuccess: Bool
+    @NSManaged var onWarnings: Bool
+    @NSManaged var statusRawValue: Int16
+    @NSManaged var trigger: Trigger?
 
 }
 
-public extension Conditions {
+extension Conditions {
     func update(_ conditions: XcodeServer.Trigger.Conditions, context: NSManagedObjectContext) {
         onAllIssuesResolved = conditions.onAllIssuesResolved
         onAnalyzerWarnings = conditions.onAnalyzerWarnings
@@ -39,7 +39,7 @@ public extension Conditions {
     }
 }
 
-public extension XcodeServer.Trigger.Conditions {
+extension XcodeServer.Trigger.Conditions {
     init(_ conditions: Conditions) {
         self.init()
         status = Int(conditions.statusRawValue)

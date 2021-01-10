@@ -13,5 +13,4 @@ public extension NSManagedObject {
         return entityName
     }
 }
-
 #endif

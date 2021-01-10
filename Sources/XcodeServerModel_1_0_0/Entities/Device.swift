@@ -5,37 +5,37 @@ import Foundation
 import CoreData
 
 //@objc(Device)
-public class Device: NSManagedObject {
+class Device: NSManagedObject {
 
 }
 
 extension Device {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Device> {
+    @nonobjc class func fetchRequest() -> NSFetchRequest<Device> {
         return NSFetchRequest<Device>(entityName: "Device")
     }
 
-    @NSManaged public var architecture: String?
-    @NSManaged public var deviceType: String?
-    @NSManaged public var identifier: String?
-    @NSManaged public var isConnected: Bool
-    @NSManaged public var isEnabledForDevelopment: Bool
-    @NSManaged public var isRetina: Bool
-    @NSManaged public var isServer: Bool
-    @NSManaged public var isSimulator: Bool
-    @NSManaged public var isSupported: Bool
-    @NSManaged public var isTrusted: Bool
-    @NSManaged public var isWireless: Bool
-    @NSManaged public var modelCode: String?
-    @NSManaged public var modelName: String?
-    @NSManaged public var modelUTI: String?
-    @NSManaged public var name: String?
-    @NSManaged public var osVersion: String?
-    @NSManaged public var platformIdentifier: String?
-    @NSManaged public var activeProxiedDevice: Device?
-    @NSManaged public var deviceSpecifications: NSSet?
-    @NSManaged public var integrations: NSSet?
-    @NSManaged public var inverseActiveProxiedDevice: Device?
+    @NSManaged var architecture: String?
+    @NSManaged var deviceType: String?
+    @NSManaged var identifier: String?
+    @NSManaged var isConnected: Bool
+    @NSManaged var isEnabledForDevelopment: Bool
+    @NSManaged var isRetina: Bool
+    @NSManaged var isServer: Bool
+    @NSManaged var isSimulator: Bool
+    @NSManaged var isSupported: Bool
+    @NSManaged var isTrusted: Bool
+    @NSManaged var isWireless: Bool
+    @NSManaged var modelCode: String?
+    @NSManaged var modelName: String?
+    @NSManaged var modelUTI: String?
+    @NSManaged var name: String?
+    @NSManaged var osVersion: String?
+    @NSManaged var platformIdentifier: String?
+    @NSManaged var activeProxiedDevice: Device?
+    @NSManaged var deviceSpecifications: NSSet?
+    @NSManaged var integrations: NSSet?
+    @NSManaged var inverseActiveProxiedDevice: Device?
 
 }
 
@@ -73,7 +73,7 @@ extension Device {
 
 }
 
-public extension Device {
+extension Device {
     /// Retrieves all `Device` entities from the Core Data `NSManagedObjectContext`
     static func devices(in context: NSManagedObjectContext) -> [Device] {
         let request = NSFetchRequest<Device>(entityName: entityName)
@@ -100,7 +100,7 @@ public extension Device {
     }
 }
 
-public extension Device {
+extension Device {
     func update(_ device: XcodeServer.Device, context: NSManagedObjectContext) {
         identifier = device.id
         architecture = device.architecture
@@ -153,7 +153,7 @@ public extension Device {
     }
 }
 
-public extension XcodeServer.Device {
+extension XcodeServer.Device {
     init(_ device: Device) {
         self.init(id: device.identifier ?? "")
         name = device.name ?? ""
@@ -177,7 +177,7 @@ public extension XcodeServer.Device {
     }
 }
 
-public extension XcodeServer.Device.ProxiedDevice {
+extension XcodeServer.Device.ProxiedDevice {
     init(_ device: Device) {
         self.init(id: device.identifier ?? "")
         name = device.name ?? ""

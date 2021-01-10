@@ -5,27 +5,27 @@ import Foundation
 import CoreData
 
 //@objc(Platform)
-public class Platform: NSManagedObject {
+class Platform: NSManagedObject {
 
 }
 
 extension Platform {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Platform> {
+    @nonobjc class func fetchRequest() -> NSFetchRequest<Platform> {
         return NSFetchRequest<Platform>(entityName: "Platform")
     }
 
-    @NSManaged public var buildNumber: String?
-    @NSManaged public var displayName: String?
-    @NSManaged public var identifier: String?
-    @NSManaged public var platformIdentifier: String?
-    @NSManaged public var simulatorIdentifier: String?
-    @NSManaged public var version: String?
-    @NSManaged public var filter: Filter?
+    @NSManaged var buildNumber: String?
+    @NSManaged var displayName: String?
+    @NSManaged var identifier: String?
+    @NSManaged var platformIdentifier: String?
+    @NSManaged var simulatorIdentifier: String?
+    @NSManaged var version: String?
+    @NSManaged var filter: Filter?
 
 }
 
-public extension Platform {
+extension Platform {
     func update(_ platform: XcodeServer.Device.Platform, context: NSManagedObjectContext) {
         buildNumber = platform.buildNumber
         displayName = platform.displayName
@@ -36,7 +36,7 @@ public extension Platform {
     }
 }
 
-public extension XcodeServer.Device.Platform {
+extension XcodeServer.Device.Platform {
     init(_ platform: Platform) {
         self.init(id: platform.identifier ?? "")
         buildNumber = platform.buildNumber ?? ""

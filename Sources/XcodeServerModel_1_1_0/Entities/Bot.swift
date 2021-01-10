@@ -5,26 +5,26 @@ import Foundation
 import CoreData
 
 //@objc(Bot)
-public class Bot: NSManagedObject {
+class Bot: NSManagedObject {
 
 }
 
 extension Bot {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Bot> {
+    @nonobjc class func fetchRequest() -> NSFetchRequest<Bot> {
         return NSFetchRequest<Bot>(entityName: "Bot")
     }
 
-    @NSManaged public var identifier: String?
-    @NSManaged public var integrationCounter: Int32
-    @NSManaged public var lastUpdate: Date?
-    @NSManaged public var name: String?
-    @NSManaged public var requiresUpgrade: Bool
-    @NSManaged public var typeRawValue: Int16
-    @NSManaged public var configuration: Configuration?
-    @NSManaged public var integrations: NSSet?
-    @NSManaged public var server: Server?
-    @NSManaged public var stats: Stats?
+    @NSManaged var identifier: String?
+    @NSManaged var integrationCounter: Int32
+    @NSManaged var lastUpdate: Date?
+    @NSManaged var name: String?
+    @NSManaged var requiresUpgrade: Bool
+    @NSManaged var typeRawValue: Int16
+    @NSManaged var configuration: Configuration?
+    @NSManaged var integrations: NSSet?
+    @NSManaged var server: Server?
+    @NSManaged var stats: Stats?
 
 }
 
@@ -45,7 +45,7 @@ extension Bot {
 
 }
 
-public extension Bot {
+extension Bot {
     /// Retrieves all `Bot` entities from the Core Data `NSManagedObjectContext`
     static func bots(in context: NSManagedObjectContext) -> [Bot] {
         let request = NSFetchRequest<Bot>(entityName: Bot.entityName)
@@ -86,7 +86,7 @@ public extension Bot {
     }
 }
 
-public extension Bot {
+extension Bot {
     /// Update the `Bot`, creating relationships as needed.
     ///
     /// - parameter bot: The bot with attributes to use for updates.
@@ -146,7 +146,7 @@ public extension Bot {
     }
 }
 
-public extension XcodeServer.Bot {
+extension XcodeServer.Bot {
     init(_ bot: Bot) {
         self.init(id: bot.identifier ?? "")
         modified = bot.lastUpdate ?? Date()

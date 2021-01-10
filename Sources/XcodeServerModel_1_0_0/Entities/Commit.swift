@@ -5,23 +5,23 @@ import Foundation
 import CoreData
 
 //@objc(Commit)
-public class Commit: NSManagedObject {
+class Commit: NSManagedObject {
 
 }
 
 extension Commit {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Commit> {
+    @nonobjc class func fetchRequest() -> NSFetchRequest<Commit> {
         return NSFetchRequest<Commit>(entityName: "Commit")
     }
 
-    @NSManaged public var commitHash: String?
-    @NSManaged public var date: Date?
-    @NSManaged public var message: String?
-    @NSManaged public var commitChanges: NSSet?
-    @NSManaged public var commitContributor: CommitContributor?
-    @NSManaged public var repository: Repository?
-    @NSManaged public var revisionBlueprints: NSSet?
+    @NSManaged var commitHash: String?
+    @NSManaged var date: Date?
+    @NSManaged var message: String?
+    @NSManaged var commitChanges: NSSet?
+    @NSManaged var commitContributor: CommitContributor?
+    @NSManaged var repository: Repository?
+    @NSManaged var revisionBlueprints: NSSet?
 
 }
 
@@ -59,7 +59,7 @@ extension Commit {
 
 }
 
-public extension Commit {
+extension Commit {
     /// Retrieves all `Commit` entities from the Core Data `NSManagedObjectContext`
     static func commits(in context: NSManagedObjectContext) -> [Commit] {
         let request = NSFetchRequest<Commit>(entityName: entityName)
@@ -99,7 +99,7 @@ public extension Commit {
     }
 }
 
-public extension Commit {
+extension Commit {
     func update(_ commit: SourceControl.Commit, integration: Integration? = nil, context: NSManagedObjectContext) {
         if commitContributor == nil {
             InternalLog.coreData.debug("Creating COMMIT_CONTRIBUTOR for Commit [\(commit.id)]")
@@ -129,7 +129,7 @@ public extension Commit {
     }
 }
 
-public extension SourceControl.Commit {
+extension SourceControl.Commit {
     init(_ commit: Commit) {
         self.init(id: commit.commitHash ?? "")
         message = commit.message ?? ""

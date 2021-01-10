@@ -5,22 +5,22 @@ import Foundation
 import CoreData
 
 //@objc(RevisionBlueprint)
-public class RevisionBlueprint: NSManagedObject {
+class RevisionBlueprint: NSManagedObject {
 
 }
 
 extension RevisionBlueprint {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<RevisionBlueprint> {
+    @nonobjc class func fetchRequest() -> NSFetchRequest<RevisionBlueprint> {
         return NSFetchRequest<RevisionBlueprint>(entityName: "RevisionBlueprint")
     }
 
-    @NSManaged public var commit: Commit?
-    @NSManaged public var integration: Integration?
+    @NSManaged var commit: Commit?
+    @NSManaged var integration: Integration?
 
 }
 
-public extension RevisionBlueprint {
+extension RevisionBlueprint {
     /// Retrieves all `RevisionBlueprint` entities from the Core Data `NSManagedObjectContext`
     static func revisionBlueprints(in context: NSManagedObjectContext) -> [RevisionBlueprint] {
         let request = NSFetchRequest<RevisionBlueprint>(entityName: entityName)

@@ -7,7 +7,6 @@ public protocol CoreDataContainer: AnyQueryable, AnyPersistable {
     static var model: Model { get }
     static var managedObjectModel: NSManagedObjectModel { get }
     static var mappingModel: NSMappingModel? { get }
-    static var modulePrefix: String { get }
 }
 
 public extension CoreDataContainer {

@@ -50,9 +50,5 @@ public class Container: CoreDataContainer {
         
         return mapping
     }
-    
-    public static var modulePrefix: String {
-        return Bundle.module.bundleURL.lastPathComponent.replacingOccurrences(of: ".bundle", with: "")
-    }
 }
 #endif

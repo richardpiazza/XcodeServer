@@ -5,24 +5,24 @@ import Foundation
 import CoreData
 
 //@objc(Filter)
-public class Filter: NSManagedObject {
+class Filter: NSManagedObject {
 
 }
 
 extension Filter {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Filter> {
+    @nonobjc class func fetchRequest() -> NSFetchRequest<Filter> {
         return NSFetchRequest<Filter>(entityName: "Filter")
     }
 
-    @NSManaged public var architectureTypeRawValue: Int16
-    @NSManaged public var filterTypeRawValue: Int16
-    @NSManaged public var deviceSpecification: DeviceSpecification?
-    @NSManaged public var platform: Platform?
+    @NSManaged var architectureTypeRawValue: Int16
+    @NSManaged var filterTypeRawValue: Int16
+    @NSManaged var deviceSpecification: DeviceSpecification?
+    @NSManaged var platform: Platform?
 
 }
 
-public extension Filter {
+extension Filter {
     func update(_ filter: XcodeServer.Device.Filter, context: NSManagedObjectContext) {
         if platform == nil {
             InternalLog.coreData.debug("Creating PLATFORM for Filter")
@@ -35,7 +35,7 @@ public extension Filter {
     }
 }
 
-public extension XcodeServer.Device.Filter {
+extension XcodeServer.Device.Filter {
     init(_ filter: Filter) {
         self.init()
         if let platform = filter.platform {

@@ -5,19 +5,19 @@ import Foundation
 import CoreData
 
 //@objc(DeviceSpecification)
-public class DeviceSpecification: NSManagedObject {
+class DeviceSpecification: NSManagedObject {
 
 }
 
 extension DeviceSpecification {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<DeviceSpecification> {
+    @nonobjc class func fetchRequest() -> NSFetchRequest<DeviceSpecification> {
         return NSFetchRequest<DeviceSpecification>(entityName: "DeviceSpecification")
     }
 
-    @NSManaged public var configuration: Configuration?
-    @NSManaged public var devices: NSSet?
-    @NSManaged public var filters: NSSet?
+    @NSManaged var configuration: Configuration?
+    @NSManaged var devices: NSSet?
+    @NSManaged var filters: NSSet?
 
 }
 
@@ -55,7 +55,7 @@ extension DeviceSpecification {
 
 }
 
-public extension DeviceSpecification {
+extension DeviceSpecification {
     func update(_ specification: XcodeServer.Device.Specification, context: NSManagedObjectContext) {
         (filters as? Set<Filter>)?.forEach({ context.delete($0) })
         
@@ -82,7 +82,7 @@ public extension DeviceSpecification {
     }
 }
 
-public extension XcodeServer.Device.Specification {
+extension XcodeServer.Device.Specification {
     init(_ specification: DeviceSpecification) {
         self.init()
         if let filters = specification.filters as? Set<Filter> {

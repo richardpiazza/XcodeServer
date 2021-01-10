@@ -5,36 +5,36 @@ import Foundation
 import CoreData
 
 //@objc(EmailConfiguration)
-public class EmailConfiguration: NSManagedObject {
+class EmailConfiguration: NSManagedObject {
 
 }
 
 extension EmailConfiguration {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<EmailConfiguration> {
+    @nonobjc class func fetchRequest() -> NSFetchRequest<EmailConfiguration> {
         return NSFetchRequest<EmailConfiguration>(entityName: "EmailConfiguration")
     }
 
-    @NSManaged public var additionalRecipients: String?
-    @NSManaged public var allowedDomainNamesData: Data?
-    @NSManaged public var ccAddressesData: Data?
-    @NSManaged public var emailCommitters: Bool
-    @NSManaged public var emailTypeRawValue: Int16
-    @NSManaged public var fromAddress: String?
-    @NSManaged public var hour: Int16
-    @NSManaged public var includeBotConfiguration: Bool
-    @NSManaged public var includeCommitMessages: Bool
-    @NSManaged public var includeIssueDetails: Bool
-    @NSManaged public var includeLogs: Bool
-    @NSManaged public var includeResolvedIssues: Bool
-    @NSManaged public var minutesAfterHour: Int16
-    @NSManaged public var replyToAddress: String?
-    @NSManaged public var weeklyScheduleDay: Int16
-    @NSManaged public var trigger: Trigger?
+    @NSManaged var additionalRecipients: String?
+    @NSManaged var allowedDomainNamesData: Data?
+    @NSManaged var ccAddressesData: Data?
+    @NSManaged var emailCommitters: Bool
+    @NSManaged var emailTypeRawValue: Int16
+    @NSManaged var fromAddress: String?
+    @NSManaged var hour: Int16
+    @NSManaged var includeBotConfiguration: Bool
+    @NSManaged var includeCommitMessages: Bool
+    @NSManaged var includeIssueDetails: Bool
+    @NSManaged var includeLogs: Bool
+    @NSManaged var includeResolvedIssues: Bool
+    @NSManaged var minutesAfterHour: Int16
+    @NSManaged var replyToAddress: String?
+    @NSManaged var weeklyScheduleDay: Int16
+    @NSManaged var trigger: Trigger?
 
 }
 
-public extension EmailConfiguration {
+extension EmailConfiguration {
     private static var jsonEncoder: JSONEncoder = JSONEncoder()
     private static var jsonDecoder: JSONDecoder = JSONDecoder()
     
@@ -105,7 +105,7 @@ public extension EmailConfiguration {
     }
 }
 
-public extension EmailConfiguration {
+extension EmailConfiguration {
     func update(_ email: XcodeServer.Trigger.Email) {
         recipients = email.additionalRecipients
         allowedDomainNames = email.allowedDomainNames
@@ -125,7 +125,7 @@ public extension EmailConfiguration {
     }
 }
 
-public extension XcodeServer.Trigger.Email {
+extension XcodeServer.Trigger.Email {
     init(_ email: EmailConfiguration) {
         self.init()
         type = email.emailType

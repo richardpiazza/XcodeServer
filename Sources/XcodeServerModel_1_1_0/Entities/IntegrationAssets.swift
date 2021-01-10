@@ -5,24 +5,24 @@ import Foundation
 import CoreData
 
 //@objc(IntegrationAssets)
-public class IntegrationAssets: NSManagedObject {
+class IntegrationAssets: NSManagedObject {
 
 }
 
 extension IntegrationAssets {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<IntegrationAssets> {
+    @nonobjc class func fetchRequest() -> NSFetchRequest<IntegrationAssets> {
         return NSFetchRequest<IntegrationAssets>(entityName: "IntegrationAssets")
     }
 
-    @NSManaged public var archive: Asset?
-    @NSManaged public var buildServiceLog: Asset?
-    @NSManaged public var integration: Integration?
-    @NSManaged public var product: Asset?
-    @NSManaged public var sourceControlLog: Asset?
-    @NSManaged public var triggerAssets: NSSet?
-    @NSManaged public var xcodebuildLog: Asset?
-    @NSManaged public var xcodebuildOutput: Asset?
+    @NSManaged var archive: Asset?
+    @NSManaged var buildServiceLog: Asset?
+    @NSManaged var integration: Integration?
+    @NSManaged var product: Asset?
+    @NSManaged var sourceControlLog: Asset?
+    @NSManaged var triggerAssets: NSSet?
+    @NSManaged var xcodebuildLog: Asset?
+    @NSManaged var xcodebuildOutput: Asset?
 
 }
 
@@ -43,7 +43,7 @@ extension IntegrationAssets {
 
 }
 
-public extension IntegrationAssets {
+extension IntegrationAssets {
     func update(_ catalog: XcodeServer.Integration.AssetCatalog, context: NSManagedObjectContext) {
         switch (archive, catalog.archive) {
         case (.none, .some(let asset)):
@@ -119,7 +119,7 @@ public extension IntegrationAssets {
     }
 }
 
-public extension XcodeServer.Integration.AssetCatalog {
+extension XcodeServer.Integration.AssetCatalog {
     init(_ assets: IntegrationAssets) {
         self.init()
         if let asset = assets.triggerAssets as? Set<Asset> {

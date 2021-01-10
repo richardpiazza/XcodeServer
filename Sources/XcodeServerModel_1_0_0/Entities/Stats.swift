@@ -5,37 +5,37 @@ import Foundation
 import CoreData
 
 //@objc(Stats)
-public class Stats: NSManagedObject {
+class Stats: NSManagedObject {
 
 }
 
 extension Stats {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Stats> {
+    @nonobjc class func fetchRequest() -> NSFetchRequest<Stats> {
         return NSFetchRequest<Stats>(entityName: "Stats")
     }
 
-    @NSManaged public var codeCoveragePercentageDelta: Int32
-    @NSManaged public var numberOfCommits: Int32
-    @NSManaged public var numberOfIntegrations: Int32
-    @NSManaged public var numberOfSuccessfulIntegrations: Int32
-    @NSManaged public var sinceDate: String?
-    @NSManaged public var testAdditionRate: Int32
-    @NSManaged public var analysisWarnings: StatsBreakdown?
-    @NSManaged public var averageIntegrationTime: StatsBreakdown?
-    @NSManaged public var bestSuccessStreak: Integration?
-    @NSManaged public var bot: Bot?
-    @NSManaged public var errors: StatsBreakdown?
-    @NSManaged public var improvedPerfTests: StatsBreakdown?
-    @NSManaged public var lastCleanIntegration: Integration?
-    @NSManaged public var regressedPerfTests: StatsBreakdown?
-    @NSManaged public var testFailures: StatsBreakdown?
-    @NSManaged public var tests: StatsBreakdown?
-    @NSManaged public var warnings: StatsBreakdown?
+    @NSManaged var codeCoveragePercentageDelta: Int32
+    @NSManaged var numberOfCommits: Int32
+    @NSManaged var numberOfIntegrations: Int32
+    @NSManaged var numberOfSuccessfulIntegrations: Int32
+    @NSManaged var sinceDate: String?
+    @NSManaged var testAdditionRate: Int32
+    @NSManaged var analysisWarnings: StatsBreakdown?
+    @NSManaged var averageIntegrationTime: StatsBreakdown?
+    @NSManaged var bestSuccessStreak: Integration?
+    @NSManaged var bot: Bot?
+    @NSManaged var errors: StatsBreakdown?
+    @NSManaged var improvedPerfTests: StatsBreakdown?
+    @NSManaged var lastCleanIntegration: Integration?
+    @NSManaged var regressedPerfTests: StatsBreakdown?
+    @NSManaged var testFailures: StatsBreakdown?
+    @NSManaged var tests: StatsBreakdown?
+    @NSManaged var warnings: StatsBreakdown?
 
 }
 
-public extension Stats {
+extension Stats {
     private static var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
@@ -57,7 +57,7 @@ public extension Stats {
     }
 }
 
-public extension Stats {
+extension Stats {
     func update(_ stats: XcodeServer.Bot.Stats, context: NSManagedObjectContext) {
         codeCoveragePercentageDelta = Int32(stats.coverageDelta)
         numberOfCommits = Int32(stats.commits)
@@ -152,7 +152,7 @@ public extension Stats {
     }
 }
 
-public extension XcodeServer.Bot.Stats {
+extension XcodeServer.Bot.Stats {
     init(_ stats: Stats) {
         self.init()
         commits = Int(stats.numberOfCommits)

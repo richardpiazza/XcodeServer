@@ -5,31 +5,31 @@ import Foundation
 import CoreData
 
 //@objc(IntegrationIssues)
-public class IntegrationIssues: NSManagedObject {
+class IntegrationIssues: NSManagedObject {
 
 }
 
 extension IntegrationIssues {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<IntegrationIssues> {
+    @nonobjc class func fetchRequest() -> NSFetchRequest<IntegrationIssues> {
         return NSFetchRequest<IntegrationIssues>(entityName: "IntegrationIssues")
     }
 
-    @NSManaged public var buildServiceErrors: NSSet?
-    @NSManaged public var buildServiceWarnings: NSSet?
-    @NSManaged public var freshAnalyzerWarnings: NSSet?
-    @NSManaged public var freshErrors: NSSet?
-    @NSManaged public var freshTestFailures: NSSet?
-    @NSManaged public var freshWarnings: NSSet?
-    @NSManaged public var integration: Integration?
-    @NSManaged public var resolvedAnalyzerWarnings: NSSet?
-    @NSManaged public var resolvedErrors: NSSet?
-    @NSManaged public var resolvedTestFailures: NSSet?
-    @NSManaged public var resolvedWarnings: NSSet?
-    @NSManaged public var unresolvedAnalyzerWarnings: NSSet?
-    @NSManaged public var unresolvedErrors: NSSet?
-    @NSManaged public var unresolvedTestFailures: NSSet?
-    @NSManaged public var unresolvedWarnings: NSSet?
+    @NSManaged var buildServiceErrors: NSSet?
+    @NSManaged var buildServiceWarnings: NSSet?
+    @NSManaged var freshAnalyzerWarnings: NSSet?
+    @NSManaged var freshErrors: NSSet?
+    @NSManaged var freshTestFailures: NSSet?
+    @NSManaged var freshWarnings: NSSet?
+    @NSManaged var integration: Integration?
+    @NSManaged var resolvedAnalyzerWarnings: NSSet?
+    @NSManaged var resolvedErrors: NSSet?
+    @NSManaged var resolvedTestFailures: NSSet?
+    @NSManaged var resolvedWarnings: NSSet?
+    @NSManaged var unresolvedAnalyzerWarnings: NSSet?
+    @NSManaged var unresolvedErrors: NSSet?
+    @NSManaged var unresolvedTestFailures: NSSet?
+    @NSManaged var unresolvedWarnings: NSSet?
 
 }
 
@@ -271,7 +271,7 @@ extension IntegrationIssues {
 
 }
 
-public extension IntegrationIssues {
+extension IntegrationIssues {
     /// Update Integration Issues
     ///
     /// - note: Using the '_inverse_ = self' references here as an Issue may be linked to multiple Integrations.
@@ -446,7 +446,7 @@ public extension IntegrationIssues {
     }
 }
 
-public extension XcodeServer.Integration.IssueCatalog {
+extension XcodeServer.Integration.IssueCatalog {
     init(_ issues: IntegrationIssues) {
         self.init()
         if let value = issues.buildServiceErrors as? Set<Issue> {
