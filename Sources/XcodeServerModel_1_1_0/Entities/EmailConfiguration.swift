@@ -56,7 +56,7 @@ extension EmailConfiguration {
             do {
                 return try Self.jsonDecoder.decode([String].self, from: data)
             } catch {
-                InternalLog.coreData.error("", error: error)
+                InternalLog.persistence.error("", error: error)
                 return []
             }
         }
@@ -64,7 +64,7 @@ extension EmailConfiguration {
             do {
                 ccAddressesData = try Self.jsonEncoder.encode(newValue)
             } catch {
-                InternalLog.coreData.error("", error: error)
+                InternalLog.persistence.error("", error: error)
             }
         }
     }
@@ -78,7 +78,7 @@ extension EmailConfiguration {
             do {
                 return try Self.jsonDecoder.decode([String].self, from: data)
             } catch {
-                InternalLog.coreData.error("", error: error)
+                InternalLog.persistence.error("", error: error)
                 return []
             }
         }
@@ -86,7 +86,7 @@ extension EmailConfiguration {
             do {
                 allowedDomainNamesData = try Self.jsonEncoder.encode(newValue)
             } catch {
-                InternalLog.coreData.error("", error: error)
+                InternalLog.persistence.error("", error: error)
             }
         }
     }

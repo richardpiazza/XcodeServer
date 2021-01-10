@@ -28,7 +28,7 @@ public class UpdateBotStatsProcedure: Procedure, InputProcedure {
         
         guard let value = input.value else {
             let error = XcodeServerProcedureError.invalidInput
-            InternalLog.procedures.error("UpdateBotStatsProcedure Failed", error: error)
+            InternalLog.operations.error("UpdateBotStatsProcedure Failed", error: error)
             finish(with: error)
             return
         }
@@ -38,7 +38,7 @@ public class UpdateBotStatsProcedure: Procedure, InputProcedure {
         destination.saveStats(value, forBot: id) { [weak self] (result) in
             switch result {
             case .failure(let error):
-                InternalLog.procedures.error("UpdateBotStatsProcedure Failed", error: error)
+                InternalLog.operations.error("UpdateBotStatsProcedure Failed", error: error)
                 self?.finish(with: error)
             case .success:
                 NotificationCenter.default.postBotDidChange(id)

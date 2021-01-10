@@ -66,7 +66,7 @@ extension Commit {
         do {
             return try context.fetch(request)
         } catch {
-            InternalLog.coreData.error("Failed to fetch commits", error: error)
+            InternalLog.persistence.error("Failed to fetch commits", error: error)
         }
         
         return []
@@ -80,7 +80,7 @@ extension Commit {
         do {
             return try context.fetch(request).first
         } catch {
-            InternalLog.coreData.error("Failed to fetch commit '\(id)'", error: error)
+            InternalLog.persistence.error("Failed to fetch commit '\(id)'", error: error)
         }
         
         return nil
@@ -92,7 +92,7 @@ extension Commit {
         do {
             return try context.fetch(request)
         } catch {
-            InternalLog.coreData.error("Failed to fetch incomplete commits", error: error)
+            InternalLog.persistence.error("Failed to fetch incomplete commits", error: error)
         }
         
         return []
@@ -102,7 +102,7 @@ extension Commit {
 extension Commit {
     func update(_ commit: SourceControl.Commit, integration: Integration? = nil, context: NSManagedObjectContext) {
         if commitContributor == nil {
-            InternalLog.coreData.debug("Creating COMMIT_CONTRIBUTOR for Commit [\(commit.id)]")
+            InternalLog.persistence.debug("Creating COMMIT_CONTRIBUTOR for Commit [\(commit.id)]")
             commitContributor = context.make()
         }
         
@@ -120,7 +120,7 @@ extension Commit {
         
         if let integration = integration {
             if RevisionBlueprint.revisionBlueprint(withCommit: self, andIntegration: integration, in: context) == nil {
-                InternalLog.coreData.debug("Creating REVISION_BLUEPRINT for Commit [\(commit.id)] and Integration [\(integration.identifier ?? "")]")
+                InternalLog.persistence.debug("Creating REVISION_BLUEPRINT for Commit [\(commit.id)] and Integration [\(integration.identifier ?? "")]")
                 let blueprint: RevisionBlueprint = context.make()
                 blueprint.commit = self
                 blueprint.integration = integration

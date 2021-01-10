@@ -83,7 +83,7 @@ extension Integration {
         do {
             return try context.fetch(request)
         } catch {
-            InternalLog.coreData.error("Failed to fetch integrations", error: error)
+            InternalLog.persistence.error("Failed to fetch integrations", error: error)
         }
         
         return []
@@ -96,7 +96,7 @@ extension Integration {
         do {
             return try context.fetch(request)
         } catch {
-            InternalLog.coreData.error("Failed to fetch integrations for bot '\(id)'", error: error)
+            InternalLog.persistence.error("Failed to fetch integrations for bot '\(id)'", error: error)
         }
         
         return []
@@ -110,7 +110,7 @@ extension Integration {
         do {
             return try context.fetch(request).first
         } catch {
-            InternalLog.coreData.error("Failed to fetch integration '\(id)'", error: error)
+            InternalLog.persistence.error("Failed to fetch integration '\(id)'", error: error)
         }
         
         return nil
@@ -123,7 +123,7 @@ extension Integration {
         do {
             return try context.fetch(request)
         } catch {
-            InternalLog.coreData.error("Failed to fetch incomplete integrations", error: error)
+            InternalLog.persistence.error("Failed to fetch incomplete integrations", error: error)
         }
         
         return []
@@ -165,7 +165,7 @@ extension Integration {
             do {
                 return try Self.jsonDecoder.decode(Tests.Hierarchy.self, from: data)
             } catch {
-                InternalLog.coreData.error("", error: error)
+                InternalLog.persistence.error("", error: error)
             }
             
             return nil
@@ -179,7 +179,7 @@ extension Integration {
             do {
                 testHierarchyData = try Self.jsonEncoder.encode(value)
             } catch {
-                InternalLog.coreData.error("", error: error)
+                InternalLog.persistence.error("", error: error)
             }
         }
     }
@@ -225,15 +225,15 @@ extension Integration {
 extension Integration {
     func update(_ integration: XcodeServer.Integration, context: NSManagedObjectContext) {
         if assets == nil {
-            InternalLog.coreData.debug("Creating INTEGRATION_ASSETS for Integration '\(integration.number)' [\(integration.id)]")
+            InternalLog.persistence.debug("Creating INTEGRATION_ASSETS for Integration '\(integration.number)' [\(integration.id)]")
             assets = context.make()
         }
         if buildResultSummary == nil {
-            InternalLog.coreData.debug("Creating BUILD_RESULT_SUMMARY for Integration '\(integration.number)' [\(integration.id)]")
+            InternalLog.persistence.debug("Creating BUILD_RESULT_SUMMARY for Integration '\(integration.number)' [\(integration.id)]")
             buildResultSummary = context.make()
         }
         if issues == nil {
-            InternalLog.coreData.debug("Creating INTEGRATION_ISSUES for Integration '\(integration.number)' [\(integration.id)]")
+            InternalLog.persistence.debug("Creating INTEGRATION_ISSUES for Integration '\(integration.number)' [\(integration.id)]")
             issues = context.make()
         }
         
@@ -278,7 +278,7 @@ extension Integration {
                 if let entity = Repository.repository(blueprint.primaryRemoteIdentifier, in: context) {
                     repository = entity
                 } else {
-                    InternalLog.coreData.debug("Creating REPOSITORY '\(blueprint.name)' [\(blueprint.primaryRemoteIdentifier)]")
+                    InternalLog.persistence.debug("Creating REPOSITORY '\(blueprint.name)' [\(blueprint.primaryRemoteIdentifier)]")
                     repository = context.make()
                 }
                 repository.update(blueprint, context: context)
@@ -289,7 +289,7 @@ extension Integration {
     func update(_ commits: Set<SourceControl.Commit>, context: NSManagedObjectContext) {
         commits.forEach { (commit) in
             guard let remoteId = commit.remoteId, !remoteId.isEmpty else {
-                InternalLog.coreData.warn("No Remote ID for commit: \(commit)")
+                InternalLog.persistence.warn("No Remote ID for commit: \(commit)")
                 return
             }
             
@@ -297,7 +297,7 @@ extension Integration {
             if let entity = Repository.repository(remoteId, in: context) {
                 repository = entity
             } else {
-                InternalLog.coreData.debug("Creating REPOSITORY '??' [\(remoteId)]")
+                InternalLog.persistence.debug("Creating REPOSITORY '??' [\(remoteId)]")
                 repository = context.make()
                 repository.identifier = remoteId
             }

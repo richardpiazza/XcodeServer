@@ -27,7 +27,7 @@ public class GetBotsProcedure: Procedure, OutputProcedure {
                     self?.output = .ready(.success(value))
                     self?.finish()
                 case .failure(let error):
-                    InternalLog.procedures.error("GetBotsProcedure Failed", error: error)
+                    InternalLog.operations.error("GetBotsProcedure Failed", error: error)
                     self?.output = .ready(.failure(error))
                     self?.finish(with: error)
                 }
@@ -39,7 +39,7 @@ public class GetBotsProcedure: Procedure, OutputProcedure {
                     self?.output = .ready(.success(value))
                     self?.finish()
                 case .failure(let error):
-                    InternalLog.procedures.error("GetBotsProcedure Failed", error: error)
+                    InternalLog.operations.error("GetBotsProcedure Failed", error: error)
                     self?.output = .ready(.failure(error))
                     self?.finish(with: error)
                 }

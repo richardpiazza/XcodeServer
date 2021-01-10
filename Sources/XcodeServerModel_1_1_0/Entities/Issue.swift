@@ -51,7 +51,7 @@ extension Issue {
         do {
             return try context.fetch(request).first
         } catch {
-            InternalLog.coreData.error("Failed to fetch issue '\(id)'", error: error)
+            InternalLog.persistence.error("Failed to fetch issue '\(id)'", error: error)
         }
         
         return nil

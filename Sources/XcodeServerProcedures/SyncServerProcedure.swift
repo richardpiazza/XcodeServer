@@ -56,7 +56,7 @@ public class SyncServerProcedure: Procedure, OutputProcedure {
 @available(swift, introduced: 5.1)
 extension SyncServerProcedure: ProcedureQueueDelegate {
     public func procedureQueue(_ queue: ProcedureQueue, didAddProcedure procedure: Procedure, context: Any?) {
-        InternalLog.procedures.debug("Enqueued Procedure '\(procedure)'")
+        InternalLog.operations.debug("Enqueued Procedure '\(procedure)'")
     }
     
     public func procedureQueue(_ queue: ProcedureQueue, didFinishProcedure procedure: Procedure, with error: Error?) {

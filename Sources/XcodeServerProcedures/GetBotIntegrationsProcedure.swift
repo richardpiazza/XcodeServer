@@ -24,7 +24,7 @@ public class GetBotIntegrationsProcedure: Procedure, InputProcedure, OutputProce
         
         guard let id = input.value else {
             let error = XcodeServerProcedureError.invalidInput
-            InternalLog.procedures.error("GetBotIntegrationsProcedure Failed", error: error)
+            InternalLog.operations.error("GetBotIntegrationsProcedure Failed", error: error)
             output = .ready(.failure(error))
             finish(with: error)
             return
@@ -36,7 +36,7 @@ public class GetBotIntegrationsProcedure: Procedure, InputProcedure, OutputProce
                 self?.output = .ready(.success(value))
                 self?.finish()
             case .failure(let error):
-                InternalLog.procedures.error("GetBotIntegrationsProcedure Failed", error: error)
+                InternalLog.operations.error("GetBotIntegrationsProcedure Failed", error: error)
                 self?.output = .ready(.failure(error))
                 self?.finish(with: error)
             }

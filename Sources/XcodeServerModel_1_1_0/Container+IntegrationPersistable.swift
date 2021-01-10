@@ -5,7 +5,7 @@ import CoreData
 
 extension Container: IntegrationPersistable {
     public func saveIntegration(_ integration: XcodeServer.Integration, forBot bot: XcodeServer.Bot.ID, queue: DispatchQueue?, completion: @escaping IntegrationResultHandler) {
-        InternalLog.coreData.info("Saving Integration '\(integration.number)' [\(integration.id)]")
+        InternalLog.persistence.info("Saving Integration '\(integration.number)' [\(integration.id)]")
         let queue = queue ?? dispatchQueue
         internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in
@@ -57,7 +57,7 @@ extension Container: IntegrationPersistable {
                 var result: [XcodeServer.Integration] = []
                 
                 for integration in integrations {
-                    InternalLog.coreData.info("Saving Integration '\(integration.number)' [\(integration.id)]")
+                    InternalLog.persistence.info("Saving Integration '\(integration.number)' [\(integration.id)]")
                     
                     let _integration: Integration
                     if let existing = Integration.integration(integration.id, in: context) {
@@ -87,7 +87,7 @@ extension Container: IntegrationPersistable {
     }
     
     public func saveArchive(_ archive: Data, forIntegration id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping DataResultHandler) {
-        InternalLog.coreData.info("Saving ARCHIVE for Integration [\(id)]")
+        InternalLog.persistence.info("Saving ARCHIVE for Integration [\(id)]")
         let queue = queue ?? dispatchQueue
         queue.async {
             completion(.failure(.message("Not Implemented")))
@@ -95,7 +95,7 @@ extension Container: IntegrationPersistable {
     }
     
     public func saveCommits(_ commits: [SourceControl.Commit], forIntegration id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping CommitsResultHandler) {
-        InternalLog.coreData.info("Saving COMMITS for Integration [\(id)]")
+        InternalLog.persistence.info("Saving COMMITS for Integration [\(id)]")
         let queue = queue ?? dispatchQueue
         internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in
@@ -110,7 +110,7 @@ extension Container: IntegrationPersistable {
                 
                 commits.forEach { (commit) in
                     guard let remoteId = commit.remoteId else {
-                        InternalLog.coreData.warn("No Remote ID for commit: \(commit)")
+                        InternalLog.persistence.warn("No Remote ID for commit: \(commit)")
                         return
                     }
                     
@@ -120,7 +120,7 @@ extension Container: IntegrationPersistable {
                     } else {
                         repository = context.make()
                         repository.identifier = remoteId
-                        InternalLog.coreData.debug("Creating REPOSITORY '??' [\(remoteId)]")
+                        InternalLog.persistence.debug("Creating REPOSITORY '??' [\(remoteId)]")
                     }
                     
                     repository.update(Set(arrayLiteral: commit), integration: managedIntegration, context: context)
@@ -141,7 +141,7 @@ extension Container: IntegrationPersistable {
     }
     
     public func saveIssues(_ issues: XcodeServer.Integration.IssueCatalog, forIntegration id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping IssueCatalogResultHandler) {
-        InternalLog.coreData.info("Saving ISSUES for Integration [\(id)]")
+        InternalLog.persistence.info("Saving ISSUES for Integration [\(id)]")
         let queue = queue ?? dispatchQueue
         internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in
@@ -179,7 +179,7 @@ extension Container: IntegrationPersistable {
     }
     
     public func deleteIntegration(_ integration: XcodeServer.Integration, queue: DispatchQueue?, completion: @escaping VoidResultHandler) {
-        InternalLog.coreData.info("Removing Integration '\(integration.number)' [\(integration.id)]")
+        InternalLog.persistence.info("Removing Integration '\(integration.number)' [\(integration.id)]")
         let queue = queue ?? dispatchQueue
         internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in

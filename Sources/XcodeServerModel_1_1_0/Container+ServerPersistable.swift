@@ -5,7 +5,7 @@ import CoreData
 
 extension Container: ServerPersistable {
     public func saveServer(_ server: XcodeServer.Server, queue: DispatchQueue?, completion: @escaping ServerResultHandler) {
-        InternalLog.coreData.info("Saving Server [\(server.id)]")
+        InternalLog.persistence.info("Saving Server [\(server.id)]")
         let queue = queue ?? dispatchQueue
         internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in
@@ -30,7 +30,7 @@ extension Container: ServerPersistable {
     }
     
     public func saveBots(_ bots: [XcodeServer.Bot], forServer server: XcodeServer.Server.ID, queue: DispatchQueue?, completion: @escaping BotsResultHandler) {
-        InternalLog.coreData.info("Saving BOTS for Server [\(server)]")
+        InternalLog.persistence.info("Saving BOTS for Server [\(server)]")
         let queue = queue ?? dispatchQueue
         internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in
@@ -60,7 +60,7 @@ extension Container: ServerPersistable {
     }
     
     public func deleteServer(_ server: XcodeServer.Server, queue: DispatchQueue?, completion: @escaping VoidResultHandler) {
-        InternalLog.coreData.info("Removing Server [\(server.id)]")
+        InternalLog.persistence.info("Removing Server [\(server.id)]")
         let queue = queue ?? dispatchQueue
         internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in

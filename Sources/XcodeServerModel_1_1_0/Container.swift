@@ -28,27 +28,11 @@ public class Container: CoreDataContainer {
     public static var model: Model { .v1_1_0 }
     
     public static var managedObjectModel: NSManagedObjectModel = {
-        guard let url = Bundle.module.url(forResource: .containerName, withExtension: .momd) else {
-            preconditionFailure("No URL for Resource '\(String.containerName).\(String.momd)' in Bundle '\(Bundle.module.bundlePath)'.")
-        }
-        
-        guard let model = NSManagedObjectModel(contentsOf: url) else {
-            preconditionFailure("Unable to load contents of NSManagedObjectModel at URL '\(url.path)'.")
-        }
-        
-        return model
+        Container.managedObjectModel(inBundle: .module)
     }()
     
     public static var mappingModel: NSMappingModel? {
-        guard let url = Bundle.module.url(forResource: .mappingModel, withExtension: .cdm) else {
-            preconditionFailure("No URL for Resource '\(String.mappingModel).\(String.cdm)' in Bundle '\(Bundle.module.bundlePath)'.")
-        }
-        
-        guard let mapping = NSMappingModel(contentsOf: url) else {
-            preconditionFailure("Unable to load contents of NSMappingModel at URL '\(url.path)'.")
-        }
-        
-        return mapping
+        Container.mappingModel(inBundle: .module)
     }
 }
 #endif

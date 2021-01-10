@@ -26,7 +26,7 @@ public class CreateServerProcedure: Procedure, InputProcedure {
         
         guard let value = input.value else {
             let error = XcodeServerProcedureError.invalidInput
-            InternalLog.procedures.error("CreateServerProcedure Failed", error: error)
+            InternalLog.operations.error("CreateServerProcedure Failed", error: error)
             finish(with: error)
             return
         }
@@ -36,7 +36,7 @@ public class CreateServerProcedure: Procedure, InputProcedure {
         destination.saveServer(server) { [weak self] (result) in
             switch result {
             case .failure(let error):
-                InternalLog.procedures.error("CreateServerProcedure Failed", error: error)
+                InternalLog.operations.error("CreateServerProcedure Failed", error: error)
                 self?.finish(with: error)
             case .success:
                 NotificationCenter.default.postServersDidChange()

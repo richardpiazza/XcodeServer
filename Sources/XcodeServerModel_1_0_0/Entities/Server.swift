@@ -50,7 +50,7 @@ extension Server {
         do {
             return try context.fetch(request)
         } catch {
-            InternalLog.coreData.error("Failed to fetch servers", error: error)
+            InternalLog.persistence.error("Failed to fetch servers", error: error)
         }
         
         return []
@@ -63,7 +63,7 @@ extension Server {
         do {
             return try context.fetch(request).first
         } catch {
-            InternalLog.coreData.error("Failed to fetch server '\(id)'", error: error)
+            InternalLog.persistence.error("Failed to fetch server '\(id)'", error: error)
         }
         
         return nil
@@ -75,7 +75,7 @@ extension Server {
         do {
             return try context.fetch(request)
         } catch {
-            InternalLog.coreData.error("Failed to fetch server last updated", error: error)
+            InternalLog.persistence.error("Failed to fetch server last updated", error: error)
         }
         
         return []
@@ -124,7 +124,7 @@ extension Server {
             } else {
                 bot = context.make()
                 addToBots(bot)
-                InternalLog.coreData.debug("Creating BOT '\(bot.name ?? "")' [\(bot.identifier ?? "")] for Server \(fqdn ?? "")")
+                InternalLog.persistence.debug("Creating BOT '\(bot.name ?? "")' [\(bot.identifier ?? "")] for Server \(fqdn ?? "")")
             }
             
             bot.update(entity, context: context)

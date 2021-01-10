@@ -25,7 +25,7 @@ extension Filter {
 extension Filter {
     func update(_ filter: XcodeServer.Device.Filter, context: NSManagedObjectContext) {
         if platform == nil {
-            InternalLog.coreData.debug("Creating PLATFORM for Filter")
+            InternalLog.persistence.debug("Creating PLATFORM for Filter")
             platform = context.make()
         }
         

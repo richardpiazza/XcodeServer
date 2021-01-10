@@ -46,7 +46,7 @@ public class SyncIntegrationProcedure: Procedure, OutputProcedure {
 @available(swift, introduced: 5.1)
 extension SyncIntegrationProcedure: ProcedureQueueDelegate {
     public func procedureQueue(_ queue: ProcedureQueue, didAddProcedure procedure: Procedure, context: Any?) {
-        InternalLog.procedures.debug("Enqueued Procedure '\(procedure)'")
+        InternalLog.operations.debug("Enqueued Procedure '\(procedure)'")
     }
     
     public func procedureQueue(_ queue: ProcedureQueue, didFinishProcedure procedure: Procedure, with error: Error?) {

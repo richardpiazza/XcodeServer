@@ -80,7 +80,7 @@ extension Device {
         do {
             return try context.fetch(request)
         } catch {
-            InternalLog.coreData.error("Failed to fetch all devices", error: error)
+            InternalLog.persistence.error("Failed to fetch all devices", error: error)
         }
         
         return []
@@ -93,7 +93,7 @@ extension Device {
         do {
             return try context.fetch(request).first
         } catch {
-            InternalLog.coreData.error("Failed to fetch device '\(id)'", error: error)
+            InternalLog.persistence.error("Failed to fetch device '\(id)'", error: error)
         }
         
         return nil

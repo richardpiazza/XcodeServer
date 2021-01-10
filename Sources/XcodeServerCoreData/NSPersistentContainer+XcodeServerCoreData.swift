@@ -26,26 +26,26 @@ public extension NSPersistentContainer {
         if persisted {
             do {
                 if let source = try Migration.migrateStore(at: storeURL, to: model, assistant: assistant) {
-                    InternalLog.coreData.info("Successful Migration from \(source.rawValue) to \(model.rawValue)")
+                    InternalLog.persistence.info("Successful Migration from \(source.rawValue) to \(model.rawValue)")
                 }
             } catch let error as Migration.Error {
                 switch error {
                 case .noMigrationPath, .unidentifiedSource:
                     if silentMigrationFailure {
-                        InternalLog.coreData.error("Migration Failed, cleaning store.", error: error)
+                        InternalLog.persistence.error("Migration Failed, cleaning store.", error: error)
                         if FileManager.default.fileExists(atPath: storeURL.path) {
                             try FileManager.default.removeItem(at: storeURL)
                         }
                     } else {
-                        InternalLog.coreData.error("Migration Failed", error: error)
+                        InternalLog.persistence.error("Migration Failed", error: error)
                         throw error
                     }
                 default:
-                    InternalLog.coreData.error("Migration Failed", error: error)
+                    InternalLog.persistence.error("Migration Failed", error: error)
                     throw error
                 }
             } catch {
-                InternalLog.coreData.error("Migration Failed", error: error)
+                InternalLog.persistence.error("Migration Failed", error: error)
                 throw error
             }
         }

@@ -22,9 +22,47 @@ public extension CoreDataContainer {
             do {
                 try persistentContainer.persistentStoreCoordinator.remove(store)
             } catch {
-                InternalLog.coreData.error("Failed to remove persistent store from the store coordinator.", error: error)
+                InternalLog.persistence.error("Failed to remove persistent store from the store coordinator.", error: error)
             }
         }
+    }
+}
+
+public extension CoreDataContainer {
+    static func managedObjectModel(forResource resource: String = .containerName, inBundle bundle: Bundle) -> NSManagedObjectModel {
+        let url: URL
+        
+        if let _url = bundle.url(forResource: resource, withExtension: .momd) {
+            url = _url
+        } else if let _url = bundle.url(forResource: resource, withExtension: "\(String.momd)\(String.precompiled)") {
+            url = _url
+        } else {
+            preconditionFailure("No URL for Resource '\(resource)' in Bundle '\(bundle.bundlePath)'.")
+        }
+        
+        guard let model = NSManagedObjectModel(contentsOf: url) else {
+            preconditionFailure("Unable to load contents of NSManagedObjectModel at URL '\(url.path)'.")
+        }
+        
+        return model
+    }
+    
+    static func mappingModel(forResource resource: String = .mappingModel, inBundle bundle: Bundle) -> NSMappingModel {
+        let url: URL
+        
+        if let _url = bundle.url(forResource: resource, withExtension: .cdm) {
+            url = _url
+        } else if let _url = bundle.url(forResource: resource, withExtension: "\(String.cdm)\(String.precompiled)") {
+            url = _url
+        } else {
+            preconditionFailure("No URL for Resource '\(resource)' in Bundle '\(bundle.bundlePath)'.")
+        }
+        
+        guard let mapping = NSMappingModel(contentsOf: url) else {
+            preconditionFailure("Unable to load contents of NSMappingModel at URL '\(url.path)'.")
+        }
+        
+        return mapping
     }
 }
 

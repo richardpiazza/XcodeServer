@@ -5,7 +5,7 @@ import CoreData
 
 extension Container: SourceControlPersistable {
     public func saveRemote(_ remote: SourceControl.Remote, queue: DispatchQueue?, completion: @escaping RemoteResultHandler) {
-        InternalLog.coreData.info("Saving Remote [\(remote.id)]")
+        InternalLog.persistence.info("Saving Remote [\(remote.id)]")
         let queue = queue ?? dispatchQueue
         internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in
@@ -14,7 +14,7 @@ extension Container: SourceControlPersistable {
                     repository = entity
                 } else {
                     repository = context.make()
-                    InternalLog.coreData.debug("Creating REPOSITORY '\(remote.name)' [\(remote.id)]")
+                    InternalLog.persistence.debug("Creating REPOSITORY '\(remote.name)' [\(remote.id)]")
                 }
                 
                 repository.update(remote, context: context)
@@ -36,7 +36,7 @@ extension Container: SourceControlPersistable {
     }
     
     public func deleteRemote(_ remote: SourceControl.Remote, queue: DispatchQueue?, completion: @escaping VoidResultHandler) {
-        InternalLog.coreData.info("Removing Remote [\(remote.id)]")
+        InternalLog.persistence.info("Removing Remote [\(remote.id)]")
         let queue = queue ?? dispatchQueue
         internalQueue.async {
             self.persistentContainer.performBackgroundTask { (context) in

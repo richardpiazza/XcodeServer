@@ -52,7 +52,7 @@ extension Bot {
         do {
             return try context.fetch(request)
         } catch {
-            InternalLog.coreData.error("Failed to fetch bots", error: error)
+            InternalLog.persistence.error("Failed to fetch bots", error: error)
         }
         
         return []
@@ -65,7 +65,7 @@ extension Bot {
         do {
             return try context.fetch(request)
         } catch {
-            InternalLog.coreData.error("Failed to fetch bots for server \(id)", error: error)
+            InternalLog.persistence.error("Failed to fetch bots for server \(id)", error: error)
         }
         
         return []
@@ -79,7 +79,7 @@ extension Bot {
         do {
             return try context.fetch(request).first
         } catch {
-            InternalLog.coreData.error("", error: error)
+            InternalLog.persistence.error("", error: error)
         }
         
         return nil
@@ -93,11 +93,11 @@ extension Bot {
     /// - parameter context: The current managed object context for performing operations.
     func update(_ bot: XcodeServer.Bot, context: NSManagedObjectContext) {
         if configuration == nil {
-            InternalLog.coreData.debug("Creating CONFIGURATION for Bot '\(bot.name)' [\(bot.id)]")
+            InternalLog.persistence.debug("Creating CONFIGURATION for Bot '\(bot.name)' [\(bot.id)]")
             configuration = context.make()
         }
         if stats == nil {
-            InternalLog.coreData.debug("Creating STATS for Bot '\(bot.name)' [\(bot.id)]")
+            InternalLog.persistence.debug("Creating STATS for Bot '\(bot.name)' [\(bot.id)]")
             stats = context.make()
         }
         
@@ -118,7 +118,7 @@ extension Bot {
                 if let entity = Repository.repository(remoteId, in: context) {
                     repository = entity
                 } else {
-                    InternalLog.coreData.debug("Creating REPOSITORY '\(blueprint.name)' [\(remoteId)]")
+                    InternalLog.persistence.debug("Creating REPOSITORY '\(blueprint.name)' [\(remoteId)]")
                     repository = context.make()
                 }
                 repository.update(blueprint, context: context)
@@ -137,7 +137,7 @@ extension Bot {
             if let existing = (integrations as? Set<Integration>)?.first(where: { $0.identifier == integration.id }) {
                 existing.update(integration, context: context)
             } else {
-                InternalLog.coreData.debug("Creating INTEGRATION '\(integration.number)' [\(integration.id)] for Bot '\(name ?? "")'")
+                InternalLog.persistence.debug("Creating INTEGRATION '\(integration.number)' [\(integration.id)] for Bot '\(name ?? "")'")
                 let new: Integration = context.make()
                 new.update(integration, context: context)
                 addToIntegrations(new)

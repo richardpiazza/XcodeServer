@@ -69,7 +69,7 @@ extension Repository {
         do {
             return try context.fetch(request)
         } catch {
-            InternalLog.coreData.error("Failed to fetch repositories", error: error)
+            InternalLog.persistence.error("Failed to fetch repositories", error: error)
         }
         
         return []
@@ -83,7 +83,7 @@ extension Repository {
         do {
             return try context.fetch(request).first
         } catch {
-            InternalLog.coreData.error("Failed to fetch repository '\(id)'", error: error)
+            InternalLog.persistence.error("Failed to fetch repository '\(id)'", error: error)
         }
         
         return nil
@@ -124,7 +124,7 @@ extension Repository {
             if let existing = Commit.commit(commit.id, in: context) {
                 _commit = existing
             } else {
-                InternalLog.coreData.debug("Creating COMMIT for Repository [\(identifier ?? "")]")
+                InternalLog.persistence.debug("Creating COMMIT for Repository [\(identifier ?? "")]")
                 _commit = context.make()
                 addToCommits(_commit)
             }

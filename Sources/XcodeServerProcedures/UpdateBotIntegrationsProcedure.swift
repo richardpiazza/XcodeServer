@@ -28,7 +28,7 @@ public class UpdateBotIntegrationsProcedure: Procedure, InputProcedure {
         
         guard let value = input.value else {
             let error = XcodeServerProcedureError.invalidInput
-            InternalLog.procedures.error("", error: error)
+            InternalLog.operations.error("", error: error)
             finish(with: error)
             return
         }
@@ -38,7 +38,7 @@ public class UpdateBotIntegrationsProcedure: Procedure, InputProcedure {
         destination.saveIntegrations(value, forBot: id) { [weak self] (result) in
             switch result {
             case .failure(let error):
-                InternalLog.procedures.error("", error: error)
+                InternalLog.operations.error("", error: error)
                 self?.finish(with: error)
             case .success:
                 NotificationCenter.default.postBotDidChange(id)
