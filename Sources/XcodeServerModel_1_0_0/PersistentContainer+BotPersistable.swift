@@ -3,12 +3,12 @@ import Dispatch
 #if canImport(CoreData)
 import CoreData
 
-extension Container: BotPersistable {
+extension PersistentContainer: BotPersistable {
     public func saveBot(_ bot: XcodeServer.Bot, forServer server: XcodeServer.Server.ID, queue: DispatchQueue?, completion: @escaping BotResultHandler) {
         InternalLog.persistence.info("Saving Bot '\(bot.name)' [\(bot.id)]")
         let queue = queue ?? dispatchQueue
         internalQueue.async {
-            self.persistentContainer.performBackgroundTask { (context) in
+            self.performBackgroundTask { (context) in
                 let _bot: Bot
                 
                 if let existing = Bot.bot(bot.id, in: context) {
@@ -47,30 +47,32 @@ extension Container: BotPersistable {
     public func saveStats(_ stats: XcodeServer.Bot.Stats, forBot bot: XcodeServer.Bot.ID, queue: DispatchQueue?, completion: @escaping BotStatsResultHandler) {
         InternalLog.persistence.info("Saving STATS for Bot [\(bot)]")
         let queue = queue ?? dispatchQueue
-        self.persistentContainer.performBackgroundTask { (context) in
-            guard let _bot = Bot.bot(bot, in: context) else {
-                queue.async {
-                    completion(.failure(.noBot(bot)))
+        internalQueue.async {
+            self.performBackgroundTask { (context) in
+                guard let _bot = Bot.bot(bot, in: context) else {
+                    queue.async {
+                        completion(.failure(.noBot(bot)))
+                    }
+                    return
                 }
-                return
-            }
-            
-            if _bot.stats == nil {
-                _bot.stats = context.make()
-            }
-            
-            _bot.stats?.update(stats, context: context)
-            
-            let result = XcodeServer.Bot.Stats(_bot.stats!)
-            
-            do {
-                try context.save()
-                queue.async {
-                    completion(.success(result))
+                
+                if _bot.stats == nil {
+                    _bot.stats = context.make()
                 }
-            } catch {
-                queue.async {
-                    completion(.failure(.error(error)))
+                
+                _bot.stats?.update(stats, context: context)
+                
+                let result = XcodeServer.Bot.Stats(_bot.stats!)
+                
+                do {
+                    try context.save()
+                    queue.async {
+                        completion(.success(result))
+                    }
+                } catch {
+                    queue.async {
+                        completion(.failure(.error(error)))
+                    }
                 }
             }
         }
@@ -80,7 +82,7 @@ extension Container: BotPersistable {
         InternalLog.persistence.info("Removing Bot '\(bot.name)' [\(bot.id)]")
         let queue = queue ?? dispatchQueue
         internalQueue.async {
-            self.persistentContainer.performBackgroundTask { (context) in
+            self.performBackgroundTask { (context) in
                 guard let _bot = Bot.bot(bot.id, in: context) else {
                     queue.async {
                         completion(.failure(.noBot(bot.id)))

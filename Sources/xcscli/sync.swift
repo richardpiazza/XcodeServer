@@ -4,7 +4,7 @@ import XcodeServer
 import XcodeServerAPI
 import XcodeServerUtility
 import XcodeServerCoreData
-import XcodeServerPersistence
+import CoreDataPlus
 #if canImport(CoreData)
 
 @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
@@ -36,7 +36,7 @@ final class Sync: ParsableCommand, Route {
     var model: Model?
     
     @Flag(help: "Removes any store files prior to syncing.")
-    var purge: Bool
+    var purge: Bool = false
     
     @Option(help: "The minimum output log level.")
     var logLevel: InternalLog.Level = .warn
@@ -48,8 +48,10 @@ final class Sync: ParsableCommand, Route {
     func run() throws {
         configureLog()
         
+        let storeURL = CoreDataStore.defaultStoreURL
+        
         if purge {
-            try FileManager.default.purgeDefaultStore()
+            try storeURL.destroy()
         }
         
         let _model = model ?? Model.current
@@ -71,11 +73,9 @@ final class Sync: ParsableCommand, Route {
                 
                 let end = Date()
                 print("Sync Complete - \(end.timeIntervalSince(start)) Seconds")
-                if let path = store.path {
-                    print("\(path)")
-                }
+                print("\(storeURL.rawValue.path)")
                 
-                store.unload()
+//                storeURL.unload()
                 
                 Self.exit()
             }

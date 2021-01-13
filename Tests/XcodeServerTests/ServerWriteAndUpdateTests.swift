@@ -1,7 +1,6 @@
 import XCTest
 @testable import XcodeServer
 @testable import XcodeServerCoreData
-@testable import XcodeServerPersistence
 @testable import XcodeServerModel_1_0_0
 
 #if canImport(CoreData)
@@ -136,15 +135,15 @@ private extension XcodeServer.Integration.ID {
 
 extension CoreDataStore {
     var server1: XcodeServerModel_1_0_0.Server? {
-        return XcodeServerModel_1_0_0.Server.server(.server1, in: container.persistentContainer.viewContext)
+        return XcodeServerModel_1_0_0.Server.server(.server1, in: catalog.persistentContainer.viewContext)
     }
     
     var bot1: XcodeServerModel_1_0_0.Bot? {
-        return XcodeServerModel_1_0_0.Bot.bot(.bot1, in: container.persistentContainer.viewContext)
+        return XcodeServerModel_1_0_0.Bot.bot(.bot1, in: catalog.persistentContainer.viewContext)
     }
     
     var integration1: XcodeServerModel_1_0_0.Integration? {
-        return XcodeServerModel_1_0_0.Integration.integration(.integration1, in: container.persistentContainer.viewContext)
+        return XcodeServerModel_1_0_0.Integration.integration(.integration1, in: catalog.persistentContainer.viewContext)
     }
 }
 #endif

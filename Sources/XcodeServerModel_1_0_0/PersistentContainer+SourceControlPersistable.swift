@@ -3,12 +3,12 @@ import Dispatch
 #if canImport(CoreData)
 import CoreData
 
-extension Container: SourceControlPersistable {
+extension PersistentContainer: SourceControlPersistable {
     public func saveRemote(_ remote: SourceControl.Remote, queue: DispatchQueue?, completion: @escaping RemoteResultHandler) {
         InternalLog.persistence.info("Saving Remote [\(remote.id)]")
         let queue = queue ?? dispatchQueue
         internalQueue.async {
-            self.persistentContainer.performBackgroundTask { (context) in
+            self.performBackgroundTask { (context) in
                 let repository: Repository
                 if let entity = Repository.repository(remote.id, in: context) {
                     repository = entity
@@ -39,7 +39,7 @@ extension Container: SourceControlPersistable {
         InternalLog.persistence.info("Removing Remote [\(remote.id)]")
         let queue = queue ?? dispatchQueue
         internalQueue.async {
-            self.persistentContainer.performBackgroundTask { (context) in
+            self.performBackgroundTask { (context) in
                 guard let _remote = Repository.repository(remote.id, in: context) else {
                     queue.async {
                         completion(.failure(.noRemote(remote.id)))

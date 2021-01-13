@@ -1,5 +1,5 @@
 import XcodeServer
-import XcodeServerCoreData
+import CoreDataPlus
 import Foundation
 #if canImport(CoreData)
 import CoreData

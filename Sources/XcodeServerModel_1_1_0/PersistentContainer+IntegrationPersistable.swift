@@ -3,12 +3,12 @@ import Dispatch
 #if canImport(CoreData)
 import CoreData
 
-extension Container: IntegrationPersistable {
+extension PersistentContainer: IntegrationPersistable {
     public func saveIntegration(_ integration: XcodeServer.Integration, forBot bot: XcodeServer.Bot.ID, queue: DispatchQueue?, completion: @escaping IntegrationResultHandler) {
         InternalLog.persistence.info("Saving Integration '\(integration.number)' [\(integration.id)]")
         let queue = queue ?? dispatchQueue
         internalQueue.async {
-            self.persistentContainer.performBackgroundTask { (context) in
+            self.performBackgroundTask { (context) in
                 let _integration: Integration
                 
                 if let existing = Integration.integration(integration.id, in: context) {
@@ -46,7 +46,7 @@ extension Container: IntegrationPersistable {
     public func saveIntegrations(_ integrations: [XcodeServer.Integration], forBot bot: XcodeServer.Bot.ID, queue: DispatchQueue?, completion: @escaping IntegrationsResultHandler) {
         let queue = queue ?? dispatchQueue
         internalQueue.async {
-            self.persistentContainer.performBackgroundTask { (context) in
+            self.performBackgroundTask { (context) in
                 guard let _bot = Bot.bot(bot, in: context) else {
                     queue.async {
                         completion(.failure(.noBot(bot)))
@@ -98,7 +98,7 @@ extension Container: IntegrationPersistable {
         InternalLog.persistence.info("Saving COMMITS for Integration [\(id)]")
         let queue = queue ?? dispatchQueue
         internalQueue.async {
-            self.persistentContainer.performBackgroundTask { (context) in
+            self.performBackgroundTask { (context) in
                 guard let managedIntegration = Integration.integration(id, in: context) else {
                     queue.async {
                         completion(.failure(.noIntegration(id)))
@@ -144,7 +144,7 @@ extension Container: IntegrationPersistable {
         InternalLog.persistence.info("Saving ISSUES for Integration [\(id)]")
         let queue = queue ?? dispatchQueue
         internalQueue.async {
-            self.persistentContainer.performBackgroundTask { (context) in
+            self.performBackgroundTask { (context) in
                 guard let managedIntegration = Integration.integration(id, in: context) else {
                     queue.async {
                         completion(.failure(.noIntegration(id)))
@@ -182,7 +182,7 @@ extension Container: IntegrationPersistable {
         InternalLog.persistence.info("Removing Integration '\(integration.number)' [\(integration.id)]")
         let queue = queue ?? dispatchQueue
         internalQueue.async {
-            self.persistentContainer.performBackgroundTask { (context) in
+            self.performBackgroundTask { (context) in
                 guard let _integration = Integration.integration(integration.id, in: context) else {
                     queue.async {
                         completion(.failure(.noIntegration(integration.id)))

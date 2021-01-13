@@ -1,7 +1,6 @@
 import XCTest
 @testable import XcodeServer
 @testable import XcodeServerCoreData
-@testable import XcodeServerPersistence
 @testable import XcodeServerModel_1_0_0
 @testable import XcodeServerModel_1_1_0
 #if canImport(CoreData)

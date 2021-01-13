@@ -18,7 +18,7 @@ let package = Package(
             targets: [
                 "XcodeServer",
                 "XcodeServerAPI",
-                "XcodeServerPersistence",
+                "XcodeServerCoreData",
                 "XcodeServerProcedures",
                 "XcodeServerUtility"
             ]
@@ -36,6 +36,7 @@ let package = Package(
         .package(url: "https://github.com/richardpiazza/SessionPlus.git", .upToNextMinor(from: "1.0.0")),
         .package(url: "https://github.com/swift-server/async-http-client", from: "1.2.1"),
         .package(url: "https://github.com/apple/swift-argument-parser.git", .upToNextMinor(from: "0.3.1")),
+        .package(url: "https://github.com/richardpiazza/CoreDataPlus.git", .branch("develop")),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -44,7 +45,8 @@ let package = Package(
             name: "xcscli",
             dependencies: [
                 "XcodeServerUtility",
-                "XcodeServerPersistence",
+                "XcodeServerCoreData",
+                "CoreDataPlus",
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
             ]
         ),
@@ -62,26 +64,28 @@ let package = Package(
         ),
         .target(
             name: "XcodeServerCoreData",
-            dependencies: ["XcodeServer"]
+            dependencies: [
+                "XcodeServer",
+                "CoreDataPlus",
+                "XcodeServerModel_1_0_0",
+                "XcodeServerModel_1_1_0",
+            ]
         ),
         .target(
             name: "XcodeServerModel_1_0_0",
-            dependencies: ["XcodeServer", "XcodeServerCoreData"],
+            dependencies: [
+                "XcodeServer",
+                "CoreDataPlus",
+            ],
             resources: [.process("Resources")]
         ),
         .target(
             name: "XcodeServerModel_1_1_0",
-            dependencies: ["XcodeServer", "XcodeServerCoreData"],
-            resources: [.process("Resources")]
-        ),
-        .target(
-            name: "XcodeServerPersistence",
             dependencies: [
                 "XcodeServer",
-                "XcodeServerCoreData",
-                "XcodeServerModel_1_0_0",
-                "XcodeServerModel_1_1_0"
-            ]
+                "CoreDataPlus",
+            ],
+            resources: [.process("Resources")]
         ),
         .target(
             name: "XcodeServerProcedures",
@@ -97,9 +101,6 @@ let package = Package(
                 "XcodeServer",
                 "XcodeServerAPI",
                 "XcodeServerCoreData",
-                "XcodeServerModel_1_0_0",
-                "XcodeServerModel_1_1_0",
-                "XcodeServerPersistence",
                 "XcodeServerUtility"
             ],
             resources: [.process("Resources")]

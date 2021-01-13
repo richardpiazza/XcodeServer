@@ -1,5 +1,6 @@
 import Foundation
 @testable import XcodeServerCoreData
+import CoreDataPlus
 
 extension FileManager {
     /// Replaces the default SQLite Core Data store with test bundle resources for testing.
@@ -16,9 +17,11 @@ extension FileManager {
             throw CocoaError(.fileNoSuchFile)
         }
         
-        try purgeDefaultStore()
-        try copyItem(at: bundleDb, to: .storeURL)
-        try copyItem(at: bundleShm, to: .shmURL)
-        try copyItem(at: bundleWal, to: .walURL)
+        let storeURL = CoreDataStore.defaultStoreURL
+        
+        try storeURL.destroy()
+        try copyItem(at: bundleDb, to: storeURL.rawValue)
+        try copyItem(at: bundleShm, to: storeURL.shmURL)
+        try copyItem(at: bundleWal, to: storeURL.walURL)
     }
 }

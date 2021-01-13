@@ -1,7 +1,6 @@
 import XCTest
 @testable import XcodeServer
 @testable import XcodeServerCoreData
-import XcodeServerPersistence
 #if canImport(CoreData)
 import CoreData
 
@@ -62,15 +61,15 @@ final class PersistentContainerTests: XCTestCase {
     func testMigrateToCurrentStore() throws {
         #if swift(>=5.3)
         try FileManager.default.overwriteDefaultStore(withResource: .model_1_0_0_populated)
-        let storeURL: URL = .storeURL
+        let storeURL = CoreDataStore.defaultStoreURL
         let storeModel = Model.v1_0_0.managedObjectModel
-        var metadata: [String: Any] = try NSPersistentStoreCoordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: storeURL, options: nil)
+        var metadata: [String: Any] = try NSPersistentStoreCoordinator.metadataForPersistentStore(ofType: storeURL.storeType, at: storeURL.rawValue, options: nil)
         XCTAssertTrue(storeModel.isConfiguration(withName: .configurationName, compatibleWithStoreMetadata: metadata))
         
         let model = Model.current
         let objectModel: NSManagedObjectModel = model.managedObjectModel
-        let _ = try CoreDataStore(model: model)
-        metadata = try NSPersistentStoreCoordinator.metadataForPersistentStore(ofType: NSSQLiteStoreType, at: storeURL, options: nil)
+        let _ = try CoreDataStore(model: model, silentFailure: false)
+        metadata = try NSPersistentStoreCoordinator.metadataForPersistentStore(ofType: storeURL.storeType, at: storeURL.rawValue, options: nil)
         XCTAssertTrue(objectModel.isConfiguration(withName: .configurationName, compatibleWithStoreMetadata: metadata))
         #endif
     }

@@ -3,11 +3,11 @@ import Dispatch
 #if canImport(CoreData)
 import CoreData
 
-extension Container: IntegrationQueryable {
+extension PersistentContainer: IntegrationQueryable {
     public func getIntegrations(queue: DispatchQueue?, completion: @escaping IntegrationsResultHandler) {
         let queue = queue ?? dispatchQueue
         internalQueue.async {
-            self.persistentContainer.performBackgroundTask { (context) in
+            self.performBackgroundTask { (context) in
                 let integrations = Integration.integrations(in: context)
                 let result = integrations.map({ XcodeServer.Integration($0) })
                 queue.async {
@@ -20,7 +20,7 @@ extension Container: IntegrationQueryable {
     public func getIntegrations(forBot id: XcodeServer.Bot.ID, queue: DispatchQueue?, completion: @escaping IntegrationsResultHandler) {
         let queue = queue ?? dispatchQueue
         internalQueue.async {
-            self.persistentContainer.performBackgroundTask { (context) in
+            self.performBackgroundTask { (context) in
                 let integrations = Integration.integrations(forBot: id, in: context)
                 let result = integrations.map({ XcodeServer.Integration($0) })
                 queue.async {
@@ -33,7 +33,7 @@ extension Container: IntegrationQueryable {
     public func getIntegration(_ id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping IntegrationResultHandler) {
         let queue = queue ?? dispatchQueue
         internalQueue.async {
-            self.persistentContainer.performBackgroundTask { (context) in
+            self.performBackgroundTask { (context) in
                 if let integration = Integration.integration(id, in: context) {
                     let result = XcodeServer.Integration(integration)
                     queue.async {
@@ -58,7 +58,7 @@ extension Container: IntegrationQueryable {
     public func getCommitsForIntegration(_ id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping CommitsResultHandler) {
         let queue = queue ?? dispatchQueue
         internalQueue.async {
-            self.persistentContainer.performBackgroundTask { (context) in
+            self.performBackgroundTask { (context) in
                 guard let integration = Integration.integration(id, in: context) else {
                     queue.async {
                         completion(.failure(.noIntegration(id)))
@@ -85,7 +85,7 @@ extension Container: IntegrationQueryable {
     public func getIssuesForIntegration(_ id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping IssueCatalogResultHandler) {
         let queue = queue ?? dispatchQueue
         internalQueue.async {
-            self.persistentContainer.performBackgroundTask { (context) in
+            self.performBackgroundTask { (context) in
                 guard let integration = Integration.integration(id, in: context) else {
                     queue.async {
                         completion(.failure(.noIntegration(id)))

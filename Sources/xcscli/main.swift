@@ -15,6 +15,7 @@ struct Command: ParsableCommand {
         #if canImport(CoreData)
         if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *) {
             subcommands.append(Sync.self)
+            subcommands.append(Store.self)
         }
         #endif
         
