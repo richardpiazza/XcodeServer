@@ -6,7 +6,7 @@ import Foundation
 #if canImport(CoreData)
 
 @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-final class StoreInfo: ParsableCommand {
+final class StoreInfo: ParsableCommand, Stored, Logged {
     
     static var configuration: CommandConfiguration = {
         .init(
@@ -14,7 +14,7 @@ final class StoreInfo: ParsableCommand {
             abstract: "Displays information about the persistence store.",
             discussion: """
             When no 'path' is specified, the default store URL will be used:
-            \(CoreDataStore.defaultStoreURL.rawValue.path)
+            \(StoreURL.xcodeServer.rawValue.path)
             """,
             version: "0.1",
             shouldDisplay: true,
@@ -24,18 +24,15 @@ final class StoreInfo: ParsableCommand {
         )
     }()
     
-    @Argument(help: "File Path")
+    @Argument(help: "Persisted store path")
     var path: String?
     
-    private var storeURL: StoreURL {
-        guard let path = self.path else {
-            return CoreDataStore.defaultStoreURL
-        }
-
-        return StoreURL(currentDirectory: path)
-    }
+    @Option(help: "The minimum output log level.")
+    var logLevel: InternalLog.Level = .warn
     
     func run() throws {
+        configureLog()
+        
         print("Store URL: \(storeURL.rawValue.path)")
         if let version = try Model.versionForStore(storeURL, configurationName: .configurationName) {
             print("Model Version: \(version.rawValue)")

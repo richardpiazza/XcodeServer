@@ -19,10 +19,20 @@ public class CoreDataStore {
                 return catalog.persistentContainer
             }
         }
+        
+        func unload() throws {
+            switch self {
+            case .v1_0_0(let catalog):
+                try catalog.unload()
+            case .v1_1_0(let catalog):
+                try catalog.unload()
+            }
+        }
     }
     
     internal let catalog: Catalog
     
+    @available(*, deprecated)
     public static var defaultStoreURL: StoreURL = {
         guard let url = try? StoreURL(applicationSupport: .configurationName, folder: .containerName) else {
             preconditionFailure()
@@ -34,38 +44,30 @@ public class CoreDataStore {
     /// Initializes the persistent store.
     ///
     /// - parameter model: `Model` version the store should be initialized with. (Migration if needed/able)
-    /// - parameter dispatchQueue: DispatchQueue on which all results will be returned (when not specified).
-    /// - parameter persisted: When false, this store will only be maintained in memory.
+    /// - parameter persistence: The underlying storage mechanism used.
     /// - parameter silentFailure: When enabled, some migration errors will fall back to a clean state.
-    public init(model: Model, dispatchQueue: DispatchQueue = .main, persisted: Bool = true, silentFailure: Bool = true) throws {
+    public init(model: Model, persistence: Persistence = .xcodeServer, silentFailure: Bool = true) throws {
         switch model {
         case .v1_0_0:
-            let persistence: CatalogContainer<Model, XcodeServerModel_1_0_0.PersistentContainer>.Persistence
-            switch persisted {
-            case true:
-                let storeURL: StoreURL = try .init(applicationSupport: .configurationName, folder: .containerName)
-                persistence = .store(storeURL)
-            case false:
-                persistence = .memory
-            }
             let container = try CatalogContainer<Model, XcodeServerModel_1_0_0.PersistentContainer>(version: model, persistence: persistence, name: .containerName, silentMigration: silentFailure)
             catalog = .v1_0_0(container)
         case .v1_1_0:
-            let persistence: CatalogContainer<Model, XcodeServerModel_1_1_0.PersistentContainer>.Persistence
-            switch persisted {
-            case true:
-                let storeURL: StoreURL = try .init(applicationSupport: .configurationName, folder: .containerName)
-                persistence = .store(storeURL)
-            case false:
-                persistence = .memory
-            }
             let container = try CatalogContainer<Model, XcodeServerModel_1_1_0.PersistentContainer>(version: model, persistence: persistence, name: .containerName, silentMigration: silentFailure)
             catalog = .v1_1_0(container)
         }
     }
     
-    public var path: String? {
-        return nil
+    @available(*, deprecated, renamed: "init(model:persistence:silentFailure:)")
+    public convenience init(model: Model, persisted: Bool = true, silentFailure: Bool = true) throws {
+        if persisted {
+            try self.init(model: model, persistence: .xcodeServer, silentFailure: silentFailure)
+        } else {
+            try self.init(model: model, persistence: .memory, silentFailure: silentFailure)
+        }
+    }
+    
+    deinit {
+        try? catalog.unload()
     }
 }
 

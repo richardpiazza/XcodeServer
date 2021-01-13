@@ -3,7 +3,7 @@ import ArgumentParser
 import XcodeServer
 import XcodeServerAPI
 
-final class Bots: ParsableCommand, Route {
+final class Bots: ParsableCommand, Route, Logged {
     
     static var configuration: CommandConfiguration = {
         return CommandConfiguration(

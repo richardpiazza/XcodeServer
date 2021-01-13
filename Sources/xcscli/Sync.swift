@@ -8,7 +8,7 @@ import CoreDataPlus
 #if canImport(CoreData)
 
 @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-final class Sync: ParsableCommand, Route {
+final class Sync: ParsableCommand, Route, Stored, Logged {
     
     static var configuration: CommandConfiguration = {
         return CommandConfiguration(
@@ -25,6 +25,9 @@ final class Sync: ParsableCommand, Route {
     
     @Argument(help: "Fully Qualified Domain Name of the Xcode Server.")
     var server: String
+    
+    @Argument(help: "Persisted store path")
+    var path: String?
     
     @Option(help: "Username credential for the Xcode Server. (Optional).")
     var username: String?
@@ -48,14 +51,12 @@ final class Sync: ParsableCommand, Route {
     func run() throws {
         configureLog()
         
-        let storeURL = CoreDataStore.defaultStoreURL
-        
         if purge {
             try storeURL.destroy()
         }
         
         let _model = model ?? Model.current
-        let store = try CoreDataStore(model: _model)
+        let store = try CoreDataStore(model: _model, persistence: .store(storeURL))
         let manager: XcodeServerUtility.Manager = Manager(store: store, authorizationDelegate: self)
         
         manager.createServer(withId: server) { (error) in
@@ -73,9 +74,7 @@ final class Sync: ParsableCommand, Route {
                 
                 let end = Date()
                 print("Sync Complete - \(end.timeIntervalSince(start)) Seconds")
-                print("\(storeURL.rawValue.path)")
-                
-//                storeURL.unload()
+                print("\(self.storeURL.rawValue.path)")
                 
                 Self.exit()
             }

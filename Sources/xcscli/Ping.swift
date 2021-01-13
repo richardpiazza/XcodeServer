@@ -3,7 +3,7 @@ import ArgumentParser
 import XcodeServer
 import XcodeServerAPI
 
-final class Ping: ParsableCommand, Route {
+final class Ping: ParsableCommand, Route, Logged {
     
     static var configuration: CommandConfiguration = {
         return CommandConfiguration(

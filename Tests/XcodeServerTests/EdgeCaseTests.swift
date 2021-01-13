@@ -32,7 +32,7 @@ final class EdgeCaseTests: XCTestCase {
     private let client: MockApiClient = Client(serverId: .server1)
     private lazy var store: CoreDataStore = {
         do {
-            return try CoreDataStore(model: .v1_0_0, persisted: false)
+            return try CoreDataStore(model: .v1_0_0, persistence: .memory)
         } catch {
             preconditionFailure(error.localizedDescription)
         }

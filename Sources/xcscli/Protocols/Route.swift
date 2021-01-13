@@ -21,13 +21,6 @@ extension Route {
         }
     }
     
-    func configureLog() {
-        InternalLog.api.minimumConsoleLevel = logLevel
-        InternalLog.persistence.minimumConsoleLevel = logLevel
-        InternalLog.operations.minimumConsoleLevel = logLevel
-        InternalLog.utility.minimumConsoleLevel = logLevel
-    }
-    
     // MARK: - APIClientAuthorizationDelegate
     func credentials(for fqdn: String) -> (username: String, password: String)? {
         return credentialsForServer(withFQDN: fqdn)

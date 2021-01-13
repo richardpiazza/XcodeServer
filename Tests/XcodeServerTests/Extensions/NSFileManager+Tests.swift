@@ -18,7 +18,7 @@ extension FileManager {
             throw CocoaError(.fileNoSuchFile)
         }
         
-        let storeURL = CoreDataStore.defaultStoreURL
+        let storeURL = StoreURL.xcodeServer
         
         try storeURL.destroy()
         try copyItem(at: bundleDb, to: storeURL.rawValue)

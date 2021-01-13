@@ -13,7 +13,7 @@ final class ServerWriteAndUpdateTests: XCTestCase {
     
     lazy var persistedStore: CoreDataStore = {
         do {
-            return try CoreDataStore(model: .v1_0_0, persisted: false)
+            return try CoreDataStore(model: .v1_0_0, persistence: .memory)
         } catch {
             preconditionFailure(error.localizedDescription)
         }
