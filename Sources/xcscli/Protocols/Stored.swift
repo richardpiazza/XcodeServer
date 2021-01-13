@@ -9,6 +9,7 @@ protocol Stored {
     var path: String? { get set }
 }
 
+#if canImport(CoreData)
 extension Stored {
     var storeURL: StoreURL {
         guard let path = self.path else {
@@ -23,3 +24,4 @@ extension Stored {
         return StoreURL(currentDirectory: filename)
     }
 }
+#endif
