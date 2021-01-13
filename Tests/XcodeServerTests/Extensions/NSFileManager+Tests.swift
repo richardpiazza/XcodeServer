@@ -1,6 +1,7 @@
 import Foundation
 @testable import XcodeServerCoreData
 import CoreDataPlus
+#if canImport(CoreData)
 
 extension FileManager {
     /// Replaces the default SQLite Core Data store with test bundle resources for testing.
@@ -25,3 +26,4 @@ extension FileManager {
         try copyItem(at: bundleWal, to: storeURL.walURL)
     }
 }
+#endif
