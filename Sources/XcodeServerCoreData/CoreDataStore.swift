@@ -20,6 +20,24 @@ public class CoreDataStore {
             }
         }
         
+        var internalQueue: DispatchQueue {
+            switch self {
+            case .v1_0_0(let catalog):
+                return catalog.persistentContainer.internalQueue
+            case .v1_1_0(let catalog):
+                return catalog.persistentContainer.internalQueue
+            }
+        }
+        
+        var dispatchQueue: DispatchQueue {
+            switch self {
+            case .v1_0_0(let catalog):
+                return catalog.persistentContainer.dispatchQueue
+            case .v1_1_0(let catalog):
+                return catalog.persistentContainer.dispatchQueue
+            }
+        }
+        
         func unload() throws {
             switch self {
             case .v1_0_0(let catalog):
@@ -31,15 +49,11 @@ public class CoreDataStore {
     }
     
     internal let catalog: Catalog
-    
-    @available(*, deprecated)
-    public static var defaultStoreURL: StoreURL = {
-        guard let url = try? StoreURL(applicationSupport: .configurationName, folder: .containerName) else {
-            preconditionFailure()
-        }
-        
-        return url
-    }()
+    public var persistentContainer: NSPersistentContainer { catalog.persistentContainer }
+    @available(*, deprecated, message: "CatalogContainer manages its own queues.")
+    internal var internalQueue: DispatchQueue { catalog.internalQueue }
+    @available(*, deprecated, message: "CatalogContainer manages its own queues.")
+    internal var returnQueue: DispatchQueue { catalog.dispatchQueue }
     
     /// Initializes the persistent store.
     ///
@@ -58,7 +72,7 @@ public class CoreDataStore {
     }
     
     @available(*, deprecated, renamed: "init(model:persistence:silentFailure:)")
-    public convenience init(model: Model, persisted: Bool = true, silentFailure: Bool = true) throws {
+    public convenience init(model: Model, dispatchQueue: DispatchQueue = .main, persisted: Bool = true, silentFailure: Bool = true) throws {
         if persisted {
             try self.init(model: model, persistence: .xcodeServer, silentFailure: silentFailure)
         } else {
