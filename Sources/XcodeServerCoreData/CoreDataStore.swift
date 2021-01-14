@@ -38,12 +38,12 @@ public class CoreDataStore {
             }
         }
         
-        func unload() throws {
+        func checkpoint(reopen: Bool = false) throws {
             switch self {
             case .v1_0_0(let catalog):
-                try catalog.unload()
+                try reopen ? catalog.checkpointAndContinue() : catalog.checkpointAndClose()
             case .v1_1_0(let catalog):
-                try catalog.unload()
+                try reopen ? catalog.checkpointAndContinue() : catalog.checkpointAndClose()
             }
         }
     }
@@ -81,7 +81,7 @@ public class CoreDataStore {
     }
     
     deinit {
-        try? catalog.unload()
+        try? catalog.checkpoint()
     }
 }
 
