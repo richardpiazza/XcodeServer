@@ -2,6 +2,7 @@ import XCTest
 @testable import XcodeServer
 @testable import XcodeServerAPI
 @testable import XcodeServerCoreData
+@testable import XcodeServerModel_1_0_0
 
 #if canImport(CoreData) && swift(>=5.3)
 final class BotWriteAndUpdateTests: XCTestCase {
@@ -50,7 +51,7 @@ final class BotWriteAndUpdateTests: XCTestCase {
     private let client: MockApiClient = Client(serverId: .server1)
     private lazy var store: CoreDataStore = {
         do {
-            return try CoreDataStore(model: .v1_0_0, persisted: false)
+            return try CoreDataStore(model: .v1_0_0, persistence: .memory)
         } catch {
             preconditionFailure(error.localizedDescription)
         }
@@ -173,7 +174,7 @@ final class BotWriteAndUpdateTests: XCTestCase {
         // currently empty as the core data entity structure doesn't allow for it.
         // but, the repository object should have been created.
         XCTAssertEqual(config.sourceControlBlueprint, SourceControl.Blueprint())
-        let repository = try XCTUnwrap(store.persistentContainer.viewContext.repository(withIdentifier: "0430DC0FCD6EB7BC51C585D722CCD37A72BD7D71"))
+        let repository = try XCTUnwrap(Repository.repository("0430DC0FCD6EB7BC51C585D722CCD37A72BD7D71", in: store.catalog.persistentContainer.viewContext))
         XCTAssertEqual(repository.identifier, "0430DC0FCD6EB7BC51C585D722CCD37A72BD7D71")
         XCTAssertEqual(repository.system, "com.apple.dt.Xcode.sourcecontrol.Git")
         XCTAssertEqual(repository.url, "bitbucket.org:richardpiazza/com.richardpiazza.dynumite.git")

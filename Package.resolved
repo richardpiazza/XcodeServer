@@ -20,6 +20,15 @@
         }
       },
       {
+        "package": "CoreDataPlus",
+        "repositoryURL": "https://github.com/richardpiazza/CoreDataPlus.git",
+        "state": {
+          "branch": null,
+          "revision": "535de703382f98e2fe8ab86aa27d53c5d930736a",
+          "version": "0.1.4"
+        }
+      },
+      {
         "package": "ProcedureKit",
         "repositoryURL": "https://github.com/richardpiazza/ProcedureKit.git",
         "state": {

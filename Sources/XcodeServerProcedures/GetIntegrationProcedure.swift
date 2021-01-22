@@ -24,7 +24,7 @@ public class GetIntegrationProcedure: Procedure, InputProcedure, OutputProcedure
         
         guard let id = input.value else {
             let error = XcodeServerProcedureError.invalidInput
-            InternalLog.procedures.error("GetIntegrationProcedure Failed", error: error)
+            InternalLog.operations.error("GetIntegrationProcedure Failed", error: error)
             output = .ready(.failure(error))
             finish(with: error)
             return
@@ -36,7 +36,7 @@ public class GetIntegrationProcedure: Procedure, InputProcedure, OutputProcedure
                 self?.output = .ready(.success(value))
                 self?.finish()
             case .failure(let error):
-                InternalLog.procedures.error("GetIntegrationProcedure Failed", error: error)
+                InternalLog.operations.error("GetIntegrationProcedure Failed", error: error)
                 self?.output = .ready(.failure(error))
                 self?.finish(with: error)
             }

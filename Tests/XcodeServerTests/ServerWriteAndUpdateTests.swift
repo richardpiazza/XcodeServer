@@ -1,6 +1,7 @@
 import XCTest
 @testable import XcodeServer
 @testable import XcodeServerCoreData
+@testable import XcodeServerModel_1_0_0
 
 #if canImport(CoreData)
 final class ServerWriteAndUpdateTests: XCTestCase {
@@ -12,7 +13,7 @@ final class ServerWriteAndUpdateTests: XCTestCase {
     
     lazy var persistedStore: CoreDataStore = {
         do {
-            return try CoreDataStore(model: .v1_0_0, persisted: false)
+            return try CoreDataStore(model: .v1_0_0, persistence: .memory)
         } catch {
             preconditionFailure(error.localizedDescription)
         }
@@ -133,22 +134,16 @@ private extension XcodeServer.Integration.ID {
 }
 
 extension CoreDataStore {
-    var server1: XcodeServerCoreData.Server? {
-        let request: NSFetchRequest<XcodeServerCoreData.Server> = NSFetchRequest(entityName: XcodeServerCoreData.Server.entityName)
-        request.predicate = NSPredicate(format: "%K == %@", #keyPath(XcodeServerCoreData.Server.fqdn), XcodeServer.Server.ID.server1)
-        return try? persistentContainer.viewContext.fetch(request).first
+    var server1: XcodeServerModel_1_0_0.Server? {
+        return XcodeServerModel_1_0_0.Server.server(.server1, in: catalog.persistentContainer.viewContext)
     }
     
-    var bot1: XcodeServerCoreData.Bot? {
-        let request: NSFetchRequest<XcodeServerCoreData.Bot> = NSFetchRequest(entityName: XcodeServerCoreData.Bot.entityName)
-        request.predicate = NSPredicate(format: "%K == %@", #keyPath(XcodeServerCoreData.Bot.identifier), XcodeServer.Bot.ID.bot1)
-        return try? persistentContainer.viewContext.fetch(request).first
+    var bot1: XcodeServerModel_1_0_0.Bot? {
+        return XcodeServerModel_1_0_0.Bot.bot(.bot1, in: catalog.persistentContainer.viewContext)
     }
     
-    var integration1: XcodeServerCoreData.Integration? {
-        let request: NSFetchRequest<XcodeServerCoreData.Integration> = NSFetchRequest(entityName: XcodeServerCoreData.Integration.entityName)
-        request.predicate = NSPredicate(format: "%K == %@", #keyPath(XcodeServerCoreData.Integration.identifier), XcodeServer.Integration.ID.integration1)
-        return try? persistentContainer.viewContext.fetch(request).first
+    var integration1: XcodeServerModel_1_0_0.Integration? {
+        return XcodeServerModel_1_0_0.Integration.integration(.integration1, in: catalog.persistentContainer.viewContext)
     }
 }
 #endif

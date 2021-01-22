@@ -3,7 +3,7 @@ import XcodeServer
 
 extension XCSClient: IntegrationQueryable {
     public func getIntegrations(queue: DispatchQueue?, completion: @escaping IntegrationsResultHandler) {
-        InternalLog.apiClient.info("Retrieving ALL Integrations")
+        InternalLog.api.info("Retrieving ALL Integrations")
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.integrations { (result) in
@@ -23,7 +23,7 @@ extension XCSClient: IntegrationQueryable {
     }
     
     public func getIntegrations(forBot id: Bot.ID, queue: DispatchQueue?, completion: @escaping IntegrationsResultHandler) {
-        InternalLog.apiClient.info("Retrieving INTEGRATIONS for Bot [\(id)]")
+        InternalLog.api.info("Retrieving INTEGRATIONS for Bot [\(id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.integrations(forBotWithIdentifier: id) { (result) in
@@ -43,7 +43,7 @@ extension XCSClient: IntegrationQueryable {
     }
     
     public func getIntegration(_ id: Integration.ID, queue: DispatchQueue?, completion: @escaping IntegrationResultHandler) {
-        InternalLog.apiClient.info("Retrieving Integration [\(id)]")
+        InternalLog.api.info("Retrieving Integration [\(id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.integration(withIdentifier: id) { (result) in
@@ -63,7 +63,7 @@ extension XCSClient: IntegrationQueryable {
     }
     
     public func getArchiveForIntegration(_ id: Integration.ID, queue: DispatchQueue?, completion: @escaping DataResultHandler) {
-        InternalLog.apiClient.info("Retrieving ARCHIVE for Integration [\(id)]")
+        InternalLog.api.info("Retrieving ARCHIVE for Integration [\(id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.archive(forIntegrationWithIdentifier: id) { (result) in
@@ -82,7 +82,7 @@ extension XCSClient: IntegrationQueryable {
     }
     
     public func getCommitsForIntegration(_ id: Integration.ID, queue: DispatchQueue?, completion: @escaping CommitsResultHandler) {
-        InternalLog.apiClient.info("Retrieving COMMITS for Integration [\(id)]")
+        InternalLog.api.info("Retrieving COMMITS for Integration [\(id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.commits(forIntegrationWithIdentifier: id) { (result) in
@@ -102,7 +102,7 @@ extension XCSClient: IntegrationQueryable {
     }
     
     public func getIssuesForIntegration(_ id: Integration.ID, queue: DispatchQueue?, completion: @escaping IssueCatalogResultHandler) {
-        InternalLog.apiClient.info("Retrieving ISSUES for Integration [\(id)]")
+        InternalLog.api.info("Retrieving ISSUES for Integration [\(id)]")
         let queue = queue ?? returnQueue
         internalQueue.async {
             self.issues(forIntegrationWithIdentifier: id) { (result) in

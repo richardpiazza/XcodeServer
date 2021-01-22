@@ -27,7 +27,7 @@ public class CreateIntegrationProcedure: Procedure, InputProcedure {
         
         guard let value = input.value else {
             let error = XcodeServerProcedureError.invalidInput
-            InternalLog.procedures.error("CreateIntegrationProcedure Failed", error: error)
+            InternalLog.operations.error("CreateIntegrationProcedure Failed", error: error)
             finish(with: error)
             return
         }
@@ -37,7 +37,7 @@ public class CreateIntegrationProcedure: Procedure, InputProcedure {
         destination.saveIntegration(value, forBot: id) { [weak self] (result) in
             switch result {
             case .failure(let error):
-                InternalLog.procedures.error("CreateIntegrationProcedure Failed", error: error)
+                InternalLog.operations.error("CreateIntegrationProcedure Failed", error: error)
                 self?.finish(with: error)
             case .success:
                 NotificationCenter.default.postBotDidChange(id)

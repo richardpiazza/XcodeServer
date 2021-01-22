@@ -27,7 +27,7 @@ public class UpdateIntegrationCommitsProcedure: Procedure, InputProcedure {
         
         guard let value = input.value else {
             let error = XcodeServerProcedureError.invalidInput
-            InternalLog.procedures.error("UpdateIntegrationCommitsProcedure Failed", error: error)
+            InternalLog.operations.error("UpdateIntegrationCommitsProcedure Failed", error: error)
             finish(with: error)
             return
         }
@@ -37,7 +37,7 @@ public class UpdateIntegrationCommitsProcedure: Procedure, InputProcedure {
         destination.saveCommits(value, forIntegration: id) { [weak self] (result) in
             switch result {
             case .failure(let error):
-                InternalLog.procedures.error("UpdateIntegrationCommitsProcedure Failed", error: error)
+                InternalLog.operations.error("UpdateIntegrationCommitsProcedure Failed", error: error)
                 self?.finish(with: error)
             case .success:
                 NotificationCenter.default.postIntegrationDidChange(id)

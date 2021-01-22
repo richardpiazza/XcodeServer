@@ -24,13 +24,13 @@ public class GetIntegrationIssuesProcedure: Procedure, InputProcedure, OutputPro
         
         guard let id = input.value else {
             let error = XcodeServerProcedureError.invalidInput
-            InternalLog.procedures.error("GetIntegrationIssuesProcedure Failed", error: error)
+            InternalLog.operations.error("GetIntegrationIssuesProcedure Failed", error: error)
             output = .ready(.failure(error))
             finish(with: error)
             return
         }
         
-        InternalLog.procedures.debug("Getting ISSUES from Integration [\(id)]")
+        InternalLog.operations.debug("Getting ISSUES from Integration [\(id)]")
         
         source.getIssuesForIntegration(id) { [weak self] (result) in
             switch result {
@@ -38,7 +38,7 @@ public class GetIntegrationIssuesProcedure: Procedure, InputProcedure, OutputPro
                 self?.output = .ready(.success(value))
                 self?.finish()
             case .failure(let error):
-                InternalLog.procedures.error("GetIntegrationIssuesProcedure Failed", error: error)
+                InternalLog.operations.error("GetIntegrationIssuesProcedure Failed", error: error)
                 self?.output = .ready(.failure(error))
                 self?.finish(with: error)
             }

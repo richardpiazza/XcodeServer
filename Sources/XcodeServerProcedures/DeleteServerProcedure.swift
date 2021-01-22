@@ -26,7 +26,7 @@ public class DeleteServerProcedure: Procedure, InputProcedure {
         
         guard let value = input.value else {
             let error = XcodeServerProcedureError.invalidInput
-            InternalLog.procedures.error("DeleteServerProcedure Failed", error: error)
+            InternalLog.operations.error("DeleteServerProcedure Failed", error: error)
             finish(with: error)
             return
         }
@@ -34,7 +34,7 @@ public class DeleteServerProcedure: Procedure, InputProcedure {
         destination.deleteServer(value) { [weak self] (result) in
             switch result {
             case .failure(let error):
-                InternalLog.procedures.error("DeleteServerProcedure Failed", error: error)
+                InternalLog.operations.error("DeleteServerProcedure Failed", error: error)
                 self?.finish(with: error)
             case .success:
                 NotificationCenter.default.postServersDidChange()

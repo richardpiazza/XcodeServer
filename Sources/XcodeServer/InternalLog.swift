@@ -189,6 +189,10 @@ public class InternalLog {
     
     /// The default shared log implementation
     public static let `default`: InternalLog = InternalLog(name: "XcodeServer.log", maxBytes: InternalLog.oneMB * 5)
+    public static let api: InternalLog = InternalLog(name: "XcodeServerAPI.log", maxBytes: InternalLog.oneMB * 5)
+    public static let operations: InternalLog = InternalLog(name: "XcodeServerProcedures.log", maxBytes: InternalLog.oneMB * 5)
+    public static let persistence: InternalLog = InternalLog(name: "XcodeServerCoreData.log", maxBytes: InternalLog.oneMB * 5)
+    public static let utility: InternalLog = InternalLog(name: "XcodeServerUtility.log", maxBytes: InternalLog.oneMB * 5)
     
     /// The default max log size
     public static let oneMB: UInt = 1024 * 1024 * 1
@@ -378,4 +382,15 @@ public class InternalLog {
             InternalLog.error("", error: error)
         }
     }
+}
+
+public extension InternalLog {
+    @available(*, deprecated, renamed: "api")
+    static var apiClient: InternalLog { .api }
+    
+    @available(*, deprecated, renamed: "persistence")
+    static var coreData: InternalLog { .persistence }
+    
+    @available(*, deprecated, renamed: "operations")
+    static var procedures: InternalLog { .operations }
 }
