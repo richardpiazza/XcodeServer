@@ -42,13 +42,13 @@ public class SyncBotProcedure: Procedure, OutputProcedure {
             return
         }
         
-        let stats = SyncBotStatsProcedure(source: source, destination: destination, bot: bot)
         let get = GetBotIntegrationsProcedure(source: source, input: bot.id)
-        get.addDependency(stats)
         let update = UpdateBotIntegrationsProcedure(destination: destination, bot: bot)
         update.injectResult(from: get)
+        let stats = SyncBotStatsProcedure(source: source, destination: destination, bot: bot)
+        stats.addDependency(update)
         
-        procedureQueue.addOperations([stats, get, update])
+        procedureQueue.addOperations([get, update, stats])
     }
 }
 
@@ -60,6 +60,8 @@ extension SyncBotProcedure: ProcedureQueueDelegate {
     }
     
     public func procedureQueue(_ queue: ProcedureQueue, didFinishProcedure procedure: Procedure, with error: Error?) {
+        InternalLog.operations.debug("Finished Procedure '\(procedure)' \(error?.localizedDescription ?? "")")
+        
         switch procedure {
         case is UpdateBotIntegrationsProcedure:
             let getOutput = GetBotIntegrationsProcedure(source: destination, input: bot.id)
