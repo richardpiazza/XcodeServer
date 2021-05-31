@@ -626,7 +626,7 @@ extension Manager: ProcedureQueueDelegate {
     }
     
     public func procedureQueue(_ queue: ProcedureQueue, didFinishProcedure procedure: Procedure, with error: Swift.Error?) {
-        
+        InternalLog.operations.debug("Finished Procedure '\(procedure)' \(error?.localizedDescription ?? "")")
     }
 }
 
