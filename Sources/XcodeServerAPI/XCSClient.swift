@@ -6,7 +6,7 @@ import SWCompression
 import FoundationNetworking
 #endif
 
-public protocol CredentialDelegate: class {
+public protocol CredentialDelegate: AnyObject {
     func credentials(for server: Server.ID) -> (username: String, password: String)?
 }
 

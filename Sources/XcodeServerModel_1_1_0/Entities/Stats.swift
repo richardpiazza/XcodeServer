@@ -135,6 +135,9 @@ extension Stats {
                 bestSuccessStreak = existing
             } else {
                 let new: Integration = context.make()
+                // In the instance where Stats are retrieved before the integration details,
+                // The relationship to the bot needs to be established.
+                new.bot = self.bot
                 new.update(integration, context: context)
                 bestSuccessStreak = new
             }
@@ -145,6 +148,9 @@ extension Stats {
                 lastCleanIntegration = existing
             } else {
                 let new: Integration = context.make()
+                // In the instance where Stats are retrieved before the integration details,
+                // The relationship to the bot needs to be established.
+                new.bot = self.bot
                 new.update(integration, context: context)
                 lastCleanIntegration = new
             }

@@ -50,6 +50,8 @@ extension SyncIntegrationProcedure: ProcedureQueueDelegate {
     }
     
     public func procedureQueue(_ queue: ProcedureQueue, didFinishProcedure procedure: Procedure, with error: Error?) {
+        InternalLog.operations.debug("Finished Procedure '\(procedure)' \(error?.localizedDescription ?? "")")
+        
         switch procedure {
         case is UpdateIntegrationProcedure:
             let getOutput = GetIntegrationProcedure(source: destination, input: integration.id)
