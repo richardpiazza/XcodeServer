@@ -2,9 +2,9 @@ import Foundation
 
 public extension Bot {
     
-    struct Configuration: Hashable {
+    struct Configuration: Hashable, Codable {
         
-        public struct Provisioning: Hashable {
+        public struct Provisioning: Hashable, Codable {
             public var addMissingDevicesToTeams: Bool = false
             public var manageCertsAndProfiles: Bool = false
             
@@ -12,7 +12,7 @@ public extension Bot {
             }
         }
         
-        public struct ArchiveExport: Hashable {
+        public struct ArchiveExport: Hashable, Codable {
             public var created: Date = Date()
             public var options: ExportOptions = ExportOptions()
             
@@ -21,7 +21,7 @@ public extension Bot {
         }
         
         /// Parameters used during the export of a compiled/signed application.
-        public struct ExportOptions: Hashable {
+        public struct ExportOptions: Hashable, Codable {
             public var method: String = ""
             public var teamID: String = ""
             public var uploadBitcode: Bool = false

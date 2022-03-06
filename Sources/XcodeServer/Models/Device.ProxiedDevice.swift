@@ -1,6 +1,6 @@
 public extension Device {
     
-    struct ProxiedDevice: Hashable, Identifiable {
+    struct ProxiedDevice: Hashable, Identifiable, Codable {
         public var id: String
         public var name: String = ""
         public var deviceType: String = ""

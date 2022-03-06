@@ -1,6 +1,6 @@
 public extension Integration {
     
-    struct BuildSummary: Hashable {
+    struct BuildSummary: Hashable, Codable {
         public var errorCount: Int = 0
         public var errorChange: Int = 0
         public var warningCount: Int = 0

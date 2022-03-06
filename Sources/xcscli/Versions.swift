@@ -2,8 +2,9 @@ import Foundation
 import ArgumentParser
 import XcodeServer
 import XcodeServerAPI
+import Logging
 
-final class Versions: ParsableCommand, Route, Logged {
+final class Versions: AsyncParsableCommand, Route, Logged {
     
     static var configuration: CommandConfiguration = {
         return CommandConfiguration(
@@ -28,28 +29,15 @@ final class Versions: ParsableCommand, Route, Logged {
     var password: String?
     
     @Option(help: "The minimum output log level.")
-    var logLevel: InternalLog.Level = .warn
+    var logLevel: Logger.Level = .warning
     
     func validate() throws {
         try validateServer()
     }
     
-    func run() throws {
-        configureLog()
-        
-        let client = try APIClient(fqdn: server, credentialDelegate: self)
-        
-        client.versions { (result) in
-            switch result {
-            case .failure(let error):
-                print(error.localizedDescription)
-            case .success(let value):
-                print(value.0.asPrettyJSON() ?? "OK")
-            }
-
-            Self.exit()
-        }
-        
-        dispatchMain()
+    func run() async throws {
+        let client = try XCSClient(fqdn: server, credentialDelegate: self)
+        let versions = try await client.versions()
+        print(versions.0.asPrettyJSON() ?? "OK")
     }
 }

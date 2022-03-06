@@ -70,7 +70,7 @@ public extension Bot.Configuration.Provisioning {
 public extension Bot.Configuration.ArchiveExport {
     init(_ export: XCSArchiveExportOptions) {
         self.init()
-        created = APIClient.dateFormatter.date(from: export.createdAt ?? "") ?? Date()
+        created = XCSClient.dateFormatter.date(from: export.createdAt ?? "") ?? Date()
         if let options = export.exportOptions {
             self.options = Bot.Configuration.ExportOptions(options)
         }

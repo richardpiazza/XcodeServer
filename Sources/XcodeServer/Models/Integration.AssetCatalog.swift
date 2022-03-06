@@ -1,6 +1,6 @@
 public extension Integration {
     
-    struct AssetCatalog: Hashable {
+    struct AssetCatalog: Hashable, Codable {
         public var triggerAssets: [Asset] = []
         public var sourceControlLog: Asset = Asset()
         public var buildServiceLog: Asset = Asset()

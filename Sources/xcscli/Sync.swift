@@ -5,10 +5,13 @@ import XcodeServerAPI
 import XcodeServerUtility
 import XcodeServerCoreData
 import CoreDataPlus
+import Logging
 #if canImport(CoreData)
 
 @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-final class Sync: ParsableCommand, Route, Stored, Logged {
+final class Sync: AsyncParsableCommand, Route, Stored, Logged {
+    
+    private static let logger: Logger = Logger(label: "Sync")
     
     static var configuration: CommandConfiguration = {
         return CommandConfiguration(
@@ -42,14 +45,14 @@ final class Sync: ParsableCommand, Route, Stored, Logged {
     var purge: Bool = false
     
     @Option(help: "The minimum output log level.")
-    var logLevel: InternalLog.Level = .warn
+    var logLevel: Logger.Level = .notice
     
     func validate() throws {
         try validateServer()
     }
     
-    func run() throws {
-        configureLog()
+    func run() async throws {
+        ConsoleLogger.bootstrap(minimumLogLevel: logLevel)
         
         if purge {
             try storeURL.destroy()
@@ -57,38 +60,28 @@ final class Sync: ParsableCommand, Route, Stored, Logged {
         
         let _model = model ?? Model.current
         let store = try CoreDataStore(model: _model, persistence: .store(storeURL))
-        let manager: XcodeServerUtility.Manager = Manager(store: store, authorizationDelegate: self)
         
-        manager.createServer(withId: server) { (error) in
-            guard error == nil else {
-                print(error!.localizedDescription)
-                Self.exit()
+        let asyncManager = AsyncManager(store: store) { fqdn in
+            guard let username = self.username, let password = self.password else {
+                return nil
             }
             
-            let start = Date()
-            manager.syncServer(withId: self.server) { (syncError) in
-                guard syncError == nil else {
-                    print(syncError!.localizedDescription)
-                    Self.exit()
-                }
-                
-                let end = Date()
-                print("Sync Complete - \(end.timeIntervalSince(start)) Seconds")
-                print("\(self.storeURL.rawValue.path)")
-                
-                Self.exit()
-            }
+            return (username, password)
         }
         
-        dispatchMain()
+        try await asyncManager.createServer(server)
+        Self.logger.notice("Syncing SERVER [\(server)]")
+        let start = Date()
+        try await asyncManager.syncServer(server, deepSync: true)
+        let end = Date()
+        Self.logger.notice("Syncing Complete", metadata: [
+            "Seconds": .string("\(end.timeIntervalSince(start))"),
+            "StoreURL": .string(storeURL.rawValue.path)
+        ])
+        try store.cleanup()
     }
-}
-
-@available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-extension Sync: ManagerAuthorizationDelegate {
 }
 
 extension Model: ExpressibleByArgument {
 }
-
 #endif

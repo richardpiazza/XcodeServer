@@ -4,7 +4,7 @@ import Foundation
 public extension NotificationCenter {
     /// Convenience method for posting a `.serversDidChange` notification.
     func postServersDidChange() {
-        InternalLog.operations.debug("Posting: ServersDidChange")
+        AsyncManager.logger.info("Posting: ServersDidChange")
         post(name: .serversDidChange, object: nil)
     }
     
@@ -12,7 +12,7 @@ public extension NotificationCenter {
     ///
     /// - parameter id: Entity ID that will be provided in the _userInfo_ dictionary under the key **Server.ID**.
     func postServerDidChange(_ id: Server.ID) {
-        InternalLog.operations.debug("Posting: ServerDidChange [\(id)]")
+        AsyncManager.logger.info("Posting: ServerDidChange [\(id)]")
         post(name: .serverDidChange, object: nil, userInfo: ["Server.ID": id])
     }
     
@@ -20,7 +20,7 @@ public extension NotificationCenter {
     ///
     /// - parameter id: Entity ID that will be provided in the _userInfo_ dictionary under the key **Bot.ID**.
     func postBotDidChange(_ id: Bot.ID) {
-        InternalLog.operations.debug("Posting: BotDidChange [\(id)]")
+        AsyncManager.logger.info("Posting: BotDidChange [\(id)]")
         post(name: .botDidChange, object: nil, userInfo: ["Bot.ID": id])
     }
     
@@ -28,18 +28,18 @@ public extension NotificationCenter {
     ///
     /// - parameter id: Entity ID that will be provided in the _userInfo_ dictionary under the key **Integration.ID**.
     func postIntegrationDidChange(_ id: Integration.ID) {
-        InternalLog.operations.debug("Posting: IntegrationDidChange [\(id)]")
+        AsyncManager.logger.info("Posting: IntegrationDidChange [\(id)]")
         post(name: .integrationDidChange, object: nil, userInfo: ["Integration.ID": id])
     }
 }
 
 public extension Notification.Name {
     /// Notification posted when the composition of persisted `Server`s changed - either through adding or removing.
-    static let serversDidChange: Self = Notification.Name("com.github.richardpiazza.XcodeServer.ServersDidChange")
+    static let serversDidChange: Self = Notification.Name("XcodeServer.Utility.ServersDidChange")
     /// Notification posted when a `Server`s versioning information or `Bot` composition is modified.
-    static let serverDidChange: Self = Notification.Name("com.github.richardpiazza.XcodeServer.ServerDidChange")
+    static let serverDidChange: Self = Notification.Name("XcodeServer.Utility.ServerDidChange")
     /// Notification posted when a `Bot`s statistics or `Integration` composition is modified.
-    static let botDidChange: Self = Notification.Name("com.github.richardpiazza.XcodeServer.BotDidChange")
+    static let botDidChange: Self = Notification.Name("XcodeServer.Utility.BotDidChange")
     /// Notification posted when a `Integration`s `Issue` or `Commit` composition is modified.
-    static let integrationDidChange: Self = Notification.Name("com.github.richardpiazza.XcodeServer.IntegrationDidChange")
+    static let integrationDidChange: Self = Notification.Name("XcodeServer.Utility.IntegrationDidChange")
 }

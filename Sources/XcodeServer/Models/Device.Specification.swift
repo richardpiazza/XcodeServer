@@ -1,6 +1,6 @@
 public extension Device {
     
-    struct Specification: Hashable {
+    struct Specification: Hashable, Codable {
         public var filters: [Filter] = []
         public var devices: Set<Device> = []
         

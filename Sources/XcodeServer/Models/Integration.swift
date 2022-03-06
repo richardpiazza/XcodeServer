@@ -4,7 +4,7 @@ import Foundation
 ///
 /// An integration is a single run of a bot. Integrations consist of building, analyzing, testing, and archiving the
 /// apps (or other software products) defined in your Xcode projects.
-public struct Integration: Hashable, Identifiable {
+public struct Integration: Hashable, Identifiable, Codable {
     
     // MARK: - Metadata
     public var id: String

@@ -17,7 +17,7 @@ final class APIResponseTests: XCTestCase {
         ("testCommits", testCommits),
     ]
     
-    private let decoder = APIClient.jsonDecoder
+    private let decoder = XCSClient.jsonDecoder
     
     func testVersions() throws {
         let url = try XCTUnwrap(Bundle.module.url(forResource: "versions", withExtension: "json"))

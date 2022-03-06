@@ -1,6 +1,6 @@
 public extension Issue {
     ///
-    struct SuspectStrategy: Hashable {
+    struct SuspectStrategy: Hashable, Codable {
         
         ///
         public enum Confidence: Int, Codable {

@@ -4,7 +4,7 @@ import Foundation
 ///
 /// Bots are processes that Xcode Server runs to perform integrations on the current version of a project in a source
 /// code repository.
-public struct Bot: Hashable, Identifiable {
+public struct Bot: Hashable, Identifiable, Codable {
     
     // MARK: - Metadata
     

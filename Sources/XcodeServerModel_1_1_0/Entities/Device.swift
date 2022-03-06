@@ -80,7 +80,7 @@ extension Device {
         do {
             return try context.fetch(request)
         } catch {
-            InternalLog.persistence.error("Failed to fetch all devices", error: error)
+            PersistentContainer.logger.error("Failed to fetch all devices", metadata: ["localizedDescription": .string(error.localizedDescription)])
         }
         
         return []
@@ -93,7 +93,7 @@ extension Device {
         do {
             return try context.fetch(request).first
         } catch {
-            InternalLog.persistence.error("Failed to fetch device '\(id)'", error: error)
+            PersistentContainer.logger.error("Failed to fetch device '\(id)'", metadata: ["localizedDescription": .string(error.localizedDescription)])
         }
         
         return nil

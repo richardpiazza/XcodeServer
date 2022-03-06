@@ -1,6 +1,6 @@
 public extension Trigger {
     ///
-    struct Email: Hashable {
+    struct Email: Hashable, Codable {
         
         /// Type of email being sent.
         ///

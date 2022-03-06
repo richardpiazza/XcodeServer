@@ -1,8 +1,8 @@
 public extension Integration {
     
-    struct ControlledChanges: Hashable {
+    struct ControlledChanges: Hashable, Codable {
         
-        public struct Values: Hashable {
+        public struct Values: Hashable, Codable {
             public var before: String = ""
             public var after: String = ""
             
@@ -10,7 +10,7 @@ public extension Integration {
             }
         }
         
-        public struct Traits: Hashable {
+        public struct Traits: Hashable, Codable {
             public var version: Values = Values()
             public var buildNumber: Values = Values()
             
@@ -18,7 +18,7 @@ public extension Integration {
             }
         }
         
-        public struct Platforms: Hashable {
+        public struct Platforms: Hashable, Codable {
             public var macOS: Traits = Traits()
             public var iOS: Traits = Traits()
             public var tvOS: Traits = Traits()

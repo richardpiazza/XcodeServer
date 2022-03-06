@@ -66,7 +66,7 @@ extension Commit {
         do {
             return try context.fetch(request)
         } catch {
-            InternalLog.persistence.error("Failed to fetch commits", error: error)
+            PersistentContainer.logger.error("Failed to fetch commits", metadata: ["localizedDescription": .string(error.localizedDescription)])
         }
         
         return []
@@ -80,7 +80,7 @@ extension Commit {
         do {
             return try context.fetch(request).first
         } catch {
-            InternalLog.persistence.error("Failed to fetch commit '\(id)'", error: error)
+            PersistentContainer.logger.error("Failed to fetch commit '\(id)'", metadata: ["localizedDescription": .string(error.localizedDescription)])
         }
         
         return nil
@@ -92,7 +92,7 @@ extension Commit {
         do {
             return try context.fetch(request)
         } catch {
-            InternalLog.persistence.error("Failed to fetch incomplete commits", error: error)
+            PersistentContainer.logger.error("Failed to fetch incomplete commits", metadata: ["localizedDescription": .string(error.localizedDescription)])
         }
         
         return []
@@ -102,7 +102,7 @@ extension Commit {
 extension Commit {
     func update(_ commit: SourceControl.Commit, integration: Integration? = nil, context: NSManagedObjectContext) {
         if commitContributor == nil {
-            InternalLog.persistence.debug("Creating COMMIT_CONTRIBUTOR for Commit [\(commit.id)]")
+            PersistentContainer.logger.info("Creating COMMIT_CONTRIBUTOR for Commit [\(commit.id)]")
             commitContributor = context.make()
         }
         
@@ -120,7 +120,7 @@ extension Commit {
         
         if let integration = integration {
             if RevisionBlueprint.revisionBlueprint(withCommit: self, andIntegration: integration, in: context) == nil {
-                InternalLog.persistence.debug("Creating REVISION_BLUEPRINT for Commit [\(commit.id)] and Integration [\(integration.identifier ?? "")]")
+                PersistentContainer.logger.info("Creating REVISION_BLUEPRINT for Commit [\(commit.id)] and Integration [\(integration.identifier ?? "")]")
                 let blueprint: RevisionBlueprint = context.make()
                 blueprint.commit = self
                 blueprint.integration = integration

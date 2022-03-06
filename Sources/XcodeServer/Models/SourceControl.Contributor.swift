@@ -1,6 +1,6 @@
 public extension SourceControl {
     
-    struct Contributor: Hashable {
+    struct Contributor: Hashable, Codable {
         public var name: String = ""
         public var displayName: String = ""
         public var emails: [String] = []

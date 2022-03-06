@@ -1,16 +1,7 @@
 import Foundation
 import ArgumentParser
-import XcodeServer
+import Logging
 
 protocol Logged {
-    var logLevel: InternalLog.Level { get set }
-}
-
-extension Logged {
-    func configureLog() {
-        InternalLog.api.minimumConsoleLevel = logLevel
-        InternalLog.persistence.minimumConsoleLevel = logLevel
-        InternalLog.operations.minimumConsoleLevel = logLevel
-        InternalLog.utility.minimumConsoleLevel = logLevel
-    }
+    var logLevel: Logger.Level { get set }
 }

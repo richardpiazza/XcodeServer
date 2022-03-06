@@ -13,38 +13,14 @@ final class BotWriteAndUpdateTests: XCTestCase {
     ]
     
     private class Client: MockApiClient {
-        override func getBot(_ id: XcodeServer.Bot.ID, queue: DispatchQueue?, completion: @escaping BotResultHandler) {
-            let queue = queue ?? returnQueue
-            dispatchQueue.async {
-                do {
-                    let resource: XCSBot = try Bundle.module.decodeJson("bot", decoder: self.decoder)
-                    let result = XcodeServer.Bot(resource, server: self.serverId)
-                    queue.async {
-                        completion(.success(result))
-                    }
-                } catch {
-                    queue.async {
-                        completion(.failure(.error(error)))
-                    }
-                }
-            }
+        override func bot(withId id: XcodeServer.Bot.ID) async throws -> XcodeServer.Bot {
+            let resource: XCSBot = try Bundle.module.decodeJson("bot", decoder: self.decoder)
+            return XcodeServer.Bot(resource, server: self.serverId)
         }
         
-        override func getStatsForBot(_ id: XcodeServer.Bot.ID, queue: DispatchQueue?, completion: @escaping BotStatsResultHandler) {
-            let queue = queue ?? returnQueue
-            dispatchQueue.async {
-                do {
-                    let resource: XCSStats = try Bundle.module.decodeJson("stats", decoder: self.decoder)
-                    let result = XcodeServer.Bot.Stats(resource)
-                    queue.async {
-                        completion(.success(result))
-                    }
-                } catch {
-                    queue.async {
-                        completion(.failure(.error(error)))
-                    }
-                }
-            }
+        override func stats(forBot id: XcodeServer.Bot.ID) async throws -> XcodeServer.Bot.Stats {
+            let resource: XCSStats = try Bundle.module.decodeJson("stats", decoder: self.decoder)
+            return XcodeServer.Bot.Stats(resource)
         }
     }
     
@@ -59,7 +35,7 @@ final class BotWriteAndUpdateTests: XCTestCase {
     
     func testWriteBot() throws {
         let saveServer = expectation(description: "Save Server")
-        store.saveServer(.exampleServer) { (result) in
+        store.persistServer(.exampleServer) { result in
             switch result {
             case .success:
                 saveServer.fulfill()
@@ -71,7 +47,7 @@ final class BotWriteAndUpdateTests: XCTestCase {
         
         let queryBot = expectation(description: "Retrieve Bot")
         var bot: XcodeServer.Bot?
-        client.getBot(.bot1) { (result) in
+        client.bot(withId: .bot1) { (result) in
             switch result {
             case .success(let value):
                 bot = value
@@ -87,7 +63,7 @@ final class BotWriteAndUpdateTests: XCTestCase {
         let _bot = try XCTUnwrap(bot)
         updatedServer.bots.insert(_bot)
         var retrievedServer: XcodeServer.Server?
-        store.saveServer(updatedServer) { (result) in
+        store.persistServer(updatedServer) { result in
             switch result {
             case .success(let value):
                 retrievedServer = value
@@ -188,7 +164,7 @@ final class BotWriteAndUpdateTests: XCTestCase {
         server.bots.insert(.dynumite)
         
         let saveServer = expectation(description: "Save Server")
-        store.saveServer(server) { (result) in
+        store.persistServer(server) { result in
             switch result {
             case .success(let value):
                 server = value
@@ -203,7 +179,7 @@ final class BotWriteAndUpdateTests: XCTestCase {
         var _stats: XcodeServer.Bot.Stats?
         
         let getStats = expectation(description: "Get Stats")
-        client.getStatsForBot(bot.id) { (result) in
+        client.stats(forBot: bot.id) { (result) in
             switch result {
             case .success(let value):
                 _stats = value
@@ -217,7 +193,7 @@ final class BotWriteAndUpdateTests: XCTestCase {
         bot.stats = try XCTUnwrap(_stats)
         
         let saveBot = expectation(description: "Save Bot")
-        store.saveBot(bot, forServer: server.id) { (result) in
+        store.persistBot(bot, forServer: server.id) { (result) in
             switch result {
             case .success(let value):
                 bot = value

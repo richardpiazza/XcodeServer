@@ -52,7 +52,7 @@ extension Bot {
         do {
             return try context.fetch(request)
         } catch {
-            InternalLog.persistence.error("Failed to fetch bots", error: error)
+            PersistentContainer.logger.error("Failed to fetch bots", metadata: ["localizedDescription": .string(error.localizedDescription)])
         }
         
         return []
@@ -60,12 +60,12 @@ extension Bot {
     
     /// Retrieves all `Bot` entities for a specific `Server`.
     static func bots(forServer id: XcodeServer.Server.ID, in context: NSManagedObjectContext) -> [Bot] {
-        let request = NSFetchRequest<Bot>(entityName: entityName)
+        let request = NSFetchRequest<Bot>(entityName: Bot.entityName)
         request.predicate = NSPredicate(format: "server.fqdn = %@", argumentArray: [id])
         do {
             return try context.fetch(request)
         } catch {
-            InternalLog.persistence.error("Failed to fetch bots for server \(id)", error: error)
+            PersistentContainer.logger.error("Failed to fetch bots for server \(id)", metadata: ["localizedDescription": .string(error.localizedDescription)])
         }
         
         return []
@@ -74,12 +74,12 @@ extension Bot {
     /// Retrieves the first `Bot` entity from the Core Data `NSManagedObjectContext` that matches the specified
     /// identifier.
     static func bot(_ id: XcodeServer.Bot.ID, in context: NSManagedObjectContext) -> Bot? {
-        let request = NSFetchRequest<Bot>(entityName: entityName)
+        let request = NSFetchRequest<Bot>(entityName: Bot.entityName)
         request.predicate = NSPredicate(format: "identifier = %@", argumentArray: [id])
         do {
             return try context.fetch(request).first
         } catch {
-            InternalLog.persistence.error("", error: error)
+            PersistentContainer.logger.error("", metadata: ["localizedDescription": .string(error.localizedDescription)])
         }
         
         return nil
@@ -93,11 +93,11 @@ extension Bot {
     /// - parameter context: The current managed object context for performing operations.
     func update(_ bot: XcodeServer.Bot, context: NSManagedObjectContext) {
         if configuration == nil {
-            InternalLog.persistence.debug("Creating CONFIGURATION for Bot '\(bot.name)' [\(bot.id)]")
+            PersistentContainer.logger.info("Creating CONFIGURATION for Bot '\(bot.name)' [\(bot.id)]")
             configuration = context.make()
         }
         if stats == nil {
-            InternalLog.persistence.debug("Creating STATS for Bot '\(bot.name)' [\(bot.id)]")
+            PersistentContainer.logger.info("Creating STATS for Bot '\(bot.name)' [\(bot.id)]")
             stats = context.make()
         }
         
@@ -118,7 +118,7 @@ extension Bot {
                 if let entity = Repository.repository(remoteId, in: context) {
                     repository = entity
                 } else {
-                    InternalLog.persistence.debug("Creating REPOSITORY '\(blueprint.name)' [\(remoteId)]")
+                    PersistentContainer.logger.info("Creating REPOSITORY '\(blueprint.name)' [\(remoteId)]")
                     repository = context.make()
                 }
                 repository.update(blueprint, context: context)
@@ -137,7 +137,7 @@ extension Bot {
             if let existing = (integrations as? Set<Integration>)?.first(where: { $0.identifier == integration.id }) {
                 existing.update(integration, context: context)
             } else {
-                InternalLog.persistence.debug("Creating INTEGRATION '\(integration.number)' [\(integration.id)] for Bot '\(name ?? "")'")
+                PersistentContainer.logger.info("Creating INTEGRATION '\(integration.number)' [\(integration.id)] for Bot '\(name ?? "")'")
                 let new: Integration = context.make()
                 new.update(integration, context: context)
                 addToIntegrations(new)

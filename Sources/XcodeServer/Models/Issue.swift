@@ -1,7 +1,7 @@
 import Foundation
 
 ///
-public struct Issue: Hashable, Identifiable {
+public struct Issue: Hashable, Identifiable, Codable {
     
     // MARK: - Metadata
     public var id: String

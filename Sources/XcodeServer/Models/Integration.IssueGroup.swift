@@ -1,6 +1,6 @@
 public extension Integration {
     
-    struct IssueGroup: Hashable {
+    struct IssueGroup: Hashable, Codable {
         public var freshIssues: Set<Issue> = []
         public var resolvedIssues: Set<Issue> = []
         public var unresolvedIssues: Set<Issue> = []

@@ -1,5 +1,5 @@
 ///
-public struct Device: Hashable, Identifiable {
+public struct Device: Hashable, Identifiable, Codable {
     
     public var id: String
     public var name: String = ""

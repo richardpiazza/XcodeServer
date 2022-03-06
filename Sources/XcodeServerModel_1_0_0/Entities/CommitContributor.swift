@@ -63,7 +63,7 @@ extension CommitContributor {
             do {
                 return try Self.jsonDecoder.decode([String].self, from: data)
             } catch {
-                InternalLog.persistence.error("Failed to get 'emailsData': \(String(data: data, encoding: .utf8) ?? "")", error: error)
+                PersistentContainer.logger.error("Failed to get 'emailsData': \(String(data: data, encoding: .utf8) ?? "")", metadata: ["localizedDescription": .string(error.localizedDescription)])
                 return []
             }
         }
@@ -71,7 +71,7 @@ extension CommitContributor {
             do {
                 emailsData = try Self.jsonEncoder.encode(newValue)
             } catch {
-                InternalLog.persistence.error("Failed to set 'emailsData': \(newValue)", error: error)
+                PersistentContainer.logger.error("Failed to set 'emailsData': \(newValue)", metadata: ["localizedDescription": .string(error.localizedDescription)])
             }
         }
     }

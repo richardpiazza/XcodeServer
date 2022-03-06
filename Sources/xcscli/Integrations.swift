@@ -2,8 +2,9 @@ import Foundation
 import ArgumentParser
 import XcodeServer
 import XcodeServerAPI
+import Logging
 
-final class Integrations: ParsableCommand, Route, Logged {
+final class Integrations: AsyncParsableCommand, Route, Logged {
     
     static var configuration: CommandConfiguration = {
         return CommandConfiguration(
@@ -41,96 +42,38 @@ final class Integrations: ParsableCommand, Route, Logged {
     var path: Path?
     
     @Option(help: "The minimum output log level.")
-    var logLevel: InternalLog.Level = .warn
+    var logLevel: Logger.Level = .warning
     
     func validate() throws {
         try validateServer()
     }
     
-    func run() throws {
-        configureLog()
-        
-        let client = try APIClient(fqdn: server, credentialDelegate: self)
+    func run() async throws {
+        let client = try XCSClient(fqdn: server, credentialDelegate: self)
         switch (path) {
         case .some(.commits):
-            client.commits(forIntegrationWithIdentifier: id) { (result) in
-                switch result {
-                case .success(let commits):
-                    print(commits.asPrettyJSON() ?? "OK")
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
-                
-                Self.exit()
-            }
+            let commits: [SourceControl.Commit] = try await client.commits(forIntegration: id)
+            print(commits.asPrettyJSON() ?? "OK")
         case .some(.issues):
-            client.issues(forIntegrationWithIdentifier: id) { (result) in
-                switch result {
-                case .success(let issues):
-                    print(issues.asPrettyJSON() ?? "OK")
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
-                
-                Self.exit()
-            }
+            let issues: Integration.IssueCatalog = try await client.issues(forIntegration: id)
+            print(issues.asPrettyJSON() ?? "OK")
         case .some(.coverage):
-            client.coverage(forIntegrationWithIdentifier: id) { (result) in
-                switch result {
-                case .success(let coverage):
-                    print(coverage.asPrettyJSON() ?? "OK")
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
-                
-                Self.exit()
-            }
+            let coverage = try await client.coverage(forIntegration: id)
+            print(coverage?.asPrettyJSON() ?? "OK")
         case .some(.archive):
-            client.archive(forIntegrationWithIdentifier: id) { (result) in
-                switch result {
-                case .success(let asset):
-                    print("Filename: \(asset.0)")
-                    let directory = URL(fileURLWithPath: FileManager.default.currentDirectoryPath, isDirectory: true)
-                    let url = directory.appendingPathComponent(asset.0)
-                    do {
-                        try asset.1.write(to: url)
-                    } catch {
-                        print(error.localizedDescription)
-                    }
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
-                
-                Self.exit()
-            }
+            let archive: (String, Data) = try await client.archive(forIntegration: id)
+            print("Filename: \(archive.0)")
+            let directory = URL(fileURLWithPath: FileManager.default.currentDirectoryPath, isDirectory: true)
+            let url = directory.appendingPathComponent(archive.0)
+            try archive.1.write(to: url)
         case .none:
             if id.isEmpty {
-                struct Integrations: Codable {
-                    public var count: Int
-                    public var results: [XCSIntegration]
-                }
-                
-                client.getPath("integrations") { (status, headers, data: Integrations?, error) in
-                    if let value = data?.results {
-                        print(value.asPrettyJSON() ?? "")
-                    }
-                    
-                    Self.exit()
-                }
+                let integrations: [Integration] = try await client.integrations()
+                print(integrations.asPrettyJSON() ?? "OK")
             } else {
-                client.integration(withIdentifier: id) { (result) in
-                    switch result {
-                    case .success(let integration):
-                        print(integration.asPrettyJSON() ?? "OK")
-                    case .failure(let error):
-                        print(error.localizedDescription)
-                    }
-                    
-                    Self.exit()
-                }
+                let integration: Integration = try await client.integration(withId: id)
+                print(integration.asPrettyJSON() ?? "OK")
             }
         }
-        
-        dispatchMain()
     }
 }

@@ -1,4 +1,4 @@
-public struct Trigger: Hashable {
+public struct Trigger: Hashable, Codable {
     
     public var name: String = ""
     public var type: Category = .script

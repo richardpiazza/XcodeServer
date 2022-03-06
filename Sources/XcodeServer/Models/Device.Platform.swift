@@ -1,6 +1,6 @@
 public extension Device {
     ///
-    struct Platform: Hashable, Identifiable {
+    struct Platform: Hashable, Identifiable, Codable {
         public var id: String
         public var buildNumber: String = ""
         public var displayName: String = ""

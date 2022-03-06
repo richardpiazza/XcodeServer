@@ -1,6 +1,6 @@
 public extension Trigger {
     
-    struct Conditions: Hashable {
+    struct Conditions: Hashable, Codable {
         public var onAllIssuesResolved: Bool = false
         public var onAnalyzerWarnings: Bool = false
         public var onBuildErrors: Bool = false

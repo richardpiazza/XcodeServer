@@ -2,7 +2,7 @@ import Foundation
 
 public extension SourceControl {
     ///
-    struct Commit: Hashable, Identifiable {
+    struct Commit: Hashable, Identifiable, Codable {
         
         // MARK: - Attributes
         /// Commit Hash

@@ -2,12 +2,13 @@ import Foundation
 import ArgumentParser
 import XcodeServer
 import XcodeServerAPI
+import Logging
 
 protocol Route: CredentialDelegate {
     var server: String { get set }
     var username: String? { get set }
     var password: String? { get set }
-    var logLevel: InternalLog.Level { get set }
+    var logLevel: Logger.Level { get set }
 }
 
 extension Route {

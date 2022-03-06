@@ -27,7 +27,7 @@ extension RevisionBlueprint {
         do {
             return try context.fetch(request)
         } catch {
-            InternalLog.persistence.error("Failed to fetch revision blueprints", error: error)
+            PersistentContainer.logger.error("Failed to fetch revision blueprints", metadata: ["localizedDescription": .string(error.localizedDescription)])
         }
         
         return []
@@ -41,7 +41,7 @@ extension RevisionBlueprint {
         do {
             return try context.fetch(request).first
         } catch {
-            InternalLog.persistence.error("Failed to fetch revision blueprint", error: error)
+            PersistentContainer.logger.error("Failed to fetch revision blueprint", metadata: ["localizedDescription": .string(error.localizedDescription)])
         }
         
         return nil

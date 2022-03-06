@@ -1,10 +1,10 @@
 import Foundation
 import ArgumentParser
+import Logging
 
-struct Command: ParsableCommand {
+struct MainCommand: AsyncParsableCommand {
     
     static var configuration: CommandConfiguration = {
-        
         var subcommands: [ParsableCommand.Type] = [
             Ping.self,
             Versions.self,
@@ -32,4 +32,6 @@ struct Command: ParsableCommand {
     }()
 }
 
-Command.main()
+@main enum Main: AsyncMain {
+    typealias Command = MainCommand
+}

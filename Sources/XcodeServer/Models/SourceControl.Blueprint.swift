@@ -1,6 +1,6 @@
 public extension SourceControl {
     
-    struct Blueprint: Hashable, Identifiable {
+    struct Blueprint: Hashable, Identifiable, Codable {
         public var id: String
         public var name: String = ""
         public var version: Int = 0

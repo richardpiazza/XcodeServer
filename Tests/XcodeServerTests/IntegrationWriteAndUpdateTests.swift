@@ -12,21 +12,9 @@ final class IntegrationWriteAndUpdateTests: XCTestCase {
     ]
     
     private class Client: MockApiClient {
-        override func getIntegration(_ id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping IntegrationResultHandler) {
-            let queue = queue ?? returnQueue
-            dispatchQueue.async {
-                do {
-                    let resource: XCSIntegration = try Bundle.module.decodeJson("integration", decoder: self.decoder)
-                    let result = XcodeServer.Integration(resource, bot: nil, server: nil)
-                    queue.async {
-                        completion(.success(result))
-                    }
-                } catch {
-                    queue.async {
-                        completion(.failure(.error(error)))
-                    }
-                }
-            }
+        override func integration(withId id: XcodeServer.Integration.ID) async throws -> XcodeServer.Integration {
+            let resource: XCSIntegration = try Bundle.module.decodeJson("integration", decoder: self.decoder)
+            return XcodeServer.Integration(resource, bot: nil, server: nil)
         }
     }
     
@@ -49,7 +37,7 @@ final class IntegrationWriteAndUpdateTests: XCTestCase {
         
         let write = expectation(description: "Write Server & Bot")
         
-        store.saveServer(server) { (result) in
+        store.persistServer(server) { result in
             switch result {
             case .failure(let error):
                 XCTFail(error.localizedDescription)
@@ -67,7 +55,7 @@ final class IntegrationWriteAndUpdateTests: XCTestCase {
         var queryResult: XcodeServer.Integration?
         
         let queryIntegration = expectation(description: "Retrieve Integration")
-        client.getIntegration(.integration1) { (result) in
+        client.integration(withId: .integration1) { (result) in
             switch result {
             case .success(let value):
                 queryResult = value
@@ -84,7 +72,7 @@ final class IntegrationWriteAndUpdateTests: XCTestCase {
         var updatedBot: XcodeServer.Bot?
         
         let saveBot = expectation(description: "Save Bot")
-        store.saveBot(bot, forServer: .server1) { (result) in
+        store.persistBot(bot, forServer: .server1) { (result) in
             switch result {
             case .success(let value):
                 updatedBot = value
@@ -107,7 +95,7 @@ final class IntegrationWriteAndUpdateTests: XCTestCase {
         bot.integrations.insert(.dynumite24)
         
         let saveBot = expectation(description: "Save Bot")
-        store.saveBot(bot, forServer: .server1) { (result) in
+        store.persistBot(bot, forServer: .server1) { (result) in
             switch result {
             case .success:
                 saveBot.fulfill()
@@ -119,7 +107,7 @@ final class IntegrationWriteAndUpdateTests: XCTestCase {
         
         var _integration: XcodeServer.Integration?
         let saveIntegration = expectation(description: "Save Integration")
-        store.saveIntegration(.dynumite24, forBot: bot.id) { (result) in
+        store.persistIntegration(.dynumite24, forBot: bot.id) { (result) in
             switch result {
             case .success(let value):
                 _integration = value
@@ -246,13 +234,13 @@ private extension XcodeServer.Integration {
         var integration: XcodeServer.Integration
         do {
             #if swift(>=5.3)
-            _integration = try Bundle.module.decodeJson("integration", decoder: XcodeServerAPI.APIClient.jsonDecoder)
+            _integration = try Bundle.module.decodeJson("integration", decoder: XcodeServerAPI.XCSClient.jsonDecoder)
             issues = try Bundle.module.decodeJson("issues")
-            commits = try Bundle.module.decodeJson("commits", decoder: XcodeServerAPI.APIClient.jsonDecoder)
+            commits = try Bundle.module.decodeJson("commits", decoder: XcodeServerAPI.XCSClient.jsonDecoder)
             #else
-            _integration = try integrationJson.decodeMultiline(decoder: XcodeServerAPI.APIClient.jsonDecoder)
-            issues = try issuesJson.decodeMultiline(decoder: XcodeServerAPI.APIClient.jsonDecoder)
-            commits = try commitsJson.decodeMultiline(decoder: XcodeServerAPI.APIClient.jsonDecoder)
+            _integration = try integrationJson.decodeMultiline(decoder: XcodeServerAPI.XCSClient.jsonDecoder)
+            issues = try issuesJson.decodeMultiline(decoder: XcodeServerAPI.XCSClient.jsonDecoder)
+            commits = try commitsJson.decodeMultiline(decoder: XcodeServerAPI.XCSClient.jsonDecoder)
             #endif
         } catch {
             preconditionFailure(error.localizedDescription)

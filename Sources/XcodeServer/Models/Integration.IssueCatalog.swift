@@ -1,6 +1,6 @@
 public extension Integration {
     
-    struct IssueCatalog: Hashable {
+    struct IssueCatalog: Hashable, Codable {
         public var buildServiceErrors: Set<Issue> = []
         public var buildServiceWarnings: Set<Issue> = []
         public var triggerErrors: Set<Issue> = []

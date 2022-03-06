@@ -2,9 +2,9 @@ import Foundation
 
 public extension Bot {
     
-    struct Stats: Hashable {
+    struct Stats: Hashable, Codable {
         
-        public struct Analysis: Hashable {
+        public struct Analysis: Hashable, Codable {
             public var count: Int = 0
             public var sum: Double = 0.0
             public var min: Double = 0.0

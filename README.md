@@ -58,13 +58,9 @@ Integration coverage data & assets.
 
 A CoreData (on Apple platforms) driven implementation of primary Xcode Server entities and their relationships to one another.
 
-### XcodeServerProcedures
-
-A operation-driven level that combines the api and persisted storage.
-
 ### XcodeServerUtility
 
-A `Manager` class that interacts with the procedures the query and persist data from the server API.
+A `Manager` class that persists data from the server API.
 
 ### [`xcscli`](Documentation/xcscli.md)
 

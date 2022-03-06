@@ -1,6 +1,6 @@
 public extension SourceControl {
     /// AKA 'Repository'
-    struct Remote: Hashable, Identifiable {
+    struct Remote: Hashable, Identifiable, Codable {
         public var id: String
         public var system: String = ""
         public var url: String = ""
