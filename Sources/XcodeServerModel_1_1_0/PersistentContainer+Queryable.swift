@@ -127,4 +127,6 @@ extension PersistentContainer: SourceControlQueryable {
         return viewContext.mapSynchronously(repository, { SourceControl.Remote($0) })
     }
 }
+
+extension PersistentContainer: EntityQueryable {}
 #endif
