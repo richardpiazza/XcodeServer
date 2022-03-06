@@ -38,6 +38,6 @@ final class Versions: AsyncParsableCommand, Route, Logged {
     func run() async throws {
         let client = try XCSClient(fqdn: server, credentialDelegate: self)
         let versions = try await client.versions()
-        print(versions.0.asPrettyJSON() ?? "OK")
+        print(versions.asPrettyJSON() ?? "OK")
     }
 }

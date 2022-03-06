@@ -20,7 +20,7 @@ extension PersistentContainer: ServerPersistable {
     public func removeServer(withId id: XcodeServer.Server.ID) async throws {
         try newBackgroundContext().performSynchronously { context in
             guard let server = Server.server(id, in: context) else {
-                throw ResultError.noServer(id)
+                throw XcodeServerError.serverNotFound(id)
             }
             
             context.delete(server)
@@ -31,7 +31,7 @@ extension PersistentContainer: ServerPersistable {
         var results: [XcodeServer.Bot]!
         try newBackgroundContext().performSynchronously { context in
             guard let server = Server.server(id, in: context) else {
-                throw ResultError.noServer(id)
+                throw XcodeServerError.serverNotFound(id)
             }
             
             server.update(Set(bots), context: context)
@@ -50,7 +50,7 @@ extension PersistentContainer: BotPersistable {
                 _bot = existing
             } else {
                 guard let server = Server.server(id, in: context) else {
-                    throw ResultError.noServer(id)
+                    throw XcodeServerError.serverNotFound(id)
                 }
                 
                 _bot = context.make()
@@ -68,7 +68,7 @@ extension PersistentContainer: BotPersistable {
     public func removeBot(withId id: XcodeServer.Bot.ID) async throws {
         try newBackgroundContext().performSynchronously { context in
             guard let bot = Bot.bot(id, in: context) else {
-                throw ResultError.noBot(id)
+                throw XcodeServerError.botNotFound(id)
             }
             
             context.delete(bot)
@@ -79,7 +79,7 @@ extension PersistentContainer: BotPersistable {
         var result: XcodeServer.Bot.Stats!
         try newBackgroundContext().performSynchronously { context in
             guard let bot = Bot.bot(id, in: context) else {
-                throw ResultError.noBot(id)
+                throw XcodeServerError.botNotFound(id)
             }
             
             if bot.stats == nil {
@@ -103,7 +103,7 @@ extension PersistentContainer: IntegrationPersistable {
                 _integration = existing
             } else {
                 guard let bot = Bot.bot(id, in: context) else {
-                    throw ResultError.noBot(id)
+                    throw XcodeServerError.botNotFound(id)
                 }
                 
                 _integration = context.make()
@@ -126,7 +126,7 @@ extension PersistentContainer: IntegrationPersistable {
                     _integration = existing
                 } else {
                     guard let bot = Bot.bot(id, in: context) else {
-                        throw ResultError.noBot(id)
+                        throw XcodeServerError.botNotFound(id)
                     }
                     
                     _integration = context.make()
@@ -144,7 +144,7 @@ extension PersistentContainer: IntegrationPersistable {
     public func removeIntegration(withId id: XcodeServer.Integration.ID) async throws {
         try newBackgroundContext().performSynchronously { context in
             guard let integration = Integration.integration(id, in: context) else {
-                throw ResultError.noIntegration(id)
+                throw XcodeServerError.integrationNotFound(id)
             }
             
             context.delete(integration)
@@ -155,7 +155,7 @@ extension PersistentContainer: IntegrationPersistable {
         var results: [SourceControl.Commit] = []
         try newBackgroundContext().performSynchronously { context in
             guard let integration = Integration.integration(id, in: context) else {
-                throw ResultError.noIntegration(id)
+                throw XcodeServerError.integrationNotFound(id)
             }
             
             integration.hasRetrievedCommits = true
@@ -185,14 +185,14 @@ extension PersistentContainer: IntegrationPersistable {
         var result: XcodeServer.Integration.IssueCatalog!
         try newBackgroundContext().performSynchronously { context in
             guard let integration = Integration.integration(id, in: context) else {
-                throw ResultError.noIntegration(id)
+                throw XcodeServerError.integrationNotFound(id)
             }
             
             integration.hasRetrievedIssues = true
             integration.issues?.update(issues, context: context)
             
             guard let catalog = integration.issues else {
-                throw ResultError.message("No 'Issues' for 'Integration' \(id).")
+                throw XcodeServerError.undefinedError(nil)
             }
             
             result = XcodeServer.Integration.IssueCatalog(catalog)
@@ -201,7 +201,7 @@ extension PersistentContainer: IntegrationPersistable {
     }
     
     public func persistArchive(_ archive: Data, forIntegration id: XcodeServer.Integration.ID) async throws -> Data {
-        throw ResultError.message("Not Implemented")
+        throw XcodeServerError.notImplemented
     }
 }
 
@@ -226,7 +226,7 @@ extension PersistentContainer: SourceControlPersistable {
     public func removeRemote(withId id: SourceControl.Remote.ID) async throws {
         try newBackgroundContext().performSynchronously { context in
             guard let remote = Repository.repository(id, in: context) else {
-                throw ResultError.noRemote(id)
+                throw XcodeServerError.remoteNotFound(id)
             }
             
             context.delete(remote)

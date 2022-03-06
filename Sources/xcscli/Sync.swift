@@ -60,25 +60,52 @@ final class Sync: AsyncParsableCommand, Route, Stored, Logged {
         
         let _model = model ?? Model.current
         let store = try CoreDataStore(model: _model, persistence: .store(storeURL))
+        let client = try XCSClient(fqdn: server, credentialDelegate: self)
         
-        let asyncManager = AsyncManager(store: store) { fqdn in
-            guard let username = self.username, let password = self.password else {
-                return nil
-            }
-            
-            return (username, password)
-        }
+        // Create Server
+        let versions = try await client.versions()
+        let _server = Server(id: server, version: versions, api: client.apiVersion)
+        _ = try await store.persistServer(_server)
         
-        try await asyncManager.createServer(server)
+        // Sync
         Self.logger.notice("Syncing SERVER [\(server)]")
         let start = Date()
-        try await asyncManager.syncServer(server, deepSync: true)
+        
+        let bots: [Bot] = try await client.bots()
+        let persistedBots = try await store.persistBots(bots, forServer: server)
+        for bot in persistedBots {
+            let stats: Bot.Stats = try await client.stats(forBot: bot.id)
+            _ = try await store.persistStats(stats, forBot: bot.id)
+            
+            let integrations: [Integration] = try await client.integrations(forBot: bot.id)
+            let persistedIntegrations = try await store.persistIntegrations(integrations, forBot: bot.id)
+            for integration in persistedIntegrations {
+                let issues: Integration.IssueCatalog = try await client.issues(forIntegration: integration.id)
+                _ = try await store.persistIssues(issues, forIntegration: integration.id)
+                
+                let commits: [SourceControl.Commit] = try await client.commits(forIntegration: integration.id)
+                _ = try await store.persistCommits(commits, forIntegration: integration.id)
+            }
+        }
+        
         let end = Date()
         Self.logger.notice("Syncing Complete", metadata: [
             "Seconds": .string("\(end.timeIntervalSince(start))"),
             "StoreURL": .string(storeURL.rawValue.path)
         ])
+        
+        // Cleanup
         try store.cleanup()
+    }
+}
+
+extension Sync: CredentialDelegate {
+    func credentials(for server: Server.ID) -> (username: String, password: String)? {
+        guard let username = self.username, let password = self.password else {
+            return nil
+        }
+        
+        return (username, password)
     }
 }
 

@@ -16,28 +16,6 @@ public protocol CredentialDelegate: AnyObject {
 
 public class XCSClient {
     
-    public enum Error: Swift.Error, LocalizedError {
-        case fqdn
-        case xcodeServer
-        case authorization
-        case response(innerError: Swift.Error?)
-        case serialization(innerError: Swift.Error?)
-        case invalidURL
-        case notImplemented
-        
-        public var errorDescription: String? {
-            switch self {
-            case .fqdn: return "Attempted to initialize with an invalid FQDN."
-            case .xcodeServer: return "This class was initialized without an XcodeServer entity."
-            case .authorization: return "The server returned a 401 response code."
-            case .response: return "The response did not contain valid data."
-            case .serialization: return "The response object could not be cast into the requested type."
-            case .invalidURL: return "Failed to construct a valid URL."
-            case .notImplemented: return "The requested function has not been implemented."
-            }
-        }
-    }
-    
     public struct Headers {
         public static let xcsAPIVersion = "x-xcsapiversion"
     }
@@ -72,6 +50,7 @@ public class XCSClient {
     
     public let fqdn: String
     public var baseURL: URL
+    public private(set) var apiVersion: Int = 19
     public var jsonEncoder: JSONEncoder = XCSClient.jsonEncoder
     public var jsonDecoder: JSONDecoder = XCSClient.jsonDecoder
     private let client: HTTPClient
@@ -84,7 +63,7 @@ public class XCSClient {
     
     public init(fqdn: String, credentialDelegate: CredentialDelegate?) throws {
         guard let url = URL(string: "https://\(fqdn):20343/api") else {
-            throw Error.fqdn
+            throw XcodeServerError.undefinedError(URLError(.badURL))
         }
         
         self.fqdn = fqdn
@@ -115,22 +94,22 @@ public class XCSClient {
         let decompressedData = try BZip2.decompress(data: data)
         
         guard let decompressedString = String(data: decompressedData, encoding: .utf8) else {
-            throw Error.serialization(innerError: nil)
+            throw XcodeServerError.undefinedError(nil)
         }
         
         guard let firstBrace = decompressedString.range(of: "{") else {
-            throw Error.serialization(innerError: nil)
+            throw XcodeServerError.undefinedError(nil)
         }
         
         guard let lastBrace = decompressedString.range(of: "}", options: .backwards, range: nil, locale: nil) else {
-            throw Error.serialization(innerError: nil)
+            throw XcodeServerError.undefinedError(nil)
         }
         
         let range = decompressedString.index(firstBrace.lowerBound, offsetBy: 0)..<decompressedString.index(lastBrace.lowerBound, offsetBy: 1)
         let json = decompressedString[range]
         
         guard let validData = json.data(using: .utf8) else {
-            throw Error.serialization(innerError: nil)
+            throw XcodeServerError.undefinedError(nil)
         }
         
         return validData
@@ -143,7 +122,7 @@ public class XCSClient {
         urlComponents?.queryItems = queryItems
         
         guard let url = urlComponents?.url else {
-            throw Error.invalidURL
+            throw XcodeServerError.undefinedError(URLError(.badURL))
         }
         
         var headers = HTTPHeaders()
@@ -170,34 +149,55 @@ public class XCSClient {
         return request
     }
     
-    /// Requests the '`/ping`' endpoint from the Xcode Server API.
+    /// Ping the Xcode Server.
+    ///
+    /// Sends a simple request to the Xcode Server api endpoint `/ping`.
+    ///
+    /// - note: This endpoint does not require authentication.
+    ///
+    /// - parameters:
+    ///   - id: The unique identifier (FQDN) of the `Server` of which to test connectivity.
     public func ping() async throws {
         Self.logger.info("Pinging SERVER [\(fqdn)]")
         let request = try clientRequest(path: "ping")
         let response = try await client.execute(request, timeout: timeout, logger: Self.logger)
+        
+        if let version = response.headers.first(name: Headers.xcsAPIVersion).flatMap(Int.init), version != apiVersion {
+            apiVersion = version
+        }
+        
         if response.status != .noContent {
-            throw Error.xcodeServer
+            throw XcodeServerError.statusCode(response.status.code)
         }
     }
     
-    public func versions() async throws -> (XCSVersion, Int) {
+    /// Versioning information about the software installed on the Xcode Server.
+    ///
+    /// Unlike `ping(_:)`, this endpoint requires authentication to complete successfully.
+    ///
+    /// - parameters:
+    ///   - id: The unique identifier (FQDN) of the `Server` of which to test connectivity.
+    public func versions() async throws -> XCSVersion {
         Self.logger.info("Retrieving XCSVersion for SERVER [\(fqdn)]")
         let request = try clientRequest(path: "versions")
         let response = try await client.execute(request, timeout: timeout, logger: Self.logger)
         
         guard response.status != .unauthorized else {
-            throw Error.authorization
+            throw XcodeServerError.unauthorized
         }
         
         guard response.status == .ok else {
-            throw Error.response(innerError: nil)
+            throw XcodeServerError.statusCode(response.status.code)
         }
         
         let data = try await response.body.data
         let document = try jsonDecoder.decode(XCSVersion.self, from: data)
-        let version = response.headers.first(name: Headers.xcsAPIVersion).flatMap(Int.init) ?? 19
         
-        return (document, version)
+        if let version = response.headers.first(name: Headers.xcsAPIVersion).flatMap(Int.init), version != apiVersion {
+            apiVersion = version
+        }
+        
+        return document
     }
     
     /// Requests the '`/bots`' endpoint from the Xcode Server API.
@@ -312,13 +312,13 @@ public class XCSClient {
         
         switch response.status {
         case .unauthorized:
-            throw Error.authorization
+            throw XcodeServerError.unauthorized
         case .notFound:
             // 404 is a valid response, no coverage data.
             return nil
         default:
             guard response.status == .ok else {
-                throw Error.response(innerError: nil)
+                throw XcodeServerError.statusCode(response.status.code)
             }
         }
         
@@ -338,10 +338,10 @@ public class XCSClient {
         
         switch response.status {
         case .unauthorized:
-            throw Error.authorization
+            throw XcodeServerError.unauthorized
         default:
             guard response.status == .ok else {
-                throw Error.response(innerError: nil)
+                throw XcodeServerError.statusCode(response.status.code)
             }
         }
         

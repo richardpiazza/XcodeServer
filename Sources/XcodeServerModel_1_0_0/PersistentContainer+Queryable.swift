@@ -13,7 +13,7 @@ extension PersistentContainer: ServerQueryable {
     
     public func server(withId id: XcodeServer.Server.ID) async throws -> XcodeServer.Server {
         guard let server = Server.server(id, in: viewContext) else {
-            throw ResultError.noServer(id)
+            throw XcodeServerError.serverNotFound(id)
         }
         
         return viewContext.mapSynchronously(server, { XcodeServer.Server($0) })
@@ -37,7 +37,7 @@ extension PersistentContainer: BotQueryable {
     
     public func bot(withId id: XcodeServer.Bot.ID) async throws -> XcodeServer.Bot {
         guard let bot = Bot.bot(id, in: viewContext) else {
-            throw ResultError.noBot(id)
+            throw XcodeServerError.botNotFound(id)
         }
         
         return viewContext.mapSynchronously(bot, { XcodeServer.Bot($0) })
@@ -45,11 +45,11 @@ extension PersistentContainer: BotQueryable {
     
     public func stats(forBot id: XcodeServer.Bot.ID) async throws -> XcodeServer.Bot.Stats {
         guard let bot = Bot.bot(id, in: viewContext) else {
-            throw ResultError.noBot(id)
+            throw XcodeServerError.botNotFound(id)
         }
         
         guard let stats = bot.stats else {
-            throw ResultError.noStatsForBot(id)
+            throw XcodeServerError.undefinedError(nil)
         }
         
         return viewContext.mapSynchronously(stats, { XcodeServer.Bot.Stats($0) })
@@ -66,7 +66,7 @@ extension PersistentContainer: IntegrationQueryable {
     
     public func integration(withId id: XcodeServer.Integration.ID) async throws -> XcodeServer.Integration {
         guard let integration = Integration.integration(id, in: viewContext) else {
-            throw ResultError.noIntegration(id)
+            throw XcodeServerError.integrationNotFound(id)
         }
         
         return viewContext.mapSynchronously(integration, { XcodeServer.Integration($0) })
@@ -81,7 +81,7 @@ extension PersistentContainer: IntegrationQueryable {
     
     public func commits(forIntegration id: XcodeServer.Integration.ID) async throws -> [SourceControl.Commit] {
         guard let integration = Integration.integration(id, in: viewContext) else {
-            throw ResultError.noIntegration(id)
+            throw XcodeServerError.integrationNotFound(id)
         }
         
         guard let blueprints = integration.revisionBlueprints as? Set<RevisionBlueprint> else {
@@ -96,7 +96,7 @@ extension PersistentContainer: IntegrationQueryable {
     
     public func issues(forIntegration id: XcodeServer.Integration.ID) async throws -> XcodeServer.Integration.IssueCatalog {
         guard let integration = Integration.integration(id, in: viewContext) else {
-            throw ResultError.noIntegration(id)
+            throw XcodeServerError.integrationNotFound(id)
         }
         
         guard let issues = integration.issues else {
@@ -107,7 +107,7 @@ extension PersistentContainer: IntegrationQueryable {
     }
     
     public func archive(forIntegration id: XcodeServer.Integration.ID) async throws -> Data {
-        throw ResultError.message("Not Implemented")
+        throw XcodeServerError.notImplemented
     }
 }
 
@@ -121,7 +121,7 @@ extension PersistentContainer: SourceControlQueryable {
     
     public func remote(withId id: SourceControl.Remote.ID) async throws -> SourceControl.Remote {
         guard let repository = Repository.repository(id, in: viewContext) else {
-            throw ResultError.noRemote(id)
+            throw XcodeServerError.remoteNotFound(id)
         }
         
         return viewContext.mapSynchronously(repository, { SourceControl.Remote($0) })

@@ -3,32 +3,32 @@ import Foundation
 
 public extension NotificationCenter {
     /// Convenience method for posting a `.serversDidChange` notification.
+    @available(*, deprecated)
     func postServersDidChange() {
-        AsyncManager.logger.info("Posting: ServersDidChange")
         post(name: .serversDidChange, object: nil)
     }
     
     /// Convenience for posting a `.serverDidChange` notification.
     ///
     /// - parameter id: Entity ID that will be provided in the _userInfo_ dictionary under the key **Server.ID**.
+    @available(*, deprecated)
     func postServerDidChange(_ id: Server.ID) {
-        AsyncManager.logger.info("Posting: ServerDidChange [\(id)]")
         post(name: .serverDidChange, object: nil, userInfo: ["Server.ID": id])
     }
     
     /// Convenience for posting a `.botDidChange` notification.
     ///
     /// - parameter id: Entity ID that will be provided in the _userInfo_ dictionary under the key **Bot.ID**.
+    @available(*, deprecated)
     func postBotDidChange(_ id: Bot.ID) {
-        AsyncManager.logger.info("Posting: BotDidChange [\(id)]")
         post(name: .botDidChange, object: nil, userInfo: ["Bot.ID": id])
     }
     
     /// Convenience for posting a `.integrationDidChange` notification.
     ///
     /// - parameter id: Entity ID that will be provided in the _userInfo_ dictionary under the key **Integration.ID**.
+    @available(*, deprecated)
     func postIntegrationDidChange(_ id: Integration.ID) {
-        AsyncManager.logger.info("Posting: IntegrationDidChange [\(id)]")
         post(name: .integrationDidChange, object: nil, userInfo: ["Integration.ID": id])
     }
 }

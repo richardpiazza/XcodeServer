@@ -8,11 +8,11 @@ extension XCSClient: ServerQueryable {
     
     public func server(withId id: Server.ID) async throws -> Server {
         guard id == fqdn else {
-            throw Error.fqdn
+            throw XcodeServerError.serverId(id)
         }
         
         let document = try await versions()
-        return Server(id: fqdn, version: document.0, api: document.1)
+        return Server(id: fqdn, version: document, api: apiVersion)
     }
 }
 
@@ -24,7 +24,7 @@ extension XCSClient: BotQueryable {
     
     public func bots(forServer id: Server.ID) async throws -> [Bot] {
         guard id == fqdn else {
-            throw Error.fqdn
+            throw XcodeServerError.serverId(id)
         }
         
         return try await bots()

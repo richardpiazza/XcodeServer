@@ -3,15 +3,11 @@ import XcodeServer
 import XcodeServerAPI
 import Logging
 
+@available(*, deprecated)
 public class AsyncManager {
     
     public typealias Store = EntityQueryable & EntityPersistable
     public typealias CredentialProvider = (_ fqdn: String) -> (username: String, password: String)?
-    
-    public enum Error: Swift.Error {
-        case nilServerID
-        case nilBotID
-    }
     
     static let logger: Logger = Logger(label: "XcodeServer.Utility")
     
@@ -39,28 +35,15 @@ public class AsyncManager {
         clients[id] = nil
     }
     
-    /// Ping the Xcode Server.
-    ///
-    /// Sends a simple request to the Xcode Server api endpoint `/ping`.
-    /// This endpoint does not require authentication.
-    ///
-    /// - parameters:
-    ///   - id: The unique identifier (FQDN) of the `Server` of which to test connectivity.
     public func ping(_ id: Server.ID) async throws {
         let client = try self.client(id)
         try await client.ping()
     }
     
-    /// Versioning information about the software installed on the Xcode Server.
-    ///
-    /// Unlike `ping(_:)`, this endpoint requires authentication to complete successfully.
-    ///
-    /// - parameters:
-    ///   - id: The unique identifier (FQDN) of the `Server` of which to test connectivity.
     public func versions(_ id: Server.ID) async throws -> Server.Version {
         let client = try self.client(id)
         let response = try await client.versions()
-        return Server.Version(response.0, api: response.1)
+        return Server.Version(response, api: client.apiVersion)
     }
     
     public func createServer(_ id: Server.ID) async throws {
@@ -78,7 +61,7 @@ public class AsyncManager {
     public func syncVersions(_ id: Server.ID) async throws {
         let client = try self.client(id)
         let versions = try await client.versions()
-        let server = Server(id: id, version: versions.0, api: versions.1)
+        let server = Server(id: id, version: versions, api: client.apiVersion)
         _ = try await store.persistServer(server)
     }
     
@@ -95,7 +78,7 @@ public class AsyncManager {
     
     public func syncBot(_ bot: Bot, deepSync: Bool = false) async throws {
         guard let id = bot.serverId else {
-            throw Error.nilServerID
+            throw XcodeServerError.serverNotFound("NIL")
         }
         
         let client = try self.client(id)
@@ -111,7 +94,7 @@ public class AsyncManager {
     
     public func syncStats(_ bot: Bot) async throws {
         guard let id = bot.serverId else {
-            throw Error.nilServerID
+            throw XcodeServerError.serverNotFound("NIL")
         }
         
         let client = try self.client(id)
@@ -121,11 +104,11 @@ public class AsyncManager {
     
     public func syncIntegration(_ integration: Integration) async throws {
         guard let serverId = integration.serverId else {
-            throw Error.nilServerID
+            throw XcodeServerError.serverNotFound("NIL")
         }
         
         guard let botId = integration.botId else {
-            throw Error.nilBotID
+            throw XcodeServerError.botNotFound("NIL")
         }
         
         let client = try self.client(serverId)
@@ -166,6 +149,7 @@ public class AsyncManager {
     }
 }
 
+@available(*, deprecated)
 extension AsyncManager: CredentialDelegate {
     public func credentials(for fqdn: String) -> (username: String, password: String)? {
         return credentialProvider?(fqdn)

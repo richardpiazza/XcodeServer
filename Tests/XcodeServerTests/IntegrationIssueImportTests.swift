@@ -23,7 +23,7 @@ final class IntegrationIssueImportTests: XCTestCase {
             case .integration2: json = "12.1_Integration_2_Issues"
             case .integration3: json = "12.1_Integration_3_Issues"
             default:
-                throw ResultError.message("Unhandled ID '\(id)'")
+                throw XcodeServerError.integrationNotFound(id)
             }
             
             let resource: XCSIssues = try Bundle.module.decodeJson(json, decoder: self.decoder)
