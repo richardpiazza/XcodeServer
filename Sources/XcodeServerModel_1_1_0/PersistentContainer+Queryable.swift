@@ -5,18 +5,17 @@ import CoreDataPlus
 
 extension PersistentContainer: ServerQueryable {
     public func servers() async throws -> [XcodeServer.Server] {
-        let servers = Server.servers(in: viewContext)
-        return servers.map { server in
-            viewContext.mapSynchronously(server, { XcodeServer.Server($0) })
-        }
+        try newBackgroundContext().fetchSynchronously(Server.fetchServers(), mapping: { server in
+            XcodeServer.Server(server)
+        })
     }
     
     public func server(withId id: XcodeServer.Server.ID) async throws -> XcodeServer.Server {
-        guard let server = Server.server(id, in: viewContext) else {
+        guard let server = try newBackgroundContext().fetchSynchronously(Server.fetchServer(withId: id), mapping: { XcodeServer.Server($0) }).first else {
             throw XcodeServerError.serverNotFound(id)
         }
         
-        return viewContext.mapSynchronously(server, { XcodeServer.Server($0) })
+        return server
     }
 }
 
