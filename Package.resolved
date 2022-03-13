@@ -2,15 +2,6 @@
   "object": {
     "pins": [
       {
-        "package": "async-http-client",
-        "repositoryURL": "https://github.com/swift-server/async-http-client",
-        "state": {
-          "branch": null,
-          "revision": "7a4dfe026f6ee0f8ad741b58df74c60af296365d",
-          "version": "1.9.0"
-        }
-      },
-      {
         "package": "BitByteData",
         "repositoryURL": "https://github.com/tsolomko/BitByteData",
         "state": {
@@ -38,6 +29,15 @@
         }
       },
       {
+        "package": "SessionPlus",
+        "repositoryURL": "https://github.com/richardpiazza/SessionPlus",
+        "state": {
+          "branch": "feature/request-response",
+          "revision": "33401bdad378d87237fd8059e843a09a3ccdde1b",
+          "version": null
+        }
+      },
+      {
         "package": "SWCompression",
         "repositoryURL": "https://github.com/tsolomko/SWCompression",
         "state": {
@@ -51,7 +51,7 @@
         "repositoryURL": "https://github.com/apple/swift-argument-parser.git",
         "state": {
           "branch": "async",
-          "revision": "b2975c42eaa8bbb849dad9c76a6b260676e7357e",
+          "revision": "3cad8ef903440142ba35f51db53b3df591156a00",
           "version": null
         }
       },
@@ -62,51 +62,6 @@
           "branch": null,
           "revision": "5d66f7ba25daf4f94100e7022febf3c75e37a6c7",
           "version": "1.4.2"
-        }
-      },
-      {
-        "package": "swift-nio",
-        "repositoryURL": "https://github.com/apple/swift-nio.git",
-        "state": {
-          "branch": null,
-          "revision": "154f1d32366449dcccf6375a173adf4ed2a74429",
-          "version": "2.38.0"
-        }
-      },
-      {
-        "package": "swift-nio-extras",
-        "repositoryURL": "https://github.com/apple/swift-nio-extras.git",
-        "state": {
-          "branch": null,
-          "revision": "f73ca5ee9c6806800243f1ac415fcf82de9a4c91",
-          "version": "1.10.2"
-        }
-      },
-      {
-        "package": "swift-nio-http2",
-        "repositoryURL": "https://github.com/apple/swift-nio-http2.git",
-        "state": {
-          "branch": null,
-          "revision": "39ed0e753596afadad920e302ae769b28f3a982b",
-          "version": "1.19.0"
-        }
-      },
-      {
-        "package": "swift-nio-ssl",
-        "repositoryURL": "https://github.com/apple/swift-nio-ssl.git",
-        "state": {
-          "branch": null,
-          "revision": "5e68c1ded15619bb281b273fa8c2d8fd7f7b2b7d",
-          "version": "2.16.1"
-        }
-      },
-      {
-        "package": "swift-nio-transport-services",
-        "repositoryURL": "https://github.com/apple/swift-nio-transport-services.git",
-        "state": {
-          "branch": null,
-          "revision": "8ab824b140d0ebcd87e9149266ddc353e3705a3e",
-          "version": "1.11.4"
         }
       }
     ]

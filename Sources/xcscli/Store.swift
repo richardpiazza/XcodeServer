@@ -11,6 +11,7 @@ final class Store: AsyncParsableCommand {
         .init(
             commandName: "store",
             abstract: "Interact with the Core Data persistence store.",
+            usage: nil,
             discussion: "",
             version: "0.1",
             shouldDisplay: true,

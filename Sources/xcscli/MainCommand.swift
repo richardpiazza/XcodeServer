@@ -22,6 +22,7 @@ struct MainCommand: AsyncParsableCommand {
         return CommandConfiguration(
             commandName: "xcscli",
             abstract: "XcodeServer Framework Command Line Interface",
+            usage: nil,
             discussion: "",
             version: "1.0.0",
             shouldDisplay: true,
@@ -32,6 +33,6 @@ struct MainCommand: AsyncParsableCommand {
     }()
 }
 
-@main enum Main: AsyncMain {
+@main enum Main: AsyncMainProtocol {
     typealias Command = MainCommand
 }

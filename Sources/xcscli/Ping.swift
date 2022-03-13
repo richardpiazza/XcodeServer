@@ -10,6 +10,7 @@ final class Ping: AsyncParsableCommand, Route, Logged {
         return CommandConfiguration(
             commandName: "ping",
             abstract: "Pings the host",
+            usage: nil,
             discussion: "",
             version: "",
             shouldDisplay: true,

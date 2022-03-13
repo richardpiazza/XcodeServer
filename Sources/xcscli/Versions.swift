@@ -10,6 +10,7 @@ final class Versions: AsyncParsableCommand, Route, Logged {
         return CommandConfiguration(
             commandName: "versions",
             abstract: "Xcode Server version information",
+            usage: nil,
             discussion: "",
             version: "",
             shouldDisplay: true,

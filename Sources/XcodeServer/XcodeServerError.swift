@@ -8,7 +8,7 @@ public enum XcodeServerError: LocalizedError {
     case remoteNotFound(_ id: SourceControl.Remote.ID)
     case serverId(_ id: Server.ID)
     case serverNotFound(_ id: Server.ID)
-    case statusCode(UInt)
+    case statusCode(Int)
     case unauthorized
     case undefinedError(_ error: Error?)
     

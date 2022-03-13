@@ -19,7 +19,6 @@ let package = Package(
                 "XcodeServer",
                 "XcodeServerAPI",
                 "XcodeServerCoreData",
-                "XcodeServerUtility"
             ]
         ),
         .executable(
@@ -31,8 +30,8 @@ let package = Package(
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
         .package(url: "https://github.com/tsolomko/SWCompression", .upToNextMinor(from: "4.5.5")),
-        .package(url: "https://github.com/swift-server/async-http-client", from: "1.9.0"),
         .package(url: "https://github.com/apple/swift-argument-parser.git", .branch("async")),
+        .package(url: "https://github.com/richardpiazza/SessionPlus", .branch("feature/request-response")),
         .package(url: "https://github.com/richardpiazza/CoreDataPlus.git", .upToNextMinor(from: "0.2.0")),
         .package(url: "https://github.com/apple/swift-log.git", from: "1.4.2"),
         .package(url: "https://github.com/onevcat/Rainbow", from: "4.0.1")
@@ -43,12 +42,12 @@ let package = Package(
         .executableTarget(
             name: "xcscli",
             dependencies: [
-                "XcodeServerUtility",
-                "XcodeServerCoreData",
-                "CoreDataPlus",
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
                 .product(name: "Logging", package: "swift-log"),
+                "CoreDataPlus",
                 "Rainbow",
+                "XcodeServerCoreData",
+                "XcodeServerAPI",
             ]
         ),
         .target(
@@ -58,8 +57,8 @@ let package = Package(
         .target(
             name: "XcodeServerAPI",
             dependencies: [
+                "SessionPlus",
                 "SWCompression",
-                .product(name: "AsyncHTTPClient", package: "async-http-client"),
             ]
         ),
         .target(
@@ -89,21 +88,12 @@ let package = Package(
             ],
             resources: [.process("Resources")]
         ),
-        .target(
-            name: "XcodeServerUtility",
-            dependencies: [
-                "XcodeServer",
-                "XcodeServerAPI",
-                .product(name: "Logging", package: "swift-log"),
-            ]
-        ),
         .testTarget(
             name: "XcodeServerTests",
             dependencies: [
                 "XcodeServer",
                 "XcodeServerAPI",
-                "XcodeServerCoreData",
-                "XcodeServerUtility"
+                "XcodeServerCoreData"
             ],
             resources: [.process("Resources")]
         ),

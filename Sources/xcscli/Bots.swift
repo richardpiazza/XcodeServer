@@ -10,6 +10,7 @@ final class Bots: AsyncParsableCommand, Route, Logged {
         return CommandConfiguration(
             commandName: "bots",
             abstract: "Interact with the `/bots` route.",
+            usage: nil,
             discussion: "",
             version: "",
             shouldDisplay: true,

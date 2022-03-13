@@ -2,7 +2,6 @@ import Foundation
 import ArgumentParser
 import XcodeServer
 import XcodeServerAPI
-import XcodeServerUtility
 import XcodeServerCoreData
 import CoreDataPlus
 import Logging
@@ -17,6 +16,7 @@ final class Sync: AsyncParsableCommand, Route, Stored, Logged {
         return CommandConfiguration(
             commandName: "sync",
             abstract: "Syncs data to a local Core Data store.",
+            usage: nil,
             discussion: "",
             version: "",
             shouldDisplay: true,
@@ -96,16 +96,6 @@ final class Sync: AsyncParsableCommand, Route, Stored, Logged {
         
         // Cleanup
         try store.cleanup()
-    }
-}
-
-extension Sync: CredentialDelegate {
-    func credentials(for server: Server.ID) -> (username: String, password: String)? {
-        guard let username = self.username, let password = self.password else {
-            return nil
-        }
-        
-        return (username, password)
     }
 }
 

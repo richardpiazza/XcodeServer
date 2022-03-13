@@ -10,6 +10,7 @@ final class Integrations: AsyncParsableCommand, Route, Logged {
         return CommandConfiguration(
             commandName: "integrations",
             abstract: "Interact with the `/integrations` route.",
+            usage: nil,
             discussion: "",
             version: "",
             shouldDisplay: true,

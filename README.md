@@ -58,10 +58,6 @@ Integration coverage data & assets.
 
 A CoreData (on Apple platforms) driven implementation of primary Xcode Server entities and their relationships to one another.
 
-### XcodeServerUtility
-
-A `Manager` class that persists data from the server API.
-
 ### [`xcscli`](Documentation/xcscli.md)
 
 The executable `xcscli` provides a command line interface to the Xcode Server API. To execute from the command line (without building a 

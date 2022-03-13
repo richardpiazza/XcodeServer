@@ -1,13 +1,10 @@
-@testable import XcodeServer
-@testable import XcodeServerAPI
 import Foundation
+@testable import XcodeServer
 
 class MockApiClient: EntityQueryable {
     
     struct NotImplemented: Error {}
     
-    let dispatchQueue: DispatchQueue = .init(label: "MockApiClient")
-    let returnQueue: DispatchQueue
     let serverId: Server.ID
     
     lazy var dateFormatter: DateFormatter = {
@@ -22,9 +19,8 @@ class MockApiClient: EntityQueryable {
         return decoder
     }()
     
-    init(serverId: Server.ID, dispatchQueue: DispatchQueue = .main) {
+    init(serverId: Server.ID) {
         self.serverId = serverId
-        returnQueue = dispatchQueue
     }
     
     // MARK: - ServerQueryable

@@ -22,13 +22,8 @@ extension Route {
         }
     }
     
-    // MARK: - APIClientAuthorizationDelegate
-    func credentials(for fqdn: String) -> (username: String, password: String)? {
-        return credentialsForServer(withFQDN: fqdn)
-    }
-    
-    // MARK: - ManagerAuthorizationDelegate
-    func credentialsForServer(withFQDN fqdn: String?) -> (username: String, password: String)? {
+    // MARK: - XCSClient CredentialDelegate
+    func credentials(for server: Server.ID) -> (username: String, password: String)? {
         guard let username = self.username else {
             return nil
         }

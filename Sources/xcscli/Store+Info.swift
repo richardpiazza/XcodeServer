@@ -13,6 +13,7 @@ final class StoreInfo: AsyncParsableCommand, Stored, Logged {
         .init(
             commandName: "info",
             abstract: "Displays information about the persistence store.",
+            usage: nil,
             discussion: """
             When no 'path' is specified, the default store URL will be used:
             \(StoreURL.xcodeServer.rawValue.path)
