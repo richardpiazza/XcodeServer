@@ -5,9 +5,7 @@ import CoreDataPlus
 
 extension PersistentContainer: ServerQueryable {
     public func servers() async throws -> [XcodeServer.Server] {
-        try newBackgroundContext().fetchSynchronously(Server.fetchServers(), mapping: { server in
-            XcodeServer.Server(server)
-        })
+        try newBackgroundContext().fetchSynchronously(Server.fetchServers(), mapping: { XcodeServer.Server($0) })
     }
     
     public func server(withId id: XcodeServer.Server.ID) async throws -> XcodeServer.Server {
@@ -21,88 +19,62 @@ extension PersistentContainer: ServerQueryable {
 
 extension PersistentContainer: BotQueryable {
     public func bots() async throws -> [XcodeServer.Bot] {
-        let bots = Bot.bots(in: viewContext)
-        return bots.map { bot in
-            viewContext.mapSynchronously(bot, { XcodeServer.Bot($0) })
-        }
+        try newBackgroundContext().fetchSynchronously(Bot.fetchBots(), mapping: { XcodeServer.Bot($0) })
     }
     
     public func bots(forServer id: XcodeServer.Server.ID) async throws -> [XcodeServer.Bot] {
-        let bots = Bot.bots(forServer: id, in: viewContext)
-        return bots.map { bot in
-            viewContext.mapSynchronously(bot, { XcodeServer.Bot($0) })
-        }
+        try newBackgroundContext().fetchSynchronously(Bot.fetchBots(forServer: id), mapping: { XcodeServer.Bot($0) })
     }
     
     public func bot(withId id: XcodeServer.Bot.ID) async throws -> XcodeServer.Bot {
-        guard let bot = Bot.bot(id, in: viewContext) else {
+        guard let bot = try newBackgroundContext().fetchSynchronously(Bot.fetchBot(withId: id), mapping: { XcodeServer.Bot($0) }).first else {
             throw XcodeServerError.botNotFound(id)
         }
         
-        return viewContext.mapSynchronously(bot, { XcodeServer.Bot($0) })
+        return bot
     }
     
     public func stats(forBot id: XcodeServer.Bot.ID) async throws -> XcodeServer.Bot.Stats {
-        guard let bot = Bot.bot(id, in: viewContext) else {
-            throw XcodeServerError.botNotFound(id)
-        }
-        
-        guard let stats = bot.stats else {
+        guard let stats = try newBackgroundContext().fetchSynchronously(Stats.fetchStats(forBot: id), mapping: { XcodeServer.Bot.Stats($0) }).first else {
             throw XcodeServerError.undefinedError(nil)
         }
         
-        return viewContext.mapSynchronously(stats, { XcodeServer.Bot.Stats($0) })
+        return stats
     }
 }
 
 extension PersistentContainer: IntegrationQueryable {
     public func integrations() async throws -> [XcodeServer.Integration] {
-        let integrations = Integration.integrations(in: viewContext)
-        return integrations.map { integration in
-            viewContext.mapSynchronously(integration, { XcodeServer.Integration($0) })
-        }
+        try newBackgroundContext().fetchSynchronously(Integration.fetchIntegrations(), mapping: { XcodeServer.Integration($0) })
     }
     
     public func integration(withId id: XcodeServer.Integration.ID) async throws -> XcodeServer.Integration {
-        guard let integration = Integration.integration(id, in: viewContext) else {
+        guard let integration = try newBackgroundContext().fetchSynchronously(Integration.fetchIntegration(withId: id), mapping: { XcodeServer.Integration($0) }).first else {
             throw XcodeServerError.integrationNotFound(id)
         }
         
-        return viewContext.mapSynchronously(integration, { XcodeServer.Integration($0) })
+        return integration
     }
     
     public func integrations(forBot id: XcodeServer.Bot.ID) async throws -> [XcodeServer.Integration] {
-        let integrations = Integration.integrations(forBot: id, in: viewContext)
-        return integrations.map { integration in
-            viewContext.mapSynchronously(integration, { XcodeServer.Integration($0) })
-        }
+        try newBackgroundContext().fetchSynchronously(Integration.fetchIntegrations(forBot: id), mapping: { XcodeServer.Integration($0) })
     }
     
     public func commits(forIntegration id: XcodeServer.Integration.ID) async throws -> [SourceControl.Commit] {
-        guard let integration = Integration.integration(id, in: viewContext) else {
-            throw XcodeServerError.integrationNotFound(id)
-        }
-        
-        guard let blueprints = integration.revisionBlueprints as? Set<RevisionBlueprint> else {
-            return []
-        }
-        
-        let commits = blueprints.compactMap { $0.commit }
-        return commits.map { commit in
-            viewContext.mapSynchronously(commit, { SourceControl.Commit($0) })
-        }
+        var results: [SourceControl.Commit] = []
+        try newBackgroundContext().performSynchronously({ context in
+            let blueprints = try context.fetch(RevisionBlueprint.fetchBlueprints(forIntegration: id))
+            let commits = blueprints.compactMap { $0.commit }
+            results = commits.map { SourceControl.Commit($0) }
+        })
+        return results
     }
     
     public func issues(forIntegration id: XcodeServer.Integration.ID) async throws -> XcodeServer.Integration.IssueCatalog {
-        guard let integration = Integration.integration(id, in: viewContext) else {
-            throw XcodeServerError.integrationNotFound(id)
-        }
-        
-        guard let issues = integration.issues else {
-            return XcodeServer.Integration.IssueCatalog()
-        }
-        
-        return viewContext.mapSynchronously(issues, { XcodeServer.Integration.IssueCatalog($0) })
+        try newBackgroundContext().fetchSynchronously(
+            IntegrationIssues.fetchIssues(forIntegration: id),
+            mapping: { XcodeServer.Integration.IssueCatalog($0) }
+        ).first ?? XcodeServer.Integration.IssueCatalog()
     }
     
     public func archive(forIntegration id: XcodeServer.Integration.ID) async throws -> Data {
@@ -112,18 +84,15 @@ extension PersistentContainer: IntegrationQueryable {
 
 extension PersistentContainer: SourceControlQueryable {
     public func remotes() async throws -> [SourceControl.Remote] {
-        let repositories = Repository.repositories(in: viewContext)
-        return repositories.map { repository in
-            viewContext.mapSynchronously(repository, { SourceControl.Remote($0) })
-        }
+        try newBackgroundContext().fetchSynchronously(Repository.fetchRemotes(), mapping: { XcodeServer.SourceControl.Remote($0) })
     }
     
     public func remote(withId id: SourceControl.Remote.ID) async throws -> SourceControl.Remote {
-        guard let repository = Repository.repository(id, in: viewContext) else {
+        guard let remote = try newBackgroundContext().fetchSynchronously(Repository.fetchRemote(withId: id), mapping: { XcodeServer.SourceControl.Remote($0) }).first else {
             throw XcodeServerError.remoteNotFound(id)
         }
         
-        return viewContext.mapSynchronously(repository, { SourceControl.Remote($0) })
+        return remote
     }
 }
 

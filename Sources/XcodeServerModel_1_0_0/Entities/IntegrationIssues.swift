@@ -272,6 +272,14 @@ extension IntegrationIssues {
 }
 
 extension IntegrationIssues {
+    static func fetchIssues(forIntegration id: XcodeServer.Integration.ID) -> NSFetchRequest<IntegrationIssues> {
+        let request = fetchRequest()
+        request.predicate = NSPredicate(format: "%K = %@", #keyPath(IntegrationIssues.integration.identifier), id)
+        return request
+    }
+}
+
+extension IntegrationIssues {
     /// Update Integration Issues
     ///
     /// - note: Using the '_inverse_ = self' references here as an Issue may be linked to multiple Integrations.

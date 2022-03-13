@@ -77,7 +77,30 @@ extension Integration {
 }
 
 extension Integration {
+    static func fetchIntegrations() -> NSFetchRequest<Integration> {
+        fetchRequest()
+    }
+    
+    static func fetchIncompleteIntegrations() -> NSFetchRequest<Integration> {
+        let request = fetchRequest()
+        request.predicate = NSPredicate(format: "%K != %@", #keyPath(Integration.currentStepRawValue), XcodeServer.Integration.Step.completed.rawValue)
+        return request
+    }
+    
+    static func fetchIntegrations(forBot id: XcodeServer.Bot.ID) -> NSFetchRequest<Integration> {
+        let request = fetchRequest()
+        request.predicate = NSPredicate(format: "%K = %@", #keyPath(Integration.bot.identifier), id)
+        return request
+    }
+    
+    static func fetchIntegration(withId id: XcodeServer.Integration.ID) -> NSFetchRequest<Integration> {
+        let request = fetchRequest()
+        request.predicate = NSPredicate(format: "%K = %@", #keyPath(Integration.identifier), id)
+        return request
+    }
+    
     /// Retrieves all `Integration` entities from the Core Data `NSManagedObjectContext`
+    @available(*, deprecated, message: "Use `fetchIntegrations()`")
     static func integrations(in context: NSManagedObjectContext) -> [Integration] {
         let request = NSFetchRequest<Integration>(entityName: entityName)
         do {
@@ -90,6 +113,7 @@ extension Integration {
     }
     
     /// Retrieves all `Integration` entities for the specified `Bot`.
+    @available(*, deprecated, message: "Use `fetchIntegrations(forBot:)`")
     static func integrations(forBot id: XcodeServer.Bot.ID, in context: NSManagedObjectContext) -> [Integration] {
         let request = NSFetchRequest<Integration>(entityName: entityName)
         request.predicate = NSPredicate(format: "bot.identifier = %@", argumentArray: [id])
@@ -117,6 +141,7 @@ extension Integration {
     }
     
     /// All Integrations that are not in the 'completed' step.
+    @available(*, deprecated, message: "Use `fetchIncompleteIntegrations()`")
     static func incompleteIntegrations(in context: NSManagedObjectContext) -> [Integration] {
         let request = NSFetchRequest<Integration>(entityName: entityName)
         request.predicate = NSPredicate(format: "currentStepRawValue != %@", argumentArray: [XcodeServer.Integration.Step.completed.rawValue])

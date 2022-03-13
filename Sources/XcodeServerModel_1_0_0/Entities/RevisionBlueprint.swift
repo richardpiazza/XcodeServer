@@ -21,6 +21,12 @@ extension RevisionBlueprint {
 }
 
 extension RevisionBlueprint {
+    static func fetchBlueprints(forIntegration id: XcodeServer.Integration.ID) -> NSFetchRequest<RevisionBlueprint> {
+        let request = fetchRequest()
+        request.predicate = NSPredicate(format: "%K = %@", #keyPath(RevisionBlueprint.integration.identifier), id)
+        return request
+    }
+    
     /// Retrieves all `RevisionBlueprint` entities from the Core Data `NSManagedObjectContext`
     static func revisionBlueprints(in context: NSManagedObjectContext) -> [RevisionBlueprint] {
         let request = NSFetchRequest<RevisionBlueprint>(entityName: entityName)

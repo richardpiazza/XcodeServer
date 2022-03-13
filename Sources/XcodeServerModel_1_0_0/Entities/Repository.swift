@@ -63,6 +63,16 @@ extension Repository {
 }
 
 extension Repository {
+    static func fetchRemotes() -> NSFetchRequest<Repository> {
+        fetchRequest()
+    }
+    
+    static func fetchRemote(withId id: XcodeServer.SourceControl.Remote.ID) -> NSFetchRequest<Repository> {
+        let request = fetchRequest()
+        request.predicate = NSPredicate(format: "%K = %@", #keyPath(Repository.identifier), id)
+        return request
+    }
+    
     /// Retrieves all `Repository` entities from the Core Data `NSManagedObjectContext`
     static func repositories(in context: NSManagedObjectContext) -> [Repository] {
         let request = NSFetchRequest<Repository>(entityName: entityName)

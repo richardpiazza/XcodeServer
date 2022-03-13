@@ -46,7 +46,24 @@ extension Bot {
 }
 
 extension Bot {
+    static func fetchBots() -> NSFetchRequest<Bot> {
+        fetchRequest()
+    }
+    
+    static func fetchBots(forServer id: XcodeServer.Server.ID) -> NSFetchRequest<Bot> {
+        let request = fetchRequest()
+        request.predicate = NSPredicate(format: "%K = %@", #keyPath(Bot.server.fqdn), id)
+        return request
+    }
+    
+    static func fetchBot(withId id: XcodeServer.Bot.ID) -> NSFetchRequest<Bot> {
+        let request = fetchRequest()
+        request.predicate = NSPredicate(format: "%K = %@", #keyPath(Bot.identifier), id)
+        return request
+    }
+    
     /// Retrieves all `Bot` entities from the Core Data `NSManagedObjectContext`
+    @available(*, deprecated, message: "Use `fetchBots()`")
     static func bots(in context: NSManagedObjectContext) -> [Bot] {
         let request = NSFetchRequest<Bot>(entityName: Bot.entityName)
         do {
@@ -59,6 +76,7 @@ extension Bot {
     }
     
     /// Retrieves all `Bot` entities for a specific `Server`.
+    @available(*, deprecated, message: "Use `fetchBots(forServer:)`")
     static func bots(forServer id: XcodeServer.Server.ID, in context: NSManagedObjectContext) -> [Bot] {
         let request = NSFetchRequest<Bot>(entityName: entityName)
         request.predicate = NSPredicate(format: "server.fqdn = %@", argumentArray: [id])
