@@ -59,7 +59,7 @@ final class Sync: AsyncParsableCommand, Route, Stored, Logged {
         }
         
         let _model = model ?? Model.current
-        let store = try CoreDataStore(model: _model, persistence: .store(storeURL))
+        var store: CoreDataStore! = try CoreDataStore(model: _model, persistence: .store(storeURL))
         let client = try XCSClient(fqdn: server, credentialDelegate: self)
         
         // Create Server
@@ -95,7 +95,7 @@ final class Sync: AsyncParsableCommand, Route, Stored, Logged {
         ])
         
         // Cleanup
-        try store.cleanup()
+        store = nil
     }
 }
 

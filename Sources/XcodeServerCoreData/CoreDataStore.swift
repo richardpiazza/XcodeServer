@@ -50,11 +50,6 @@ public class CoreDataStore {
         }
     }
     
-    /// Checkpoint the catalog.
-    public func cleanup() throws {
-        try catalog.checkpoint()
-    }
-    
     deinit {
         try? catalog.checkpoint()
     }
