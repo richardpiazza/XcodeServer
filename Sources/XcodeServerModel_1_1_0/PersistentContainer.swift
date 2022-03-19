@@ -22,5 +22,7 @@ public class PersistentContainer: NSPersistentContainer {
         
         return model
     }()
+    
+    lazy var persistenceContext: NSManagedObjectContext = newBackgroundContext()
 }
 #endif
