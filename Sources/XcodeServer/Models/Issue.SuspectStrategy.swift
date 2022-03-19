@@ -19,11 +19,18 @@ public extension Issue {
             case multipleCommitsSingleUserInIntegration = 6
         }
         
-        public var confidence: Confidence = .high
-        public var reliability: Int = 0
-        public var identificationStrategy: IdentificationStrategy = .blameLineAgainstCommits
+        public var confidence: Confidence
+        public var reliability: Int
+        public var identificationStrategy: IdentificationStrategy
         
-        public init() {
+        public init(
+            confidence: Issue.SuspectStrategy.Confidence = .high,
+            reliability: Int = 0,
+            identificationStrategy: Issue.SuspectStrategy.IdentificationStrategy = .blameLineAgainstCommits
+        ) {
+            self.confidence = confidence
+            self.reliability = reliability
+            self.identificationStrategy = identificationStrategy
         }
     }
 }

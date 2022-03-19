@@ -12,7 +12,7 @@ public extension Server {
         case v2_0 = "2.0"
     }
     
-    ///
+    /// Metadata about the api and applications hosted by the `Server`.
     struct Version: Hashable, Encodable {
         
         /// The **API** version.

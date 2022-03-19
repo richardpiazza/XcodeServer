@@ -1,15 +1,21 @@
 public extension Tests {
     ///
     struct Suite: Hashable, Codable {
-        public var name: String = ""
-        public var classes: [Tests.Class] = []
+        public var name: String
+        public var classes: [Tests.Class]
         public var aggregateResults: [Tests.DeviceIdentifier: Double]?
         
-        public init() {
+        public init(name: String = "", classes: [Tests.Class] = [], aggregateResults: [Tests.DeviceIdentifier: Double]? = nil) {
+            self.name = name
+            self.classes = classes
+            self.aggregateResults = aggregateResults
         }
         
         public init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: Tests.CodingKeys.self)
+            name = ""
+            classes = []
+            
             try container.allKeys.forEach({ (key) in
                 switch key.stringValue {
                 case Tests.CodingKeys.aggregateDeviceStatus.stringValue:

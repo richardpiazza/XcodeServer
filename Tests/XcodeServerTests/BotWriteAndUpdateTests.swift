@@ -88,7 +88,7 @@ final class BotWriteAndUpdateTests: XCTestCase {
         
         let config = retrievedBot.configuration
         XCTAssertEqual(config.schedule, .manual)
-        XCTAssertEqual(config.periodicInterval, .none)
+        XCTAssertEqual(config.periodicInterval, .never)
         XCTAssertEqual(config.weeklyScheduleDay, 0)
         XCTAssertEqual(config.hourOfIntegration, 0)
         XCTAssertEqual(config.minutesAfterHourToIntegrate, 0)

@@ -36,28 +36,61 @@ public extension Trigger {
             case integration = 2
         }
         
-        public var type: Category = .integrationReport
-        public var fromAddress: String = ""
-        public var replyToAddress: String = ""
-        public var allowedDomainNames: [String] = []
-        public var additionalRecipients: [String] = []
-        public var ccAddresses: [String] = []
+        public var type: Category
+        public var fromAddress: String
+        public var replyToAddress: String
+        public var allowedDomainNames: [String]
+        public var additionalRecipients: [String]
+        public var ccAddresses: [String]
         
         // Schedule
-        public var weeklyScheduleDay: Int = 0
-        public var hour: Int = 0
-        public var minutesAfterHour: Int = 0
+        public var weeklyScheduleDay: Int
+        public var hour: Int
+        public var minutesAfterHour: Int
         
         // Options
-        public var emailCommitters: Bool = false
-        public var includeBotConfiguration: Bool = false
-        public var includeCommitMessages: Bool = false
-        public var includeIssueDetails: Bool = false
-        public var includeLogs: Bool = false
-        public var includeResolvedIssues: Bool = false
-        public var scmOptions: [String : Int] = [:]
+        public var emailCommitters: Bool
+        public var includeBotConfiguration: Bool
+        public var includeCommitMessages: Bool
+        public var includeIssueDetails: Bool
+        public var includeLogs: Bool
+        public var includeResolvedIssues: Bool
+        public var scmOptions: [String : Int]
         
-        public init() {
+        public init(
+            type: Trigger.Email.Category = .integrationReport,
+            fromAddress: String = "",
+            replyToAddress: String = "",
+            allowedDomainNames: [String] = [],
+            additionalRecipients: [String] = [],
+            ccAddresses: [String] = [],
+            weeklyScheduleDay: Int = 0,
+            hour: Int = 0,
+            minutesAfterHour: Int = 0,
+            emailCommitters: Bool = false,
+            includeBotConfiguration: Bool = false,
+            includeCommitMessages: Bool = false,
+            includeIssueDetails: Bool = false,
+            includeLogs: Bool = false,
+            includeResolvedIssues: Bool = false,
+            scmOptions: [String : Int] = [:]
+        ) {
+            self.type = type
+            self.fromAddress = fromAddress
+            self.replyToAddress = replyToAddress
+            self.allowedDomainNames = allowedDomainNames
+            self.additionalRecipients = additionalRecipients
+            self.ccAddresses = ccAddresses
+            self.weeklyScheduleDay = weeklyScheduleDay
+            self.hour = hour
+            self.minutesAfterHour = minutesAfterHour
+            self.emailCommitters = emailCommitters
+            self.includeBotConfiguration = includeBotConfiguration
+            self.includeCommitMessages = includeCommitMessages
+            self.includeIssueDetails = includeIssueDetails
+            self.includeLogs = includeLogs
+            self.includeResolvedIssues = includeResolvedIssues
+            self.scmOptions = scmOptions
         }
     }
 }

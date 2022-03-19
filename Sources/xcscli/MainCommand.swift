@@ -2,7 +2,7 @@ import Foundation
 import ArgumentParser
 import Logging
 
-struct MainCommand: AsyncParsableCommand {
+@main struct MainCommand: AsyncParsableCommand {
     
     static var configuration: CommandConfiguration = {
         var subcommands: [ParsableCommand.Type] = [
@@ -31,8 +31,4 @@ struct MainCommand: AsyncParsableCommand {
             helpNames: [.short, .long]
         )
     }()
-}
-
-@main enum Main: AsyncMainProtocol {
-    typealias Command = MainCommand
 }

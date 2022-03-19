@@ -110,7 +110,7 @@ extension Configuration {
     
     var periodicScheduleInterval: XcodeServer.Bot.PeriodicInterval {
         get {
-            return XcodeServer.Bot.PeriodicInterval(rawValue: Int(periodicScheduleIntervalRawValue)) ?? .none
+            return XcodeServer.Bot.PeriodicInterval(rawValue: Int(periodicScheduleIntervalRawValue)) ?? .never
         }
         set {
             periodicScheduleIntervalRawValue = Int16(newValue.rawValue)

@@ -2,15 +2,29 @@ public extension SourceControl {
     /// AKA 'Repository'
     struct Remote: Hashable, Identifiable, Codable {
         public var id: String
-        public var system: String = ""
-        public var url: String = ""
-        public var trustedCertFingerprint: String = ""
-        public var enforceTrustCertFingerprint: Bool = false
-        public var locations: Set<SourceControl.Location> = []
-        public var commits: Set<SourceControl.Commit> = []
+        public var system: String
+        public var url: String
+        public var trustedCertFingerprint: String
+        public var enforceTrustCertFingerprint: Bool
+        public var locations: Set<SourceControl.Location>
+        public var commits: Set<SourceControl.Commit>
         
-        public init(id: Remote.ID = "") {
+        public init(
+            id: Remote.ID = "",
+            system: String = "",
+            url: String = "",
+            trustedCertFingerprint: String = "",
+            enforceTrustCertFingerprint: Bool = false,
+            locations: Set<SourceControl.Location> = [],
+            commits: Set<SourceControl.Commit> = []
+        ) {
             self.id = id
+            self.system = system
+            self.url = url
+            self.trustedCertFingerprint = trustedCertFingerprint
+            self.enforceTrustCertFingerprint = enforceTrustCertFingerprint
+            self.locations = locations
+            self.commits = commits
         }
     }
 }

@@ -1,15 +1,30 @@
 public extension Integration {
-    
+    ///
     struct IssueCatalog: Hashable, Codable {
-        public var buildServiceErrors: Set<Issue> = []
-        public var buildServiceWarnings: Set<Issue> = []
-        public var triggerErrors: Set<Issue> = []
-        public var errors: IssueGroup = IssueGroup()
-        public var warnings: IssueGroup = IssueGroup()
-        public var testFailures: IssueGroup = IssueGroup()
-        public var analyzerWarnings: IssueGroup = IssueGroup()
+        public var buildServiceErrors: Set<Issue>
+        public var buildServiceWarnings: Set<Issue>
+        public var triggerErrors: Set<Issue>
+        public var errors: IssueGroup
+        public var warnings: IssueGroup
+        public var testFailures: IssueGroup
+        public var analyzerWarnings: IssueGroup
         
-        public init() {
+        public init(
+            buildServiceErrors: Set<Issue> = [],
+            buildServiceWarnings: Set<Issue> = [],
+            triggerErrors: Set<Issue> = [],
+            errors: Integration.IssueGroup = IssueGroup(),
+            warnings: Integration.IssueGroup = IssueGroup(),
+            testFailures: Integration.IssueGroup = IssueGroup(),
+            analyzerWarnings: Integration.IssueGroup = IssueGroup()
+        ) {
+            self.buildServiceErrors = buildServiceErrors
+            self.buildServiceWarnings = buildServiceWarnings
+            self.triggerErrors = triggerErrors
+            self.errors = errors
+            self.warnings = warnings
+            self.testFailures = testFailures
+            self.analyzerWarnings = analyzerWarnings
         }
     }
 }
