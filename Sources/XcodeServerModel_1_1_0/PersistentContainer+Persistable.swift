@@ -55,6 +55,9 @@ extension PersistentContainer: BotPersistable {
             let _bot: Bot
             if let existing = Bot.bot(bot.id, in: context) {
                 _bot = existing
+                if _bot.server == nil {
+                    _bot.server = Server.server(id, in: context)
+                }
             } else {
                 guard let server = Server.server(id, in: context) else {
                     throw XcodeServerError.serverNotFound(id)
@@ -111,6 +114,9 @@ extension PersistentContainer: IntegrationPersistable {
             let _integration: Integration
             if let existing = Integration.integration(integration.id, in: context) {
                 _integration = existing
+                if _integration.bot == nil {
+                    _integration.bot = Bot.bot(id, in: context)
+                }
             } else {
                 guard let bot = Bot.bot(id, in: context) else {
                     throw XcodeServerError.botNotFound(id)
@@ -135,6 +141,9 @@ extension PersistentContainer: IntegrationPersistable {
                 let _integration: Integration
                 if let existing = Integration.integration(integration.id, in: context) {
                     _integration = existing
+                    if _integration.bot == nil {
+                        _integration.bot = Bot.bot(id, in: context)
+                    }
                 } else {
                     guard let bot = Bot.bot(id, in: context) else {
                         throw XcodeServerError.botNotFound(id)
