@@ -289,7 +289,7 @@ final class IntegrationIssueImportTests: XCTestCase {
         let buildWarning = try XCTUnwrap(catalog.buildServiceWarnings.first)
         XCTAssertEqual(buildWarning.id, "2911c1d6174047dcf2a52f464a019134")
         XCTAssertEqual(buildWarning.message, "An error occurred while building, so archiving was skipped.")
-        XCTAssertEqual(buildWarning.type, .BuildServiceWarning)
+        XCTAssertEqual(buildWarning.type, .buildServiceWarning)
         XCTAssertEqual(buildWarning.age, 0)
         XCTAssertEqual(buildWarning.status, .new)
         
