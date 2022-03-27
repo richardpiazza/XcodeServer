@@ -3,7 +3,7 @@ import XCTest
 @testable import XcodeServerAPI
 @testable import XcodeServerCoreData
 
-#if canImport(CoreData) && swift(>=5.3)
+#if canImport(CoreData)
 final class EdgeCaseTests: XCTestCase {
     
     private class Client: MockApiClient {

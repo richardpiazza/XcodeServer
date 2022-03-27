@@ -2,7 +2,6 @@ import XCTest
 @testable import XcodeServer
 @testable import XcodeServerAPI
 
-#if swift(>=5.3)
 final class APIResponseTests: XCTestCase {
     
     private let decoder = XCSClient.jsonDecoder
@@ -79,4 +78,3 @@ final class APIResponseTests: XCTestCase {
         XCTAssertEqual(commits.results.count, 1)
     }
 }
-#endif

@@ -4,7 +4,7 @@ import XCTest
 @testable import XcodeServerCoreData
 @testable import XcodeServerModel_1_0_0
 
-#if canImport(CoreData) && swift(>=5.3)
+#if canImport(CoreData)
 final class BotWriteAndUpdateTests: XCTestCase {
     
     private class Client: MockApiClient {
@@ -290,11 +290,7 @@ private extension XcodeServer.Bot {
     static let dynumite: Self = {
         let _bot: XCSBot
         do {
-            #if swift(>=5.3)
             _bot = try Bundle.module.decodeJson("bot")
-            #else
-            _bot = try botJson.decodeMultiline()
-            #endif
         } catch {
             _bot = XCSBot()
         }

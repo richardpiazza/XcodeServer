@@ -3,7 +3,7 @@ import XCTest
 @testable import XcodeServerAPI
 @testable import XcodeServerCoreData
 
-#if canImport(CoreData) && swift(>=5.3)
+#if canImport(CoreData)
 final class IntegrationWriteAndUpdateTests: XCTestCase {
     
     private class Client: MockApiClient {
@@ -203,11 +203,7 @@ private extension XcodeServer.Bot {
     static let dynumite: Self = {
         let _bot: XCSBot
         do {
-            #if swift(>=5.3)
             _bot = try Bundle.module.decodeJson("bot")
-            #else
-            _bot = try botJson.decodeMultiline()
-            #endif
         } catch {
             preconditionFailure(error.localizedDescription)
         }
@@ -228,15 +224,9 @@ private extension XcodeServer.Integration {
         let commits: Commits
         var integration: XcodeServer.Integration
         do {
-            #if swift(>=5.3)
             _integration = try Bundle.module.decodeJson("integration", decoder: XcodeServerAPI.XCSClient.jsonDecoder)
             issues = try Bundle.module.decodeJson("issues")
             commits = try Bundle.module.decodeJson("commits", decoder: XcodeServerAPI.XCSClient.jsonDecoder)
-            #else
-            _integration = try integrationJson.decodeMultiline(decoder: XcodeServerAPI.XCSClient.jsonDecoder)
-            issues = try issuesJson.decodeMultiline(decoder: XcodeServerAPI.XCSClient.jsonDecoder)
-            commits = try commitsJson.decodeMultiline(decoder: XcodeServerAPI.XCSClient.jsonDecoder)
-            #endif
         } catch {
             preconditionFailure(error.localizedDescription)
         }
