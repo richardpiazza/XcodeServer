@@ -6,11 +6,6 @@ import XCTest
 #if canImport(CoreData)
 final class ServerWriteAndUpdateTests: XCTestCase {
     
-    static var allTests = [
-        ("testWriteServer", testWriteServer),
-        ("testUpdateServer", testUpdateServer),
-    ]
-    
     lazy var persistedStore: CoreDataStore = {
         do {
             return try CoreDataStore(model: .v1_0_0, persistence: .memory)

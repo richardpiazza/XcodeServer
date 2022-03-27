@@ -7,13 +7,6 @@ import CoreData
 
 final class PersistentContainerTests: XCTestCase {
     
-    static var allTests = [
-        ("testModel_1_0_0_Initialization", testModel_1_0_0_Initialization),
-        ("testEmptyStore_Model_1_0_0_Metadata", testEmptyStore_Model_1_0_0_Metadata),
-        ("testFullStore_Model_1_0_0_Metadata", testFullStore_Model_1_0_0_Metadata),
-        ("testMigrateToCurrentStore", testMigrateToCurrentStore),
-    ]
-    
     func testModel_1_0_0_Initialization() {
         #if swift(>=5.3)
         let exp = expectation(description: "\(#function)")

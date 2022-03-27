@@ -6,11 +6,6 @@ import XCTest
 #if canImport(CoreData) && swift(>=5.3)
 final class IntegrationWriteAndUpdateTests: XCTestCase {
     
-    static var allTests = [
-        ("testWriteIntegration", testWriteIntegration),
-        ("testIntegrationCommitsAndIssues", testIntegrationCommitsAndIssues),
-    ]
-    
     private class Client: MockApiClient {
         override func integration(withId id: XcodeServer.Integration.ID) async throws -> XcodeServer.Integration {
             let resource: XCSIntegration = try Bundle.module.decodeJson("integration", decoder: self.decoder)

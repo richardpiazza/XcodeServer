@@ -6,10 +6,6 @@ import XCTest
 #if canImport(CoreData) && swift(>=5.3)
 final class EdgeCaseTests: XCTestCase {
     
-    static var allTests = [
-        ("testIntegrationCommitRemoteId", testIntegrationCommitRemoteId),
-    ]
-    
     private class Client: MockApiClient {
         override func commits(forIntegration id: XcodeServer.Integration.ID) async throws -> [SourceControl.Commit] {
             let resource: XCSResults<XCSCommit> = try Bundle.module.decodeJson("structured18_commits", decoder: self.decoder)

@@ -5,18 +5,6 @@ import XCTest
 #if swift(>=5.3)
 final class APIResponseTests: XCTestCase {
     
-    static var allTests = [
-        ("testVersions", testVersions),
-        ("testBots", testBots),
-        ("testBot", testBot),
-        ("testStats", testStats),
-        ("testIntegrations", testIntegrations),
-        ("testIntegration", testIntegration),
-        ("testRunIntegration", testRunIntegration),
-        ("testIssues", testIssues),
-        ("testCommits", testCommits),
-    ]
-    
     private let decoder = XCSClient.jsonDecoder
     
     func testVersions() throws {

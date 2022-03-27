@@ -8,11 +8,6 @@ import CoreData
 
 final class ModelTests: XCTestCase {
     
-    static var allTests = [
-        ("testModel_1_0_0_Hashes", testModel_1_0_0_Hashes),
-        ("testModel_1_1_0_Hashes", testModel_1_1_0_Hashes),
-    ]
-    
     func testModel_1_0_0_Hashes() throws {
         let model: Model = .v1_0_0
         let managedObjectModel = model.managedObjectModel

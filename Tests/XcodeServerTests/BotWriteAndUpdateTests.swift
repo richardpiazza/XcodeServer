@@ -7,11 +7,6 @@ import XCTest
 #if canImport(CoreData) && swift(>=5.3)
 final class BotWriteAndUpdateTests: XCTestCase {
     
-    static var allTests = [
-        ("testWriteBot", testWriteBot),
-        ("testUpdateBotStats", testUpdateBotStats),
-    ]
-    
     private class Client: MockApiClient {
         override func bot(withId id: XcodeServer.Bot.ID) async throws -> XcodeServer.Bot {
             let resource: XCSBot = try Bundle.module.decodeJson("bot", decoder: self.decoder)
