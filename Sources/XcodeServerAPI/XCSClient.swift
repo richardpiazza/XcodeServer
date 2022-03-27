@@ -17,14 +17,6 @@ public class XCSClient: URLSessionClient {
         public static let xcsAPIVersion = "x-xcsapiversion"
     }
     
-    internal static var rfc1123: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEE',' dd MMM yyyy HH':'mm':'ss 'GMT'"
-        formatter.timeZone = TimeZone(identifier: "GMT")!
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        return formatter
-    }()
-    
     internal static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
@@ -88,7 +80,7 @@ public class XCSClient: URLSessionClient {
         return validData
     }
     
-    private func clientRequest(path: String, method: HTTP.RequestMethod = .get, queryItems: [URLQueryItem]? = nil, data: Data? = nil) throws -> Request {
+    private func clientRequest(path: String, method: SessionPlus.Method = .get, queryItems: [URLQueryItem]? = nil, data: Data? = nil) throws -> Request {
         let pathURL = baseURL.appendingPathComponent(path)
         
         var urlComponents = URLComponents(url: pathURL, resolvingAgainstBaseURL: false)
@@ -98,17 +90,12 @@ public class XCSClient: URLSessionClient {
             throw XcodeServerError.undefinedError(URLError(.badURL))
         }
         
-        var headers = HTTP.Headers()
-        headers["Date"] = Self.rfc1123.string(from: Date())
-        headers["Accept"] = "application/json"
-        headers["Content-Type"] = "application/json"
-        
-        if let credentials = credentialDelegate?.credentials(for: url.host ?? "") {
-            let auth = HTTP.Authorization.basic(username: credentials.username, password: credentials.password)
-            headers["Authorization"] = auth.headerValue
+        let request = AnyRequest(path: path, method: method, queryItems: queryItems, body: data)
+        guard let credentials = credentialDelegate?.credentials(for: url.host ?? "") else {
+            return request
         }
         
-        return AnyRequest(path: path, method: method, headers: headers, queryItems: queryItems, body: data)
+        return request.authorized(.basic(username: credentials.username, password: credentials.password))
     }
     
     /// Ping the Xcode Server.
