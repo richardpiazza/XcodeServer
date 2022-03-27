@@ -32,9 +32,9 @@
         "package": "SessionPlus",
         "repositoryURL": "https://github.com/richardpiazza/SessionPlus",
         "state": {
-          "branch": "feature/request-response",
+          "branch": null,
           "revision": "33401bdad378d87237fd8059e843a09a3ccdde1b",
-          "version": null
+          "version": "2.0.0-beta.1"
         }
       },
       {
