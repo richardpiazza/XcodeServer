@@ -51,7 +51,11 @@ public class XCSClient: URLSessionClient {
         }
         
         self.fqdn = fqdn
+        #if canImport(ObjectiveC)
         super.init(baseURL: url, sessionConfiguration: .default, sessionDelegate: SelfSignedSessionDelegate())
+        #else
+        super.init(baseURL: url, sessionConfiguration: .default)
+        #endif
         self.credentialDelegate = credentialDelegate
     }
     
