@@ -48,17 +48,35 @@ let package = Package(
                 "Rainbow",
                 "XcodeServerCoreData",
                 "XcodeServerAPI",
+            ],
+            swiftSettings: [
+                .unsafeFlags([
+                    "-Xfrontend",
+                    "-enable-experimental-concurrency"
+                ])
             ]
         ),
         .target(
             name: "XcodeServer",
-            dependencies: []
+            dependencies: [],
+            swiftSettings: [
+                .unsafeFlags([
+                    "-Xfrontend",
+                    "-enable-experimental-concurrency"
+                ])
+            ]
         ),
         .target(
             name: "XcodeServerAPI",
             dependencies: [
                 "SessionPlus",
                 "SWCompression",
+            ],
+            swiftSettings: [
+                .unsafeFlags([
+                    "-Xfrontend",
+                    "-enable-experimental-concurrency"
+                ])
             ]
         ),
         .target(
@@ -68,6 +86,12 @@ let package = Package(
                 "CoreDataPlus",
                 "XcodeServerModel_1_0_0",
                 "XcodeServerModel_1_1_0",
+            ],
+            swiftSettings: [
+                .unsafeFlags([
+                    "-Xfrontend",
+                    "-enable-experimental-concurrency"
+                ])
             ]
         ),
         .target(
@@ -77,7 +101,13 @@ let package = Package(
                 "CoreDataPlus",
                 .product(name: "Logging", package: "swift-log"),
             ],
-            resources: [.process("Resources")]
+            resources: [.process("Resources")],
+            swiftSettings: [
+                .unsafeFlags([
+                    "-Xfrontend",
+                    "-enable-experimental-concurrency"
+                ])
+            ]
         ),
         .target(
             name: "XcodeServerModel_1_1_0",
@@ -86,7 +116,13 @@ let package = Package(
                 "CoreDataPlus",
                 .product(name: "Logging", package: "swift-log"),
             ],
-            resources: [.process("Resources")]
+            resources: [.process("Resources")],
+            swiftSettings: [
+                .unsafeFlags([
+                    "-Xfrontend",
+                    "-enable-experimental-concurrency"
+                ])
+            ]
         ),
         .testTarget(
             name: "XcodeServerTests",
@@ -95,7 +131,13 @@ let package = Package(
                 "XcodeServerAPI",
                 "XcodeServerCoreData"
             ],
-            resources: [.process("Resources")]
+            resources: [.process("Resources")],
+            swiftSettings: [
+                .unsafeFlags([
+                    "-Xfrontend",
+                    "-enable-experimental-concurrency"
+                ])
+            ]
         ),
     ],
     swiftLanguageVersions: [.v5]
