@@ -2,12 +2,13 @@ import Foundation
 import ArgumentParser
 import XcodeServer
 import XcodeServerAPI
+import Logging
 
 protocol Route: CredentialDelegate {
     var server: String { get set }
     var username: String? { get set }
     var password: String? { get set }
-    var logLevel: InternalLog.Level { get set }
+    var logLevel: Logger.Level { get set }
 }
 
 extension Route {
@@ -21,13 +22,8 @@ extension Route {
         }
     }
     
-    // MARK: - APIClientAuthorizationDelegate
-    func credentials(for fqdn: String) -> (username: String, password: String)? {
-        return credentialsForServer(withFQDN: fqdn)
-    }
-    
-    // MARK: - ManagerAuthorizationDelegate
-    func credentialsForServer(withFQDN fqdn: String?) -> (username: String, password: String)? {
+    // MARK: - XCSClient CredentialDelegate
+    func credentials(for server: Server.ID) -> (username: String, password: String)? {
         guard let username = self.username else {
             return nil
         }

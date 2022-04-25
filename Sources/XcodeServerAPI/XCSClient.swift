@@ -1,54 +1,21 @@
 import XcodeServer
-import Dispatch
 import Foundation
-import SWCompression
 #if canImport(FoundationNetworking)
 import FoundationNetworking
 #endif
+import SWCompression
+import SessionPlus
+import Logging
 
 public protocol CredentialDelegate: AnyObject {
     func credentials(for server: Server.ID) -> (username: String, password: String)?
 }
 
-public class XCSClient {
-    
-    public enum Error: Swift.Error, LocalizedError {
-        case fqdn
-        case xcodeServer
-        case authorization
-        case response(innerError: Swift.Error?)
-        case serialization(innerError: Swift.Error?)
-        case invalidURL
-        case notImplemented
-        
-        public var errorDescription: String? {
-            switch self {
-            case .fqdn: return "Attempted to initialize with an invalid FQDN."
-            case .xcodeServer: return "This class was initialized without an XcodeServer entity."
-            case .authorization: return "The server returned a 401 response code."
-            case .response: return "The response did not contain valid data."
-            case .serialization: return "The response object could not be cast into the requested type."
-            case .invalidURL: return "Failed to construct a valid URL."
-            case .notImplemented: return "The requested function has not been implemented."
-            }
-        }
-    }
+public class XCSClient: URLSessionClient {
     
     public struct Headers {
         public static let xcsAPIVersion = "x-xcsapiversion"
     }
-    
-    /// A general completion handler for HTTP requests.
-    public typealias DataTaskCompletion = (_ statusCode: Int, _ headers: [String: String]?, _ data: Data?, _ error: Swift.Error?) -> Void
-    public typealias CodableTaskCompletion<D: Decodable> = (_ statusCode: Int, _ headers: [String: String]?, _ data: D?, _ error: Swift.Error?) -> Void
-    
-    internal static var rfc1123: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEE',' dd MMM yyyy HH':'mm':'ss 'GMT'"
-        formatter.timeZone = TimeZone(identifier: "GMT")!
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        return formatter
-    }()
     
     internal static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -68,397 +35,265 @@ public class XCSClient {
         return decoder
     }()
     
+    static let logger: Logger = Logger(label: "XcodeServer.API")
+    
     public let fqdn: String
-    public var baseURL: URL
+    public private(set) var apiVersion: Int = 19
     public var jsonEncoder: JSONEncoder = XCSClient.jsonEncoder
     public var jsonDecoder: JSONDecoder = XCSClient.jsonDecoder
-    internal let internalQueue: DispatchQueue = DispatchQueue(label: "XcodeServer.XcodeServerAPI.APIClient")
-    internal let returnQueue: DispatchQueue
     
     /// Delegate responsible for handling all authentication needs.
     public var credentialDelegate: CredentialDelegate?
     
-    init(fqdn: String, dispatchQueue: DispatchQueue, credentialDelegate: CredentialDelegate?) throws {
+    public init(fqdn: String, credentialDelegate: CredentialDelegate?) throws {
         guard let url = URL(string: "https://\(fqdn):20343/api") else {
-            throw Error.fqdn
+            throw XcodeServerError.undefinedError(URLError(.badURL))
         }
         
         self.fqdn = fqdn
-        baseURL = url
-        returnQueue = dispatchQueue
+        #if canImport(ObjectiveC)
+        super.init(baseURL: url, sessionConfiguration: .default, sessionDelegate: SelfSignedSessionDelegate())
+        #else
+        super.init(baseURL: url, sessionConfiguration: .default)
+        #endif
         self.credentialDelegate = credentialDelegate
     }
     
-    final func decompress(data: Data) throws -> Data {
+    private func decompress(data: Data) throws -> Data {
         let decompressedData = try BZip2.decompress(data: data)
         
         guard let decompressedString = String(data: decompressedData, encoding: .utf8) else {
-            throw Error.serialization(innerError: nil)
+            throw XcodeServerError.undefinedError(nil)
         }
         
         guard let firstBrace = decompressedString.range(of: "{") else {
-            throw Error.serialization(innerError: nil)
+            throw XcodeServerError.undefinedError(nil)
         }
         
         guard let lastBrace = decompressedString.range(of: "}", options: .backwards, range: nil, locale: nil) else {
-            throw Error.serialization(innerError: nil)
+            throw XcodeServerError.undefinedError(nil)
         }
         
         let range = decompressedString.index(firstBrace.lowerBound, offsetBy: 0)..<decompressedString.index(lastBrace.lowerBound, offsetBy: 1)
         let json = decompressedString[range]
         
         guard let validData = json.data(using: .utf8) else {
-            throw Error.serialization(innerError: nil)
+            throw XcodeServerError.undefinedError(nil)
         }
         
         return validData
     }
     
-    final func serverResult<T>(_ statusCode: Int, _ headers: [String: String]?, data: T?, _ error: Swift.Error?) -> Result<T, Error> {
-        guard statusCode != 401 else {
-            return .failure(Error.authorization)
+    private func clientRequest(path: String, method: SessionPlus.Method = .get, queryItems: [URLQueryItem]? = nil, data: Data? = nil) throws -> Request {
+        let pathURL = baseURL.appendingPathComponent(path)
+        
+        var urlComponents = URLComponents(url: pathURL, resolvingAgainstBaseURL: false)
+        urlComponents?.queryItems = queryItems
+        
+        guard let url = urlComponents?.url else {
+            throw XcodeServerError.undefinedError(URLError(.badURL))
         }
         
-        guard statusCode == 200 || statusCode == 201 else {
-            return .failure(Error.response(innerError: error))
+        let request = AnyRequest(path: path, method: method, queryItems: queryItems, body: data)
+        guard let credentials = credentialDelegate?.credentials(for: url.host ?? "") else {
+            return request
         }
         
-        guard let result = data else {
-            return .failure(Error.serialization(innerError: error))
+        return request.authorized(.basic(username: credentials.username, password: credentials.password))
+    }
+    
+    /// Ping the Xcode Server.
+    ///
+    /// Sends a simple request to the Xcode Server api endpoint `/ping`.
+    ///
+    /// - note: This endpoint does not require authentication.
+    ///
+    /// - parameters:
+    ///   - id: The unique identifier (FQDN) of the `Server` of which to test connectivity.
+    public func ping() async throws {
+        Self.logger.info("Pinging SERVER [\(fqdn)]")
+        let request = try clientRequest(path: "ping")
+        let response = try await performRequest(request)
+        
+        if let version = response.headers[Headers.xcsAPIVersion] as? Int, version != apiVersion {
+            apiVersion = version
         }
         
-        return .success(result)
-    }
-    
-    /// Convenience method for generating and executing a request using the `GET` http method.
-    public func getPath(_ path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping DataTaskCompletion) {
-        completion(0, nil, nil, Error.notImplemented)
-    }
-    
-    /// Convenience method for generating and executing a request using the `PUT` http method.
-    public func putData(_ data: Data?, path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping DataTaskCompletion) {
-        completion(0, nil, nil, Error.notImplemented)
-    }
-    
-    /// Convenience method for generating and executing a request using the `POST` http method.
-    public func postData(_ data: Data?, path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping DataTaskCompletion) {
-        completion(0, nil, nil, Error.notImplemented)
-    }
-    
-    /// Convenience method for generating and executing a request using the `PATCH` http method.
-    public func patchData(_ data: Data?, path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping DataTaskCompletion) {
-        completion(0, nil, nil, Error.notImplemented)
-    }
-    
-    /// Convenience method for generating and executing a request using the `DELETE` http method.
-    public func deletePath(_ path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping DataTaskCompletion) {
-        completion(0, nil, nil, Error.notImplemented)
-    }
-    
-    func encode<E: Encodable>(_ encodable: E?) throws -> Data? {
-        var data: Data? = nil
-        if let encodable = encodable {
-            data = try jsonEncoder.encode(encodable)
+        if response.statusCode != .noContent {
+            throw XcodeServerError.statusCode(response.statusCode.rawValue)
         }
-        return data
     }
     
-    func decode<D: Decodable>(statusCode: Int, headers: [String: String]?, data: Data?, error: Swift.Error?, completion: @escaping CodableTaskCompletion<D>) {
-        guard let data = data else {
-            completion(statusCode, headers, nil, error)
-            return
+    /// Versioning information about the software installed on the Xcode Server.
+    ///
+    /// Unlike `ping(_:)`, this endpoint requires authentication to complete successfully.
+    ///
+    /// - parameters:
+    ///   - id: The unique identifier (FQDN) of the `Server` of which to test connectivity.
+    public func versions() async throws -> XCSVersion {
+        Self.logger.info("Retrieving XCSVersion for SERVER [\(fqdn)]")
+        let request = try clientRequest(path: "versions")
+        let response = try await performRequest(request)
+        
+        guard response.statusCode != .unauthorized else {
+            throw XcodeServerError.unauthorized
         }
         
-        let result: D
-        do {
-            result = try jsonDecoder.decode(D.self, from: data)
-            completion(statusCode, headers, result, nil)
-        } catch let decoderError {
-            completion(statusCode, headers, nil, decoderError)
-        }
-    }
-    
-    public func getPath<D: Decodable>(_ path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping CodableTaskCompletion<D>) {
-        self.getPath(path, queryItems: queryItems) { (statusCode, headers, data: Data?, error) in
-            self.decode(statusCode: statusCode, headers: headers, data: data, error: error, completion: completion)
-        }
-    }
-    
-    public func putData<E: Encodable, D: Decodable>(_ encodable: E?, path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping CodableTaskCompletion<D>) {
-        var data: Data? = nil
-        do {
-            data = try self.encode(encodable)
-        } catch {
-            completion(0, nil, nil, error)
-            return
+        guard response.statusCode == .ok else {
+            throw XcodeServerError.statusCode(response.statusCode.rawValue)
         }
         
-        self.putData(data, path: path, queryItems: queryItems) { (statusCode, headers, data: Data?, error) in
-            self.decode(statusCode: statusCode, headers: headers, data: data, error: error, completion: completion)
-        }
-    }
-    
-    public func postData<E: Encodable, D: Decodable>(_ encodable: E?, path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping CodableTaskCompletion<D>) {
-        var data: Data? = nil
-        do {
-            data = try self.encode(encodable)
-        } catch {
-            completion(0, nil, nil, error)
-            return
+        let document = try jsonDecoder.decode(XCSVersion.self, from: response.data)
+        
+        if let version = response.headers[Headers.xcsAPIVersion] as? Int, version != apiVersion {
+            apiVersion = version
         }
         
-        self.postData(data, path: path, queryItems: queryItems) { (statusCode, headers, data: Data?, error) in
-            self.decode(statusCode: statusCode, headers: headers, data: data, error: error, completion: completion)
-        }
+        return document
     }
     
-    public func postData<D: Decodable>(_ data: Data?, path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping CodableTaskCompletion<D>) {
-        self.postData(data, path: path, queryItems: queryItems) { (statusCode, headers, data: Data?, error) in
-            self.decode(statusCode: statusCode, headers: headers, data: data, error: error, completion: completion)
-        }
-    }
-    
-    public func patchData<E: Encodable, D: Decodable>(_ encodable: E?, path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping CodableTaskCompletion<D>) {
-        var data: Data? = nil
-        do {
-            data = try self.encode(encodable)
-        } catch {
-            completion(0, nil, nil, error)
-            return
-        }
-        
-        self.patchData(data, path: path, queryItems: queryItems) { (statusCode, headers, data: Data?, error) in
-            self.decode(statusCode: statusCode, headers: headers, data: data, error: error, completion: completion)
-        }
-    }
-    
-    public func deletePath<D: Decodable>(_ path: String, queryItems: [URLQueryItem]? = nil, completion: @escaping CodableTaskCompletion<D>) {
-        self.deletePath(path, queryItems: queryItems) { (statusCode, headers, data: Data?, error) in
-            self.decode(statusCode: statusCode, headers: headers, data: data, error: error, completion: completion)
-        }
-    }
-}
-
-// MARK: - Connection/Versioning
-public extension XCSClient {
-    /// Requests the '`/ping`' endpoint from the Xcode Server API.
-    func ping(_ completion: @escaping (Result<Void, Error>) -> Void) {
-        getPath("ping") { (statusCode, headers, data: Data?, error) in
-            guard statusCode == 204 else {
-                completion(.failure(Error.xcodeServer))
-                return
-            }
-            
-            completion(.success(()))
-        }
-    }
-    
-    func versions(_ completion: @escaping (Result<(XCSVersion, Int?), Error>) -> Void) {
-        getPath("versions") { (statusCode, headers, data: XCSVersion?, error) in
-            guard statusCode != 401 else {
-                completion(.failure(Error.authorization))
-                return
-            }
-            
-            guard statusCode == 200 else {
-                completion(.failure(Error.response(innerError: error)))
-                return
-            }
-            
-            guard let result = data else {
-                completion(.failure(Error.serialization(innerError: error)))
-                return
-            }
-            
-            var apiVersion: Int?
-            
-            if let responseHeaders = headers {
-                if let version = responseHeaders[Headers.xcsAPIVersion] {
-                    apiVersion = Int(version)
-                }
-            }
-            
-            completion(.success((result, apiVersion)))
-        }
-    }
-}
-
-// MARK: - Bots
-public extension XCSClient {
     /// Requests the '`/bots`' endpoint from the Xcode Server API.
-    func bots(_ completion: @escaping (Result<[XCSBot], Error>) -> Void) {
+    public func bots() async throws -> [XCSBot] {
+        Self.logger.info("Retrieving [XCSBot] for SERVER [\(fqdn)]")
+        
         struct Response: Codable {
             public var count: Int
             public var results: [XCSBot]
         }
         
-        getPath("bots") { (statusCode, headers, data: Response?, error) in
-            completion(self.serverResult(statusCode, headers, data: data?.results, error))
-        }
+        let request = try clientRequest(path: "bots")
+        let response = try await performRequest(request)
+        let results = try jsonDecoder.decode(Response.self, from: response.data)
+        return results.results
     }
     
-    /// Requests the '`/bots/{id}`' endpoint from the Xcode Server API.
-    func bot(withIdentifier identifier: String, completion: @escaping (Result<XCSBot, Error>) -> Void) {
-        getPath("bots/\(identifier)") { (statusCode, headers, data: XCSBot?, error) in
-            completion(self.serverResult(statusCode, headers, data: data, error))
-        }
+    public func bot(withId id: Bot.ID) async throws -> XCSBot {
+        Self.logger.info("Retrieving XCSBot [\(id)]")
+        let request = try clientRequest(path: "bots/\(id)")
+        let response = try await performRequest(request)
+        return try jsonDecoder.decode(XCSBot.self, from: response.data)
     }
     
-    /// Requests the '`/bots/{id}/stats`' endpoint from the Xcode Server API.
-    func stats(forBotWithIdentifier identifier: String, completion: @escaping (Result<XCSStats, Error>) -> Void) {
-        getPath("bots/\(identifier)/stats") { (statusCode, headers, data: XCSStats?, error) in
-            completion(self.serverResult(statusCode, headers, data: data, error))
-        }
+    public func stats(forBot id: Bot.ID) async throws -> XCSStats {
+        Self.logger.info("Retrieving XCSStats for Bot [\(id)]")
+        let request = try clientRequest(path: "bots/\(id)/stats")
+        let response = try await performRequest(request)
+        return try jsonDecoder.decode(XCSStats.self, from: response.data)
     }
-}
-
-// MARK: - Integrations
-public extension XCSClient {
+    
     /// Requests the '`/integrations`' endpoint from the Xcode Server API.
-    func integrations(completion: @escaping (Result<[XCSIntegration], Error>) -> Void) {
+    public func integrations() async throws -> [XCSIntegration] {
+        Self.logger.info("Retrieving [XCSIntegration] for SERVER [\(fqdn)]")
         struct Response: Codable {
             public var count: Int
             public var results: [XCSIntegration]
         }
         
-        getPath("integrations") { (statusCode, headers, data: Response?, error) in
-            completion(self.serverResult(statusCode, headers, data: data?.results, error))
-        }
-    }
-    
-    /// Requests the '`/bots/{id}/integrations`' endpoint from the Xcode Server API.
-    func integrations(forBotWithIdentifier identifier: String, completion: @escaping (Result<[XCSIntegration], Error>) -> Void) {
-        struct Response: Codable {
-            public var count: Int
-            public var results: [XCSIntegration]
-        }
-        
-        getPath("bots/\(identifier)/integrations") { (statusCode, headers, data: Response?, error) in
-            completion(self.serverResult(statusCode, headers, data: data?.results, error))
-        }
-    }
-    
-    /// Posts a request to the '`/bots/{id}`' endpoint from the Xcode Server API.
-    func runIntegration(forBotWithIdentifier identifier: String, completion: @escaping (Result<XCSIntegration, Error>) -> Void) {
-        postData(nil, path: "bots/\(identifier)/integrations") { (statusCode, headers, data: XCSIntegration?, error) in
-            completion(self.serverResult(statusCode, headers, data: data, error))
-        }
+        let request = try clientRequest(path: "integrations")
+        let response = try await performRequest(request)
+        let results = try jsonDecoder.decode(Response.self, from: response.data)
+        return results.results
     }
     
     /// Requests the '`/integrations/{id}`' endpoint from the Xcode Server API.
-    func integration(withIdentifier identifier: String, completion: @escaping (Result<XCSIntegration, Error>) -> Void) {
-        getPath("integrations/\(identifier)") { (statusCode, headers, data: XCSIntegration?, error) in
-            completion(self.serverResult(statusCode, headers, data: data, error))
-        }
+    public func integration(withId id: Integration.ID) async throws -> XCSIntegration {
+        Self.logger.info("Retrieving XCSIntegration [\(id)]")
+        let request = try clientRequest(path: "integrations/\(id)")
+        let response = try await performRequest(request)
+        return try jsonDecoder.decode(XCSIntegration.self, from: response.data)
     }
-}
-
-// MARK: - Commits
-public extension XCSClient {
+    
+    /// Requests the '`/bots/{id}/integrations`' endpoint from the Xcode Server API.
+    public func integrations(forBot id: Bot.ID) async throws -> [XCSIntegration] {
+        Self.logger.info("Retrieving [XCSIntegration] for BOT [\(id)]")
+        struct Response: Codable {
+            public var count: Int
+            public var results: [XCSIntegration]
+        }
+        
+        let request = try clientRequest(path: "bots/\(id)/integrations")
+        let response = try await performRequest(request)
+        let results = try jsonDecoder.decode(Response.self, from: response.data)
+        return results.results
+    }
+    
+    /// Posts a request to the '`/bots/{id}/integrations`' endpoint on the Xcode Server API.
+    public func runIntegration(forBot id: Bot.ID) async throws -> XCSIntegration {
+        Self.logger.info("Requesting XCSIntegration for BOT [\(id)]")
+        let request = try clientRequest(path: "bots/\(id)/integrations", method: .post)
+        let response = try await performRequest(request)
+        return try jsonDecoder.decode(XCSIntegration.self, from: response.data)
+    }
+    
     /// Requests the '`/integrations/{id}/commits`' endpoint from the Xcode Server API.
-    func commits(forIntegrationWithIdentifier identifier: String, completion: @escaping (Result<[XCSCommit], Error>) -> Void) {
+    public func commits(forIntegration id: Integration.ID) async throws -> [XCSCommit] {
+        Self.logger.info("Retrieving [XCSCommit] for INTEGRATION [\(id)]")
         struct Response: Codable {
             public var count: Int
             public var results: [XCSCommit]
         }
         
-        getPath("integrations/\(identifier)/commits") { (statusCode, headers, data: Response?, error) in
-            completion(self.serverResult(statusCode, headers, data: data?.results, error))
-        }
+        let request = try clientRequest(path: "integrations/\(id)/commits")
+        let response = try await performRequest(request)
+        let results = try jsonDecoder.decode(Response.self, from: response.data)
+        return results.results
     }
-}
-
-// MARK: - Issues
-public extension XCSClient {
+    
     /// Requests the '`/integrations/{id}/issues`' endpoint from the Xcode Server API.
-    func issues(forIntegrationWithIdentifier identifier: String, completion: @escaping (Result<XCSIssues, Error>) -> Void) {
-        getPath("integrations/\(identifier)/issues") { (statusCode, headers, data: XCSIssues?, error) in
-            completion(self.serverResult(statusCode, headers, data: data, error))
-        }
+    public func issues(forIntegration id: Integration.ID) async throws -> XCSIssues {
+        Self.logger.info("Retrieving XCSIssues for INTEGRATION [\(id)]")
+        let request = try clientRequest(path: "integrations/\(id)/issues")
+        let response = try await performRequest(request)
+        return try jsonDecoder.decode(XCSIssues.self, from: response.data)
     }
-}
-
-// MARK: - Coverage
-public extension XCSClient {
     
     /// Requests the '`/integrations/{id}/coverage`' endpoint from the Xcode Server API.
-    func coverage(forIntegrationWithIdentifier identifier: String, completion: @escaping (Result<XCSCoverageHierarchy?, Swift.Error>) -> Void) {
-        getPath("integrations/\(identifier)/coverage") { (statusCode, headers, data: Data?, error) in
-            guard statusCode != 401 else {
-                completion(.failure(Error.authorization))
-                return
+    public func coverage(forIntegration id: Integration.ID) async throws -> XCSCoverageHierarchy? {
+        Self.logger.info("Retrieving XCSCoverageHierarchy for INTEGRATION [\(id)]")
+        let request = try clientRequest(path: "integrations/\(id)/coverage")
+        let response = try await performRequest(request)
+        
+        switch response.statusCode {
+        case .unauthorized:
+            throw XcodeServerError.unauthorized
+        case .notFound:
+            // 404 is a valid response, no coverage data.
+            return nil
+        default:
+            guard response.statusCode == .ok else {
+                throw XcodeServerError.statusCode(response.statusCode.rawValue)
             }
-            
-            guard statusCode == 200 else {
-                if statusCode == 404 {
-                    // 404 is a valid response, no coverage data.
-                    completion(.success(nil))
-                } else {
-                    completion(.failure(Error.response(innerError: error)))
-                }
-                return
-            }
-            
-            guard let result = data else {
-                completion(.failure(Error.serialization(innerError: error)))
-                return
-            }
-            
-            let decompressedData: Data
-            do {
-                decompressedData = try self.decompress(data: result)
-            } catch let decompressionError {
-                completion(.failure(decompressionError))
-                return
-            }
-            
-            let coverage: XCSCoverageHierarchy
-            do {
-                coverage = try self.jsonDecoder.decode(XCSCoverageHierarchy.self, from: decompressedData)
-            } catch let serializationError {
-                completion(.failure(serializationError))
-                return
-            }
-            
-            completion(.success(coverage))
         }
+        
+        let decompressedData = try decompress(data: response.data)
+        return try jsonDecoder.decode(XCSCoverageHierarchy.self, from: decompressedData)
     }
-}
-
-// MARK: - Assets
-public extension XCSClient {
+    
     /// Retrieve the _post-integration_ asset archive.
     ///
     /// Requests the '`/integrations/{id}/assets`' endpoint from the Xcode Server API.
     /// This `.tar` file will contain all of the integration logs, test summaries, and IPA.
-    func archive(forIntegrationWithIdentifier identifier: String, completion: @escaping (Result<(String, Data), Error>) -> Void) {
-        getPath("integrations/\(identifier)/assets") { (statusCode, headers, data: Data?, error) in
-            guard statusCode != 401 else {
-                completion(.failure(Error.authorization))
-                return
+    public func archive(forIntegration id: Integration.ID) async throws -> (String, Data) {
+        Self.logger.info("Retrieving ARCHIVE for INTEGRATION [\(id)]")
+        let request = try clientRequest(path: "integrations/\(id)/assets")
+        let response = try await performRequest(request)
+        
+        switch response.statusCode {
+        case .unauthorized:
+            throw XcodeServerError.unauthorized
+        default:
+            guard response.statusCode == .ok else {
+                throw XcodeServerError.statusCode(response.statusCode.rawValue)
             }
-            
-            guard statusCode == 200 else {
-                completion(.failure(Error.response(innerError: error)))
-                return
-            }
-            
-            var filename: String = "File.tar.gz"
-            if let disposition = headers?["Content-Disposition"]?.filenameFromContentDisposition() {
-                filename = disposition
-            }
-            
-            guard let result = data else {
-                completion(.failure(Error.serialization(innerError: error)))
-                return
-            }
-            
-            completion(.success((filename, result)))
         }
+        
+        var filename = "File.tar.gz"
+        if let value = (response.headers["Content-Disposition"] as? String)?.filenameFromContentDisposition() {
+            filename = value
+        }
+        
+        return (filename, response.data)
     }
-}
-
-extension APIClient: AnyQueryable {
 }
 
 private extension StringProtocol {

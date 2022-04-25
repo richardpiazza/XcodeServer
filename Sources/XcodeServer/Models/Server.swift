@@ -13,8 +13,11 @@ public struct Server: Hashable, Identifiable {
     public var version: Version = Version()
     public var bots: Set<Bot> = []
     
-    public init(id: Server.ID = "") {
+    public init(id: Server.ID = "", modified: Date = Date(), version: Server.Version = Version(), bots: Set<Bot> = []) {
         self.id = id
+        self.modified = modified
+        self.version = version
+        self.bots = bots
     }
 }
 

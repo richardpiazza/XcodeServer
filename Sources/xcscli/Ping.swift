@@ -2,13 +2,15 @@ import Foundation
 import ArgumentParser
 import XcodeServer
 import XcodeServerAPI
+import Logging
 
-final class Ping: ParsableCommand, Route, Logged {
+final class Ping: AsyncParsableCommand, Route, Logged {
     
     static var configuration: CommandConfiguration = {
         return CommandConfiguration(
             commandName: "ping",
             abstract: "Pings the host",
+            usage: nil,
             discussion: "",
             version: "",
             shouldDisplay: true,
@@ -28,27 +30,15 @@ final class Ping: ParsableCommand, Route, Logged {
     var password: String?
     
     @Option(help: "The minimum output log level.")
-    var logLevel: InternalLog.Level = .warn
+    var logLevel: Logger.Level = .warning
     
     func validate() throws {
         try validateServer()
     }
     
-    func run() throws {
-        configureLog()
-        
-        let client = try APIClient(fqdn: server, credentialDelegate: self)
-        client.ping { (result) in
-            switch result {
-            case .success:
-                print("OK")
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
-            
-            Self.exit()
-        }
-        
-        dispatchMain()
+    func run() async throws {
+        let client = try XCSClient(fqdn: server, credentialDelegate: self)
+        try await client.ping()
+        print("OK")
     }
 }

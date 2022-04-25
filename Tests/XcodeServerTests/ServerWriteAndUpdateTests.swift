@@ -6,11 +6,6 @@ import XCTest
 #if canImport(CoreData)
 final class ServerWriteAndUpdateTests: XCTestCase {
     
-    static var allTests = [
-        ("testWriteServer", testWriteServer),
-        ("testUpdateServer", testUpdateServer),
-    ]
-    
     lazy var persistedStore: CoreDataStore = {
         do {
             return try CoreDataStore(model: .v1_0_0, persistence: .memory)
@@ -27,7 +22,7 @@ final class ServerWriteAndUpdateTests: XCTestCase {
         let server: XcodeServer.Server = .testServer
         let complete = expectation(description: "complete")
         
-        store.saveServer(server) { (result) in
+        store.persistServer(server) { result in
             switch result {
             case .failure(let error):
                 XCTFail(error.localizedDescription)
@@ -62,7 +57,7 @@ final class ServerWriteAndUpdateTests: XCTestCase {
         let server: XcodeServer.Server = .testServer
         let complete = expectation(description: "complete")
         
-        store.saveServer(server) { (result) in
+        store.persistServer(server) { result in
             switch result {
             case .failure(let error):
                 XCTFail(error.localizedDescription)
@@ -75,7 +70,7 @@ final class ServerWriteAndUpdateTests: XCTestCase {
                 XCTAssertEqual(initialState.os, "10.15")
                 XCTAssertEqual(initialState.xcode, "11.6")
                 
-                self.store.saveServer(.updateServer) { (updateResult) in
+                self.store.persistServer(.updateServer) { (updateResult) in
                     switch updateResult {
                     case .failure(let error):
                         XCTFail(error.localizedDescription)

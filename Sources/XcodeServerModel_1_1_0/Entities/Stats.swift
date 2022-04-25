@@ -36,6 +36,14 @@ extension Stats {
 }
 
 extension Stats {
+    static func fetchStats(forBot id: XcodeServer.Bot.ID) -> NSFetchRequest<Stats> {
+        let request = fetchRequest()
+        request.predicate = NSPredicate(format: "%K = %@", #keyPath(Stats.bot.identifier), id)
+        return request
+    }
+}
+
+extension Stats {
     private static var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"

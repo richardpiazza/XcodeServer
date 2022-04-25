@@ -60,7 +60,7 @@ extension DeviceSpecification {
         (filters as? Set<Filter>)?.forEach({ context.delete($0) })
         
         specification.filters.forEach { (filter) in
-            InternalLog.persistence.debug("Creating FILTER for DeviceSpecification")
+            PersistentContainer.logger.info("Creating FILTER for DeviceSpecification")
             let _filter: Filter = context.make()
             _filter.update(filter, context: context)
             addToFilters(_filter)
@@ -73,7 +73,7 @@ extension DeviceSpecification {
             if let entity = Device.device(device.id, in: context) {
                 addToDevices(entity)
             } else {
-                InternalLog.persistence.debug("Creating DEVICE for DeviceSpecification")
+                PersistentContainer.logger.info("Creating DEVICE for DeviceSpecification")
                 let _device: Device = context.make()
                 _device.update(device, context: context)
                 addToDevices(_device)

@@ -2,22 +2,9 @@ import XCTest
 @testable import XcodeServer
 @testable import XcodeServerAPI
 
-#if swift(>=5.3)
 final class APIResponseTests: XCTestCase {
     
-    static var allTests = [
-        ("testVersions", testVersions),
-        ("testBots", testBots),
-        ("testBot", testBot),
-        ("testStats", testStats),
-        ("testIntegrations", testIntegrations),
-        ("testIntegration", testIntegration),
-        ("testRunIntegration", testRunIntegration),
-        ("testIssues", testIssues),
-        ("testCommits", testCommits),
-    ]
-    
-    private let decoder = APIClient.jsonDecoder
+    private let decoder = XCSClient.jsonDecoder
     
     func testVersions() throws {
         let url = try XCTUnwrap(Bundle.module.url(forResource: "versions", withExtension: "json"))
@@ -91,4 +78,3 @@ final class APIResponseTests: XCTestCase {
         XCTAssertEqual(commits.results.count, 1)
     }
 }
-#endif

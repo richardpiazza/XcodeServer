@@ -24,7 +24,7 @@ public extension Bot.Configuration {
     init(_ configuration: XCSConfiguration) {
         self.init()
         schedule = Bot.Schedule(rawValue: configuration.scheduleType?.rawValue ?? 0) ?? .manual
-        periodicInterval = Bot.PeriodicInterval(rawValue: configuration.periodicScheduleInterval.rawValue) ?? .none
+        periodicInterval = Bot.PeriodicInterval(rawValue: configuration.periodicScheduleInterval.rawValue) ?? .never
         weeklyScheduleDay = configuration.weeklyScheduleDay ?? 0
         hourOfIntegration = configuration.hourOfIntegration ?? 0
         minutesAfterHourToIntegrate = configuration.minutesAfterHourToIntegrate ?? 0
@@ -70,7 +70,7 @@ public extension Bot.Configuration.Provisioning {
 public extension Bot.Configuration.ArchiveExport {
     init(_ export: XCSArchiveExportOptions) {
         self.init()
-        created = APIClient.dateFormatter.date(from: export.createdAt ?? "") ?? Date()
+        created = XCSClient.dateFormatter.date(from: export.createdAt ?? "") ?? Date()
         if let options = export.exportOptions {
             self.options = Bot.Configuration.ExportOptions(options)
         }

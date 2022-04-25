@@ -1,10 +1,10 @@
-@testable import XcodeServer
-@testable import XcodeServerAPI
 import Foundation
+@testable import XcodeServer
 
-class MockApiClient: AnyQueryable {
-    let dispatchQueue: DispatchQueue = .init(label: "MockApiClient")
-    let returnQueue: DispatchQueue
+class MockApiClient: EntityQueryable {
+    
+    struct NotImplemented: Error {}
+    
     let serverId: Server.ID
     
     lazy var dateFormatter: DateFormatter = {
@@ -19,114 +19,126 @@ class MockApiClient: AnyQueryable {
         return decoder
     }()
     
-    init(serverId: Server.ID, dispatchQueue: DispatchQueue = .main) {
+    init(serverId: Server.ID) {
         self.serverId = serverId
-        returnQueue = dispatchQueue
     }
     
     // MARK: - ServerQueryable
     
-    func getServers(queue: DispatchQueue?, completion: @escaping ServersResultHandler) {
-        let queue = queue ?? returnQueue
-        queue.async {
-            completion(.failure(.message("Not Implemented")))
-        }
+    func servers() async throws -> [Server] {
+        throw NotImplemented()
     }
     
-    func getServer(_ id: Server.ID, queue: DispatchQueue?, completion: @escaping ServerResultHandler) {
-        let queue = queue ?? returnQueue
-        queue.async {
-            completion(.failure(.message("Not Implemented")))
-        }
+    func server(withId id: Server.ID) async throws -> Server {
+        throw NotImplemented()
     }
     
     // MARK: - BotQueryable
     
-    func getBots(queue: DispatchQueue?, completion: @escaping BotsResultHandler) {
-        let queue = queue ?? returnQueue
-        queue.async {
-            completion(.failure(.message("Not Implemented")))
+    func bots() async throws -> [Bot] {
+        throw NotImplemented()
+    }
+    
+    func bots(forServer id: Server.ID) async throws -> [Bot] {
+        throw NotImplemented()
+    }
+    
+    func bot(withId id: Bot.ID) async throws -> Bot {
+        throw NotImplemented()
+    }
+    
+    func bot(withId id: Bot.ID, completion: @escaping (Result<Bot, Error>) -> Void) {
+        Task {
+            do {
+                let value = try await bot(withId: id)
+                completion(.success(value))
+            } catch {
+                completion(.failure(error))
+            }
         }
     }
     
-    func getBots(forServer id: Server.ID, queue: DispatchQueue?, completion: @escaping BotsResultHandler) {
-        let queue = queue ?? returnQueue
-        queue.async {
-            completion(.failure(.message("Not Implemented")))
-        }
+    func stats(forBot id: Bot.ID) async throws -> Bot.Stats {
+        throw NotImplemented()
     }
     
-    func getBot(_ id: Bot.ID, queue: DispatchQueue?, completion: @escaping BotResultHandler) {
-        let queue = queue ?? returnQueue
-        queue.async {
-            completion(.failure(.message("Not Implemented")))
-        }
-    }
-    
-    func getStatsForBot(_ id: Bot.ID, queue: DispatchQueue?, completion: @escaping BotStatsResultHandler) {
-        let queue = queue ?? returnQueue
-        queue.async {
-            completion(.failure(.message("Not Implemented")))
+    func stats(forBot id: Bot.ID, completion: @escaping (Result<Bot.Stats, Error>) -> Void) {
+        Task {
+            do {
+                let value = try await stats(forBot: id)
+                completion(.success(value))
+            } catch {
+                completion(.failure(error))
+            }
         }
     }
     
     // MARK: - IntegrationQueryable
     
-    func getIntegrations(queue: DispatchQueue?, completion: @escaping IntegrationsResultHandler) {
-        let queue = queue ?? returnQueue
-        queue.async {
-            completion(.failure(.message("Not Implemented")))
+    func integrations() async throws -> [Integration] {
+        throw NotImplemented()
+    }
+    
+    func integration(withId id: Integration.ID) async throws -> Integration {
+        throw NotImplemented()
+    }
+    
+    func integration(withId id: Integration.ID, completion: @escaping (Result<Integration, Error>) -> Void) {
+        Task {
+            do {
+                let value = try await integration(withId: id)
+                completion(.success(value))
+            } catch {
+                completion(.failure(error))
+            }
         }
     }
     
-    func getIntegrations(forBot id: Bot.ID, queue: DispatchQueue?, completion: @escaping IntegrationsResultHandler) {
-        let queue = queue ?? returnQueue
-        queue.async {
-            completion(.failure(.message("Not Implemented")))
+    func integrations(forBot id: Bot.ID) async throws -> [Integration] {
+        throw NotImplemented()
+    }
+    
+    func commits(forIntegration id: Integration.ID) async throws -> [SourceControl.Commit] {
+        throw NotImplemented()
+    }
+    
+    func commits(forIntegration id: Integration.ID, completion: @escaping (Result<[SourceControl.Commit], Error>) -> Void) {
+        Task {
+            do {
+                let value = try await commits(forIntegration: id)
+                completion(.success(value))
+            } catch {
+                completion(.failure(error))
+            }
         }
     }
     
-    func getIntegration(_ id: Integration.ID, queue: DispatchQueue?, completion: @escaping IntegrationResultHandler) {
-        let queue = queue ?? returnQueue
-        queue.async {
-            completion(.failure(.message("Not Implemented")))
+    func issues(forIntegration id: Integration.ID) async throws -> Integration.IssueCatalog {
+        throw NotImplemented()
+    }
+    
+    func issues(forIntegration id: Integration.ID, completion: @escaping (Result<Integration.IssueCatalog, Error>) -> Void) {
+        Task {
+            do {
+                let value = try await issues(forIntegration: id)
+                completion(.success(value))
+            } catch {
+                completion(.failure(error))
+            }
         }
     }
     
-    func getArchiveForIntegration(_ id: Integration.ID, queue: DispatchQueue?, completion: @escaping DataResultHandler) {
-        let queue = queue ?? returnQueue
-        queue.async {
-            completion(.failure(.message("Not Implemented")))
-        }
-    }
-    
-    func getCommitsForIntegration(_ id: Integration.ID, queue: DispatchQueue?, completion: @escaping CommitsResultHandler) {
-        let queue = queue ?? returnQueue
-        queue.async {
-            completion(.failure(.message("Not Implemented")))
-        }
-    }
-    
-    func getIssuesForIntegration(_ id: Integration.ID, queue: DispatchQueue?, completion: @escaping IssueCatalogResultHandler) {
-        let queue = queue ?? returnQueue
-        queue.async {
-            completion(.failure(.message("Not Implemented")))
-        }
+    func archive(forIntegration id: Integration.ID) async throws -> Data {
+        throw NotImplemented()
     }
     
     // MARK: - SourceControlQueryable
     
-    func getRemote(_ id: SourceControl.Remote.ID, queue: DispatchQueue?, completion: @escaping RemoteResultHandler) {
-        let queue = queue ?? returnQueue
-        queue.async {
-            completion(.failure(.message("Not Implemented")))
-        }
+    func remotes() async throws -> [SourceControl.Remote] {
+        throw NotImplemented()
     }
     
-    func getRemotes(queue: DispatchQueue?, completion: @escaping RemotesResultHandler) {
-        let queue = queue ?? returnQueue
-        queue.async {
-            completion(.failure(.message("Not Implemented")))
-        }
+    func remote(withId id: SourceControl.Remote.ID) async throws -> SourceControl.Remote {
+        throw NotImplemented()
     }
 }

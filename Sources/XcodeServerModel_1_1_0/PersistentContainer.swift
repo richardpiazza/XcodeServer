@@ -1,12 +1,11 @@
 import XcodeServer
-import CoreDataPlus
-import Dispatch
+import Logging
 #if canImport(CoreData)
 import CoreData
+import CoreDataPlus
 
 public class PersistentContainer: NSPersistentContainer {
-    public let internalQueue: DispatchQueue = .init(label: "XcodeServerModel_1_1_0.PersistentContainer")
-    public var dispatchQueue: DispatchQueue = .main
+    static let logger: Logger = Logger(label: "XcodeServer.CoreDataModel_1.1.0")
     
     public static var managedObjectModel: NSManagedObjectModel = {
         guard let model = try? Bundle.module.managedObjectModel(forResource: "XcodeServer") else {
@@ -23,5 +22,7 @@ public class PersistentContainer: NSPersistentContainer {
         
         return model
     }()
+    
+    lazy var persistenceContext: NSManagedObjectContext = newBackgroundContext()
 }
 #endif

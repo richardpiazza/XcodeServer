@@ -3,14 +3,19 @@ import Foundation
 public extension Tests {
     ///
     struct Method: Hashable, Codable {
-        public var name: String = ""
-        public var deviceResults: [Tests.DeviceIdentifier: Int] = [:]
+        public var name: String
+        public var deviceResults: [Tests.DeviceIdentifier: Int]
         
-        public init() {
+        public init(name: String = "", deviceResults: [Tests.DeviceIdentifier: Int] = [:]) {
+            self.name = name
+            self.deviceResults = deviceResults
         }
         
         public init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: Tests.CodingKeys.self)
+            name = ""
+            deviceResults = [:]
+            
             try container.allKeys.forEach { (key) in
                 if let value = try container.decodeIfPresent(Int.self, forKey: key) {
                     deviceResults[key.stringValue] = value

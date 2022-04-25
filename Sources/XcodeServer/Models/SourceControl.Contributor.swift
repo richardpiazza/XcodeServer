@@ -1,11 +1,14 @@
 public extension SourceControl {
-    
-    struct Contributor: Hashable {
-        public var name: String = ""
-        public var displayName: String = ""
-        public var emails: [String] = []
+    ///
+    struct Contributor: Hashable, Codable {
+        public var name: String
+        public var displayName: String
+        public var emails: [String]
         
-        public init() {
+        public init(name: String = "", displayName: String = "", emails: [String] = []) {
+            self.name = name
+            self.displayName = displayName
+            self.emails = emails
         }
     }
 }

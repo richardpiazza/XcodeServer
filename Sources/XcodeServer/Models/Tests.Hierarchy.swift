@@ -1,13 +1,16 @@
 public extension Tests {
     ///
     struct Hierarchy: Hashable, Codable {
-        public var suites: [Tests.Suite] = []
+        public var suites: [Tests.Suite]
         
-        public init() {
+        public init(suites: [Tests.Suite] = []) {
+            self.suites = suites
         }
         
         public init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: Tests.CodingKeys.self)
+            suites = []
+            
             try container.allKeys.forEach({ (key) in
                 var suite = try container.decodeIfPresent(Tests.Suite.self, forKey: key)
                 suite?.name = key.stringValue

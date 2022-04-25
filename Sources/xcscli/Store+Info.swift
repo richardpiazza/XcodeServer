@@ -3,15 +3,17 @@ import XcodeServer
 import XcodeServerCoreData
 import CoreDataPlus
 import Foundation
+import Logging
 #if canImport(CoreData)
 
 @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-final class StoreInfo: ParsableCommand, Stored, Logged {
+final class StoreInfo: AsyncParsableCommand, Stored, Logged {
     
     static var configuration: CommandConfiguration = {
         .init(
             commandName: "info",
             abstract: "Displays information about the persistence store.",
+            usage: nil,
             discussion: """
             When no 'path' is specified, the default store URL will be used:
             \(StoreURL.xcodeServer.rawValue.path)
@@ -28,11 +30,9 @@ final class StoreInfo: ParsableCommand, Stored, Logged {
     var path: String?
     
     @Option(help: "The minimum output log level.")
-    var logLevel: InternalLog.Level = .warn
+    var logLevel: Logger.Level = .warning
     
-    func run() throws {
-        configureLog()
-        
+    func run() async throws {
         print("Store URL: \(storeURL.rawValue.path)")
         if let version = try Model.versionForStore(storeURL, configurationName: .configurationName) {
             print("Model Version: \(version.rawValue)")

@@ -63,13 +63,23 @@ extension Repository {
 }
 
 extension Repository {
+    static func fetchRemotes() -> NSFetchRequest<Repository> {
+        fetchRequest()
+    }
+    
+    static func fetchRemote(withId id: XcodeServer.SourceControl.Remote.ID) -> NSFetchRequest<Repository> {
+        let request = fetchRequest()
+        request.predicate = NSPredicate(format: "%K = %@", #keyPath(Repository.identifier), id)
+        return request
+    }
+    
     /// Retrieves all `Repository` entities from the Core Data `NSManagedObjectContext`
     static func repositories(in context: NSManagedObjectContext) -> [Repository] {
         let request = NSFetchRequest<Repository>(entityName: entityName)
         do {
             return try context.fetch(request)
         } catch {
-            InternalLog.persistence.error("Failed to fetch repositories", error: error)
+            PersistentContainer.logger.error("Failed to fetch repositories", metadata: ["localizedDescription": .string(error.localizedDescription)])
         }
         
         return []
@@ -83,7 +93,7 @@ extension Repository {
         do {
             return try context.fetch(request).first
         } catch {
-            InternalLog.persistence.error("Failed to fetch repository '\(id)'", error: error)
+            PersistentContainer.logger.error("Failed to fetch repository '\(id)'", metadata: ["localizedDescription": .string(error.localizedDescription)])
         }
         
         return nil
@@ -124,7 +134,7 @@ extension Repository {
             if let existing = Commit.commit(commit.id, in: context) {
                 _commit = existing
             } else {
-                InternalLog.persistence.debug("Creating COMMIT for Repository [\(identifier ?? "")]")
+                PersistentContainer.logger.info("Creating COMMIT for Repository [\(identifier ?? "")]")
                 _commit = context.make()
                 addToCommits(_commit)
             }

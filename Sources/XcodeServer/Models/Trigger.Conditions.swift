@@ -1,15 +1,30 @@
 public extension Trigger {
-    
-    struct Conditions: Hashable {
-        public var onAllIssuesResolved: Bool = false
-        public var onAnalyzerWarnings: Bool = false
-        public var onBuildErrors: Bool = false
-        public var onFailingTests: Bool = false
-        public var onSuccess: Bool = false
-        public var onWarnings: Bool = false
-        public var status: Int = 0
+    ///
+    struct Conditions: Hashable, Codable {
+        public var onAllIssuesResolved: Bool
+        public var onAnalyzerWarnings: Bool
+        public var onBuildErrors: Bool
+        public var onFailingTests: Bool
+        public var onSuccess: Bool
+        public var onWarnings: Bool
+        public var status: Int
         
-        public init() {
+        public init(
+            onAllIssuesResolved: Bool = false,
+            onAnalyzerWarnings: Bool = false,
+            onBuildErrors: Bool = false,
+            onFailingTests: Bool = false,
+            onSuccess: Bool = false,
+            onWarnings: Bool = false,
+            status: Int = 0
+        ) {
+            self.onAllIssuesResolved = onAllIssuesResolved
+            self.onAnalyzerWarnings = onAnalyzerWarnings
+            self.onBuildErrors = onBuildErrors
+            self.onFailingTests = onFailingTests
+            self.onSuccess = onSuccess
+            self.onWarnings = onWarnings
+            self.status = status
         }
     }
 }

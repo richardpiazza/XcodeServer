@@ -1,10 +1,12 @@
 public extension SourceControl {
-    
-    struct Change: Hashable {
-        public var filePath: String = ""
-        public var status: Int = 0
+    ///
+    struct Change: Hashable, Codable {
+        public var filePath: String
+        public var status: Int
         
-        public init() {
+        public init(filePath: String = "", status: Int = 0) {
+            self.filePath = filePath
+            self.status = status
         }
     }
 }

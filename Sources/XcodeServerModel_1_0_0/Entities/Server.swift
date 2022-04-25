@@ -44,13 +44,33 @@ extension Server {
 }
 
 extension Server {
+    static func fetchServers() -> NSFetchRequest<Server> {
+        fetchRequest()
+    }
+    
+    static func fetchServers(lastUpdatedOnOrBefore date: Date) -> NSFetchRequest<Server> {
+        let request = fetchRequest()
+        request.predicate = NSCompoundPredicate(orPredicateWithSubpredicates: [
+            NSPredicate(format: "%K == nil", #keyPath(Server.lastUpdate)),
+            NSPredicate(format: "%K < %@", #keyPath(Server.lastUpdate), date as NSDate)
+        ])
+        return request
+    }
+    
+    static func fetchServer(withId id: XcodeServer.Server.ID) -> NSFetchRequest<Server> {
+        let request = fetchRequest()
+        request.predicate = NSPredicate(format: "%K = %@", #keyPath(Server.fqdn), id)
+        return request
+    }
+    
     /// Retrieves all `Server` entities from the Core Data `NSManagedObjectContext`
+    @available(*, deprecated, message: "Use `fetchServers()`")
     static func servers(in context: NSManagedObjectContext) -> [Server] {
         let request = NSFetchRequest<Server>(entityName: entityName)
         do {
             return try context.fetch(request)
         } catch {
-            InternalLog.persistence.error("Failed to fetch servers", error: error)
+            PersistentContainer.logger.error("Failed to fetch servers", metadata: ["localizedDescription": .string(error.localizedDescription)])
         }
         
         return []
@@ -63,19 +83,20 @@ extension Server {
         do {
             return try context.fetch(request).first
         } catch {
-            InternalLog.persistence.error("Failed to fetch server '\(id)'", error: error)
+            PersistentContainer.logger.error("Failed to fetch server '\(id)'", metadata: ["localizedDescription": .string(error.localizedDescription)])
         }
         
         return nil
     }
     
+    @available(*, deprecated, message: "Use `fetchServers(lastUpdatedOnOrBefore:)`")
     static func serversLastUpdatedOnOrBefore(_ date: Date, in context: NSManagedObjectContext) -> [Server] {
         let request = NSFetchRequest<Server>(entityName: entityName)
         request.predicate = NSPredicate(format: "lastUpdate == nil OR lastUpdate < %@", argumentArray: [date])
         do {
             return try context.fetch(request)
         } catch {
-            InternalLog.persistence.error("Failed to fetch server last updated", error: error)
+            PersistentContainer.logger.error("Failed to fetch server last updated", metadata: ["localizedDescription": .string(error.localizedDescription)])
         }
         
         return []
@@ -124,7 +145,7 @@ extension Server {
             } else {
                 bot = context.make()
                 addToBots(bot)
-                InternalLog.persistence.debug("Creating BOT '\(bot.name ?? "")' [\(bot.identifier ?? "")] for Server \(fqdn ?? "")")
+                PersistentContainer.logger.info("Creating BOT '\(bot.name ?? "")' [\(bot.identifier ?? "")] for Server \(fqdn ?? "")")
             }
             
             bot.update(entity, context: context)

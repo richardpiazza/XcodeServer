@@ -3,29 +3,13 @@ import XCTest
 @testable import XcodeServerAPI
 @testable import XcodeServerCoreData
 
-#if canImport(CoreData) && swift(>=5.3)
+#if canImport(CoreData)
 final class EdgeCaseTests: XCTestCase {
     
-    static var allTests = [
-        ("testIntegrationCommitRemoteId", testIntegrationCommitRemoteId),
-    ]
-    
     private class Client: MockApiClient {
-        override func getCommitsForIntegration(_ id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping CommitsResultHandler) {
-            let queue = queue ?? returnQueue
-            dispatchQueue.async {
-                do {
-                    let resource: XCSResults<XCSCommit> = try Bundle.module.decodeJson("structured18_commits", decoder: self.decoder)
-                    let result: [SourceControl.Commit] = resource.results.commits(forIntegration: id)
-                    queue.async {
-                        completion(.success(result))
-                    }
-                } catch {
-                    queue.async {
-                        completion(.failure(.error(error)))
-                    }
-                }
-            }
+        override func commits(forIntegration id: XcodeServer.Integration.ID) async throws -> [SourceControl.Commit] {
+            let resource: XCSResults<XCSCommit> = try Bundle.module.decodeJson("structured18_commits", decoder: self.decoder)
+            return resource.results.commits(forIntegration: id)
         }
     }
     
@@ -42,7 +26,7 @@ final class EdgeCaseTests: XCTestCase {
         var retrievedCommits: [SourceControl.Commit]?
         
         let query = expectation(description: "Retrieve Commits")
-        client.getCommitsForIntegration(.integration1) { (result) in
+        client.commits(forIntegration: .integration1) { (result) in
             switch result {
             case .failure(let error):
                 XCTFail(error.localizedDescription)

@@ -1,6 +1,7 @@
 import XcodeServer
 import CoreDataPlus
 import Foundation
+import Logging
 #if canImport(CoreData)
 import CoreData
 
@@ -56,7 +57,7 @@ extension EmailConfiguration {
             do {
                 return try Self.jsonDecoder.decode([String].self, from: data)
             } catch {
-                InternalLog.persistence.error("", error: error)
+                PersistentContainer.logger.error("", metadata: ["localizedDescription": .string(error.localizedDescription)])
                 return []
             }
         }
@@ -64,7 +65,7 @@ extension EmailConfiguration {
             do {
                 ccAddressesData = try Self.jsonEncoder.encode(newValue)
             } catch {
-                InternalLog.persistence.error("", error: error)
+                PersistentContainer.logger.error("", metadata: ["localizedDescription": .string(error.localizedDescription)])
             }
         }
     }
@@ -78,7 +79,7 @@ extension EmailConfiguration {
             do {
                 return try Self.jsonDecoder.decode([String].self, from: data)
             } catch {
-                InternalLog.persistence.error("", error: error)
+                PersistentContainer.logger.error("", metadata: ["localizedDescription": .string(error.localizedDescription)])
                 return []
             }
         }
@@ -86,7 +87,7 @@ extension EmailConfiguration {
             do {
                 allowedDomainNamesData = try Self.jsonEncoder.encode(newValue)
             } catch {
-                InternalLog.persistence.error("", error: error)
+                PersistentContainer.logger.error("", metadata: ["localizedDescription": .string(error.localizedDescription)])
             }
         }
     }

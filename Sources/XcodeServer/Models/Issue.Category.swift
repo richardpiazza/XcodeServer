@@ -3,12 +3,15 @@ public extension Issue {
     enum Category: String, Codable {
         case unknown = "unknown"
         case buildServiceError = "buildServiceError"
-        case BuildServiceWarning = "buildServiceWarning"
+        case buildServiceWarning = "buildServiceWarning"
         case triggerError = "triggerError"
         case error = "error"
         case warning = "warning"
         case testFailure = "testFailure"
         case analyzerWarning = "analyzerWarning"
+        
+        @available(*, deprecated, renamed: "buildServiceWarning")
+        public static var BuildServiceWarning: Category { buildServiceWarning }
     }
 }
 
@@ -17,7 +20,7 @@ extension Issue.Category: CustomStringConvertible {
         switch self {
         case .unknown: return "Unknown"
         case .buildServiceError: return "Build Service Error"
-        case .BuildServiceWarning: return "Build Service Warning"
+        case .buildServiceWarning: return "Build Service Warning"
         case .triggerError: return "Trigger Error"
         case .error: return "Error"
         case .warning: return "Warning"
@@ -30,7 +33,7 @@ extension Issue.Category: CustomStringConvertible {
 public extension Issue.Category {
     var isWarning: Bool {
         switch self {
-        case .warning, .BuildServiceWarning: return true
+        case .warning, .buildServiceWarning: return true
         default: return false
         }
     }

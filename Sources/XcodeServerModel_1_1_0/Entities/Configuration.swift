@@ -110,7 +110,7 @@ extension Configuration {
     
     var periodicScheduleInterval: XcodeServer.Bot.PeriodicInterval {
         get {
-            return XcodeServer.Bot.PeriodicInterval(rawValue: Int(periodicScheduleIntervalRawValue)) ?? .none
+            return XcodeServer.Bot.PeriodicInterval(rawValue: Int(periodicScheduleIntervalRawValue)) ?? .never
         }
         set {
             periodicScheduleIntervalRawValue = Int16(newValue.rawValue)
@@ -126,7 +126,7 @@ extension Configuration {
             do {
                 return try Self.jsonDecoder.decode([String].self, from: data)
             } catch {
-                InternalLog.persistence.error("", error: error)
+                PersistentContainer.logger.error("", metadata: ["localizedDescription": .string(error.localizedDescription)])
                 return []
             }
         }
@@ -134,7 +134,7 @@ extension Configuration {
             do {
                 additionalBuildArgumentsData = try Self.jsonEncoder.encode(newValue)
             } catch {
-                InternalLog.persistence.error("", error: error)
+                PersistentContainer.logger.error("", metadata: ["localizedDescription": .string(error.localizedDescription)])
             }
         }
     }
@@ -148,7 +148,7 @@ extension Configuration {
             do {
                 return try Self.jsonDecoder.decode([String: String].self, from: data)
             } catch {
-                InternalLog.persistence.error("", error: error)
+                PersistentContainer.logger.error("", metadata: ["localizedDescription": .string(error.localizedDescription)])
                 return [:]
             }
         }
@@ -156,7 +156,7 @@ extension Configuration {
             do {
                 buildEnvironmentVariablesData = try Self.jsonEncoder.encode(newValue)
             } catch {
-                InternalLog.persistence.error("", error: error)
+                PersistentContainer.logger.error("", metadata: ["localizedDescription": .string(error.localizedDescription)])
             }
         }
     }
@@ -178,7 +178,7 @@ extension Configuration {
 extension Configuration {
     func update(_ configuration: XcodeServer.Bot.Configuration, context: NSManagedObjectContext) {
         if deviceSpecification == nil {
-            InternalLog.persistence.debug("Creating DEVICE_SPECIFICATION for Configuration '\(bot?.name ?? "")'")
+            PersistentContainer.logger.info("Creating DEVICE_SPECIFICATION for Configuration '\(bot?.name ?? "")'")
             deviceSpecification = context.make()
         }
         
@@ -205,7 +205,7 @@ extension Configuration {
         
         (triggers as? Set<Trigger>)?.forEach({ context.delete($0) })
         configuration.triggers.forEach { (trigger) in
-            InternalLog.persistence.debug("Creating TRIGGER for Configuration '\(bot?.name ?? "")'")
+            PersistentContainer.logger.info("Creating TRIGGER for Configuration '\(bot?.name ?? "")'")
             let _trigger: Trigger = context.make()
             _trigger.update(trigger, context: context)
             addToTriggers(_trigger)
@@ -217,7 +217,7 @@ extension Configuration {
             if let entity = Repository.repository(remoteId, in: context) {
                 repository = entity
             } else {
-                InternalLog.persistence.info("Creating REPOSITORY '\(configuration.sourceControlBlueprint.name)' [\(remoteId)]")
+                PersistentContainer.logger.info("Creating REPOSITORY '\(configuration.sourceControlBlueprint.name)' [\(remoteId)]")
                 repository = context.make()
             }
             

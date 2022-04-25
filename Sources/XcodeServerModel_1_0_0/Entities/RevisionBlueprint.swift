@@ -21,13 +21,19 @@ extension RevisionBlueprint {
 }
 
 extension RevisionBlueprint {
+    static func fetchBlueprints(forIntegration id: XcodeServer.Integration.ID) -> NSFetchRequest<RevisionBlueprint> {
+        let request = fetchRequest()
+        request.predicate = NSPredicate(format: "%K = %@", #keyPath(RevisionBlueprint.integration.identifier), id)
+        return request
+    }
+    
     /// Retrieves all `RevisionBlueprint` entities from the Core Data `NSManagedObjectContext`
     static func revisionBlueprints(in context: NSManagedObjectContext) -> [RevisionBlueprint] {
         let request = NSFetchRequest<RevisionBlueprint>(entityName: entityName)
         do {
             return try context.fetch(request)
         } catch {
-            InternalLog.persistence.error("Failed to fetch revision blueprints", error: error)
+            PersistentContainer.logger.error("Failed to fetch revision blueprints", metadata: ["localizedDescription": .string(error.localizedDescription)])
         }
         
         return []
@@ -41,7 +47,7 @@ extension RevisionBlueprint {
         do {
             return try context.fetch(request).first
         } catch {
-            InternalLog.persistence.error("Failed to fetch revision blueprint", error: error)
+            PersistentContainer.logger.error("Failed to fetch revision blueprint", metadata: ["localizedDescription": .string(error.localizedDescription)])
         }
         
         return nil

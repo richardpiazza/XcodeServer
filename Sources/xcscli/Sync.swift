@@ -2,18 +2,21 @@ import Foundation
 import ArgumentParser
 import XcodeServer
 import XcodeServerAPI
-import XcodeServerUtility
 import XcodeServerCoreData
 import CoreDataPlus
+import Logging
 #if canImport(CoreData)
 
 @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-final class Sync: ParsableCommand, Route, Stored, Logged {
+final class Sync: AsyncParsableCommand, Route, Stored, Logged {
+    
+    private static let logger: Logger = Logger(label: "Sync")
     
     static var configuration: CommandConfiguration = {
         return CommandConfiguration(
             commandName: "sync",
             abstract: "Syncs data to a local Core Data store.",
+            usage: nil,
             discussion: "",
             version: "",
             shouldDisplay: true,
@@ -42,53 +45,60 @@ final class Sync: ParsableCommand, Route, Stored, Logged {
     var purge: Bool = false
     
     @Option(help: "The minimum output log level.")
-    var logLevel: InternalLog.Level = .warn
+    var logLevel: Logger.Level = .notice
     
     func validate() throws {
         try validateServer()
     }
     
-    func run() throws {
-        configureLog()
+    func run() async throws {
+        ConsoleLogger.bootstrap(minimumLogLevel: logLevel)
         
         if purge {
             try storeURL.destroy()
         }
         
         let _model = model ?? Model.current
-        let store = try CoreDataStore(model: _model, persistence: .store(storeURL))
-        let manager: XcodeServerUtility.Manager = Manager(store: store, authorizationDelegate: self)
+        var store: CoreDataStore! = try CoreDataStore(model: _model, persistence: .store(storeURL))
+        let client = try XCSClient(fqdn: server, credentialDelegate: self)
         
-        manager.createServer(withId: server) { (error) in
-            guard error == nil else {
-                print(error!.localizedDescription)
-                Self.exit()
-            }
+        // Create Server
+        let versions = try await client.versions()
+        let _server = Server(id: server, version: versions, api: client.apiVersion)
+        _ = try await store.persistServer(_server)
+        
+        // Sync
+        Self.logger.notice("Syncing SERVER [\(server)]")
+        let start = Date()
+        
+        let bots: [Bot] = try await client.bots()
+        let persistedBots = try await store.persistBots(bots, forServer: server)
+        for bot in persistedBots {
+            let stats: Bot.Stats = try await client.stats(forBot: bot.id)
+            _ = try await store.persistStats(stats, forBot: bot.id)
             
-            let start = Date()
-            manager.syncServer(withId: self.server) { (syncError) in
-                guard syncError == nil else {
-                    print(syncError!.localizedDescription)
-                    Self.exit()
-                }
+            let integrations: [Integration] = try await client.integrations(forBot: bot.id)
+            let persistedIntegrations = try await store.persistIntegrations(integrations, forBot: bot.id)
+            for integration in persistedIntegrations {
+                let issues: Integration.IssueCatalog = try await client.issues(forIntegration: integration.id)
+                _ = try await store.persistIssues(issues, forIntegration: integration.id)
                 
-                let end = Date()
-                print("Sync Complete - \(end.timeIntervalSince(start)) Seconds")
-                print("\(self.storeURL.rawValue.path)")
-                
-                Self.exit()
+                let commits: [SourceControl.Commit] = try await client.commits(forIntegration: integration.id)
+                _ = try await store.persistCommits(commits, forIntegration: integration.id)
             }
         }
         
-        dispatchMain()
+        let end = Date()
+        Self.logger.notice("Syncing Complete", metadata: [
+            "Seconds": .string("\(end.timeIntervalSince(start))"),
+            "StoreURL": .string(storeURL.rawValue.path)
+        ])
+        
+        // Cleanup
+        store = nil
     }
-}
-
-@available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-extension Sync: ManagerAuthorizationDelegate {
 }
 
 extension Model: ExpressibleByArgument {
 }
-
 #endif

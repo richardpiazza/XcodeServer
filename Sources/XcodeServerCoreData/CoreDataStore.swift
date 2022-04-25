@@ -2,7 +2,6 @@ import XcodeServer
 import CoreDataPlus
 import XcodeServerModel_1_0_0
 import XcodeServerModel_1_1_0
-import Dispatch
 #if canImport(CoreData)
 import CoreData
 
@@ -20,24 +19,6 @@ public class CoreDataStore {
             }
         }
         
-        var internalQueue: DispatchQueue {
-            switch self {
-            case .v1_0_0(let catalog):
-                return catalog.persistentContainer.internalQueue
-            case .v1_1_0(let catalog):
-                return catalog.persistentContainer.internalQueue
-            }
-        }
-        
-        var dispatchQueue: DispatchQueue {
-            switch self {
-            case .v1_0_0(let catalog):
-                return catalog.persistentContainer.dispatchQueue
-            case .v1_1_0(let catalog):
-                return catalog.persistentContainer.dispatchQueue
-            }
-        }
-        
         func checkpoint(reopen: Bool = false) throws {
             switch self {
             case .v1_0_0(let catalog):
@@ -50,10 +31,8 @@ public class CoreDataStore {
     
     internal let catalog: Catalog
     public var persistentContainer: NSPersistentContainer { catalog.persistentContainer }
-    @available(*, deprecated, message: "CatalogContainer manages its own queues.")
-    internal var internalQueue: DispatchQueue { catalog.internalQueue }
-    @available(*, deprecated, message: "CatalogContainer manages its own queues.")
-    internal var returnQueue: DispatchQueue { catalog.dispatchQueue }
+    public var entityQueryable: EntityQueryable { catalog.persistentContainer as! EntityQueryable }
+    public var entityPersistable: EntityPersistable { catalog.persistentContainer as! EntityPersistable }
     
     /// Initializes the persistent store.
     ///
@@ -71,141 +50,132 @@ public class CoreDataStore {
         }
     }
     
-    @available(*, deprecated, renamed: "init(model:persistence:silentFailure:)")
-    public convenience init(model: Model, dispatchQueue: DispatchQueue = .main, persisted: Bool = true, silentFailure: Bool = true) throws {
-        if persisted {
-            try self.init(model: model, persistence: .xcodeServer, silentFailure: silentFailure)
-        } else {
-            try self.init(model: model, persistence: .memory, silentFailure: silentFailure)
-        }
-    }
-    
     deinit {
         try? catalog.checkpoint()
     }
 }
 
-extension CoreDataStore: AnyQueryable {
+extension CoreDataStore: EntityQueryable {
     // MARK: - BotQueryable
-    public func getBots(queue: DispatchQueue?, completion: @escaping BotsResultHandler) {
-        (catalog.persistentContainer as! BotQueryable).getBots(queue: queue, completion: completion)
+    public func bots() async throws -> [Bot] {
+        try await entityQueryable.bots()
     }
     
-    public func getBots(forServer id: XcodeServer.Server.ID, queue: DispatchQueue?, completion: @escaping BotsResultHandler) {
-        (catalog.persistentContainer as! BotQueryable).getBots(forServer: id, queue: queue, completion: completion)
+    public func bots(forServer id: Server.ID) async throws -> [Bot] {
+        try await entityQueryable.bots(forServer: id)
     }
     
-    public func getBot(_ id: XcodeServer.Bot.ID, queue: DispatchQueue?, completion: @escaping BotResultHandler) {
-        (catalog.persistentContainer as! BotQueryable).getBot(id, queue: queue, completion: completion)
+    public func bot(withId id: Bot.ID) async throws -> Bot {
+        try await entityQueryable.bot(withId: id)
     }
     
-    public func getStatsForBot(_ id: XcodeServer.Bot.ID, queue: DispatchQueue?, completion: @escaping BotStatsResultHandler) {
-        (catalog.persistentContainer as! BotQueryable).getStatsForBot(id, queue: queue, completion: completion)
+    public func stats(forBot id: Bot.ID) async throws -> Bot.Stats {
+        try await entityQueryable.stats(forBot: id)
     }
     
     // MARK: - IntegrationQueryable
-    public func getIntegrations(queue: DispatchQueue?, completion: @escaping IntegrationsResultHandler) {
-        (catalog.persistentContainer as! IntegrationQueryable).getIntegrations(queue: queue, completion: completion)
+    public func integrations() async throws -> [Integration] {
+        try await entityQueryable.integrations()
     }
     
-    public func getIntegrations(forBot id: XcodeServer.Bot.ID, queue: DispatchQueue?, completion: @escaping IntegrationsResultHandler) {
-        (catalog.persistentContainer as! IntegrationQueryable).getIntegrations(forBot: id, queue: queue, completion: completion)
+    public func integration(withId id: Integration.ID) async throws -> Integration {
+        try await entityQueryable.integration(withId: id)
     }
     
-    public func getIntegration(_ id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping IntegrationResultHandler) {
-        (catalog.persistentContainer as! IntegrationQueryable).getIntegration(id, queue: queue, completion: completion)
+    public func integrations(forBot id: Bot.ID) async throws -> [Integration] {
+        try await entityQueryable.integrations(forBot: id)
     }
     
-    public func getArchiveForIntegration(_ id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping DataResultHandler) {
-        (catalog.persistentContainer as! IntegrationQueryable).getArchiveForIntegration(id, queue: queue, completion: completion)
+    public func commits(forIntegration id: Integration.ID) async throws -> [SourceControl.Commit] {
+        try await entityQueryable.commits(forIntegration: id)
     }
     
-    public func getCommitsForIntegration(_ id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping CommitsResultHandler) {
-        (catalog.persistentContainer as! IntegrationQueryable).getCommitsForIntegration(id, queue: queue, completion: completion)
+    public func issues(forIntegration id: Integration.ID) async throws -> Integration.IssueCatalog {
+        try await entityQueryable.issues(forIntegration: id)
     }
     
-    public func getIssuesForIntegration(_ id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping IssueCatalogResultHandler) {
-        (catalog.persistentContainer as! IntegrationQueryable).getIssuesForIntegration(id, queue: queue, completion: completion)
+    public func archive(forIntegration id: Integration.ID) async throws -> Data {
+        try await entityQueryable.archive(forIntegration: id)
     }
     
     // MARK: - ServerQueryable
-    public func getServers(queue: DispatchQueue?, completion: @escaping ServersResultHandler) {
-        (catalog.persistentContainer as! ServerQueryable).getServers(queue: queue, completion: completion)
+    public func servers() async throws -> [Server] {
+        try await entityQueryable.servers()
     }
     
-    public func getServer(_ id: XcodeServer.Server.ID, queue: DispatchQueue?, completion: @escaping ServerResultHandler) {
-        (catalog.persistentContainer as! ServerQueryable).getServer(id, queue: queue, completion: completion)
+    public func server(withId id: Server.ID) async throws -> Server {
+        try await entityQueryable.server(withId: id)
     }
     
     // MARK: - SourceControlQueryable
-    public func getRemotes(queue: DispatchQueue?, completion: @escaping RemotesResultHandler) {
-        (catalog.persistentContainer as! SourceControlQueryable).getRemotes(queue: queue, completion: completion)
+    public func remotes() async throws -> [SourceControl.Remote] {
+        try await entityQueryable.remotes()
     }
     
-    public func getRemote(_ id: SourceControl.Remote.ID, queue: DispatchQueue?, completion: @escaping RemoteResultHandler) {
-        (catalog.persistentContainer as! SourceControlQueryable).getRemote(id, queue: queue, completion: completion)
+    public func remote(withId id: SourceControl.Remote.ID) async throws -> SourceControl.Remote {
+        try await entityQueryable.remote(withId: id)
     }
 }
 
-extension CoreDataStore: AnyPersistable {
+extension CoreDataStore: EntityPersistable {
     // MARK: - BotPersistable
-    public func saveBot(_ bot: XcodeServer.Bot, forServer server: XcodeServer.Server.ID, queue: DispatchQueue?, completion: @escaping BotResultHandler) {
-        (catalog.persistentContainer as! BotPersistable).saveBot(bot, forServer: server, queue: queue, completion: completion)
+    public func persistBot(_ bot: XcodeServer.Bot, forServer id: XcodeServer.Server.ID) async throws -> XcodeServer.Bot {
+        try await entityPersistable.persistBot(bot, forServer: id)
     }
     
-    public func deleteBot(_ bot: XcodeServer.Bot, queue: DispatchQueue?, completion: @escaping VoidResultHandler) {
-        (catalog.persistentContainer as! BotPersistable).deleteBot(bot, queue: queue, completion: completion)
+    public func removeBot(withId id: XcodeServer.Bot.ID) async throws {
+        try await entityPersistable.removeBot(withId: id)
     }
     
-    public func saveStats(_ stats: XcodeServer.Bot.Stats, forBot bot: XcodeServer.Bot.ID, queue: DispatchQueue?, completion: @escaping BotStatsResultHandler) {
-        (catalog.persistentContainer as! BotPersistable).saveStats(stats, forBot: bot, queue: queue, completion: completion)
+    public func persistStats(_ stats: XcodeServer.Bot.Stats, forBot id: XcodeServer.Bot.ID) async throws -> XcodeServer.Bot.Stats {
+        try await entityPersistable.persistStats(stats, forBot: id)
     }
     
     // MARK: - IntegrationPersistable
-    public func saveIntegration(_ integration: XcodeServer.Integration, forBot bot: XcodeServer.Bot.ID, queue: DispatchQueue?, completion: @escaping IntegrationResultHandler) {
-        (catalog.persistentContainer as! IntegrationPersistable).saveIntegration(integration, forBot: bot, queue: queue, completion: completion)
+    public func persistIntegration(_ integration: XcodeServer.Integration, forBot id: XcodeServer.Bot.ID) async throws -> XcodeServer.Integration {
+        try await entityPersistable.persistIntegration(integration, forBot: id)
     }
     
-    public func saveIntegrations(_ integrations: [XcodeServer.Integration], forBot bot: XcodeServer.Bot.ID, queue: DispatchQueue?, completion: @escaping IntegrationsResultHandler) {
-        (catalog.persistentContainer as! IntegrationPersistable).saveIntegrations(integrations, forBot: bot, queue: queue, completion: completion)
+    public func persistIntegrations(_ integrations: [XcodeServer.Integration], forBot id: XcodeServer.Bot.ID) async throws -> [XcodeServer.Integration] {
+        try await entityPersistable.persistIntegrations(integrations, forBot: id)
     }
     
-    public func deleteIntegration(_ integration: XcodeServer.Integration, queue: DispatchQueue?, completion: @escaping VoidResultHandler) {
-        (catalog.persistentContainer as! IntegrationPersistable).deleteIntegration(integration, queue: queue, completion: completion)
+    public func removeIntegration(withId id: XcodeServer.Integration.ID) async throws {
+        try await entityPersistable.removeIntegration(withId: id)
     }
     
-    public func saveArchive(_ archive: Data, forIntegration id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping DataResultHandler) {
-        (catalog.persistentContainer as! IntegrationPersistable).saveArchive(archive, forIntegration: id, queue: queue, completion: completion)
+    public func persistCommits(_ commits: [SourceControl.Commit], forIntegration id: XcodeServer.Integration.ID) async throws -> [SourceControl.Commit] {
+        try await entityPersistable.persistCommits(commits, forIntegration: id)
     }
     
-    public func saveCommits(_ commits: [SourceControl.Commit], forIntegration id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping CommitsResultHandler) {
-        (catalog.persistentContainer as! IntegrationPersistable).saveCommits(commits, forIntegration: id, queue: queue, completion: completion)
+    public func persistIssues(_ issues: XcodeServer.Integration.IssueCatalog, forIntegration id: XcodeServer.Integration.ID) async throws -> XcodeServer.Integration.IssueCatalog {
+        try await entityPersistable.persistIssues(issues, forIntegration: id)
     }
     
-    public func saveIssues(_ issues: XcodeServer.Integration.IssueCatalog, forIntegration id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping IssueCatalogResultHandler) {
-        (catalog.persistentContainer as! IntegrationPersistable).saveIssues(issues, forIntegration: id, queue: queue, completion: completion)
+    public func persistArchive(_ archive: Data, forIntegration id: XcodeServer.Integration.ID) async throws -> Data {
+        try await entityPersistable.persistArchive(archive, forIntegration: id)
     }
     
     // MARK: - ServerPersistable
-    public func saveServer(_ server: XcodeServer.Server, queue: DispatchQueue?, completion: @escaping ServerResultHandler) {
-        (catalog.persistentContainer as! ServerPersistable).saveServer(server, queue: queue, completion: completion)
+    public func persistServer(_ server: Server) async throws -> Server {
+        try await entityPersistable.persistServer(server)
     }
     
-    public func saveBots(_ bots: [XcodeServer.Bot], forServer server: XcodeServer.Server.ID, queue: DispatchQueue?, completion: @escaping BotsResultHandler) {
-        (catalog.persistentContainer as! ServerPersistable).saveBots(bots, forServer: server, queue: queue, completion: completion)
+    public func removeServer(withId id: Server.ID) async throws {
+        try await entityPersistable.removeServer(withId: id)
     }
     
-    public func deleteServer(_ server: XcodeServer.Server, queue: DispatchQueue?, completion: @escaping VoidResultHandler) {
-        (catalog.persistentContainer as! ServerPersistable).deleteServer(server, queue: queue, completion: completion)
+    public func persistBots(_ bots: [Bot], forServer id: Server.ID) async throws -> [Bot] {
+        try await entityPersistable.persistBots(bots, forServer: id)
     }
     
     // MARK: - SourceControlPersistable
-    public func saveRemote(_ remote: SourceControl.Remote, queue: DispatchQueue?, completion: @escaping RemoteResultHandler) {
-        (catalog.persistentContainer as! SourceControlPersistable).saveRemote(remote, queue: queue, completion: completion)
+    public func persistRemote(_ remote: SourceControl.Remote) async throws -> SourceControl.Remote {
+        try await entityPersistable.persistRemote(remote)
     }
     
-    public func deleteRemote(_ remote: SourceControl.Remote, queue: DispatchQueue?, completion: @escaping VoidResultHandler) {
-        (catalog.persistentContainer as! SourceControlPersistable).deleteRemote(remote, queue: queue, completion: completion)
+    public func removeRemote(withId id: SourceControl.Remote.ID) async throws {
+        try await entityPersistable.removeRemote(withId: id)
     }
 }
 #endif

@@ -3,44 +3,22 @@ import XCTest
 @testable import XcodeServerAPI
 @testable import XcodeServerCoreData
 
-#if canImport(CoreData) && swift(>=5.3)
+#if canImport(CoreData)
 final class IntegrationIssueImportTests: XCTestCase {
     
-    static var allTests = [
-        ("testIntegration1Decoding", testIntegration1Decoding),
-        ("testIntegration2Decoding", testIntegration2Decoding),
-        ("testIntegration3Decoding", testIntegration3Decoding),
-        ("testIntegration1IssuesStorage", testIntegration1IssuesStorage),
-        ("testIntegration2IssuesStorage", testIntegration2IssuesStorage),
-        ("testIntegration3IssuesStorage", testIntegration3IssuesStorage),
-    ]
-    
     private class Client: MockApiClient {
-        override func getIssuesForIntegration(_ id: XcodeServer.Integration.ID, queue: DispatchQueue?, completion: @escaping IssueCatalogResultHandler) {
-            let queue = queue ?? returnQueue
+        override func issues(forIntegration id: XcodeServer.Integration.ID) async throws -> XcodeServer.Integration.IssueCatalog {
             let json: String
             switch id {
             case .integration1: json = "12.1_Integration_1_Issues"
             case .integration2: json = "12.1_Integration_2_Issues"
             case .integration3: json = "12.1_Integration_3_Issues"
             default:
-                queue.async {
-                    completion(.failure(.message("Unhandled ID '\(id)'")))
-                }
-                return
+                throw XcodeServerError.integrationNotFound(id)
             }
             
-            do {
-                let resource: XCSIssues = try Bundle.module.decodeJson(json, decoder: self.decoder)
-                let result = XcodeServer.Integration.IssueCatalog(resource, integration: id)
-                queue.async {
-                    completion(.success(result))
-                }
-            } catch {
-                queue.async {
-                    completion(.failure(.error(error)))
-                }
-            }
+            let resource: XCSIssues = try Bundle.module.decodeJson(json, decoder: self.decoder)
+            return XcodeServer.Integration.IssueCatalog(resource, integration: id)
         }
     }
     
@@ -76,7 +54,7 @@ final class IntegrationIssueImportTests: XCTestCase {
         var _catalog: XcodeServer.Integration.IssueCatalog?
         var query = expectation(description: "Get Catalog")
         
-        client.getIssuesForIntegration(.integration1) { (result) in
+        client.issues(forIntegration: .integration1) { (result) in
             switch result {
             case .success(let value):
                 _catalog = value
@@ -90,7 +68,7 @@ final class IntegrationIssueImportTests: XCTestCase {
         catalog1 = try XCTUnwrap(_catalog)
         
         query = expectation(description: "Get Catalog")
-        client.getIssuesForIntegration(.integration2) { (result) in
+        client.issues(forIntegration: .integration2) { (result) in
             switch result {
             case .success(let value):
                 _catalog = value
@@ -104,7 +82,7 @@ final class IntegrationIssueImportTests: XCTestCase {
         catalog2 = try XCTUnwrap(_catalog)
         
         query = expectation(description: "Get Catalog")
-        client.getIssuesForIntegration(.integration3) { (result) in
+        client.issues(forIntegration: .integration3) { (result) in
             switch result {
             case .success(let value):
                 _catalog = value
@@ -118,7 +96,7 @@ final class IntegrationIssueImportTests: XCTestCase {
         catalog3 = try XCTUnwrap(_catalog)
         
         let write = expectation(description: "Store Server")
-        store.saveServer(server) { (result) in
+        store.persistServer(server) { result in
             switch result {
             case .success:
                 write.fulfill()
@@ -215,7 +193,7 @@ final class IntegrationIssueImportTests: XCTestCase {
         
         let write = expectation(description: "Save Catalog")
         
-        store.saveIssues(_issues, forIntegration: .integration1) { (result) in
+        store.persistIssues(_issues, forIntegration: .integration1) { (result) in
             switch result {
             case .success(let value):
                 _catalog = value
@@ -238,7 +216,7 @@ final class IntegrationIssueImportTests: XCTestCase {
         
         let write = expectation(description: "Save Catalog")
         
-        store.saveIssues(_issues, forIntegration: .integration2) { (result) in
+        store.persistIssues(_issues, forIntegration: .integration2) { (result) in
             switch result {
             case .success(let value):
                 _catalog = value
@@ -261,7 +239,7 @@ final class IntegrationIssueImportTests: XCTestCase {
         
         let write = expectation(description: "Save Catalog")
         
-        store.saveIssues(_issues, forIntegration: .integration3) { (result) in
+        store.persistIssues(_issues, forIntegration: .integration3) { (result) in
             switch result {
             case .success(let value):
                 _catalog = value
@@ -302,7 +280,7 @@ final class IntegrationIssueImportTests: XCTestCase {
         let buildWarning = try XCTUnwrap(catalog.buildServiceWarnings.first)
         XCTAssertEqual(buildWarning.id, "2911c1d6174047dcf2a52f464a019134")
         XCTAssertEqual(buildWarning.message, "An error occurred while building, so archiving was skipped.")
-        XCTAssertEqual(buildWarning.type, .BuildServiceWarning)
+        XCTAssertEqual(buildWarning.type, .buildServiceWarning)
         XCTAssertEqual(buildWarning.age, 0)
         XCTAssertEqual(buildWarning.status, .new)
         

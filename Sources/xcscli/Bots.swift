@@ -2,13 +2,15 @@ import Foundation
 import ArgumentParser
 import XcodeServer
 import XcodeServerAPI
+import Logging
 
-final class Bots: ParsableCommand, Route, Logged {
+final class Bots: AsyncParsableCommand, Route, Logged {
     
     static var configuration: CommandConfiguration = {
         return CommandConfiguration(
             commandName: "bots",
             abstract: "Interact with the `/bots` route.",
+            usage: nil,
             discussion: "",
             version: "",
             shouldDisplay: true,
@@ -40,74 +42,30 @@ final class Bots: ParsableCommand, Route, Logged {
     var path: Path?
     
     @Option(help: "The minimum output log level.")
-    var logLevel: InternalLog.Level = .warn
+    var logLevel: Logger.Level = .warning
     
     func validate() throws {
         try validateServer()
     }
     
-    func run() throws {
-        configureLog()
-        
-        let client = try APIClient(fqdn: server, credentialDelegate: self)
+    func run() async throws {
+        let client = try XCSClient(fqdn: server, credentialDelegate: self)
         switch (id) {
         case .some(let id) where path == .some(.stats):
-            client.stats(forBotWithIdentifier: id) { (result) in
-                switch result {
-                case .success(let stats):
-                    print(stats.asPrettyJSON() ?? "OK")
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
-                
-                Self.exit()
-            }
+            let stats: Bot.Stats = try await client.stats(forBot: id)
+            print(stats.asPrettyJSON() ?? "OK")
         case .some(let id) where path == .some(.integrations):
-            client.integrations(forBotWithIdentifier: id) { (result) in
-                switch result {
-                case .success(let integrations):
-                    print(integrations.asPrettyJSON() ?? "OK")
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
-                
-                Self.exit()
-            }
+            let integrations: [Integration] = try await client.integrations(forBot: id)
+            print(integrations.asPrettyJSON() ?? "OK")
         case .some(let id) where path == .some(.run):
-            client.runIntegration(forBotWithIdentifier: id) { (result) in
-                switch result {
-                case .success(let integration):
-                    print(integration.asPrettyJSON() ?? "OK")
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
-                
-                Self.exit()
-            }
+            let integration = try await client.runIntegration(forBot: id)
+            print(integration.asPrettyJSON() ?? "OK")
         case .some(let id) where path == .none:
-            client.bot(withIdentifier: id) { (result) in
-                switch result {
-                case .success(let bot):
-                    print(bot.asPrettyJSON() ?? "OK")
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
-                
-                Self.exit()
-            }
+            let bot: Bot = try await client.bot(withId: id)
+            print(bot.asPrettyJSON() ?? "OK")
         default:
-            client.bots { (result) in
-                switch result {
-                case .success(let bots):
-                    print(bots.asPrettyJSON() ?? "OK")
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
-                
-                Self.exit()
-            }
+            let bots: [Bot] = try await client.bots()
+            print(bots.asPrettyJSON() ?? "OK")
         }
-        
-        dispatchMain()
     }
 }
