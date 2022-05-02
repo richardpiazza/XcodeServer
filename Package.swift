@@ -29,7 +29,7 @@ let package = Package(
     dependencies: [
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
-        .package(url: "https://github.com/richardpiazza/SessionPlus.git", .upToNextMajor(from: "2.0.0")),
+        .package(url: "https://github.com/richardpiazza/SessionPlus.git", .upToNextMajor(from: "2.0.1")),
         .package(url: "https://github.com/richardpiazza/CoreDataPlus.git", .upToNextMajor(from: "0.2.0")),
         .package(url: "https://github.com/apple/swift-log.git", .upToNextMajor(from: "1.4.2")),
         .package(url: "https://github.com/apple/swift-argument-parser.git", .upToNextMajor(from: "1.1.1")),
