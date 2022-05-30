@@ -68,6 +68,7 @@ let package = Package(
                 "CoreDataPlus",
                 "XcodeServerModel_1_0_0",
                 "XcodeServerModel_1_1_0",
+                "XcodeServerModel_2_0_0",
             ]
         ),
         .target(
@@ -81,6 +82,15 @@ let package = Package(
         ),
         .target(
             name: "XcodeServerModel_1_1_0",
+            dependencies: [
+                "XcodeServer",
+                "CoreDataPlus",
+                .product(name: "Logging", package: "swift-log"),
+            ],
+            resources: [.process("Resources")]
+        ),
+        .target(
+            name: "XcodeServerModel_2_0_0",
             dependencies: [
                 "XcodeServer",
                 "CoreDataPlus",
