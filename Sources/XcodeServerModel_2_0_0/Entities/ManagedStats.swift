@@ -40,9 +40,7 @@ extension ManagedStats {
         request.predicate = NSPredicate(format: "%K = %@", #keyPath(ManagedStats.bot.identifier), id)
         return request
     }
-}
-
-extension ManagedStats {
+    
     private static var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
@@ -62,9 +60,7 @@ extension ManagedStats {
             sinceDate = Self.dateFormatter.string(from: newValue)
         }
     }
-}
-
-extension ManagedStats {
+    
     func update(_ stats: Bot.Stats, context: NSManagedObjectContext) {
         codeCoveragePercentageDelta = Int32(stats.coverageDelta)
         numberOfCommits = Int32(stats.commits)

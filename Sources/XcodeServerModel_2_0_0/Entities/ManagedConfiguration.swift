@@ -78,39 +78,23 @@ extension ManagedConfiguration {
 
 extension ManagedConfiguration {
     var codeCoveragePreference: Bot.Coverage {
-        get {
-            return Bot.Coverage(rawValue: Int(codeCoveragePreferenceRawValue)) ?? .disabled
-        }
-        set {
-            codeCoveragePreferenceRawValue = Int16(newValue.rawValue)
-        }
+        get { Bot.Coverage(rawValue: Int(codeCoveragePreferenceRawValue)) ?? .disabled }
+        set { codeCoveragePreferenceRawValue = Int16(newValue.rawValue) }
     }
     
     var cleanSchedule: Bot.Cleaning {
-        get {
-            return Bot.Cleaning(rawValue: Int(cleanScheduleRawValue)) ?? .never
-        }
-        set {
-            cleanScheduleRawValue = Int16(newValue.rawValue)
-        }
+        get { Bot.Cleaning(rawValue: Int(cleanScheduleRawValue)) ?? .never }
+        set { cleanScheduleRawValue = Int16(newValue.rawValue) }
     }
     
     var scheduleType: Bot.Schedule {
-        get {
-            return Bot.Schedule(rawValue: Int(scheduleTypeRawValue)) ?? .periodic
-        }
-        set {
-            scheduleTypeRawValue = Int16(newValue.rawValue)
-        }
+        get { Bot.Schedule(rawValue: Int(scheduleTypeRawValue)) ?? .periodic }
+        set { scheduleTypeRawValue = Int16(newValue.rawValue) }
     }
     
     var periodicScheduleInterval: Bot.PeriodicInterval {
-        get {
-            return Bot.PeriodicInterval(rawValue: Int(periodicScheduleIntervalRawValue)) ?? .never
-        }
-        set {
-            periodicScheduleIntervalRawValue = Int16(newValue.rawValue)
-        }
+        get { Bot.PeriodicInterval(rawValue: Int(periodicScheduleIntervalRawValue)) ?? .never }
+        set { periodicScheduleIntervalRawValue = Int16(newValue.rawValue) }
     }
     
     var additionalBuildArguments: [String] {
@@ -122,7 +106,10 @@ extension ManagedConfiguration {
             do {
                 return try PersistentContainer.jsonDecoder.decode([String].self, from: data)
             } catch {
-                PersistentContainer.logger.error("", metadata: ["localizedDescription": .string(error.localizedDescription)])
+                PersistentContainer.logger.error("Failed to decode 'additionalBuildArgumentsData'.", metadata: [
+                    "UTF8": .string(String(data: data, encoding: .utf8) ?? ""),
+                    "localizedDescription": .string(error.localizedDescription)
+                ])
                 return []
             }
         }
@@ -130,7 +117,10 @@ extension ManagedConfiguration {
             do {
                 additionalBuildArgumentsData = try PersistentContainer.jsonEncoder.encode(newValue)
             } catch {
-                PersistentContainer.logger.error("", metadata: ["localizedDescription": .string(error.localizedDescription)])
+                PersistentContainer.logger.error("Failed to encode 'additionalBuildArgumentsData'.", metadata: [
+                    "UTF8": .stringConvertible(newValue),
+                    "localizedDescription": .string(error.localizedDescription)
+                ])
             }
         }
     }
@@ -144,7 +134,10 @@ extension ManagedConfiguration {
             do {
                 return try PersistentContainer.jsonDecoder.decode([String: String].self, from: data)
             } catch {
-                PersistentContainer.logger.error("", metadata: ["localizedDescription": .string(error.localizedDescription)])
+                PersistentContainer.logger.error("Failed to decode 'buildEnvironmentVariablesData'.", metadata: [
+                    "UTF8": .string(String(data: data, encoding: .utf8) ?? ""),
+                    "localizedDescription": .string(error.localizedDescription)
+                ])
                 return [:]
             }
         }
@@ -152,7 +145,10 @@ extension ManagedConfiguration {
             do {
                 buildEnvironmentVariablesData = try PersistentContainer.jsonEncoder.encode(newValue)
             } catch {
-                PersistentContainer.logger.error("", metadata: ["localizedDescription": .string(error.localizedDescription)])
+                PersistentContainer.logger.error("Failed to encode 'buildEnvironmentVariablesData'.", metadata: [
+                    "UTF8": .stringConvertible(newValue),
+                    "localizedDescription": .string(error.localizedDescription)
+                ])
             }
         }
     }
@@ -169,12 +165,13 @@ extension ManagedConfiguration {
             manageCertsAndProfiles = newValue.manageCertsAndProfiles
         }
     }
-}
-
-extension ManagedConfiguration {
+    
     func update(_ configuration: Bot.Configuration, context: NSManagedObjectContext) {
         if deviceSpecification == nil {
-            PersistentContainer.logger.info("Creating DEVICE_SPECIFICATION for Configuration '\(bot?.name ?? "")'")
+            PersistentContainer.logger.trace("Creating `ManagedDeviceSpecification`.", metadata: [
+                "Bot.ID": .string(bot?.identifier ?? ""),
+                "Bot.Name": .string(bot?.name ?? "")
+            ])
             deviceSpecification = context.make()
         }
         
@@ -201,7 +198,10 @@ extension ManagedConfiguration {
         
         (triggers as? Set<ManagedTrigger>)?.forEach({ context.delete($0) })
         configuration.triggers.forEach { (trigger) in
-            PersistentContainer.logger.info("Creating TRIGGER for Configuration '\(bot?.name ?? "")'")
+            PersistentContainer.logger.trace("Creating `ManagedTrigger`.", metadata: [
+                "Bot.ID": .string(bot?.identifier ?? ""),
+                "Bot.Name": .string(bot?.name ?? "")
+            ])
             let _trigger: ManagedTrigger = context.make()
             _trigger.update(trigger, context: context)
             addToTriggers(_trigger)
@@ -213,7 +213,11 @@ extension ManagedConfiguration {
             if let entity = ManagedRepository.repository(remoteId, in: context) {
                 repository = entity
             } else {
-                PersistentContainer.logger.info("Creating REPOSITORY '\(configuration.sourceControlBlueprint.name)' [\(remoteId)]")
+                PersistentContainer.logger.trace("Creating `ManagedRepository`.", metadata: [
+                    "Remote.ID": .string(remoteId),
+                    "Blueprint.ID": .string(configuration.sourceControlBlueprint.id),
+                    "Blueprint.Name": .string(configuration.sourceControlBlueprint.name),
+                ])
                 repository = context.make()
             }
             

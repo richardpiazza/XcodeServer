@@ -28,11 +28,13 @@ extension ManagedRevisionBlueprint {
     
     /// Retrieves all `ManagedRevisionBlueprint` entities from the Core Data `NSManagedObjectContext`
     static func revisionBlueprints(in context: NSManagedObjectContext) -> [ManagedRevisionBlueprint] {
-        let request = NSFetchRequest<ManagedRevisionBlueprint>(entityName: entityName)
+        let request = fetchRequest()
         do {
             return try context.fetch(request)
         } catch {
-            PersistentContainer.logger.error("Failed to fetch revision blueprints", metadata: ["localizedDescription": .string(error.localizedDescription)])
+            PersistentContainer.logger.error("Failed to fetch `[ManagedRevisionBlueprint]`.", metadata: [
+                "localizedDescription": .string(error.localizedDescription)
+            ])
         }
         
         return []
@@ -41,12 +43,20 @@ extension ManagedRevisionBlueprint {
     /// Retrieves the first `ManagedRevisionBlueprint` entity from the Core Data `NSManagedObjectContext` that has a specific `Commit` and `Integration`
     /// associated with it.
     static func revisionBlueprint(withCommit commit: ManagedCommit, andIntegration integration: ManagedIntegration, in context: NSManagedObjectContext) -> ManagedRevisionBlueprint? {
-        let request = NSFetchRequest<ManagedRevisionBlueprint>(entityName: entityName)
-        request.predicate = NSPredicate(format: "commit = %@ AND integration = %@", argumentArray: [commit, integration])
+        let request = fetchRequest()
+        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+            NSPredicate(format: "%K = %@", #keyPath(ManagedRevisionBlueprint.commit), commit),
+            NSPredicate(format: "%K = %@", #keyPath(ManagedRevisionBlueprint.integration), integration)
+        ])
         do {
             return try context.fetch(request).first
         } catch {
-            PersistentContainer.logger.error("Failed to fetch revision blueprint", metadata: ["localizedDescription": .string(error.localizedDescription)])
+            PersistentContainer.logger.error("Failed to fetch `ManagedRevisionBlueprint`.", metadata: [
+                "SourceControl.Commit.ID": .string(commit.commitHash ?? ""),
+                "Integration.ID": .string(integration.identifier ?? ""),
+                "Integration.Number": .stringConvertible(integration.number),
+                "localizedDescription": .string(error.localizedDescription)
+            ])
         }
         
         return nil

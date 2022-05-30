@@ -24,7 +24,7 @@ extension ManagedFilter {
 extension ManagedFilter {
     func update(_ filter: Device.Filter, context: NSManagedObjectContext) {
         if platform == nil {
-            PersistentContainer.logger.info("Creating PLATFORM for Filter")
+            PersistentContainer.logger.trace("Creating `ManagedPlatform`.")
             platform = context.make()
         }
         

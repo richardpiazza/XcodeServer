@@ -301,19 +301,20 @@ extension ManagedIssue {
 
 extension ManagedIssue {
     static func issue(_ id: Issue.ID, in context: NSManagedObjectContext) -> ManagedIssue? {
-        let request = NSFetchRequest<ManagedIssue>(entityName: entityName)
-        request.predicate = NSPredicate(format: "identifier = %@", argumentArray: [id])
+        let request = fetchRequest()
+        request.predicate = NSPredicate(format: "%K = %@", #keyPath(ManagedIssue.identifier), id)
         do {
             return try context.fetch(request).first
         } catch {
-            PersistentContainer.logger.error("Failed to fetch issue '\(id)'", metadata: ["localizedDescription": .string(error.localizedDescription)])
+            PersistentContainer.logger.error("Failed to fetch `ManagedIssue`.", metadata: [
+                "Issue.ID": .string(id),
+                "localizedDescription": .string(error.localizedDescription)
+            ])
         }
         
         return nil
     }
-}
-
-extension ManagedIssue {
+    
     var status: Issue.Status {
         get { Issue.Status(rawValue: Int(statusRawValue)) ?? .new }
         set { statusRawValue = Int16(newValue.rawValue) }
@@ -323,9 +324,7 @@ extension ManagedIssue {
         get { Issue.Category(rawValue: typeRawValue ?? "") ?? .unknown }
         set { typeRawValue = newValue.rawValue }
     }
-}
-
-extension ManagedIssue {
+    
     func update(_ issue: Issue, context: NSManagedObjectContext) {
         identifier = issue.id
         age = Int32(issue.age)

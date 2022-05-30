@@ -64,27 +64,26 @@ extension ManagedServer {
     
     /// Retrieves the first `ManagedServer` entity from the Core Data `NSManagedObjectContext` that matches the specified id.
     static func server(_ id: Server.ID, in context: NSManagedObjectContext) -> ManagedServer? {
-        let request = NSFetchRequest<ManagedServer>(entityName: entityName)
-        request.predicate = NSPredicate(format: "fqdn = %@", argumentArray: [id])
+        let request = fetchRequest()
+        request.predicate = NSPredicate(format: "$K = %@", #keyPath(ManagedServer.fqdn), id)
         do {
             return try context.fetch(request).first
         } catch {
-            PersistentContainer.logger.error("Failed to fetch server '\(id)'", metadata: ["localizedDescription": .string(error.localizedDescription)])
+            PersistentContainer.logger.error("Failed to fetch `ManagedServer`.", metadata: [
+                "Server.ID": .string(id),
+                "localizedDescription": .string(error.localizedDescription)
+            ])
         }
         
         return nil
     }
-}
-
-extension ManagedServer {
+    
     /// The root API URL for this `XcodeServer`.
     /// Apple by default requires the HTTPS scheme and port 20343.
     var apiURL: URL? {
-        return URL(string: "https://\(self.fqdn ?? ""):20343/api")
+        return URL(string: "https://\(fqdn ?? ""):20343/api")
     }
-}
-
-extension ManagedServer {
+    
     /// Update the `Server`, creating relationships as needed.
     ///
     /// - parameter server: The entity with attributes to use for updates.
@@ -118,7 +117,11 @@ extension ManagedServer {
             } else {
                 bot = context.make()
                 addToBots(bot)
-                PersistentContainer.logger.info("Creating BOT '\(bot.name ?? "")' [\(bot.identifier ?? "")] for Server \(fqdn ?? "")")
+                PersistentContainer.logger.trace("Creating `ManagedBot`.", metadata: [
+                    "Bot.ID": .string(bot.identifier ?? ""),
+                    "Bot.Name": .string(bot.name ?? ""),
+                    "Server.ID": .string(fqdn ?? "")
+                ])
             }
             
             bot.update(entity, context: context)

@@ -100,19 +100,20 @@ extension ManagedIntegration {
     
     /// Retrieves the first `ManagedIntegration` entity from the Core Data `NSManagedObjectContext` that matches the specified id.
     static func integration(_ id: Integration.ID, in context: NSManagedObjectContext) -> ManagedIntegration? {
-        let request = NSFetchRequest<ManagedIntegration>(entityName: entityName)
-        request.predicate = NSPredicate(format: "identifier = %@", argumentArray: [id])
+        let request = fetchRequest()
+        request.predicate = NSPredicate(format: "%K = %@", #keyPath(ManagedIntegration.identifier), id)
         do {
             return try context.fetch(request).first
         } catch {
-            PersistentContainer.logger.error("Failed to fetch integration '\(id)'", metadata: ["localizedDescription": .string(error.localizedDescription)])
+            PersistentContainer.logger.error("Failed to fetch `ManagedIntegration`.", metadata: [
+                "Integration.ID": .string(id),
+                "localizedDescription": .string(error.localizedDescription)
+            ])
         }
         
         return nil
     }
-}
-
-extension ManagedIntegration {
+    
     var integrationNumber: Int {
         return Int(number)
     }
@@ -136,7 +137,10 @@ extension ManagedIntegration {
             do {
                 return try PersistentContainer.jsonDecoder.decode(Tests.Hierarchy.self, from: data)
             } catch {
-                PersistentContainer.logger.error("", metadata: ["localizedDescription": .string(error.localizedDescription)])
+                PersistentContainer.logger.error("Failed to decode 'testHierarchyData'.", metadata: [
+                    "UTF8": .string(String(data: data, encoding: .utf8) ?? ""),
+                    "localizedDescription": .string(error.localizedDescription)
+                ])
             }
             
             return nil
@@ -150,7 +154,10 @@ extension ManagedIntegration {
             do {
                 testHierarchyData = try PersistentContainer.jsonEncoder.encode(value)
             } catch {
-                PersistentContainer.logger.error("", metadata: ["localizedDescription": .string(error.localizedDescription)])
+                PersistentContainer.logger.error("Failed to encode 'testHierarchyData'.", metadata: [
+                    "UTF8": .string("\(value)"),
+                    "localizedDescription": .string(error.localizedDescription)
+                ])
             }
         }
     }
@@ -191,20 +198,27 @@ extension ManagedIntegration {
         
         return commits
     }
-}
-
-extension ManagedIntegration {
+    
     func update(_ integration: Integration, context: NSManagedObjectContext) {
         if assets == nil {
-            PersistentContainer.logger.info("Creating INTEGRATION_ASSETS for Integration '\(integration.number)' [\(integration.id)]")
+            PersistentContainer.logger.trace("Creating `ManagedIntegrationAssets`.", metadata: [
+                "Integration.ID": .string(integration.id),
+                "Integration.Number": .stringConvertible(integration.number)
+            ])
             assets = context.make()
         }
         if buildResultSummary == nil {
-            PersistentContainer.logger.info("Creating BUILD_RESULT_SUMMARY for Integration '\(integration.number)' [\(integration.id)]")
+            PersistentContainer.logger.trace("Creating `ManagedBuildResultSummary`.", metadata: [
+                "Integration.ID": .string(integration.id),
+                "Integration.Number": .stringConvertible(integration.number)
+            ])
             buildResultSummary = context.make()
         }
         if issues == nil {
-            PersistentContainer.logger.info("Creating INTEGRATION_ISSUES for Integration '\(integration.number)' [\(integration.id)]")
+            PersistentContainer.logger.trace("Creating `ManagedIntegrationIssues`.", metadata: [
+                "Integration.ID": .string(integration.id),
+                "Integration.Number": .stringConvertible(integration.number)
+            ])
             issues = context.make()
         }
         
@@ -249,7 +263,11 @@ extension ManagedIntegration {
                 if let entity = ManagedRepository.repository(blueprint.primaryRemoteIdentifier, in: context) {
                     repository = entity
                 } else {
-                    PersistentContainer.logger.info("Creating REPOSITORY '\(blueprint.name)' [\(blueprint.primaryRemoteIdentifier)]")
+                    PersistentContainer.logger.trace("Creating `ManagedRepository`.", metadata: [
+                        "Remote.ID": .string(blueprint.primaryRemoteIdentifier),
+                        "Blueprint.ID": .string(blueprint.id),
+                        "Blueprint.Name": .string(blueprint.name),
+                    ])
                     repository = context.make()
                 }
                 repository.update(blueprint, context: context)
@@ -268,7 +286,9 @@ extension ManagedIntegration {
             if let entity = ManagedRepository.repository(remoteId, in: context) {
                 repository = entity
             } else {
-                PersistentContainer.logger.info("Creating REPOSITORY '??' [\(remoteId)]")
+                PersistentContainer.logger.trace("Creating `ManagedRepository`.", metadata: [
+                    "Remote.ID": .string(remoteId),
+                ])
                 repository = context.make()
                 repository.identifier = remoteId
             }

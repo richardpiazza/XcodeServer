@@ -8,7 +8,7 @@ extension PersistentContainer: ServerQueryable {
         try viewContext.fetchSynchronously(ManagedServer.fetchServers(), mapping: { Server($0) })
     }
     
-    public func server(withId id: XcodeServer.Server.ID) async throws -> Server {
+    public func server(withId id: Server.ID) async throws -> Server {
         guard let server = try viewContext.fetchSynchronously(ManagedServer.fetchServer(withId: id), mapping: { Server($0) }).first else {
             throw XcodeServerError.serverNotFound(id)
         }
@@ -74,7 +74,7 @@ extension PersistentContainer: IntegrationQueryable {
         try viewContext.fetchSynchronously(
             ManagedIntegrationIssues.fetchIssues(forIntegration: id),
             mapping: { Integration.IssueCatalog($0) }
-        ).first ?? XcodeServer.Integration.IssueCatalog()
+        ).first ?? Integration.IssueCatalog()
     }
     
     public func archive(forIntegration id: Integration.ID) async throws -> Data {

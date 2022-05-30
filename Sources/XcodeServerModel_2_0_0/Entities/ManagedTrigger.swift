@@ -34,9 +34,7 @@ extension ManagedTrigger {
         get { Trigger.Category(rawValue: Int(typeRawValue)) ?? .script }
         set { typeRawValue = Int16(newValue.rawValue) }
     }
-}
-
-extension ManagedTrigger {
+    
     func update(_ trigger: Trigger, context: NSManagedObjectContext) {
         if conditions == nil {
             conditions = context.make()

@@ -59,7 +59,10 @@ extension ManagedCommitContributor {
             do {
                 return try PersistentContainer.jsonDecoder.decode([String].self, from: data)
             } catch {
-                PersistentContainer.logger.error("Failed to get 'emailsData': \(String(data: data, encoding: .utf8) ?? "")", metadata: ["localizedDescription": .string(error.localizedDescription)])
+                PersistentContainer.logger.error("Failed to decode 'emailsData'.", metadata: [
+                    "UTF8": .string(String(data: data, encoding: .utf8) ?? ""),
+                    "localizedDescription": .string(error.localizedDescription)
+                ])
                 return []
             }
         }
@@ -67,13 +70,14 @@ extension ManagedCommitContributor {
             do {
                 emailsData = try PersistentContainer.jsonEncoder.encode(newValue)
             } catch {
-                PersistentContainer.logger.error("Failed to set 'emailsData': \(newValue)", metadata: ["localizedDescription": .string(error.localizedDescription)])
+                PersistentContainer.logger.error("Failed to encode 'emailsData'.", metadata: [
+                    "UTF8": .stringConvertible(newValue),
+                    "localizedDescription": .string(error.localizedDescription)
+                ])
             }
         }
     }
-}
-
-extension ManagedCommitContributor {
+    
     func update(_ contributor: SourceControl.Contributor) {
         displayName = contributor.displayName
         emailAddresses = contributor.emails

@@ -35,12 +35,8 @@ extension ManagedEmailConfiguration {
 
 extension ManagedEmailConfiguration {
     var emailType: Trigger.Email.Category {
-        get {
-            return Trigger.Email.Category(rawValue: Int(emailTypeRawValue)) ?? .integrationReport
-        }
-        set {
-            emailTypeRawValue = Int16(newValue.rawValue)
-        }
+        get { Trigger.Email.Category(rawValue: Int(emailTypeRawValue)) ?? .integrationReport }
+        set { emailTypeRawValue = Int16(newValue.rawValue) }
     }
     
     var ccAddresses: [String] {
@@ -52,7 +48,10 @@ extension ManagedEmailConfiguration {
             do {
                 return try PersistentContainer.jsonDecoder.decode([String].self, from: data)
             } catch {
-                PersistentContainer.logger.error("", metadata: ["localizedDescription": .string(error.localizedDescription)])
+                PersistentContainer.logger.error("Failed to decode 'ccAddressesData'.", metadata: [
+                    "UTF8": .string(String(data: data, encoding: .utf8) ?? ""),
+                    "localizedDescription": .string(error.localizedDescription)
+                ])
                 return []
             }
         }
@@ -60,7 +59,10 @@ extension ManagedEmailConfiguration {
             do {
                 ccAddressesData = try PersistentContainer.jsonEncoder.encode(newValue)
             } catch {
-                PersistentContainer.logger.error("", metadata: ["localizedDescription": .string(error.localizedDescription)])
+                PersistentContainer.logger.error("Failed to encode 'ccAddressesData'.", metadata: [
+                    "UTF8": .stringConvertible(newValue),
+                    "localizedDescription": .string(error.localizedDescription)
+                ])
             }
         }
     }
@@ -74,7 +76,10 @@ extension ManagedEmailConfiguration {
             do {
                 return try PersistentContainer.jsonDecoder.decode([String].self, from: data)
             } catch {
-                PersistentContainer.logger.error("", metadata: ["localizedDescription": .string(error.localizedDescription)])
+                PersistentContainer.logger.error("Failed to decode 'allowedDomainNamesData'.", metadata: [
+                    "UTF8": .string(String(data: data, encoding: .utf8) ?? ""),
+                    "localizedDescription": .string(error.localizedDescription)
+                ])
                 return []
             }
         }
@@ -82,7 +87,10 @@ extension ManagedEmailConfiguration {
             do {
                 allowedDomainNamesData = try PersistentContainer.jsonEncoder.encode(newValue)
             } catch {
-                PersistentContainer.logger.error("", metadata: ["localizedDescription": .string(error.localizedDescription)])
+                PersistentContainer.logger.error("Failed to encode 'allowedDomainNamesData'.", metadata: [
+                    "UTF8": .stringConvertible(newValue),
+                    "localizedDescription": .string(error.localizedDescription)
+                ])
             }
         }
     }
@@ -99,9 +107,7 @@ extension ManagedEmailConfiguration {
             additionalRecipients = newValue.joined(separator: ",")
         }
     }
-}
-
-extension ManagedEmailConfiguration {
+    
     func update(_ email: Trigger.Email) {
         recipients = email.additionalRecipients
         allowedDomainNames = email.allowedDomainNames

@@ -74,11 +74,13 @@ extension ManagedRepository {
     
     /// Retrieves all `ManagedRepository` entities from the Core Data `NSManagedObjectContext`
     static func repositories(in context: NSManagedObjectContext) -> [ManagedRepository] {
-        let request = NSFetchRequest<ManagedRepository>(entityName: entityName)
+        let request = fetchRequest()
         do {
             return try context.fetch(request)
         } catch {
-            PersistentContainer.logger.error("Failed to fetch repositories", metadata: ["localizedDescription": .string(error.localizedDescription)])
+            PersistentContainer.logger.error("Failed to fetch `[ManagedRepository]`.", metadata: [
+                "localizedDescription": .string(error.localizedDescription)
+            ])
         }
         
         return []
@@ -86,19 +88,20 @@ extension ManagedRepository {
     
     /// Retrieves the first `ManagedRepository` entity from the Core Data `NSManagedObjectContext` that matches the specified id.
     static func repository(_ id: SourceControl.Remote.ID, in context: NSManagedObjectContext) -> ManagedRepository? {
-        let request = NSFetchRequest<ManagedRepository>(entityName: entityName)
-        request.predicate = NSPredicate(format: "identifier = %@", argumentArray: [id])
+        let request = fetchRequest()
+        request.predicate = NSPredicate(format: "%K = %@", #keyPath(ManagedRepository.identifier), id)
         do {
             return try context.fetch(request).first
         } catch {
-            PersistentContainer.logger.error("Failed to fetch repository '\(id)'", metadata: ["localizedDescription": .string(error.localizedDescription)])
+            PersistentContainer.logger.error("Failed to fetch `ManagedRepository`.", metadata: [
+                "SourceControl.Remote.ID": .string(id),
+                "localizedDescription": .string(error.localizedDescription)
+            ])
         }
         
         return nil
     }
-}
-
-extension ManagedRepository {
+    
     func update(_ remote: SourceControl.Remote, context: NSManagedObjectContext) {
         identifier = remote.id
         system = remote.system
@@ -132,7 +135,9 @@ extension ManagedRepository {
             if let existing = ManagedCommit.commit(commit.id, in: context) {
                 _commit = existing
             } else {
-                PersistentContainer.logger.info("Creating COMMIT for Repository [\(identifier ?? "")]")
+                PersistentContainer.logger.trace("Creating `ManagedCommit`.", metadata: [
+                    "SourceControl.Remote.ID":  .string(identifier ?? "")
+                ])
                 _commit = context.make()
                 addToCommits(_commit)
             }

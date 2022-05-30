@@ -61,11 +61,13 @@ extension ManagedCommit {
 extension ManagedCommit {
     /// Retrieves all `Commit` entities from the Core Data `NSManagedObjectContext`
     static func commits(in context: NSManagedObjectContext) -> [ManagedCommit] {
-        let request = NSFetchRequest<ManagedCommit>(entityName: entityName)
+        let request = fetchRequest()
         do {
             return try context.fetch(request)
         } catch {
-            PersistentContainer.logger.error("Failed to fetch commits", metadata: ["localizedDescription": .string(error.localizedDescription)])
+            PersistentContainer.logger.error("Failed to fetch `[ManagedCommit]`.", metadata: [
+                "localizedDescription": .string(error.localizedDescription)
+            ])
         }
         
         return []
@@ -73,12 +75,15 @@ extension ManagedCommit {
     
     /// Retrieves the first `ManagedCommit` entity from the Core Data `NSManagedObjectContext` that matches the specified Hash identifier.
     static func commit(_ id: SourceControl.Commit.ID, in context: NSManagedObjectContext) -> ManagedCommit? {
-        let request = NSFetchRequest<ManagedCommit>(entityName: entityName)
-        request.predicate = NSPredicate(format: "commitHash = %@", argumentArray: [id])
+        let request = fetchRequest()
+        request.predicate = NSPredicate(format: "%K = %@", #keyPath(ManagedCommit.commitHash) ,id)
         do {
             return try context.fetch(request).first
         } catch {
-            PersistentContainer.logger.error("Failed to fetch commit '\(id)'", metadata: ["localizedDescription": .string(error.localizedDescription)])
+            PersistentContainer.logger.error("Failed to fetch `[ManagedCommit]`.", metadata: [
+                "SourceControl.Commit.ID": .string(id),
+                "localizedDescription": .string(error.localizedDescription)
+            ])
         }
         
         return nil
@@ -90,17 +95,19 @@ extension ManagedCommit {
         do {
             return try context.fetch(request)
         } catch {
-            PersistentContainer.logger.error("Failed to fetch incomplete commits", metadata: ["localizedDescription": .string(error.localizedDescription)])
+            PersistentContainer.logger.error("Failed to fetch incomplete `[ManagedCommit]`.", metadata: [
+                "localizedDescription": .string(error.localizedDescription)
+            ])
         }
         
         return []
     }
-}
-
-extension ManagedCommit {
+    
     func update(_ commit: SourceControl.Commit, integration: ManagedIntegration? = nil, context: NSManagedObjectContext) {
         if commitContributor == nil {
-            PersistentContainer.logger.info("Creating COMMIT_CONTRIBUTOR for Commit [\(commit.id)]")
+            PersistentContainer.logger.trace("Creating `ManagedCommitContributor`.", metadata: [
+                "SourceControl.Commit.ID": .string(commit.id)
+            ])
             commitContributor = context.make()
         }
         
@@ -118,7 +125,10 @@ extension ManagedCommit {
         
         if let integration = integration {
             if ManagedRevisionBlueprint.revisionBlueprint(withCommit: self, andIntegration: integration, in: context) == nil {
-                PersistentContainer.logger.info("Creating REVISION_BLUEPRINT for Commit [\(commit.id)] and Integration [\(integration.identifier ?? "")]")
+                PersistentContainer.logger.trace("Creating `ManagedRevisionBlueprint`.", metadata: [
+                    "SourceControl.Commit.ID" : .string(commit.id),
+                    "Integration.ID": .string(integration.identifier ?? "")
+                ])
                 let blueprint: ManagedRevisionBlueprint = context.make()
                 blueprint.commit = self
                 blueprint.integration = integration

@@ -294,9 +294,7 @@ extension ManagedIntegrationIssues {
         request.predicate = NSPredicate(format: "%K = %@", #keyPath(ManagedIntegrationIssues.integration.identifier), id)
         return request
     }
-}
-
-extension ManagedIntegrationIssues {
+    
     /// Update Integration Issues
     ///
     /// - note: Using the '_inverse_ = self' references here as an Issue may be linked to multiple Integrations.

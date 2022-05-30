@@ -59,7 +59,7 @@ extension ManagedDeviceSpecification {
         (filters as? Set<ManagedFilter>)?.forEach({ context.delete($0) })
         
         specification.filters.forEach { (filter) in
-            PersistentContainer.logger.info("Creating FILTER for DeviceSpecification")
+            PersistentContainer.logger.trace("Creating `ManagedFilter`.")
             let _filter: ManagedFilter = context.make()
             _filter.update(filter, context: context)
             addToFilters(_filter)
@@ -72,7 +72,7 @@ extension ManagedDeviceSpecification {
             if let entity = ManagedDevice.device(device.id, in: context) {
                 addToDevices(entity)
             } else {
-                PersistentContainer.logger.info("Creating DEVICE for DeviceSpecification")
+                PersistentContainer.logger.trace("Creating `ManagedDevice`.")
                 let _device: ManagedDevice = context.make()
                 _device.update(device, context: context)
                 addToDevices(_device)

@@ -75,11 +75,13 @@ extension ManagedDevice {
 extension ManagedDevice {
     /// Retrieves all `Device` entities from the Core Data `NSManagedObjectContext`
     static func devices(in context: NSManagedObjectContext) -> [ManagedDevice] {
-        let request = NSFetchRequest<ManagedDevice>(entityName: entityName)
+        let request = fetchRequest()
         do {
             return try context.fetch(request)
         } catch {
-            PersistentContainer.logger.error("Failed to fetch all devices", metadata: ["localizedDescription": .string(error.localizedDescription)])
+            PersistentContainer.logger.error("Failed to fetch `[ManagedDevice]`.", metadata: [
+                "localizedDescription": .string(error.localizedDescription)
+            ])
         }
         
         return []
@@ -87,19 +89,20 @@ extension ManagedDevice {
     
     /// Retrieves the first `Device` entity from the Core Data `NSManagedObjectContext` that matches the specified id.
     static func device(_ id: Device.ID, in context: NSManagedObjectContext) -> ManagedDevice? {
-        let request = NSFetchRequest<ManagedDevice>(entityName: entityName)
-        request.predicate = NSPredicate(format: "identifier = %@", argumentArray: [id])
+        let request = fetchRequest()
+        request.predicate = NSPredicate(format: "%K = %@", #keyPath(ManagedDevice.identifier), id)
         do {
             return try context.fetch(request).first
         } catch {
-            PersistentContainer.logger.error("Failed to fetch device '\(id)'", metadata: ["localizedDescription": .string(error.localizedDescription)])
+            PersistentContainer.logger.error("Failed to fetch `ManagedDevice`.", metadata: [
+                "Device.ID": .string(id),
+                "localizedDescription": .string(error.localizedDescription)
+            ])
         }
         
         return nil
     }
-}
-
-extension ManagedDevice {
+    
     func update(_ device: Device, context: NSManagedObjectContext) {
         identifier = device.id
         architecture = device.architecture
@@ -152,7 +155,7 @@ extension ManagedDevice {
     }
 }
 
-extension XcodeServer.Device {
+extension Device {
     init(_ device: ManagedDevice) {
         self.init(id: device.identifier ?? "")
         name = device.name ?? ""
@@ -171,12 +174,12 @@ extension XcodeServer.Device {
         isSupported = device.isSupported
         isEnabledForDevelopment = device.isEnabledForDevelopment
         if let proxy = device.activeProxiedDevice {
-            proxiedDevice = XcodeServer.Device.ProxiedDevice(proxy)
+            proxiedDevice = Device.ProxiedDevice(proxy)
         }
     }
 }
 
-extension XcodeServer.Device.ProxiedDevice {
+extension Device.ProxiedDevice {
     init(_ device: ManagedDevice) {
         self.init(id: device.identifier ?? "")
         name = device.name ?? ""

@@ -63,30 +63,37 @@ extension ManagedBot {
     
     /// Retrieves the first `ManagedBot` entity from the Core Data `NSManagedObjectContext` that matches the specified identifier.
     static func bot(_ id: Bot.ID, in context: NSManagedObjectContext) -> ManagedBot? {
-        let request = NSFetchRequest<ManagedBot>(entityName: entityName)
-        request.predicate = NSPredicate(format: "identifier = %@", argumentArray: [id])
+        let request = fetchRequest()
+        request.predicate = NSPredicate(format: "%K = %@", #keyPath(ManagedBot.identifier), id)
         do {
             return try context.fetch(request).first
         } catch {
-            PersistentContainer.logger.error("", metadata: ["localizedDescription": .string(error.localizedDescription)])
+            PersistentContainer.logger.error("Failed to fetch `ManagedBot`.", metadata: [
+                "Bot.ID": .string(id),
+                "localizedDescription": .string(error.localizedDescription)
+            ])
         }
         
         return nil
     }
-}
-
-extension ManagedBot {
+    
     /// Update the `Bot`, creating relationships as needed.
     ///
     /// - parameter bot: The bot with attributes to use for updates.
     /// - parameter context: The current managed object context for performing operations.
     func update(_ bot: Bot, context: NSManagedObjectContext) {
         if configuration == nil {
-            PersistentContainer.logger.info("Creating CONFIGURATION for Bot '\(bot.name)' [\(bot.id)]")
+            PersistentContainer.logger.trace("Creating `ManagedConfiguration`.", metadata: [
+                "Bot.ID": .string(bot.id),
+                "Bot.Name": .string(bot.name)
+            ])
             configuration = context.make()
         }
         if stats == nil {
-            PersistentContainer.logger.info("Creating STATS for Bot '\(bot.name)' [\(bot.id)]")
+            PersistentContainer.logger.trace("Creating `ManagedStats`.", metadata: [
+                "Bot.ID": .string(bot.id),
+                "Bot.Name": .string(bot.name)
+            ])
             stats = context.make()
         }
         
@@ -107,7 +114,11 @@ extension ManagedBot {
                 if let entity = ManagedRepository.repository(remoteId, in: context) {
                     repository = entity
                 } else {
-                    PersistentContainer.logger.info("Creating REPOSITORY '\(blueprint.name)' [\(remoteId)]")
+                    PersistentContainer.logger.trace("Creating `ManagedRepository`.", metadata: [
+                        "Remote.ID": .string(remoteId),
+                        "Blueprint.ID": .string(blueprint.id),
+                        "Blueprint.Name": .string(blueprint.name),
+                    ])
                     repository = context.make()
                 }
                 repository.update(blueprint, context: context)
@@ -126,7 +137,12 @@ extension ManagedBot {
             if let existing = (integrations as? Set<ManagedIntegration>)?.first(where: { $0.identifier == integration.id }) {
                 existing.update(integration, context: context)
             } else {
-                PersistentContainer.logger.info("Creating INTEGRATION '\(integration.number)' [\(integration.id)] for Bot '\(name ?? "")'")
+                PersistentContainer.logger.trace("Creating `ManagedIntegration`.", metadata: [
+                    "Integration.ID": .string(integration.id),
+                    "Integration.Number": .stringConvertible(integration.number),
+                    "Bot.ID": .string(identifier ?? ""),
+                    "Bot.Name": .string(name ?? ""),
+                ])
                 let new: ManagedIntegration = context.make()
                 new.update(integration, context: context)
                 addToIntegrations(new)
