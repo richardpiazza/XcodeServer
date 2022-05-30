@@ -65,7 +65,7 @@ extension ManagedServer {
     /// Retrieves the first `ManagedServer` entity from the Core Data `NSManagedObjectContext` that matches the specified id.
     static func server(_ id: Server.ID, in context: NSManagedObjectContext) -> ManagedServer? {
         let request = fetchRequest()
-        request.predicate = NSPredicate(format: "$K = %@", #keyPath(ManagedServer.fqdn), id)
+        request.predicate = NSPredicate(format: "%K = %@", #keyPath(ManagedServer.fqdn), id)
         do {
             return try context.fetch(request).first
         } catch {
