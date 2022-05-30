@@ -18,7 +18,7 @@ public enum Model: String, Hashable, CaseIterable, ModelVersion, ModelCatalog {
     case v2_0_0 = "2.0.0"
     
     /// The preferred/most current version of the model.
-    public static var current: Model = .v1_1_0
+    public static var current: Model = .v2_0_0
     
     public static var allVersions: [Self] { allCases }
     
