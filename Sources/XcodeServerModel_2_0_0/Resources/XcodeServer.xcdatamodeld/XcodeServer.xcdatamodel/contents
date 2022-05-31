@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21F79" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="ManagedAsset" representedClassName="XcodeServerModel_2_0_0.ManagedAsset" syncable="YES">
+        <attribute name="allowAnonymousAccess" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="fileName" optional="YES" attributeType="String"/>
+        <attribute name="isDirectory" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="relativePath" optional="YES" attributeType="String"/>
+        <attribute name="size" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="triggerName" optional="YES" attributeType="String"/>
+        <relationship name="inverseArchive" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ManagedIntegrationAssets" inverseName="archive" inverseEntity="ManagedIntegrationAssets"/>
+        <relationship name="inverseBuildServiceLog" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ManagedIntegrationAssets" inverseName="buildServiceLog" inverseEntity="ManagedIntegrationAssets"/>
+        <relationship name="inverseProduct" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ManagedIntegrationAssets" inverseName="product" inverseEntity="ManagedIntegrationAssets"/>
+        <relationship name="inverseSourceControlLog" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ManagedIntegrationAssets" inverseName="sourceControlLog" inverseEntity="ManagedIntegrationAssets"/>
+        <relationship name="inverseTriggerAssets" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ManagedIntegrationAssets" inverseName="triggerAssets" inverseEntity="ManagedIntegrationAssets"/>
+        <relationship name="inverseXcodebuildLog" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ManagedIntegrationAssets" inverseName="xcodebuildLog" inverseEntity="ManagedIntegrationAssets"/>
+        <relationship name="inverseXcodebuildOutput" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ManagedIntegrationAssets" inverseName="xcodebuildOutput" inverseEntity="ManagedIntegrationAssets"/>
+    </entity>
+    <entity name="ManagedBot" representedClassName="XcodeServerModel_2_0_0.ManagedBot" syncable="YES">
+        <attribute name="identifier" attributeType="String" defaultValueString="f8cf876e03804ea585fe6cb54bcca396"/>
+        <attribute name="integrationCounter" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="lastUpdate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="requiresUpgrade" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="typeRawValue" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="configuration" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ManagedConfiguration" inverseName="bot" inverseEntity="ManagedConfiguration"/>
+        <relationship name="integrations" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ManagedIntegration" inverseName="bot" inverseEntity="ManagedIntegration"/>
+        <relationship name="server" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ManagedServer" inverseName="bots" inverseEntity="ManagedServer"/>
+        <relationship name="stats" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ManagedStats" inverseName="bot" inverseEntity="ManagedStats"/>
+        <fetchIndex name="byPropertyIndex">
+            <fetchIndexElement property="identifier" type="Binary" order="ascending"/>
+            <fetchIndexElement property="name" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="ManagedBuildResultSummary" representedClassName="XcodeServerModel_2_0_0.ManagedBuildResultSummary" syncable="YES">
+        <attribute name="analyzerWarningChange" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="analyzerWarningCount" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="codeCoveragePercentage" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="codeCoveragePercentageDelta" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="errorChange" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="errorCount" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="improvedPerfTestCount" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="regressedPerfTestCount" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="testFailureChange" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="testFailureCount" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="testsChange" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="testsCount" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="warningChange" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="warningCount" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="integration" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ManagedIntegration" inverseName="buildResultSummary" inverseEntity="ManagedIntegration"/>
+    </entity>
+    <entity name="ManagedCommit" representedClassName="XcodeServerModel_2_0_0.ManagedCommit" syncable="YES">
+        <attribute name="commitHash" attributeType="String" defaultValueString="_commitHash"/>
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="message" optional="YES" attributeType="String"/>
+        <relationship name="commitChanges" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ManagedCommitChange" inverseName="commit" inverseEntity="ManagedCommitChange"/>
+        <relationship name="commitContributor" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ManagedCommitContributor" inverseName="commit" inverseEntity="ManagedCommitContributor"/>
+        <relationship name="repository" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ManagedRepository" inverseName="commits" inverseEntity="ManagedRepository"/>
+        <relationship name="revisionBlueprints" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ManagedRevisionBlueprint" inverseName="commit" inverseEntity="ManagedRevisionBlueprint"/>
+        <fetchIndex name="byPropertyIndex">
+            <fetchIndexElement property="commitHash" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="ManagedCommitChange" representedClassName="XcodeServerModel_2_0_0.ManagedCommitChange" syncable="YES">
+        <attribute name="filePath" optional="YES" attributeType="String"/>
+        <attribute name="statusRawValue" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="commit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ManagedCommit" inverseName="commitChanges" inverseEntity="ManagedCommit"/>
+    </entity>
+    <entity name="ManagedCommitContributor" representedClassName="XcodeServerModel_2_0_0.ManagedCommitContributor" syncable="YES">
+        <attribute name="displayName" optional="YES" attributeType="String"/>
+        <attribute name="emailsData" optional="YES" attributeType="Binary"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="commit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ManagedCommit" inverseName="commitContributor" inverseEntity="ManagedCommit"/>
+    </entity>
+    <entity name="ManagedConditions" representedClassName="XcodeServerModel_2_0_0.ManagedConditions" syncable="YES">
+        <attribute name="onAllIssuesResolved" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="onAnalyzerWarnings" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="onBuildErrors" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="onFailingTests" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="onInternalErrors" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="onSuccess" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="onWarnings" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="statusRawValue" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="trigger" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ManagedTrigger" inverseName="conditions" inverseEntity="ManagedTrigger"/>
+    </entity>
+    <entity name="ManagedConfiguration" representedClassName="XcodeServerModel_2_0_0.ManagedConfiguration" syncable="YES">
+        <attribute name="additionalBuildArgumentsData" optional="YES" attributeType="Binary"/>
+        <attribute name="addMissingDeviceToTeams" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="buildEnvironmentVariablesData" optional="YES" attributeType="Binary"/>
+        <attribute name="cleanScheduleRawValue" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="codeCoveragePreferenceRawValue" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="disableAppThinning" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="exportsProductFromArchive" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="hourOfIntegration" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="manageCertsAndProfiles" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="minutesAfterHourToIntegrate" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="performsAnalyzeAction" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="performsArchiveAction" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="performsTestAction" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="performsUpgradeIntegration" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="periodicScheduleIntervalRawValue" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="runOnlyDisabledTests" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="scheduleTypeRawValue" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="schemeName" optional="YES" attributeType="String"/>
+        <attribute name="testingDestinationTypeRawValue" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="useParallelDeviceTesting" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="weeklyScheduleDay" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="bot" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ManagedBot" inverseName="configuration" inverseEntity="ManagedBot"/>
+        <relationship name="deviceSpecification" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ManagedDeviceSpecification" inverseName="configuration" inverseEntity="ManagedDeviceSpecification"/>
+        <relationship name="repositories" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ManagedRepository" inverseName="configurations" inverseEntity="ManagedRepository"/>
+        <relationship name="triggers" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ManagedTrigger" inverseName="configuration" inverseEntity="ManagedTrigger"/>
+    </entity>
+    <entity name="ManagedDevice" representedClassName="XcodeServerModel_2_0_0.ManagedDevice" syncable="YES">
+        <attribute name="architecture" optional="YES" attributeType="String"/>
+        <attribute name="deviceType" optional="YES" attributeType="String"/>
+        <attribute name="identifier" attributeType="String" defaultValueString="0a21bee5e97f43cd9aaddaa31eceab29"/>
+        <attribute name="isConnected" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="isEnabledForDevelopment" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="isRetina" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="isServer" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="isSimulator" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="isSupported" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="isTrusted" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="isWireless" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="modelCode" optional="YES" attributeType="String"/>
+        <attribute name="modelName" optional="YES" attributeType="String"/>
+        <attribute name="modelUTI" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="osVersion" optional="YES" attributeType="String"/>
+        <attribute name="platformIdentifier" optional="YES" attributeType="String"/>
+        <relationship name="activeProxiedDevice" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ManagedDevice" inverseName="inverseActiveProxiedDevice" inverseEntity="ManagedDevice"/>
+        <relationship name="deviceSpecifications" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ManagedDeviceSpecification" inverseName="devices" inverseEntity="ManagedDeviceSpecification"/>
+        <relationship name="integrations" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ManagedIntegration" inverseName="testedDevices" inverseEntity="ManagedIntegration"/>
+        <relationship name="inverseActiveProxiedDevice" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ManagedDevice" inverseName="activeProxiedDevice" inverseEntity="ManagedDevice"/>
+        <fetchIndex name="byPropertyIndex">
+            <fetchIndexElement property="identifier" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="ManagedDeviceSpecification" representedClassName="XcodeServerModel_2_0_0.ManagedDeviceSpecification" syncable="YES">
+        <relationship name="configuration" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ManagedConfiguration" inverseName="deviceSpecification" inverseEntity="ManagedConfiguration"/>
+        <relationship name="devices" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ManagedDevice" inverseName="deviceSpecifications" inverseEntity="ManagedDevice"/>
+        <relationship name="filters" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ManagedFilter" inverseName="deviceSpecification" inverseEntity="ManagedFilter"/>
+    </entity>
+    <entity name="ManagedEmailConfiguration" representedClassName="XcodeServerModel_2_0_0.ManagedEmailConfiguration" syncable="YES">
+        <attribute name="additionalRecipients" optional="YES" attributeType="String"/>
+        <attribute name="allowedDomainNamesData" optional="YES" attributeType="Binary"/>
+        <attribute name="ccAddressesData" optional="YES" attributeType="Binary"/>
+        <attribute name="emailCommitters" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="emailTypeRawValue" optional="YES" attributeType="Integer 16" usesScalarValueType="YES"/>
+        <attribute name="fromAddress" optional="YES" attributeType="String"/>
+        <attribute name="hour" optional="YES" attributeType="Integer 16" usesScalarValueType="YES"/>
+        <attribute name="includeBotConfiguration" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="includeCommitMessages" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="includeIssueDetails" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="includeLogs" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="includeResolvedIssues" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="minutesAfterHour" optional="YES" attributeType="Integer 16" usesScalarValueType="YES"/>
+        <attribute name="replyToAddress" optional="YES" attributeType="String"/>
+        <attribute name="weeklyScheduleDay" optional="YES" attributeType="Integer 16" usesScalarValueType="YES"/>
+        <relationship name="trigger" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ManagedTrigger" inverseName="emailConfiguration" inverseEntity="ManagedTrigger"/>
+    </entity>
+    <entity name="ManagedFilter" representedClassName="XcodeServerModel_2_0_0.ManagedFilter" syncable="YES">
+        <attribute name="architectureTypeRawValue" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="filterTypeRawValue" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="deviceSpecification" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ManagedDeviceSpecification" inverseName="filters" inverseEntity="ManagedDeviceSpecification"/>
+        <relationship name="platform" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ManagedPlatform" inverseName="filter" inverseEntity="ManagedPlatform"/>
+    </entity>
+    <entity name="ManagedIntegration" representedClassName="XcodeServerModel_2_0_0.ManagedIntegration" syncable="YES">
+        <attribute name="currentStepRawValue" optional="YES" attributeType="String"/>
+        <attribute name="duration" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="endedTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="hasRetrievedAssets" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="hasRetrievedCommits" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="hasRetrievedIssues" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="identifier" attributeType="String" defaultValueString="c7f172cb9df24db9bc4e65f609800cbe"/>
+        <attribute name="lastUpdate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="number" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="queuedDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="resultRawValue" optional="YES" attributeType="String"/>
+        <attribute name="revision" optional="YES" attributeType="String"/>
+        <attribute name="shouldClean" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="startedTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="successStreak" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="testHierarchyData" optional="YES" attributeType="Binary"/>
+        <relationship name="assets" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ManagedIntegrationAssets" inverseName="integration" inverseEntity="ManagedIntegrationAssets"/>
+        <relationship name="bot" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ManagedBot" inverseName="integrations" inverseEntity="ManagedBot"/>
+        <relationship name="buildResultSummary" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ManagedBuildResultSummary" inverseName="integration" inverseEntity="ManagedBuildResultSummary"/>
+        <relationship name="inverseBestSuccessStreak" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ManagedStats" inverseName="bestSuccessStreak" inverseEntity="ManagedStats"/>
+        <relationship name="inverseLastCleanIntegration" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ManagedStats" inverseName="lastCleanIntegration" inverseEntity="ManagedStats"/>
+        <relationship name="issues" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ManagedIntegrationIssues" inverseName="integration" inverseEntity="ManagedIntegrationIssues"/>
+        <relationship name="revisionBlueprints" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ManagedRevisionBlueprint" inverseName="integration" inverseEntity="ManagedRevisionBlueprint"/>
+        <relationship name="testedDevices" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ManagedDevice" inverseName="integrations" inverseEntity="ManagedDevice"/>
+        <fetchIndex name="byPropertyIndex">
+            <fetchIndexElement property="identifier" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="ManagedIntegrationAssets" representedClassName="XcodeServerModel_2_0_0.ManagedIntegrationAssets" syncable="YES">
+        <relationship name="archive" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ManagedAsset" inverseName="inverseArchive" inverseEntity="ManagedAsset"/>
+        <relationship name="buildServiceLog" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ManagedAsset" inverseName="inverseBuildServiceLog" inverseEntity="ManagedAsset"/>
+        <relationship name="integration" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ManagedIntegration" inverseName="assets" inverseEntity="ManagedIntegration"/>
+        <relationship name="product" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ManagedAsset" inverseName="inverseProduct" inverseEntity="ManagedAsset"/>
+        <relationship name="sourceControlLog" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ManagedAsset" inverseName="inverseSourceControlLog" inverseEntity="ManagedAsset"/>
+        <relationship name="triggerAssets" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ManagedAsset" inverseName="inverseTriggerAssets" inverseEntity="ManagedAsset"/>
+        <relationship name="xcodebuildLog" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ManagedAsset" inverseName="inverseXcodebuildLog" inverseEntity="ManagedAsset"/>
+        <relationship name="xcodebuildOutput" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ManagedAsset" inverseName="inverseXcodebuildOutput" inverseEntity="ManagedAsset"/>
+    </entity>
+    <entity name="ManagedIntegrationIssues" representedClassName="XcodeServerModel_2_0_0.ManagedIntegrationIssues" syncable="YES">
+        <relationship name="buildServiceErrors" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ManagedIssue" inverseName="inverseBuildServiceErrors" inverseEntity="ManagedIssue"/>
+        <relationship name="buildServiceWarnings" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ManagedIssue" inverseName="inverseBuildServiceWarnings" inverseEntity="ManagedIssue"/>
+        <relationship name="freshAnalyzerWarnings" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ManagedIssue" inverseName="inverseFreshAnalyzerWarnings" inverseEntity="ManagedIssue"/>
+        <relationship name="freshErrors" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ManagedIssue" inverseName="inverseFreshErrors" inverseEntity="ManagedIssue"/>
+        <relationship name="freshTestFailures" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ManagedIssue" inverseName="inverseFreshTestFailures" inverseEntity="ManagedIssue"/>
+        <relationship name="freshWarnings" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ManagedIssue" inverseName="inverseFreshWarnings" inverseEntity="ManagedIssue"/>
+        <relationship name="integration" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ManagedIntegration" inverseName="issues" inverseEntity="ManagedIntegration"/>
+        <relationship name="resolvedAnalyzerWarnings" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ManagedIssue" inverseName="inverseResolvedAnalyzerWarnings" inverseEntity="ManagedIssue"/>
+        <relationship name="resolvedErrors" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ManagedIssue" inverseName="inverseResolvedErrors" inverseEntity="ManagedIssue"/>
+        <relationship name="resolvedTestFailures" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ManagedIssue" inverseName="inverseResolvedTestFailures" inverseEntity="ManagedIssue"/>
+        <relationship name="resolvedWarnings" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ManagedIssue" inverseName="inverseResolvedWarnings" inverseEntity="ManagedIssue"/>
+        <relationship name="triggerErrors" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ManagedIssue" inverseName="inverseTriggerErrors" inverseEntity="ManagedIssue"/>
+        <relationship name="unresolvedAnalyzerWarnings" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ManagedIssue" inverseName="inverseUnresolvedAnalyzerWarnings" inverseEntity="ManagedIssue"/>
+        <relationship name="unresolvedErrors" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ManagedIssue" inverseName="inverseUnresolvedErrors" inverseEntity="ManagedIssue"/>
+        <relationship name="unresolvedTestFailures" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ManagedIssue" inverseName="inverseUnresolvedTestFailures" inverseEntity="ManagedIssue"/>
+        <relationship name="unresolvedWarnings" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ManagedIssue" inverseName="inverseUnresolvedWarnings" inverseEntity="ManagedIssue"/>
+    </entity>
+    <entity name="ManagedIssue" representedClassName="XcodeServerModel_2_0_0.ManagedIssue" syncable="YES">
+        <attribute name="age" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="documentFilePath" optional="YES" attributeType="String"/>
+        <attribute name="documentLocationData" optional="YES" attributeType="String"/>
+        <attribute name="fixItType" optional="YES" attributeType="String"/>
+        <attribute name="identifier" attributeType="String" defaultValueString="aa250af67a174b8192a950fabb457776"/>
+        <attribute name="issueType" optional="YES" attributeType="String"/>
+        <attribute name="lineNumber" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="message" optional="YES" attributeType="String"/>
+        <attribute name="statusRawValue" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="target" optional="YES" attributeType="String"/>
+        <attribute name="testCase" optional="YES" attributeType="String"/>
+        <attribute name="typeRawValue" optional="YES" attributeType="String"/>
+        <relationship name="inverseBuildServiceErrors" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ManagedIntegrationIssues" inverseName="buildServiceErrors" inverseEntity="ManagedIntegrationIssues"/>
+        <relationship name="inverseBuildServiceWarnings" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ManagedIntegrationIssues" inverseName="buildServiceWarnings" inverseEntity="ManagedIntegrationIssues"/>
+        <relationship name="inverseFreshAnalyzerWarnings" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ManagedIntegrationIssues" inverseName="freshAnalyzerWarnings" inverseEntity="ManagedIntegrationIssues"/>
+        <relationship name="inverseFreshErrors" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ManagedIntegrationIssues" inverseName="freshErrors" inverseEntity="ManagedIntegrationIssues"/>
+        <relationship name="inverseFreshTestFailures" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ManagedIntegrationIssues" inverseName="freshTestFailures" inverseEntity="ManagedIntegrationIssues"/>
+        <relationship name="inverseFreshWarnings" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ManagedIntegrationIssues" inverseName="freshWarnings" inverseEntity="ManagedIntegrationIssues"/>
+        <relationship name="inverseResolvedAnalyzerWarnings" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ManagedIntegrationIssues" inverseName="resolvedAnalyzerWarnings" inverseEntity="ManagedIntegrationIssues"/>
+        <relationship name="inverseResolvedErrors" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ManagedIntegrationIssues" inverseName="resolvedErrors" inverseEntity="ManagedIntegrationIssues"/>
+        <relationship name="inverseResolvedTestFailures" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ManagedIntegrationIssues" inverseName="resolvedTestFailures" inverseEntity="ManagedIntegrationIssues"/>
+        <relationship name="inverseResolvedWarnings" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ManagedIntegrationIssues" inverseName="resolvedWarnings" inverseEntity="ManagedIntegrationIssues"/>
+        <relationship name="inverseTriggerErrors" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ManagedIntegrationIssues" inverseName="triggerErrors" inverseEntity="ManagedIntegrationIssues"/>
+        <relationship name="inverseUnresolvedAnalyzerWarnings" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ManagedIntegrationIssues" inverseName="unresolvedAnalyzerWarnings" inverseEntity="ManagedIntegrationIssues"/>
+        <relationship name="inverseUnresolvedErrors" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ManagedIntegrationIssues" inverseName="unresolvedErrors" inverseEntity="ManagedIntegrationIssues"/>
+        <relationship name="inverseUnresolvedTestFailures" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ManagedIntegrationIssues" inverseName="unresolvedTestFailures" inverseEntity="ManagedIntegrationIssues"/>
+        <relationship name="inverseUnresolvedWarnings" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ManagedIntegrationIssues" inverseName="unresolvedWarnings" inverseEntity="ManagedIntegrationIssues"/>
+        <fetchIndex name="byPropertyIndex">
+            <fetchIndexElement property="identifier" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="ManagedPlatform" representedClassName="XcodeServerModel_2_0_0.ManagedPlatform" syncable="YES">
+        <attribute name="buildNumber" optional="YES" attributeType="String"/>
+        <attribute name="displayName" optional="YES" attributeType="String"/>
+        <attribute name="identifier" optional="YES" attributeType="String"/>
+        <attribute name="platformIdentifier" optional="YES" attributeType="String"/>
+        <attribute name="simulatorIdentifier" optional="YES" attributeType="String"/>
+        <attribute name="version" optional="YES" attributeType="String"/>
+        <relationship name="filter" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ManagedFilter" inverseName="platform" inverseEntity="ManagedFilter"/>
+        <fetchIndex name="byPropertyIndex">
+            <fetchIndexElement property="identifier" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="ManagedRepository" representedClassName="XcodeServerModel_2_0_0.ManagedRepository" syncable="YES">
+        <attribute name="branchIdentifier" optional="YES" attributeType="String"/>
+        <attribute name="branchOptions" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="identifier" attributeType="String" defaultValueString="a935c1bc28dc4ccd9b9074346afb62bd"/>
+        <attribute name="locationType" optional="YES" attributeType="String"/>
+        <attribute name="system" optional="YES" attributeType="String"/>
+        <attribute name="url" optional="YES" attributeType="String"/>
+        <attribute name="workingCopyPath" optional="YES" attributeType="String"/>
+        <attribute name="workingCopyState" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="commits" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ManagedCommit" inverseName="repository" inverseEntity="ManagedCommit"/>
+        <relationship name="configurations" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ManagedConfiguration" inverseName="repositories" inverseEntity="ManagedConfiguration"/>
+        <fetchIndex name="byPropertyIndex">
+            <fetchIndexElement property="identifier" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="ManagedRevisionBlueprint" representedClassName="XcodeServerModel_2_0_0.ManagedRevisionBlueprint" syncable="YES">
+        <relationship name="commit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ManagedCommit" inverseName="revisionBlueprints" inverseEntity="ManagedCommit"/>
+        <relationship name="integration" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ManagedIntegration" inverseName="revisionBlueprints" inverseEntity="ManagedIntegration"/>
+    </entity>
+    <entity name="ManagedServer" representedClassName="XcodeServerModel_2_0_0.ManagedServer" syncable="YES">
+        <attribute name="apiVersion" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="fqdn" attributeType="String" defaultValueString="_fqdn"/>
+        <attribute name="lastUpdate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="os" optional="YES" attributeType="String"/>
+        <attribute name="server" optional="YES" attributeType="String"/>
+        <attribute name="xcode" optional="YES" attributeType="String"/>
+        <attribute name="xcodeServer" optional="YES" attributeType="String"/>
+        <relationship name="bots" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ManagedBot" inverseName="server" inverseEntity="ManagedBot"/>
+        <fetchIndex name="byPropertyIndex">
+            <fetchIndexElement property="fqdn" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="ManagedStats" representedClassName="XcodeServerModel_2_0_0.ManagedStats" syncable="YES">
+        <attribute name="codeCoveragePercentageDelta" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="numberOfCommits" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="numberOfIntegrations" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="numberOfSuccessfulIntegrations" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="sinceDate" optional="YES" attributeType="String"/>
+        <attribute name="testAdditionRate" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="analysisWarnings" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ManagedStatsBreakdown" inverseName="inverseAnalysisWarnings" inverseEntity="ManagedStatsBreakdown"/>
+        <relationship name="averageIntegrationTime" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ManagedStatsBreakdown" inverseName="inverseAverageIntegrationTime" inverseEntity="ManagedStatsBreakdown"/>
+        <relationship name="bestSuccessStreak" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ManagedIntegration" inverseName="inverseBestSuccessStreak" inverseEntity="ManagedIntegration"/>
+        <relationship name="bot" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ManagedBot" inverseName="stats" inverseEntity="ManagedBot"/>
+        <relationship name="errors" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ManagedStatsBreakdown" inverseName="inverseErrors" inverseEntity="ManagedStatsBreakdown"/>
+        <relationship name="improvedPerfTests" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ManagedStatsBreakdown" inverseName="inverseImprovedPerfTests" inverseEntity="ManagedStatsBreakdown"/>
+        <relationship name="lastCleanIntegration" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ManagedIntegration" inverseName="inverseLastCleanIntegration" inverseEntity="ManagedIntegration"/>
+        <relationship name="regressedPerfTests" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ManagedStatsBreakdown" inverseName="inverseRegressedPerfTests" inverseEntity="ManagedStatsBreakdown"/>
+        <relationship name="testFailures" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ManagedStatsBreakdown" inverseName="inverseTestFailures" inverseEntity="ManagedStatsBreakdown"/>
+        <relationship name="tests" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ManagedStatsBreakdown" inverseName="inverseTests" inverseEntity="ManagedStatsBreakdown"/>
+        <relationship name="warnings" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ManagedStatsBreakdown" inverseName="inverseWarnings" inverseEntity="ManagedStatsBreakdown"/>
+    </entity>
+    <entity name="ManagedStatsBreakdown" representedClassName="XcodeServerModel_2_0_0.ManagedStatsBreakdown" syncable="YES">
+        <attribute name="avg" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="count" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="max" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="min" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="stdDev" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="sum" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="inverseAnalysisWarnings" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ManagedStats" inverseName="analysisWarnings" inverseEntity="ManagedStats"/>
+        <relationship name="inverseAverageIntegrationTime" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ManagedStats" inverseName="averageIntegrationTime" inverseEntity="ManagedStats"/>
+        <relationship name="inverseErrors" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ManagedStats" inverseName="errors" inverseEntity="ManagedStats"/>
+        <relationship name="inverseImprovedPerfTests" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ManagedStats" inverseName="improvedPerfTests" inverseEntity="ManagedStats"/>
+        <relationship name="inverseRegressedPerfTests" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ManagedStats" inverseName="regressedPerfTests" inverseEntity="ManagedStats"/>
+        <relationship name="inverseTestFailures" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ManagedStats" inverseName="testFailures" inverseEntity="ManagedStats"/>
+        <relationship name="inverseTests" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ManagedStats" inverseName="tests" inverseEntity="ManagedStats"/>
+        <relationship name="inverseWarnings" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ManagedStats" inverseName="warnings" inverseEntity="ManagedStats"/>
+    </entity>
+    <entity name="ManagedTrigger" representedClassName="XcodeServerModel_2_0_0.ManagedTrigger" syncable="YES">
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="phaseRawValue" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="scriptBody" optional="YES" attributeType="String"/>
+        <attribute name="typeRawValue" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="conditions" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ManagedConditions" inverseName="trigger" inverseEntity="ManagedConditions"/>
+        <relationship name="configuration" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ManagedConfiguration" inverseName="triggers" inverseEntity="ManagedConfiguration"/>
+        <relationship name="emailConfiguration" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ManagedEmailConfiguration" inverseName="trigger" inverseEntity="ManagedEmailConfiguration"/>
+    </entity>
+    <elements>
+        <element name="ManagedAsset" positionX="-85.62890625" positionY="-319.5859375" width="128" height="224"/>
+        <element name="ManagedBot" positionX="-94.6875" positionY="-48.45703125" width="128" height="179"/>
+        <element name="ManagedBuildResultSummary" positionX="444.1171875" positionY="-307.36328125" width="128" height="254"/>
+        <element name="ManagedCommit" positionX="-239.77734375" positionY="378.33203125" width="128" height="134"/>
+        <element name="ManagedCommitChange" positionX="-250.328125" positionY="617.3125" width="128" height="74"/>
+        <element name="ManagedCommitContributor" positionX="-431.6796875" positionY="623.61328125" width="128" height="89"/>
+        <element name="ManagedConditions" positionX="-32.57421875" positionY="656.78515625" width="128" height="164"/>
+        <element name="ManagedConfiguration" positionX="-349.6171875" positionY="-115.2890625" width="128" height="404"/>
+        <element name="ManagedDevice" positionX="242.953125" positionY="167.30078125" width="128" height="344"/>
+        <element name="ManagedDeviceSpecification" positionX="-35.5703125" positionY="198.46484375" width="128" height="74"/>
+        <element name="ManagedEmailConfiguration" positionX="132.60546875" positionY="548.19921875" width="128" height="269"/>
+        <element name="ManagedFilter" positionX="-600.046875" positionY="233.98828125" width="128" height="89"/>
+        <element name="ManagedIntegration" positionX="244.38671875" positionY="-316.546875" width="128" height="389"/>
+        <element name="ManagedIntegrationAssets" positionX="83.0859375" positionY="-311.1328125" width="128" height="149"/>
+        <element name="ManagedIntegrationIssues" positionX="574.84375" positionY="387.09765625" width="128" height="269"/>
+        <element name="ManagedIssue" positionX="801.67578125" positionY="305.66796875" width="128" height="448"/>
+        <element name="ManagedPlatform" positionX="-611.125" positionY="-36.5078125" width="128" height="134"/>
+        <element name="ManagedRepository" positionX="-507.671875" positionY="385.48828125" width="128" height="179"/>
+        <element name="ManagedRevisionBlueprint" positionX="-35.66796875" positionY="301.7265625" width="128" height="59"/>
+        <element name="ManagedServer" positionX="-297.23046875" positionY="-313.47265625" width="128" height="149"/>
+        <element name="ManagedStats" positionX="599.10546875" positionY="-46.6640625" width="128" height="284"/>
+        <element name="ManagedStatsBreakdown" positionX="797.65234375" positionY="-1.47265625" width="128" height="239"/>
+        <element name="ManagedTrigger" positionX="-33.48828125" positionY="397.375" width="128" height="134"/>
+    </elements>
+</model>

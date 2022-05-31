@@ -2,6 +2,7 @@ import XcodeServer
 import CoreDataPlus
 import XcodeServerModel_1_0_0
 import XcodeServerModel_1_1_0
+import XcodeServerModel_2_0_0
 #if canImport(CoreData)
 import CoreData
 
@@ -9,12 +10,15 @@ public class CoreDataStore {
     enum Catalog {
         case v1_0_0(CatalogContainer<Model, XcodeServerModel_1_0_0.PersistentContainer>)
         case v1_1_0(CatalogContainer<Model, XcodeServerModel_1_1_0.PersistentContainer>)
+        case v2_0_0(CatalogContainer<Model, XcodeServerModel_2_0_0.PersistentContainer>)
         
         var persistentContainer: NSPersistentContainer {
             switch self {
             case .v1_0_0(let catalog):
                 return catalog.persistentContainer
             case .v1_1_0(let catalog):
+                return catalog.persistentContainer
+            case .v2_0_0(let catalog):
                 return catalog.persistentContainer
             }
         }
@@ -24,6 +28,8 @@ public class CoreDataStore {
             case .v1_0_0(let catalog):
                 try reopen ? catalog.checkpointAndContinue() : catalog.checkpointAndClose()
             case .v1_1_0(let catalog):
+                try reopen ? catalog.checkpointAndContinue() : catalog.checkpointAndClose()
+            case .v2_0_0(let catalog):
                 try reopen ? catalog.checkpointAndContinue() : catalog.checkpointAndClose()
             }
         }
@@ -47,6 +53,9 @@ public class CoreDataStore {
         case .v1_1_0:
             let container = try CatalogContainer<Model, XcodeServerModel_1_1_0.PersistentContainer>(version: model, persistence: persistence, name: .containerName, silentMigration: silentFailure)
             catalog = .v1_1_0(container)
+        case .v2_0_0:
+            let container = try CatalogContainer<Model, XcodeServerModel_2_0_0.PersistentContainer>(version: model, persistence: persistence, name: .containerName, silentMigration: silentFailure)
+            catalog = .v2_0_0(container)
         }
     }
     
