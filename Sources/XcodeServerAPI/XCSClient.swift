@@ -171,6 +171,20 @@ public class XCSClient: URLSessionClient {
         Self.logger.info("Retrieving XCSBot [\(id)]")
         let request = try clientRequest(path: "bots/\(id)")
         let response = try await performRequest(request)
+        
+        switch response.statusCode {
+        case .notFound:
+            throw XcodeServerError.botNotFound(id)
+        case .ok:
+            break
+        default:
+            Self.logger.warning("Unexpected HTTP Status Code", metadata: [
+                "Bot.ID": .string(id),
+                "StatusCode": .stringConvertible(response.statusCode),
+                "Body": .string(String(data: response.data, encoding: .utf8) ?? "")
+            ])
+        }
+        
         return try jsonDecoder.decode(XCSBot.self, from: response.data)
     }
     
@@ -178,6 +192,20 @@ public class XCSClient: URLSessionClient {
         Self.logger.info("Retrieving XCSStats for Bot [\(id)]")
         let request = try clientRequest(path: "bots/\(id)/stats")
         let response = try await performRequest(request)
+        
+        switch response.statusCode {
+        case .notFound:
+            throw XcodeServerError.botNotFound(id)
+        case .ok:
+            break
+        default:
+            Self.logger.warning("Unexpected HTTP Status Code", metadata: [
+                "Bot.ID": .string(id),
+                "StatusCode": .stringConvertible(response.statusCode),
+                "Body": .string(String(data: response.data, encoding: .utf8) ?? "")
+            ])
+        }
+        
         return try jsonDecoder.decode(XCSStats.self, from: response.data)
     }
     
@@ -200,6 +228,20 @@ public class XCSClient: URLSessionClient {
         Self.logger.info("Retrieving XCSIntegration [\(id)]")
         let request = try clientRequest(path: "integrations/\(id)")
         let response = try await performRequest(request)
+        
+        switch response.statusCode {
+        case .notFound:
+            throw XcodeServerError.integrationNotFound(id)
+        case .ok:
+            break
+        default:
+            Self.logger.warning("Unexpected HTTP Status Code", metadata: [
+                "Integration.ID": .string(id),
+                "StatusCode": .stringConvertible(response.statusCode),
+                "Body": .string(String(data: response.data, encoding: .utf8) ?? "")
+            ])
+        }
+        
         return try jsonDecoder.decode(XCSIntegration.self, from: response.data)
     }
     
@@ -214,6 +256,20 @@ public class XCSClient: URLSessionClient {
         let request = try clientRequest(path: "bots/\(id)/integrations")
         let response = try await performRequest(request)
         let results = try jsonDecoder.decode(Response.self, from: response.data)
+        
+        switch response.statusCode {
+        case .notFound:
+            throw XcodeServerError.botNotFound(id)
+        case .ok:
+            break
+        default:
+            Self.logger.warning("Unexpected HTTP Status Code", metadata: [
+                "Bot.ID": .string(id),
+                "StatusCode": .stringConvertible(response.statusCode),
+                "Body": .string(String(data: response.data, encoding: .utf8) ?? "")
+            ])
+        }
+        
         return results.results
     }
     
@@ -222,6 +278,20 @@ public class XCSClient: URLSessionClient {
         Self.logger.info("Requesting XCSIntegration for BOT [\(id)]")
         let request = try clientRequest(path: "bots/\(id)/integrations", method: .post)
         let response = try await performRequest(request)
+        
+        switch response.statusCode {
+        case .notFound:
+            throw XcodeServerError.botNotFound(id)
+        case .ok:
+            break
+        default:
+            Self.logger.warning("Unexpected HTTP Status Code", metadata: [
+                "Bot.ID": .string(id),
+                "StatusCode": .stringConvertible(response.statusCode),
+                "Body": .string(String(data: response.data, encoding: .utf8) ?? "")
+            ])
+        }
+        
         return try jsonDecoder.decode(XCSIntegration.self, from: response.data)
     }
     
@@ -235,6 +305,20 @@ public class XCSClient: URLSessionClient {
         
         let request = try clientRequest(path: "integrations/\(id)/commits")
         let response = try await performRequest(request)
+        
+        switch response.statusCode {
+        case .notFound:
+            throw XcodeServerError.integrationNotFound(id)
+        case .ok:
+            break
+        default:
+            Self.logger.warning("Unexpected HTTP Status Code", metadata: [
+                "Integration.ID": .string(id),
+                "StatusCode": .stringConvertible(response.statusCode),
+                "Body": .string(String(data: response.data, encoding: .utf8) ?? "")
+            ])
+        }
+        
         let results = try jsonDecoder.decode(Response.self, from: response.data)
         return results.results
     }
@@ -244,6 +328,20 @@ public class XCSClient: URLSessionClient {
         Self.logger.info("Retrieving XCSIssues for INTEGRATION [\(id)]")
         let request = try clientRequest(path: "integrations/\(id)/issues")
         let response = try await performRequest(request)
+        
+        switch response.statusCode {
+        case .notFound:
+            throw XcodeServerError.integrationNotFound(id)
+        case .ok:
+            break
+        default:
+            Self.logger.warning("Unexpected HTTP Status Code", metadata: [
+                "Integration.ID": .string(id),
+                "StatusCode": .stringConvertible(response.statusCode),
+                "Body": .string(String(data: response.data, encoding: .utf8) ?? "")
+            ])
+        }
+        
         return try jsonDecoder.decode(XCSIssues.self, from: response.data)
     }
     

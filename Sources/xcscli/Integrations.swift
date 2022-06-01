@@ -50,30 +50,47 @@ final class Integrations: AsyncParsableCommand, Route, Logged {
     }
     
     func run() async throws {
+        ConsoleLogger.bootstrap(minimumLogLevel: logLevel)
+        
         let client = try XCSClient(fqdn: server, credentialDelegate: self)
-        switch (path) {
-        case .some(.commits):
-            let commits: [SourceControl.Commit] = try await client.commits(forIntegration: id)
-            print(commits.asPrettyJSON() ?? "OK")
-        case .some(.issues):
-            let issues: Integration.IssueCatalog = try await client.issues(forIntegration: id)
-            print(issues.asPrettyJSON() ?? "OK")
-        case .some(.coverage):
-            let coverage = try await client.coverage(forIntegration: id)
-            print(coverage?.asPrettyJSON() ?? "OK")
-        case .some(.archive):
-            let archive: (String, Data) = try await client.archive(forIntegration: id)
-            print("Filename: \(archive.0)")
-            let directory = URL(fileURLWithPath: FileManager.default.currentDirectoryPath, isDirectory: true)
-            let url = directory.appendingPathComponent(archive.0)
-            try archive.1.write(to: url)
-        case .none:
-            if id.isEmpty {
-                let integrations: [Integration] = try await client.integrations()
-                print(integrations.asPrettyJSON() ?? "OK")
+        
+        do {
+            switch (path) {
+            case .some(.commits):
+                Logger.xcscli.notice("Retrieving Commits For Integration [\(id)]")
+                let commits: [SourceControl.Commit] = try await client.commits(forIntegration: id)
+                print(commits.asPrettyJSON() ?? "OK")
+            case .some(.issues):
+                Logger.xcscli.notice("Retrieving Issues For Integration [\(id)]")
+                let issues: Integration.IssueCatalog = try await client.issues(forIntegration: id)
+                print(issues.asPrettyJSON() ?? "OK")
+            case .some(.coverage):
+                Logger.xcscli.notice("Retrieving Coverage For Integration [\(id)]")
+                let coverage = try await client.coverage(forIntegration: id)
+                print(coverage?.asPrettyJSON() ?? "OK")
+            case .some(.archive):
+                Logger.xcscli.notice("Retrieving Archive For Integration [\(id)]")
+                let archive: (String, Data) = try await client.archive(forIntegration: id)
+                print("Filename: \(archive.0)")
+                let directory = URL(fileURLWithPath: FileManager.default.currentDirectoryPath, isDirectory: true)
+                let url = directory.appendingPathComponent(archive.0)
+                try archive.1.write(to: url)
+            case .none:
+                if id.isEmpty {
+                    Logger.xcscli.notice("Retrieving Integrations [\(server)]")
+                    let integrations: [Integration] = try await client.integrations()
+                    print(integrations.asPrettyJSON() ?? "OK")
+                } else {
+                    Logger.xcscli.notice("Retrieving Integration [\(id)]")
+                    let integration: Integration = try await client.integration(withId: id)
+                    print(integration.asPrettyJSON() ?? "OK")
+                }
+            }
+        } catch let xcsError as XcodeServerError {
+            if case .integrationNotFound(let id) = xcsError {
+                Logger.xcscli.error("Integration '\(id)' does not exist, or has been deleted.")
             } else {
-                let integration: Integration = try await client.integration(withId: id)
-                print(integration.asPrettyJSON() ?? "OK")
+                throw xcsError
             }
         }
     }

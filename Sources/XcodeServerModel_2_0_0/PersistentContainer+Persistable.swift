@@ -33,19 +33,6 @@ extension PersistentContainer: ServerPersistable {
             context.delete(server)
         }
     }
-    
-    public func persistBots(_ bots: [Bot], forServer id: Server.ID) async throws -> [Bot] {
-        var results: [Bot]!
-        try persistenceContext.performSynchronously { context in
-            guard let server = ManagedServer.server(id, in: context) else {
-                throw XcodeServerError.serverNotFound(id)
-            }
-            
-            server.update(Set(bots), context: context)
-            results = (server.bots as? Set<ManagedBot> ?? []).map { Bot($0) }
-        }
-        return results
-    }
 }
 
 extension PersistentContainer: BotPersistable {
@@ -74,6 +61,19 @@ extension PersistentContainer: BotPersistable {
             result = Bot(_bot)
         }
         return result
+    }
+    
+    public func persistBots(_ bots: [Bot], forServer id: Server.ID, cascadeDelete: Bool) async throws -> [Bot] {
+        var results: [Bot]!
+        try persistenceContext.performSynchronously { context in
+            guard let server = ManagedServer.server(id, in: context) else {
+                throw XcodeServerError.serverNotFound(id)
+            }
+            
+            server.update(Set(bots), context: context)
+            results = (server.bots as? Set<ManagedBot> ?? []).map { Bot($0) }
+        }
+        return results
     }
     
     public func removeBot(withId id: Bot.ID) async throws {
@@ -134,7 +134,7 @@ extension PersistentContainer: IntegrationPersistable {
         return result
     }
     
-    public func persistIntegrations(_ integrations: [Integration], forBot id: Bot.ID) async throws -> [Integration] {
+    public func persistIntegrations(_ integrations: [Integration], forBot id: Bot.ID, cascadeDelete: Bool) async throws -> [Integration] {
         var results: [Integration] = []
         try persistenceContext.performSynchronously { context in
             for integration in integrations {

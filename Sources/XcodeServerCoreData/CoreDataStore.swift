@@ -132,6 +132,10 @@ extension CoreDataStore: EntityPersistable {
         try await entityPersistable.persistBot(bot, forServer: id)
     }
     
+    public func persistBots(_ bots: [Bot], forServer id: Server.ID, cascadeDelete: Bool) async throws -> [Bot] {
+        try await entityPersistable.persistBots(bots, forServer: id, cascadeDelete: cascadeDelete)
+    }
+    
     public func removeBot(withId id: XcodeServer.Bot.ID) async throws {
         try await entityPersistable.removeBot(withId: id)
     }
@@ -145,8 +149,8 @@ extension CoreDataStore: EntityPersistable {
         try await entityPersistable.persistIntegration(integration, forBot: id)
     }
     
-    public func persistIntegrations(_ integrations: [XcodeServer.Integration], forBot id: XcodeServer.Bot.ID) async throws -> [XcodeServer.Integration] {
-        try await entityPersistable.persistIntegrations(integrations, forBot: id)
+    public func persistIntegrations(_ integrations: [XcodeServer.Integration], forBot id: XcodeServer.Bot.ID, cascadeDelete: Bool) async throws -> [XcodeServer.Integration] {
+        try await entityPersistable.persistIntegrations(integrations, forBot: id, cascadeDelete: cascadeDelete)
     }
     
     public func removeIntegration(withId id: XcodeServer.Integration.ID) async throws {
@@ -172,10 +176,6 @@ extension CoreDataStore: EntityPersistable {
     
     public func removeServer(withId id: Server.ID) async throws {
         try await entityPersistable.removeServer(withId: id)
-    }
-    
-    public func persistBots(_ bots: [Bot], forServer id: Server.ID) async throws -> [Bot] {
-        try await entityPersistable.persistBots(bots, forServer: id)
     }
     
     // MARK: - SourceControlPersistable

@@ -10,8 +10,6 @@ import Logging
 @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 final class Sync: AsyncParsableCommand, Route, Stored, Logged {
     
-    private static let logger: Logger = Logger(label: "Sync")
-    
     static var configuration: CommandConfiguration = {
         return CommandConfiguration(
             commandName: "sync",
@@ -68,7 +66,7 @@ final class Sync: AsyncParsableCommand, Route, Stored, Logged {
         _ = try await store.persistServer(_server)
         
         // Sync
-        Self.logger.notice("Syncing SERVER [\(server)]")
+        Logger.xcscli.notice("Syncing SERVER [\(server)]")
         let start = Date()
         
         let bots: [Bot] = try await client.bots()
@@ -89,7 +87,7 @@ final class Sync: AsyncParsableCommand, Route, Stored, Logged {
         }
         
         let end = Date()
-        Self.logger.notice("Syncing Complete", metadata: [
+        Logger.xcscli.notice("Syncing Complete", metadata: [
             "Seconds": .string("\(end.timeIntervalSince(start))"),
             "StoreURL": .string(storeURL.rawValue.path)
         ])
