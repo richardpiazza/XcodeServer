@@ -88,7 +88,7 @@ extension ManagedServer {
     ///
     /// - parameter server: The entity with attributes to use for updates.
     /// - parameter context: The managed context in which to perform operations.
-    func update(_ server: Server, context: NSManagedObjectContext) {
+    func update(_ server: Server, cascadeDelete: Bool, context: NSManagedObjectContext) {
         fqdn = server.id
         lastUpdate = Date()
         apiVersion = Int32(server.version.api.rawValue)
@@ -102,14 +102,29 @@ extension ManagedServer {
         if !server.version.serverAppVersion.isEmpty {
             self.server = server.version.serverAppVersion
         }
-        update(server.bots, context: context)
+        update(server.bots, cascadeDelete: cascadeDelete, context: context)
     }
     
     /// Inserts or updates `Bot`s.
     ///
-    /// - parameter entities: The entities to process
-    /// - parameter context: The managed context in which to perform operations.
-    func update(_ entities: Set<Bot>, context: NSManagedObjectContext) {
+    /// - parameters:
+    ///   - entities: The entities to process
+    ///   - cascadeDelete: Option to remove non-provided persisted entities.
+    ///   - context: The managed context in which to perform operations.
+    func update(_ entities: Set<Bot>, cascadeDelete: Bool, context: NSManagedObjectContext) {
+        if cascadeDelete {
+            var botsToRemove = (bots as? Set<ManagedBot>) ?? []
+            entities.forEach { bot in
+                if let index = botsToRemove.firstIndex(where: { $0.identifier == bot.id }) {
+                    botsToRemove.remove(at: index)
+                }
+            }
+            
+            botsToRemove.forEach { managedBot in
+                context.delete(managedBot)
+            }
+        }
+        
         entities.forEach({ entity in
             let bot: ManagedBot
             if let existing = ManagedBot.bot(entity.id, in: context) {
@@ -124,7 +139,7 @@ extension ManagedServer {
                 ])
             }
             
-            bot.update(entity, context: context)
+            bot.update(entity, cascadeDelete: cascadeDelete, context: context)
         })
     }
 }

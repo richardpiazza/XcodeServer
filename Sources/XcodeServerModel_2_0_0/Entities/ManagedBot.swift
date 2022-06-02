@@ -81,7 +81,7 @@ extension ManagedBot {
     ///
     /// - parameter bot: The bot with attributes to use for updates.
     /// - parameter context: The current managed object context for performing operations.
-    func update(_ bot: Bot, context: NSManagedObjectContext) {
+    func update(_ bot: Bot, cascadeDelete: Bool, context: NSManagedObjectContext) {
         if configuration == nil {
             PersistentContainer.logger.trace("Creating `ManagedConfiguration`.", metadata: [
                 "Bot.ID": .string(bot.id),
@@ -105,7 +105,7 @@ extension ManagedBot {
         requiresUpgrade = bot.requiresUpgrade
         stats?.update(bot.stats, context: context)
         typeRawValue = Int16(bot.type)
-        update(Array(bot.integrations), context: context)
+        update(Array(bot.integrations), cascadeDelete: cascadeDelete, context: context)
         
         if let blueprint = bot.lastRevisionBlueprint {
             let remoteId = blueprint.primaryRemoteIdentifier
@@ -132,7 +132,20 @@ extension ManagedBot {
     ///
     /// - parameter entities: The integrations to process.
     /// - parameter context: The current managed object context for performing operations.
-    func update(_ entities: [Integration], context: NSManagedObjectContext) {
+    func update(_ entities: [Integration], cascadeDelete: Bool, context: NSManagedObjectContext) {
+        if cascadeDelete {
+            var integrationsToRemove = (integrations as? Set<ManagedIntegration>) ?? []
+            entities.forEach { integration in
+                if let index = integrationsToRemove.firstIndex(where: { $0.identifier == integration.id }) {
+                    integrationsToRemove.remove(at: index)
+                }
+            }
+            
+            integrationsToRemove.forEach { managedIntegration in
+                context.delete(managedIntegration)
+            }
+        }
+        
         entities.forEach({ integration in
             if let existing = (integrations as? Set<ManagedIntegration>)?.first(where: { $0.identifier == integration.id }) {
                 existing.update(integration, context: context)

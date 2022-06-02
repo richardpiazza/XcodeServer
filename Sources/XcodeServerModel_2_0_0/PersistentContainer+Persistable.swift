@@ -15,7 +15,7 @@ extension PersistentContainer: ServerPersistable {
                 PersistentContainer.logger.info("Creating SERVER [\(server.id)]")
                 _server = context.make()
             }
-            _server.update(server, context: context)
+            _server.update(server, cascadeDelete: false, context: context)
             _server.lastUpdate = Date()
             
             result = Server(_server)
@@ -55,7 +55,7 @@ extension PersistentContainer: BotPersistable {
                 _bot.server = server
             }
             
-            _bot.update(bot, context: context)
+            _bot.update(bot, cascadeDelete: false, context: context)
             _bot.lastUpdate = Date()
             
             result = Bot(_bot)
@@ -70,7 +70,7 @@ extension PersistentContainer: BotPersistable {
                 throw XcodeServerError.serverNotFound(id)
             }
             
-            server.update(Set(bots), context: context)
+            server.update(Set(bots), cascadeDelete: cascadeDelete, context: context)
             results = (server.bots as? Set<ManagedBot> ?? []).map { Bot($0) }
         }
         return results
@@ -137,27 +137,34 @@ extension PersistentContainer: IntegrationPersistable {
     public func persistIntegrations(_ integrations: [Integration], forBot id: Bot.ID, cascadeDelete: Bool) async throws -> [Integration] {
         var results: [Integration] = []
         try persistenceContext.performSynchronously { context in
-            for integration in integrations {
-                let _integration: ManagedIntegration
-                if let existing = ManagedIntegration.integration(integration.id, in: context) {
-                    _integration = existing
-                    if _integration.bot == nil {
-                        _integration.bot = ManagedBot.bot(id, in: context)
-                    }
-                } else {
-                    guard let bot = ManagedBot.bot(id, in: context) else {
-                        throw XcodeServerError.botNotFound(id)
-                    }
-                    
-                    PersistentContainer.logger.info("Creating INTEGRATION '\(integration.number)' [\(integration.id)]")
-                    _integration = context.make()
-                    _integration.bot = bot
-                }
-                
-                _integration.update(integration, context: context)
-                
-                results.append(Integration(_integration))
+            guard let bot = ManagedBot.bot(id, in: context) else {
+                throw XcodeServerError.botNotFound(id)
             }
+            
+            bot.update(integrations, cascadeDelete: cascadeDelete, context: context)
+            results = (bot.integrations as? Set<ManagedIntegration> ?? []).map { Integration($0) }
+            
+//            for integration in integrations {
+//                let _integration: ManagedIntegration
+//                if let existing = ManagedIntegration.integration(integration.id, in: context) {
+//                    _integration = existing
+//                    if _integration.bot == nil {
+//                        _integration.bot = ManagedBot.bot(id, in: context)
+//                    }
+//                } else {
+//                    guard let bot = ManagedBot.bot(id, in: context) else {
+//                        throw XcodeServerError.botNotFound(id)
+//                    }
+//
+//                    PersistentContainer.logger.info("Creating INTEGRATION '\(integration.number)' [\(integration.id)]")
+//                    _integration = context.make()
+//                    _integration.bot = bot
+//                }
+//
+//                _integration.update(integration, context: context)
+//
+//                results.append(Integration(_integration))
+//            }
         }
         return results
     }
