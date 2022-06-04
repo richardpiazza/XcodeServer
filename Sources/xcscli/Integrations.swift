@@ -4,7 +4,7 @@ import XcodeServer
 import XcodeServerAPI
 import Logging
 
-final class Integrations: AsyncParsableCommand, Route, Logged {
+final class Integrations: AsyncParsableCommand, Routed, Credentialed, Logged {
     
     static var configuration: CommandConfiguration = {
         return CommandConfiguration(

@@ -52,6 +52,14 @@ additional resources.
 
 * **coverage**: Unit testing coverage data (can take a while).
 
-#### sync
+#### store
 
 On Apple platforms this command will download and persist data from a requested server.
+
+* **info**: Retrieves versioning information about a persistence store (model version)
+
+* **sync**: Initiates a sync for a specific server, retrieving Bots and their associated Integrations.
+
+* **delete-server**: Removes the data for a single Xcode Server from the persistence store.
+
+* **purge**: Remote the local persistence store from disk.

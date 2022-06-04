@@ -7,6 +7,9 @@ import CoreDataPlus
 protocol Stored {
     /// Persisted store path
     var path: String? { get set }
+    
+    /// The model version to use when accessing the store
+    var model: Model? { get set }
 }
 
 #if canImport(CoreData)

@@ -16,7 +16,10 @@ final class Store: AsyncParsableCommand {
             version: "0.1",
             shouldDisplay: true,
             subcommands: [
-                StoreInfo.self
+                StoreInfo.self,
+                StoreSync.self,
+                StoreDeleteServer.self,
+                StorePurge.self,
             ],
             defaultSubcommand: nil,
             helpNames: [.short, .long]
