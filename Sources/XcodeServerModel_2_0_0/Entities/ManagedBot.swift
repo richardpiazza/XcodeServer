@@ -142,6 +142,10 @@ extension ManagedBot {
             }
             
             integrationsToRemove.forEach { managedIntegration in
+                PersistentContainer.logger.info("Deleting `ManagedIntegration`.", metadata: [
+                    "Integration.ID": .string(managedIntegration.identifier ?? ""),
+                    "Integration.Number": .stringConvertible(managedIntegration.number),
+                ])
                 context.delete(managedIntegration)
             }
         }

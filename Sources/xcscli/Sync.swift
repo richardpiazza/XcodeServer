@@ -36,11 +36,17 @@ final class Sync: AsyncParsableCommand, Route, Stored, Logged {
     @Option(help: "Password credential for the Xcode Server. (Optional).")
     var password: String?
     
-    @Option(help: "The model version to use. [1.0.0].")
+    @Option(help: "The model version to use. [2.0.0].")
     var model: Model?
     
     @Flag(help: "Removes any store files prior to syncing.")
     var purge: Bool = false
+    
+    @Flag(help: "Removes Bots and Integrations that no longer exist.")
+    var cascade: Bool = false
+    
+    @Flag(help: "Delete the specified server from the store.")
+    var delete: Bool = false
     
     @Option(help: "The minimum output log level.")
     var logLevel: Logger.Level = .notice
@@ -58,6 +64,14 @@ final class Sync: AsyncParsableCommand, Route, Stored, Logged {
         
         let _model = model ?? Model.current
         var store: CoreDataStore! = try CoreDataStore(model: _model, persistence: .store(storeURL))
+        
+        if delete {
+            Logger.xcscli.notice("Removing SERVER [\(server)]")
+            try await store.removeServer(withId: server)
+            store = nil
+            return
+        }
+        
         let client = try XCSClient(fqdn: server, credentialDelegate: self)
         
         // Create Server
@@ -70,13 +84,13 @@ final class Sync: AsyncParsableCommand, Route, Stored, Logged {
         let start = Date()
         
         let bots: [Bot] = try await client.bots()
-        let persistedBots = try await store.persistBots(bots, forServer: server)
+        let persistedBots = try await store.persistBots(bots, forServer: server, cascadeDelete: cascade)
         for bot in persistedBots {
             let stats: Bot.Stats = try await client.stats(forBot: bot.id)
             _ = try await store.persistStats(stats, forBot: bot.id)
             
             let integrations: [Integration] = try await client.integrations(forBot: bot.id)
-            let persistedIntegrations = try await store.persistIntegrations(integrations, forBot: bot.id)
+            let persistedIntegrations = try await store.persistIntegrations(integrations, forBot: bot.id, cascadeDelete: cascade)
             for integration in persistedIntegrations {
                 let issues: Integration.IssueCatalog = try await client.issues(forIntegration: integration.id)
                 _ = try await store.persistIssues(issues, forIntegration: integration.id)
@@ -92,7 +106,7 @@ final class Sync: AsyncParsableCommand, Route, Stored, Logged {
             "StoreURL": .string(storeURL.rawValue.path)
         ])
         
-        // Cleanup
+        // Clean-up
         store = nil
     }
 }

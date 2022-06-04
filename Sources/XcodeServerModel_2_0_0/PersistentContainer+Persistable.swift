@@ -143,28 +143,6 @@ extension PersistentContainer: IntegrationPersistable {
             
             bot.update(integrations, cascadeDelete: cascadeDelete, context: context)
             results = (bot.integrations as? Set<ManagedIntegration> ?? []).map { Integration($0) }
-            
-//            for integration in integrations {
-//                let _integration: ManagedIntegration
-//                if let existing = ManagedIntegration.integration(integration.id, in: context) {
-//                    _integration = existing
-//                    if _integration.bot == nil {
-//                        _integration.bot = ManagedBot.bot(id, in: context)
-//                    }
-//                } else {
-//                    guard let bot = ManagedBot.bot(id, in: context) else {
-//                        throw XcodeServerError.botNotFound(id)
-//                    }
-//
-//                    PersistentContainer.logger.info("Creating INTEGRATION '\(integration.number)' [\(integration.id)]")
-//                    _integration = context.make()
-//                    _integration.bot = bot
-//                }
-//
-//                _integration.update(integration, context: context)
-//
-//                results.append(Integration(_integration))
-//            }
         }
         return results
     }

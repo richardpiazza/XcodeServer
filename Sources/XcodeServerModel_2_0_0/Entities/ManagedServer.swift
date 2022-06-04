@@ -121,6 +121,10 @@ extension ManagedServer {
             }
             
             botsToRemove.forEach { managedBot in
+                PersistentContainer.logger.info("Deleting `ManagedBot`.", metadata: [
+                    "Bot.ID": .string(managedBot.identifier ?? ""),
+                    "Bot.Name": .string(managedBot.name ?? ""),
+                ])
                 context.delete(managedBot)
             }
         }
