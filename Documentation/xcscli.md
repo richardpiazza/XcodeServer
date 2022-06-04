@@ -58,8 +58,8 @@ On Apple platforms this command will download and persist data from a requested 
 
 * **info**: Retrieves versioning information about a persistence store (model version)
 
-* **sync**: Initiates a sync for a specific server, retrieving Bots and their associated Integrations.
+* **sync**: Sync a specific server, retrieving Bots and any associated Integrations.
 
 * **delete-server**: Removes the data for a single Xcode Server from the persistence store.
 
-* **purge**: Remote the local persistence store from disk.
+* **purge**: Remove the local persistence store from disk.
