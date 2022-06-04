@@ -3,6 +3,7 @@ import ArgumentParser
 import XcodeServer
 import XcodeServerCoreData
 import CoreDataPlus
+#if canImport(CoreData)
 
 protocol Stored {
     /// Persisted store path
@@ -12,7 +13,6 @@ protocol Stored {
     var model: Model? { get set }
 }
 
-#if canImport(CoreData)
 extension Stored {
     var storeURL: StoreURL {
         guard let path = self.path else {
