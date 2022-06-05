@@ -29,8 +29,20 @@ Configuration: `/Library/Developer/XcodeServer/Configuration/xcscouch.ini`
 ### Compile Core Data Model to `.momd`
 
 ```bash
-/Applications/Xcode.app/Contents/Developer/usr/bin/momc {Source.xcdatamodeld} {Destination.momd}
+/Applications/Xcode.app/Contents/Developer/usr/bin/momc {/Path/To/Source.xcdatamodeld} {Path/To/Destination}
 ```
+
+* Source must be full path (including file extension)
+* Destination is path only (no file name)
+
+### Compile Core Data Mapping Model to `.cdm`
+
+```bash
+/Applications/Xcode.app/Contents/Developer/usr/bin/mapc {/Path/To/Source.xcmappingmodel} {Path/To/Destination.cdm}
+```
+
+* Source must be full path (including file extension)
+* Destination includes the filename & extension
 
 ## Simulator
 
