@@ -26,19 +26,6 @@ extension PersistentContainer: ServerPersistable {
             context.delete(server)
         }
     }
-    
-    public func persistBots(_ bots: [XcodeServer.Bot], forServer id: XcodeServer.Server.ID) async throws -> [XcodeServer.Bot] {
-        var results: [XcodeServer.Bot]!
-        try newBackgroundContext().performSynchronously { context in
-            guard let server = Server.server(id, in: context) else {
-                throw XcodeServerError.serverNotFound(id)
-            }
-            
-            server.update(Set(bots), context: context)
-            results = (server.bots as? Set<Bot> ?? []).map { XcodeServer.Bot($0) }
-        }
-        return results
-    }
 }
 
 extension PersistentContainer: BotPersistable {
@@ -63,6 +50,19 @@ extension PersistentContainer: BotPersistable {
             result = XcodeServer.Bot(_bot)
         }
         return result
+    }
+    
+    public func persistBots(_ bots: [XcodeServer.Bot], forServer id: XcodeServer.Server.ID, cascadeDelete: Bool) async throws -> [XcodeServer.Bot] {
+        var results: [XcodeServer.Bot]!
+        try newBackgroundContext().performSynchronously { context in
+            guard let server = Server.server(id, in: context) else {
+                throw XcodeServerError.serverNotFound(id)
+            }
+            
+            server.update(Set(bots), context: context)
+            results = (server.bots as? Set<Bot> ?? []).map { XcodeServer.Bot($0) }
+        }
+        return results
     }
     
     public func removeBot(withId id: XcodeServer.Bot.ID) async throws {
@@ -117,7 +117,7 @@ extension PersistentContainer: IntegrationPersistable {
         return result
     }
     
-    public func persistIntegrations(_ integrations: [XcodeServer.Integration], forBot id: XcodeServer.Bot.ID) async throws -> [XcodeServer.Integration] {
+    public func persistIntegrations(_ integrations: [XcodeServer.Integration], forBot id: XcodeServer.Bot.ID, cascadeDelete: Bool) async throws -> [XcodeServer.Integration] {
         var results: [XcodeServer.Integration] = []
         try newBackgroundContext().performSynchronously { context in
             for integration in integrations {

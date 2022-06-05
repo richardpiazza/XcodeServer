@@ -4,7 +4,7 @@ import XcodeServer
 import XcodeServerAPI
 import Logging
 
-final class Versions: AsyncParsableCommand, Route, Logged {
+final class Versions: AsyncParsableCommand, Routed, Credentialed, Logged {
     
     static var configuration: CommandConfiguration = {
         return CommandConfiguration(
@@ -37,6 +37,8 @@ final class Versions: AsyncParsableCommand, Route, Logged {
     }
     
     func run() async throws {
+        ConsoleLogger.bootstrap(minimumLogLevel: logLevel)
+        
         let client = try XCSClient(fqdn: server, credentialDelegate: self)
         let versions = try await client.versions()
         print(versions.asPrettyJSON() ?? "OK")

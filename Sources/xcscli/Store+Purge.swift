@@ -7,12 +7,12 @@ import Logging
 #if canImport(CoreData)
 
 @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-final class StoreInfo: AsyncParsableCommand, Stored, Logged {
+final class StorePurge: AsyncParsableCommand, Stored, Logged {
     
     static var configuration: CommandConfiguration = {
         .init(
-            commandName: "info",
-            abstract: "Displays information about the persistence store.",
+            commandName: "purge",
+            abstract: "Purges the local persistence store.",
             usage: nil,
             discussion: """
             When no 'path' is specified, the default store URL will be used:
@@ -38,12 +38,9 @@ final class StoreInfo: AsyncParsableCommand, Stored, Logged {
     func run() async throws {
         ConsoleLogger.bootstrap(minimumLogLevel: logLevel)
         
-        let version = try Model.versionForStore(storeURL, configurationName: .configurationName)
-        
-        Logger.xcscli.notice("Store Info", metadata: [
-            "StoreURL": .string(storeURL.rawValue.path),
-            "ModelVersion": .string(version?.rawValue ?? "UNKNOWN")
-        ])
+        Logger.xcscli.notice("Purging Store")
+        try storeURL.destroy()
+        Logger.xcscli.notice("Purge Complete")
     }
 }
 

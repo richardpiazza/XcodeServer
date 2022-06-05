@@ -4,7 +4,7 @@ import XcodeServer
 import XcodeServerAPI
 import Logging
 
-final class Bots: AsyncParsableCommand, Route, Logged {
+final class Bots: AsyncParsableCommand, Routed, Credentialed, Logged {
     
     static var configuration: CommandConfiguration = {
         return CommandConfiguration(
@@ -42,30 +42,46 @@ final class Bots: AsyncParsableCommand, Route, Logged {
     var path: Path?
     
     @Option(help: "The minimum output log level.")
-    var logLevel: Logger.Level = .warning
+    var logLevel: Logger.Level = .notice
     
     func validate() throws {
         try validateServer()
     }
     
     func run() async throws {
+        ConsoleLogger.bootstrap(minimumLogLevel: logLevel)
+        
         let client = try XCSClient(fqdn: server, credentialDelegate: self)
-        switch (id) {
-        case .some(let id) where path == .some(.stats):
-            let stats: Bot.Stats = try await client.stats(forBot: id)
-            print(stats.asPrettyJSON() ?? "OK")
-        case .some(let id) where path == .some(.integrations):
-            let integrations: [Integration] = try await client.integrations(forBot: id)
-            print(integrations.asPrettyJSON() ?? "OK")
-        case .some(let id) where path == .some(.run):
-            let integration = try await client.runIntegration(forBot: id)
-            print(integration.asPrettyJSON() ?? "OK")
-        case .some(let id) where path == .none:
-            let bot: Bot = try await client.bot(withId: id)
-            print(bot.asPrettyJSON() ?? "OK")
-        default:
-            let bots: [Bot] = try await client.bots()
-            print(bots.asPrettyJSON() ?? "OK")
+        
+        do {
+            switch (id) {
+            case .some(let id) where path == .some(.stats):
+                Logger.xcscli.notice("Retrieving Stats For Bot [\(id)]")
+                let stats: Bot.Stats = try await client.stats(forBot: id)
+                print(stats.asPrettyJSON() ?? "OK")
+            case .some(let id) where path == .some(.integrations):
+                Logger.xcscli.notice("Retrieving Integrations For Bot [\(id)]")
+                let integrations: [Integration] = try await client.integrations(forBot: id)
+                print(integrations.asPrettyJSON() ?? "OK")
+            case .some(let id) where path == .some(.run):
+                Logger.xcscli.notice("Triggering Integration For Bot [\(id)]")
+                let integration = try await client.runIntegration(forBot: id)
+                print(integration.asPrettyJSON() ?? "OK")
+            case .some(let id) where path == .none:
+                Logger.xcscli.notice("Retrieving Bot [\(id)]")
+                let bot: Bot = try await client.bot(withId: id)
+                print(bot.asPrettyJSON() ?? "OK")
+            default:
+                Logger.xcscli.notice("Retrieving Bots For Server [\(server)]")
+                let bots: [Bot] = try await client.bots()
+                print(bots.asPrettyJSON() ?? "OK")
+            }
+        } catch let xcsError as XcodeServerError {
+            if case .botNotFound(let id) = xcsError {
+                Logger.xcscli.error("Bot '\(id)' does not exist, or has been deleted.")
+            } else {
+                throw xcsError
+            }
         }
     }
 }
